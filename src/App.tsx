@@ -1,3 +1,10 @@
-export const App = () => {
-  return <div>App</div>;
+import { RouteRenderer } from "./routes/route-renderer";
+
+const App = () => {
+  return (
+    <div>
+      <RouteRenderer />
+    </div>
+  );
 };
+export default App;
