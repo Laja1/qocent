@@ -14,7 +14,8 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
-"paths": {
+"baseUrl": ".",
+    "paths": {
       "@/*": [
         "./src/*"
       ]

@@ -1,7 +1,5 @@
 import { authRoutes } from "@/routes/routes";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { TextPressure } from "../shared";
-
+import { Link, useLocation } from "react-router-dom";
 type AuthLayoutProps = {
   children: React.ReactNode;
   title: string;
@@ -17,7 +15,6 @@ type AuthLayoutProps = {
 
 const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
   const location = useLocation();
-  const navigate = useNavigate();
   const pathname = location.pathname;
 
   const renderFooterText = (pathname: string) => {

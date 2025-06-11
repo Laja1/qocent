@@ -2,6 +2,7 @@ import cx from "classnames";
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
 
+
 const buttonVariants = cva("button", {
   variants: {
     intent: {
@@ -15,7 +16,7 @@ const buttonVariants = cva("button", {
       secondary: [
         "bg-white",
         "text-[#161C2D]",
-        "border-[2.3px]",
+        "border-[1px]",
         "border-[#DFDFE5]",
         "hover:bg-gray-100",
       ],
@@ -64,6 +65,7 @@ interface ButtonProps
   type?: "button" | "submit";
   size?: "small" | "medium" | "large" | "rounded";
   state?: buttonState;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   prefixIcon?: any;
   surfixIcon?: React.ReactElement;
 }
@@ -104,7 +106,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         onClick={onClick}
       >
         <div className="flex justify-center  items-center">
-          {prefixIcon && <span className="mr-2">{prefixIcon}</span>}
+          {prefixIcon && <span className="mr-1">{prefixIcon}</span>}
           <span className="font-medium">{label}</span>{" "}
           {isLoading && (
             <span className="ml-2">

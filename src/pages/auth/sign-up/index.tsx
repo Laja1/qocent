@@ -1,5 +1,5 @@
 import AuthLayout from "@/components/layouts/authLayout";
-import { Button } from "@/components/shared/Button";
+import { Button } from "@/components/shared";
 import { Textfield } from "@/components/shared/textfield";
 
 const SignUp = () => {
