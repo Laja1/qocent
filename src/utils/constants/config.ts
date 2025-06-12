@@ -13,13 +13,24 @@ import {
   DollarSign,
   Users,
 } from "lucide-react";
-import type { ServerCardsProps } from "@/pages/server-room/server-cards";
 
 type dashboardItemType = {
   name: string;
   href: string;
   icon: React.FC<SVGProps<SVGSVGElement>>;
 };
+
+export interface ServerRoomType {
+  id: string;
+  name: string;
+  description: string;
+  resourceCount: number;
+  region: string;
+  status: string;
+  createdAt: string;
+  bill: number;
+  credit: number;
+}
 
 export const dashboardItems: dashboardItemType[] = [
   {
@@ -82,44 +93,106 @@ export const sidebarItems = [
   },
 ];
 
-export const serverRooms: ServerCardsProps[] = [
+export const serverRooms: ServerRoomType[] = [
   {
-    id: "rubies",
-    name: "Rubies Server Room",
-    description: "Production environment for the Rubies application",
+    id: "100234001",
+    name: "Tymer",
+    description: "Production environment for the Tymer application",
     resourceCount: 12,
-    region: "US East",
-    status: "Active",
-    createdAt: "2023-05-15",
+    region: "US (California)",
+    status: "ACTIVE",
+    createdAt: "1945-02-03",
+    bill: 76902.0,
+    credit: 7718.0,
   },
   {
-    id: "emeralds",
-    name: "Emeralds Server Room",
-    description: "Development environment for the Emeralds project",
+    id: "100234002",
+    name: "Rubies",
+    description: "Production environment for the Rubies application",
     resourceCount: 8,
-    region: "US West",
-    status: "Active",
-    createdAt: "2023-06-22",
+    region: "US (Virginia)",
+    status: "ACTIVE",
+    createdAt: "1945-02-04",
+    bill: 34460.0,
+    credit: 661.0,
   },
   {
-    id: "sapphires",
-    name: "Sapphires Server Room",
-    description: "Testing environment for the Sapphires service",
+    id: "100234003",
+    name: "Qoovest",
+    description: "Development environment for the Qoovest project",
     resourceCount: 5,
-    region: "EU West",
-    status: "Maintenance",
-    createdAt: "2023-07-10",
+    region: "UK",
+    status: "ACTIVE",
+    createdAt: "1945-02-05",
+    bill: 11671.0,
+    credit: 547.0,
   },
   {
-    id: "diamonds",
-    name: "Diamonds Server Room",
-    description: "Staging environment for the Diamonds platform",
+    id: "100234004",
+    name: "Qoonity",
+    description: "Testing environment for the Qoonity service",
     resourceCount: 9,
-    region: "Asia Pacific",
-    status: "Active",
-    createdAt: "2023-08-05",
+    region: "France",
+    status: "ACTIVE",
+    createdAt: "1945-02-06",
+    bill: 87829.0,
+    credit: 4877.0,
+  },
+  {
+    id: "100234005",
+    name: "NCube",
+    description: "Staging environment for the NCube platform",
+    resourceCount: 15,
+    region: "Germany",
+    status: "ACTIVE",
+    createdAt: "1945-02-07",
+    bill: 75488.0,
+    credit: 2267.0,
+  },
+  {
+    id: "100234006",
+    name: "Tymer",
+    description: "Backup environment for Tymer",
+    resourceCount: 6,
+    region: "South Africa",
+    status: "MAINTENANCE",
+    createdAt: "1945-02-08",
+    bill: 74891.0,
+    credit: 6397.0,
   },
 ];
+
+export const serverColumns: { header: string; accessorKey?: string }[] = [
+  {
+    header: "ID",
+    accessorKey: "id",
+  },
+  {
+    header: "NAME",
+    accessorKey: "name",
+  },
+  {
+    header: "VIEW",
+  },
+  {
+    header: "REGION",
+    accessorKey: "region",
+  },
+  {
+    header: "DATE",
+  },
+  {
+    header: "STATUS",
+    accessorKey: "status",
+  },
+  {
+    header: "BILL (USD)",
+  },
+  {
+    header: "CREDIT (USD)",
+  },
+];
+
 export const serverRoomResources = {
   servers: [
     {

@@ -14,7 +14,7 @@ export const Header = ({
   children,
 }: HeaderProps) => {
   return (
-    <header className="border-b w-full border-gray-200 px-6 py-4">
+    <header className="border-b w-full border-gray-200 px-6 py-[14px]">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <SidebarTrigger />

@@ -95,56 +95,56 @@ export const Dashboard = () => {
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mb-8">
-            <div className="bg-gradient-to-b from-white to-blue-400 rounded-md ">
+            <div className="bg-white rounded-md shadow-sm">
               <div className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-blue-600">
+                    <p className="text-sm font-medium text-black-600">
                       Active Resources
                     </p>
-                    <p className="text-2xl font-bold text-blue-600">12</p>
+                    <p className="text-2xl font-bold text-black-600">12</p>
                   </div>
-                  <Server className="h-8 w-8 text-blue-700" />
+                  <Server className="h-8 w-8 text-blue-600" />
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-b from-white to-green-400 rounded-md ">
+            <div className="bg-white rounded-md shadow-sm">
               <div className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-green-600">
+                    <p className="text-sm font-medium text-black">
                       Monthly Cost
                     </p>
-                    <p className="text-2xl font-bold text-green-600">$247</p>
+                    <p className="text-2xl font-bold text-black">$247</p>
                   </div>
-                  <DollarSign className="h-8 w-8 text-green-600" />
+                  <DollarSign className="h-8 w-8 text-amber-700  " />
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-b from-white to-purple-400 rounded-md ">
+            <div className="bg-white rounded-md shadow-sm">
               <div className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-purple-900">
+                    <p className="text-sm font-medium text-black">
                       Data Stored
                     </p>
-                    <p className="text-2xl font-bold text-purple-600">1.2TB</p>
+                    <p className="text-2xl font-bold text-black">1.2TB</p>
                   </div>
-                  <HardDrive className="h-8 w-8 text-purple-600" />
+                  <HardDrive className="h-8 w-8 text-violet-700" />
                 </div>
               </div>
             </div>
 
-            <div className="bg-gradient-to-b from-white to-amber-400 rounded-md ">
+            <div className="bg-white rounded-md shadow-sm">
               <div className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm font-medium text-amber-600">Uptime</p>
-                    <p className="text-2xl font-bold text-orange-600">99.9%</p>
+                    <p className="text-sm font-medium text-black">Uptime</p>
+                    <p className="text-2xl font-bold text-black">99.9%</p>
                   </div>
-                  <Activity className="h-8 w-8 text-orange-600" />
+                  <Activity className="h-8 w-8 text-violet-700" />
                 </div>
               </div>
             </div>
