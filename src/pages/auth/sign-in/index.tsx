@@ -12,7 +12,7 @@ const SignIn = () => {
         <Button
           label="Sign In"
           className="w-full mt-3"
-          onClick={() => navigate("/dashboard")}
+          onClick={() => navigate("/dashboard/server-rooms")}
         />
       </div>
     </AuthLayout>

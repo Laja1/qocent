@@ -159,7 +159,6 @@ export function DataTable<T>({
       <CardHeader>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            {title && <CardTitle>{title}</CardTitle>}
             {description && <CardDescription>{description}</CardDescription>}
           </div>
           <div className="flex flex-col md:flex-row gap-2">
@@ -181,7 +180,7 @@ export function DataTable<T>({
                     setFilters((prev) => ({ ...prev, [column.id]: value }))
                   }
                 >
-                  <SelectTrigger className="w-[160px]">
+                  <SelectTrigger className="w-[140px]">
                     <Filter className="h-4 w-4 mr-2" />
                     <SelectValue placeholder={column.header} />
                   </SelectTrigger>

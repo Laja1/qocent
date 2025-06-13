@@ -2,7 +2,6 @@ import { Button, DataTable, Header, type ColumnDef } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { serverRooms, type ServerRoomType } from "@/utils/constants/config";
 import { useNavigate } from "react-router-dom";
-import { Eye } from "lucide-react";
 
 export const ServerRoom = () => {
   const navigate = useNavigate();
@@ -21,26 +20,10 @@ export const ServerRoom = () => {
       sortable: true,
     },
     {
-      id: "view",
-      header: "VIEW",
-      accessorKey: (row) => row.id,
-      cell: (row) => (
-        <div
-          className="text-purple-500 flex-row flex items-center hover:text-blue-800 p-0 h-auto cursor-pointer hover:underline"
-          onClick={() => {
-            navigate(`/dashboard/server/${row.id}`);
-          }}
-        >
-          <Eye className="h-4 w-4 mr-1" />
-          View {row.id}
-        </div>
-      ),
-    },
-    {
       id: "region",
       header: "REGION",
       accessorKey: "region",
-      cell: (row) => <span className="text-blue-600">{row.region}</span>,
+      cell: (row) => <span className="text-blue-500">{row.region}</span>,
       sortable: true,
       filterType: "select",
       filterOptions: [
@@ -106,15 +89,11 @@ export const ServerRoom = () => {
 
   return (
     <div className="">
-      <Header title="Server Room" description="Manage your server room">
+      <Header title="Server Rooms" description="Manage your server room">
         <Button label="Server Room" />
       </Header>
 
       <div className="p-5 flex flex-col">
-        <h3 className="text-base font-medium pb-4">
-          Select a server room to view its resources
-        </h3>
-
         <DataTable
           data={serverRooms}
           columns={serverRoomColumns}
@@ -122,7 +101,6 @@ export const ServerRoom = () => {
           description={`${serverRooms.length} server rooms available`}
           searchPlaceholder="Search server rooms by name, ID, or region..."
           onRowClick={(row) => navigate(`/dashboard/server/${row.id}`)}
-          filterableColumns={["status", "region"]}
           initialSorting={{ id: "name", desc: false }}
         />
       </div>

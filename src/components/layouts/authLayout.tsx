@@ -52,7 +52,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
   return (
     <div
       className={
-        "flex  flex-col items-center justify-between min-h-screen  py-5"
+        "flex  flex-col items-center  justify-between min-h-screen  py-5"
       }
     >
       <div>
@@ -60,8 +60,8 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
           QUCOON CLOUD SERVICES
         </h1>
       </div>
-      <div className="flex   justify-center items-center w-[450px]">
-        <div className="bg-[#FFFFFF0D] shadow-2xl  shadow-[#000]  max-w-md mx-5 rounded-xl py-5 lg:px-6  px-3 w-full ">
+      <div className="flex   justify-center items-center w-[350px] lg:w-[450px]">
+        <div className="bg-[#FFFFFF0D]     max-w-md mx-5 rounded-xl py-5 lg:px-6  px-3 w-full ">
           <div className="justify-center items-center flex-col mt-5 flex space-y-3">
             <p className="font-bold lg:text-3xl text-xl">{title}</p>
             <p className="font-light lg:text-sm text-center text-xs pb-3 ">

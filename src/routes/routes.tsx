@@ -16,13 +16,7 @@ export const generalRoutes = [
 
 export const dashboardRoutesWithSidebar = [
   {
-    path: "/dashboard",
-    element: <Dashboard />,
-    name: "Home",
-    metadata: { isProtected: true, hasSideBar: true, displayName: "Home" },
-  },
-  {
-    path: "/dashboard/server-room",
+    path: "/dashboard/server-rooms",
     element: <ServerRoom />,
     name: "ServerRoom",
     metadata: {
