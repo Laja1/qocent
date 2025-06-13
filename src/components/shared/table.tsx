@@ -55,7 +55,6 @@ export type DataTableProps<T> = {
 export function DataTable<T>({
   data,
   columns,
-  title,
   description,
   searchPlaceholder = "Search...",
   onRowClick,
@@ -205,7 +204,7 @@ export function DataTable<T>({
         <div className="rounded-md border">
           <Table>
             <TableHeader>
-              <TableRow className="bg-gray-50">
+              <TableRow className="">
                 {columns.map((column) => (
                   <TableHead
                     key={column.id}
@@ -246,7 +245,7 @@ export function DataTable<T>({
                 processedData.map((row, rowIndex) => (
                   <TableRow
                     key={rowIndex}
-                    className={`hover:bg-gray-50 ${
+                    className={`hover:bg-gray-50 -h-80 ${
                       onRowClick ? "cursor-pointer" : ""
                     }`}
                     onClick={onRowClick ? () => onRowClick(row) : undefined}
@@ -264,7 +263,7 @@ export function DataTable<T>({
             </TableBody>
           </Table>
         </div>
-        <div className="flex items-center justify-between mt-4 text-sm text-gray-500">
+        <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
           <div>
             Showing {processedData.length} of {data.length} items
           </div>

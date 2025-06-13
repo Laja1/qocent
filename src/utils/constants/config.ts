@@ -1,4 +1,4 @@
-import { Home, BookOpen, School, Award, Settings } from "lucide-react";
+import { Home, BookOpen, School, Award, Settings, User, Command } from "lucide-react";
 import type { SVGProps } from "react";
 import {
   // Cloud,
@@ -62,15 +62,15 @@ export const dashboardItems: dashboardItemType[] = [
 
 export const sidebarItems = [
   {
-    title: "Dashboard",
-    icon: Activity,
-    href: "/dashboard",
-    isActive: true,
+    title: "Server Rooms",
+    icon: Server,
+    href: "/dashboard/server-rooms",
+    isActive: false,
   },
   {
-    title: "Server Room",
-    icon: Server,
-    href: "/dashboard/server-room",
+    title: "Resources",
+    icon: Activity,
+    href: "/dashboard/resources",
     isActive: false,
   },
   {
@@ -83,6 +83,18 @@ export const sidebarItems = [
     title: "Team",
     icon: Users,
     href: "/dashboard/team",
+    isActive: false,
+  },
+  {
+    title: "Identity Center",
+    icon: User,
+    href: "/dashboard/identity-center",
+    isActive: false,
+  },
+  {
+    title: "Command Center",
+    icon: Command,
+    href: "/dashboard/command-center",
     isActive: false,
   },
   {
@@ -162,7 +174,509 @@ export const serverRooms: ServerRoomType[] = [
   },
 ];
 
-export const serverColumns: { header: string; accessorKey?: string }[] = [
+type ResourceType = {
+  servers: {
+    id: string;
+    name: string;
+    type: string;
+    status: string;
+  }[];
+  databases: {
+    id: string;
+    name: string;
+    type: string;
+    status: string;
+  }[];
+  fileCabinets: {
+    id: string;
+    name: string;
+    type: string;
+    status: string;
+  }[];
+  sanDisks: {
+    id: string;
+    name: string;
+    type: string;
+    status: string;
+  }[];
+  subnets: {
+    id: string;
+    name: string;
+    type: string;
+    status: string;
+  }[];
+  vpc: {
+    id: string;
+    name: string;
+    type: string;
+    status: string;
+  }[];
+};
+
+interface ResourceData {
+  id: string;
+  name: string;
+  description: string;
+  resourceCount: number;
+  region: string;
+  status: string;
+  createdAt: string;
+  bill: number;
+  credit: number;
+  resources: ResourceType[];
+}
+
+export const resources: ResourceData[] = [
+  {
+    id: "100234001",
+    name: "Tymer",
+    description: "Production environment for the Tymer application",
+    resourceCount: 12,
+    region: "US (California)",
+    status: "ACTIVE",
+    createdAt: "1945-02-03",
+    bill: 76902.0,
+    credit: 7718.0,
+    resources: [
+      {
+        servers: [
+          {
+            id: "100234001",
+            name: "Server 1",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234002",
+            name: "Server 2",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+        ],
+        databases: [
+          {
+            id: "100234003",
+            name: "Database 1",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234004",
+            name: "Database 2",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+        ],
+        fileCabinets: [
+          {
+            id: "100234005",
+            name: "File Cabinet 1",
+            type: "s3",
+            status: "ACTIVE",
+          },
+        ],
+        sanDisks: [
+          {
+            id: "100234006",
+            name: "SAN Disk 1",
+            type: "ssd",
+            status: "ACTIVE",
+          },
+        ],
+        subnets: [
+          {
+            id: "100234007",
+            name: "Subnet 1",
+            type: "subnet",
+            status: "ACTIVE",
+          },
+        ],
+        vpc: [
+          {
+            id: "100234008",
+            name: "VPC 1",
+            type: "vpc",
+            status: "ACTIVE",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "100234002",
+    name: "Rubies",
+    description: "Production environment for the Rubies application",
+    resourceCount: 8,
+    region: "US (Virginia)",
+    status: "ACTIVE",
+    createdAt: "1945-02-04",
+    bill: 34460.0,
+    credit: 661.0,
+    resources: [
+      {
+        servers: [
+          {
+            id: "100234001",
+            name: "Server 1",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234002",
+            name: "Server 2",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+        ],
+        databases: [
+          {
+            id: "100234003",
+            name: "Database 1",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234004",
+            name: "Database 2",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+        ],
+        fileCabinets: [
+          {
+            id: "100234005",
+            name: "File Cabinet 1",
+            type: "s3",
+            status: "ACTIVE",
+          },
+        ],
+        sanDisks: [
+        ],
+        subnets: [
+          {
+            id: "100234006",
+            name: "Subnet 1",
+            type: "subnet",
+            status: "ACTIVE",
+          },
+        ],
+        vpc: [
+          {
+            id: "100234007",
+            name: "VPC 1",
+            type: "vpc",
+            status: "ACTIVE",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "100234003",
+    name: "Qoovest",
+    description: "Development environment for the Qoovest project",
+    resourceCount: 5,
+    region: "UK",
+    status: "ACTIVE",
+    createdAt: "1945-02-05",
+    bill: 11671.0,
+    credit: 547.0,
+    resources: [
+      {
+        servers: [
+          {
+            id: "100234001",
+            name: "Server 1",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234002",
+            name: "Server 2",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+        ],
+        databases: [
+          {
+            id: "100234003",
+            name: "Database 1",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234004",
+            name: "Database 2",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+        ],
+        fileCabinets: [
+          {
+            id: "100234005",
+            name: "File Cabinet 1",
+            type: "s3",
+            status: "ACTIVE",
+          },
+        ],
+        sanDisks: [
+          {
+            id: "100234006",
+            name: "SAN Disk 1",
+            type: "ssd",
+            status: "ACTIVE",
+          },
+        ],
+        subnets: [
+          {
+            id: "100234007",
+            name: "Subnet 1",
+            type: "subnet",
+            status: "ACTIVE",
+          },
+        ],
+        vpc: [
+          {
+            id: "100234008",
+            name: "VPC 1",
+            type: "vpc",
+            status: "ACTIVE",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "100234004",
+    name: "Qoonity",
+    description: "Testing environment for the Qoonity service",
+    resourceCount: 9,
+    region: "France",
+    status: "ACTIVE",
+    createdAt: "1945-02-06",
+    bill: 87829.0,
+    credit: 4877.0,
+    resources: [
+      {
+        servers: [
+          {
+            id: "100234001",
+            name: "Server 1",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234002",
+            name: "Server 2",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+        ],
+        databases: [
+          {
+            id: "100234003",
+            name: "Database 1",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234004",
+            name: "Database 2",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+        ],
+        fileCabinets: [
+          {
+            id: "100234005",
+            name: "File Cabinet 1",
+            type: "s3",
+            status: "ACTIVE",
+          },
+        ],
+        sanDisks: [
+          {
+            id: "100234006",
+            name: "SAN Disk 1",
+            type: "ssd",
+            status: "ACTIVE",
+          },
+        ],
+        subnets: [
+          {
+            id: "100234007",
+            name: "Subnet 1",
+            type: "subnet",
+            status: "ACTIVE",
+          },
+        ],
+        vpc: [
+          {
+            id: "100234008",
+            name: "VPC 1",
+            type: "vpc",
+            status: "ACTIVE",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "100234005",
+    name: "NCube",
+    description: "Staging environment for the NCube platform",
+    resourceCount: 15,
+    region: "Germany",
+    status: "ACTIVE",
+    createdAt: "1945-02-07",
+    bill: 75488.0,
+    credit: 2267.0,
+    resources: [
+      {
+        servers: [
+          {
+            id: "100234001",
+            name: "Server 1",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234002",
+            name: "Server 2",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+        ],
+        databases: [
+          {
+            id: "100234003",
+            name: "Database 1",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234004",
+            name: "Database 2",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+        ],
+        fileCabinets: [
+          {
+            id: "100234005",
+            name: "File Cabinet 1",
+            type: "s3",
+            status: "ACTIVE",
+          },
+        ],
+        sanDisks: [
+          {
+            id: "100234006",
+            name: "SAN Disk 1",
+            type: "ssd",
+            status: "ACTIVE",
+          },
+        ],
+        subnets: [
+          {
+            id: "100234007",
+            name: "Subnet 1",
+            type: "subnet",
+            status: "ACTIVE",
+          },
+        ],
+        vpc: [
+          {
+            id: "100234008",
+            name: "VPC 1",
+            type: "vpc",
+            status: "ACTIVE",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    id: "100234006",
+    name: "Tymer",
+    description: "Backup environment for Tymer",
+    resourceCount: 6,
+    region: "South Africa",
+    status: "MAINTENANCE",
+    createdAt: "1945-02-08",
+    bill: 74891.0,
+    credit: 6397.0,
+    resources: [
+      {
+        servers: [
+          {
+            id: "100234001",
+            name: "Server 1",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234002",
+            name: "Server 2",
+            type: "t3.medium",
+            status: "ACTIVE",
+          },
+        ],
+        databases: [
+          {
+            id: "100234003",
+            name: "Database 1",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+          {
+            id: "100234004",
+            name: "Database 2",
+            type: "mysql",
+            status: "ACTIVE",
+          },
+        ],
+        fileCabinets: [
+          {
+            id: "100234005",
+            name: "File Cabinet 1",
+            type: "s3",
+            status: "ACTIVE",
+          },
+        ],
+        sanDisks: [
+          {
+            id: "100234006",
+            name: "SAN Disk 1",
+            type: "ssd",
+            status: "ACTIVE",
+          },
+        ],
+        subnets: [
+          {
+            id: "100234007",
+            name: "Subnet 1",
+            type: "subnet",
+            status: "ACTIVE",
+          },
+        ],
+        vpc: [
+          {
+            id: "100234008",
+            name: "VPC 1",
+            type: "vpc",
+            status: "ACTIVE",
+          },
+        ],
+      },
+    ],
+  },
+];
+
+export const serverColumns: Array<{
+  header: string;
+  accessorKey?: string;
+}> = [
   {
     header: "ID",
     accessorKey: "id",
@@ -191,7 +705,7 @@ export const serverColumns: { header: string; accessorKey?: string }[] = [
   {
     header: "CREDIT (USD)",
   },
-];
+]
 
 export const serverRoomResources = {
   servers: [

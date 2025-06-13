@@ -9,6 +9,7 @@
 @theme{
     --font-alumni: 'Alumni Sans SC', sans-serif;
     --color-background: #F7F5F1;
+    --color-sidebar: #F7F5F1;
 }
 
 @theme inline {

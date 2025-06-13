@@ -14,7 +14,7 @@ export const Header = ({
   children,
 }: HeaderProps) => {
   return (
-    <header className="border-b w-full  bg-[#B19662] text-white border-gray-200 px-6 py-[5px]">
+    <header className="border-b w-full bg-gradient-to-tr from-15% from-[#cfbe9d] to-[#614611] text-white border-gray-200 px-6 py-[5px]">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-2">
           <SidebarTrigger />

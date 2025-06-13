@@ -1,4 +1,4 @@
-import { Button, DataTable, Header, type ColumnDef } from "@/components/shared";
+import {  DataTable, Header, type ColumnDef } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { serverRooms, type ServerRoomType } from "@/utils/constants/config";
 import { useNavigate } from "react-router-dom";
@@ -10,7 +10,7 @@ export const ServerRoom = () => {
       id: "id",
       header: "ID",
       accessorKey: "id",
-      cell: (row) => <span className="font-mono text-sm">{row.id}</span>,
+      cell: (row) => <span className="font-mono text-amber-800 text-xs">{row.id}</span>,
       sortable: true,
     },
     {
@@ -18,12 +18,13 @@ export const ServerRoom = () => {
       header: "NAME",
       accessorKey: "name",
       sortable: true,
+      
     },
     {
       id: "region",
       header: "REGION",
       accessorKey: "region",
-      cell: (row) => <span className="text-blue-500">{row.region}</span>,
+      cell: (row) => <span className="text-amber-800">{row.region}</span>,
       sortable: true,
       filterType: "select",
       filterOptions: [
@@ -39,6 +40,7 @@ export const ServerRoom = () => {
       header: "DATE",
       accessorKey: "createdAt",
       sortable: true,
+      cell: (row) => <span className="">{row.createdAt}</span>,
     },
     {
       id: "status",
@@ -68,7 +70,7 @@ export const ServerRoom = () => {
       header: "BILL (USD)",
       accessorKey: "bill",
       cell: (row) => (
-        <span className="font-mono text-right block">
+        <span className="font-mono text-green-500 text-xs  block">
           {row.bill.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
       ),
@@ -79,7 +81,7 @@ export const ServerRoom = () => {
       header: "CREDIT (USD)",
       accessorKey: "credit",
       cell: (row) => (
-        <span className="font-mono text-right block">
+        <span className="font-mono text-green-500 text-xs  block">
           {row.credit.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
       ),
@@ -90,7 +92,8 @@ export const ServerRoom = () => {
   return (
     <div className="">
       <Header title="Server Rooms" description="Manage your server room">
-        <Button label="Server Room" />
+        {/* <Button label="Server Rooms" /> */}
+        <p className="text-white text-xs">tosin@example.com</p>
       </Header>
 
       <div className="p-5 flex flex-col">
