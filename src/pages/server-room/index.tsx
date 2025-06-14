@@ -49,7 +49,7 @@ export const ServerRoom = () => {
       cell: (row) => (
         <Badge
           variant="outline"
-          className={
+          className={ `text-xs `+
             row.status === "ACTIVE"
               ? "bg-green-50 text-green-700 border-green-200"
               : "bg-yellow-50 text-yellow-700 border-yellow-200"

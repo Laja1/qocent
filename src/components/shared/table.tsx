@@ -245,13 +245,13 @@ export function DataTable<T>({
                 processedData.map((row, rowIndex) => (
                   <TableRow
                     key={rowIndex}
-                    className={`hover:bg-gray-50 -h-80 ${
+                    className={`hover:bg-gray-50 ${
                       onRowClick ? "cursor-pointer" : ""
                     }`}
                     onClick={onRowClick ? () => onRowClick(row) : undefined}
                   >
                     {columns.map((column) => (
-                      <TableCell key={column.id}>
+                      <TableCell key={column.id} className="text-xs p-[4px]">
                         {column.cell
                           ? column.cell(row)
                           : String(getAccessor(column)(row))}
