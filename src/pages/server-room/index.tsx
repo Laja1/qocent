@@ -1,6 +1,6 @@
-import {  DataTable, Header, type ColumnDef } from "@/components/shared";
+import { DataTable, Header, type ColumnDef } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
-import { serverRooms, type ServerRoomType } from "@/utils/constants/config";
+import { serverRooms, type ServerRoomType } from "@/utilities/constants/config";
 import { useNavigate } from "react-router-dom";
 
 export const ServerRoom = () => {
@@ -10,7 +10,9 @@ export const ServerRoom = () => {
       id: "id",
       header: "ID",
       accessorKey: "id",
-      cell: (row) => <span className="font-mono text-amber-800 text-xs">{row.id}</span>,
+      cell: (row) => (
+        <span className=" text-amber-800 ">{row.id}</span>
+      ),
       sortable: true,
     },
     {
@@ -18,7 +20,6 @@ export const ServerRoom = () => {
       header: "NAME",
       accessorKey: "name",
       sortable: true,
-      
     },
     {
       id: "region",
@@ -51,8 +52,8 @@ export const ServerRoom = () => {
           variant="outline"
           className={ `text-xs `+
             row.status === "ACTIVE"
-              ? "bg-green-50 text-green-700 border-green-200"
-              : "bg-yellow-50 text-yellow-700 border-yellow-200"
+              ? "bg-green-50 text-green-700 text-[10px] border-green-200"
+              : "bg-red-50 text-red-700 text-[10px] border-red-200"
           }
         >
           {row.status}
@@ -70,7 +71,7 @@ export const ServerRoom = () => {
       header: "BILL (USD)",
       accessorKey: "bill",
       cell: (row) => (
-        <span className="font-mono text-green-500 text-xs  block">
+        <span className=" text-green-700   text-right">
           {row.bill.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
       ),
@@ -81,7 +82,7 @@ export const ServerRoom = () => {
       header: "CREDIT (USD)",
       accessorKey: "credit",
       cell: (row) => (
-        <span className="font-mono text-green-500 text-xs  block">
+        <span className=" text-green-700  justify-end text-right">
           {row.credit.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
       ),
@@ -89,6 +90,15 @@ export const ServerRoom = () => {
     },
   ];
 
+ 
+
+  // const handlePageClick = (val: number) => {
+  //   setParams((prev) => ({ ...prev, page: val }));
+  // };
+
+  // const handlePageCountChange = (val: number) => {
+  //   setParams((prev) => ({ ...prev, size: val }));
+  // };
   return (
     <div className="">
       <Header title="Server Rooms" description="Manage your server room">
@@ -107,6 +117,15 @@ export const ServerRoom = () => {
           initialSorting={{ id: "name", desc: false }}
         />
       </div>
+      {/* <Table
+        columns={columns}
+        data={dummyUsers}
+        // loading={isGettingUser}
+        // isFetching={isFetching}
+        // actions={(row) =>
+        //   hasPermission(permissions.manageUserAccount) ? TableAction(row) : undefined
+        // }
+      /> */}
     </div>
   );
 };

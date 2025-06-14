@@ -2,7 +2,6 @@ import type React from "react";
 import { useState, useMemo } from "react";
 import {
   Table,
-  TableBody,
   TableCell,
   TableHead,
   TableHeader,
@@ -18,11 +17,9 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
 } from "@/components/ui/card";
 import { Search, Filter, Download, ChevronDown, ChevronUp } from "lucide-react";
 
@@ -154,7 +151,7 @@ export function DataTable<T>({
   );
 
   return (
-    <Card>
+  <div className="bg-white rounded-lg font-brfirma shadow-md py-2">
       <CardHeader>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -167,7 +164,7 @@ export function DataTable<T>({
                 placeholder={searchPlaceholder}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 w-full md:w-[350px]"
+                className="pl-10 placeholder:text-xs w-full md:w-[350px]"
               />
             </div>
             <div className="flex gap-2">
@@ -208,7 +205,7 @@ export function DataTable<T>({
                 {columns.map((column) => (
                   <TableHead
                     key={column.id}
-                    className={`font-semibold ${
+                    className={`font-semibold h-10 ${
                       column.sortable ? "cursor-pointer select-none" : ""
                     }`}
                     onClick={
@@ -231,36 +228,36 @@ export function DataTable<T>({
                 ))}
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <tbody>
               {processedData.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={columns.length}
-                    className="h-24 text-center"
+                    className="h-16 text-center"
                   >
                     No results found.
                   </TableCell>
                 </TableRow>
               ) : (
                 processedData.map((row, rowIndex) => (
-                  <TableRow
+                  <tr
                     key={rowIndex}
-                    className={`hover:bg-gray-50 ${
+                    className={`hover:bg-gray-50 h-4 ${
                       onRowClick ? "cursor-pointer" : ""
                     }`}
                     onClick={onRowClick ? () => onRowClick(row) : undefined}
                   >
                     {columns.map((column) => (
-                      <TableCell key={column.id} className="text-xs p-[4px]">
+                      <td key={column.id} className="border-b py-1 px-2 text-xs">
                         {column.cell
                           ? column.cell(row)
                           : String(getAccessor(column)(row))}
-                      </TableCell>
+                      </td>
                     ))}
-                  </TableRow>
+                  </tr>
                 ))
               )}
-            </TableBody>
+            </tbody>
           </Table>
         </div>
         <div className="flex items-center justify-between mt-4 text-xs text-gray-500">
@@ -269,6 +266,6 @@ export function DataTable<T>({
           </div>
         </div>
       </CardContent>
-    </Card>
+    </div>
   );
 }

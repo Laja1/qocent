@@ -1,5 +1,5 @@
 import { SubnetSection } from "@/components/not-shared/subnet";
-import { subnetData } from "@/utils/constants/config";
+import { subnetData } from "@/utilities/constants/config";
 import { Router } from "lucide-react";
 
 export const Architecture = () => {
@@ -27,6 +27,6 @@ export const Architecture = () => {
           </div>
         </div>
       </div>
-            </div>
+    </div>
   );
 };

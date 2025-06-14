@@ -1,4 +1,4 @@
-import { ICON_MAP } from "@/utils/constants/icons";
+import { ICON_MAP } from "@/utilities/constants/icons";
 import { Globe, Lock } from "lucide-react";
 type Resource = {
   id: number;
@@ -26,9 +26,7 @@ export const SubnetSection = ({ subnet }: SubnetSectionProps) => {
   );
 
   return (
-    <div
-      className={`rounded-xl  border p-2 mb-6 shadow-sm ${containerClass}`}
-    >
+    <div className={`rounded-xl  border p-2 mb-6 shadow-sm ${containerClass}`}>
       <div className="flex items-start">{icon}</div>
 
       <div className="flex flex-wrap  items-center justify-center gap-4">

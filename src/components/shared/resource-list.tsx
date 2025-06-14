@@ -12,7 +12,7 @@ import {
   Square,
   RotateCcw,
 } from "lucide-react";
-import { serverRoomResources } from "@/utils/constants/config";
+import { serverRoomResources } from "@/utilities/constants/config";
 import { Button } from "@/components/shared";
 import { useNavigate } from "react-router-dom";
 

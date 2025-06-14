@@ -6,9 +6,28 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+@font-face {
+    font-family: AeonikPro;
+    src: url('./assets/fonts/AeonikProTRIAL-Regular.otf');
+}
+
+@font-face {
+    font-family: Strawford;
+    src: url('./assets/fonts/strawford-regular-webfont.ttf');
+}
+
+@font-face {
+    font-family: Br Firma;
+    src: url('./assets/fonts/BR-Firma-Regular.otf');
+}
+
 @theme{
-    --font-alumni: 'Alumni Sans SC', sans-serif;
-    --color-background: #F7F5F1;
+    --font-aeonikpro: AeonikPro, 'san-seriff';
+   
+    --font-brfirma: Br firma,'san-seriff';
+    --font-strawford: Strawford,'san-seriff';
+    --color-background: #032e15;
     --color-sidebar: #F7F5F1;
 }
 
@@ -129,5 +148,6 @@
 }
 
 body{
-    background-color: #F7F5F1;
+    background-color: #edf2ef;
+    font-family: var(--font-brfirma);
 }

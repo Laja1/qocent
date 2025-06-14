@@ -13,7 +13,7 @@ import {
   ApiServerIcon,
   ProxyIcon,
   WebServerIcon,
-} from "@/utils/constants/icons";
+} from "@/utilities/constants/icons";
 
 export const ArchitectureDiagram = ({
   serverRoomId,
