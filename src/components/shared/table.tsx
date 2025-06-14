@@ -2,7 +2,6 @@ import type React from "react";
 import { useState, useMemo } from "react";
 import {
   Table,
-  TableBody,
   TableCell,
   TableHead,
   TableHeader,
@@ -18,7 +17,6 @@ import {
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
   CardContent,
   CardDescription,
   CardHeader,
@@ -153,7 +151,7 @@ export function DataTable<T>({
   );
 
   return (
-    <div className="bg-white rounded-lg font-aeonikpro shadow-md py-2">
+  <div className="bg-white rounded-lg font-brfirma shadow-md py-2">
       <CardHeader>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -166,7 +164,7 @@ export function DataTable<T>({
                 placeholder={searchPlaceholder}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 w-full md:w-[350px]"
+                className="pl-10 placeholder:text-xs w-full md:w-[350px]"
               />
             </div>
             <div className="flex gap-2">

@@ -17,9 +17,16 @@
     src: url('./assets/fonts/strawford-regular-webfont.ttf');
 }
 
+@font-face {
+    font-family: Br Firma;
+    src: url('./assets/fonts/BR-Firma-Regular.otf');
+}
+
 @theme{
     --font-aeonikpro: AeonikPro, 'san-seriff';
-    --font-strawford: Strawford,'san-seriff'
+   
+    --font-brfirma: Br firma,'san-seriff';
+    --font-strawford: Strawford,'san-seriff';
     --color-background: #032e15;
     --color-sidebar: #F7F5F1;
 }
@@ -142,4 +149,5 @@
 
 body{
     background-color: #edf2ef;
+    font-family: var(--font-brfirma);
 }

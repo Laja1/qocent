@@ -1,5 +1,4 @@
 import { DataTable, Header, type ColumnDef } from "@/components/shared";
-import { Table } from "@/components/Table";
 import { Badge } from "@/components/ui/badge";
 import { serverRooms, type ServerRoomType } from "@/utilities/constants/config";
 import { useNavigate } from "react-router-dom";

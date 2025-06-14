@@ -31,12 +31,12 @@ export const SidebarLayout = () => {
   };
 
   return (
-    <Sidebar className="">
+    <Sidebar className="font-brfirma">
       <SidebarHeader className="bg-green-950   text-white  border-gray-200 p-[7px]">
         <div className="flex items-center space-x-2">
           <Cloud className="h-6 w-6" color="white" />
           <div>
-            <h2 className="font-semibold ">Qucoon Cloud</h2>
+            <h2 className="font-bold ">Qucoon Cloud</h2>
             <p className="text-xs ">ife@example.com</p>
           </div>
         </div>
