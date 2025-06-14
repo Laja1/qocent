@@ -1,4 +1,4 @@
-import { Home, BookOpen, School, Award, Settings, User, Command } from "lucide-react";
+import { Home, BookOpen, School, Award, Settings, User, Command, Construction } from "lucide-react";
 import type { SVGProps } from "react";
 import {
   // Cloud,
@@ -11,7 +11,6 @@ import {
   // Plus,
   Activity,
   DollarSign,
-  Users,
 } from "lucide-react";
 
 type dashboardItemType = {
@@ -74,19 +73,19 @@ export const sidebarItems = [
     isActive: false,
   },
   {
+    title: "Projects",
+    icon: Construction,
+    href: "/dashboard/projects",
+    isActive: false,
+  },
+  {
     title: "Billing",
     icon: DollarSign,
     href: "/dashboard/billing",
     isActive: false,
   },
   {
-    title: "Team",
-    icon: Users,
-    href: "/dashboard/team",
-    isActive: false,
-  },
-  {
-    title: "Identity Center",
+    title: "IAM Center(Identity Access Management)",
     icon: User,
     href: "/dashboard/identity-center",
     isActive: false,

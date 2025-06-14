@@ -6,9 +6,21 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+@font-face {
+    font-family: AeonikPro;
+    src: url('./assets/fonts/AeonikProTRIAL-Regular.otf');
+}
+
+@font-face {
+    font-family: Strawford;
+    src: url('./assets/fonts/strawford-regular-webfont.ttf');
+}
+
 @theme{
-    --font-alumni: 'Alumni Sans SC', sans-serif;
-    --color-background: #F7F5F1;
+    --font-aeonikpro: AeonikPro, 'san-seriff';
+    --font-strawford: Strawford,'san-seriff'
+    --color-background: #032e15;
     --color-sidebar: #F7F5F1;
 }
 
@@ -129,5 +141,5 @@
 }
 
 body{
-    background-color: #F7F5F1;
+    background-color: #edf2ef;
 }

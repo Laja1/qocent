@@ -12,7 +12,7 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link, useLocation } from "react-router-dom";
-import { sidebarItems } from "@/utils/constants/config";
+import { sidebarItems } from "@/utilities/constants/config";
 
 export const SidebarLayout = () => {
   const { pathname } = useLocation();
@@ -31,17 +31,17 @@ export const SidebarLayout = () => {
   };
 
   return (
-    <Sidebar>
-      <SidebarHeader className="bg-[#F7F5F1]  text-black  border-gray-200 p-[7px]">
+    <Sidebar className="">
+      <SidebarHeader className="bg-green-950   text-white  border-gray-200 p-[7px]">
         <div className="flex items-center space-x-2">
-          <Cloud className="h-6 w-6" color="black" />
+          <Cloud className="h-6 w-6" color="white" />
           <div>
-            <h2 className="font-semibold text-black">Qucoon Cloud</h2>
-            <p className="text-xs text-black">ife@example.com</p>
+            <h2 className="font-semibold ">Qucoon Cloud</h2>
+            <p className="text-xs ">ife@example.com</p>
           </div>
         </div>
       </SidebarHeader>
-      <SidebarContent className="bg-[#F7F5F1] ">
+      <SidebarContent className="bg-[#edf2ef] ">
         <SidebarGroup>
           <SidebarGroupLabel className="">ACCOUNT</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -63,7 +63,7 @@ export const SidebarLayout = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t  bg-[#F7F5F1] border-gray-200 p-4">
+      <SidebarFooter className="border-t  bg-[#edf2ef] border-gray-200 p-4">
         <div className="text-xs text-gray-500">
           <p>Region: US East (N. Virginia)</p>
           <p>Account ID: 123456789012</p>

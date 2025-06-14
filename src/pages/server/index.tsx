@@ -1,8 +1,8 @@
-import { resources } from "@/utils/constants/config";
+import { resources } from "@/utilities/constants/config";
 import { useParams } from "react-router-dom";
-import { DataTable } from "@/components/shared";
-import { Header } from "./header";
+import { DataTable, Header } from "@/components/shared";
 import { Architecture } from "./architecure";
+import { Badge } from "@/components/ui/badge";
 
 export const Server = () => {
   const params = useParams();
@@ -17,25 +17,36 @@ export const Server = () => {
       id: "id",
       header: "ID",
       accessorKey: "id",
-      cell: (row) => <span className="font-mono  block">{row.id}</span>,
+      cell: (row) => <span className="block text-amber-800">{row.id}</span>,
     },
     {
       id: "name",
       header: "NAME",
       accessorKey: "name",
-      cell: (row) => <span className="font-mono  block">{row.name}</span>,
+      cell: (row) => <span className="block ">{row.name}</span>,
     },
     {
       id: "type",
       header: "TYPE",
       accessorKey: "type",
-      cell: (row) => <span className="font-mono  block">{row.type}</span>,
+      cell: (row) => <span className="block text-amber-800">{row.type}</span>,
     },
     {
       id: "status",
       header: "STATUS",
       accessorKey: "status",
-      cell: (row) => <span className="font-mono  block">{row.status}</span>,
+      cell: (row) => (
+        <Badge
+          variant="outline"
+          className={
+            row.status === "ACTIVE"
+              ? "bg-green-50 text-green-700 text-[10px] border-green-200"
+              : "bg-red-50 text-red-700 text-[10px] border-red-200"
+          }
+        >
+          {row.status}
+        </Badge>
+      ),
     },
   ];
 
@@ -82,9 +93,11 @@ export const Server = () => {
   return (
     <div>
       <div>
-        <Header serverRoom={serverRoom} />
+      <Header navigateBack={true} title={serverRoom?.name} description={serverRoom?.id} />
+       
+      
         <div className="flex flex-col w-full">
-          <div>
+          <div className="p-5">
             <DataTable
               data={resourceData || []}
               columns={serverRoomColumns}
