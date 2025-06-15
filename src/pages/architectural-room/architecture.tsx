@@ -1,6 +1,7 @@
 import { SubnetSection } from "@/components/not-shared/subnet";
 import { Header } from "@/components/shared";
 import { vpcData } from "@/utilities/constants/config";
+import { RowsToRender } from "@/utilities/constants/helper";
 import { AwsLogo, HuaweiLogo } from "@/utilities/constants/icons";
 import { Router } from "lucide-react";
 import { useParams } from "react-router-dom";
@@ -8,7 +9,7 @@ import { useParams } from "react-router-dom";
 export const ArchitectureRoom = () => {
   const params = useParams();
   const data = vpcData.find((vpc) => vpc.id === Number(params.id));
-  console.log(params);
+  const style = RowsToRender(data)
   return (
     <div>
       <Header title={data?.vpcId} description={data?.cidrBlock} navigateBack={true} />
@@ -28,7 +29,7 @@ export const ArchitectureRoom = () => {
               <Router className="h-6 w-6 text-purple-600" />
             </div>
 
-            <div className="flex  gap-3 items-center    w-full">
+            <div className={`${style} gap-3 items-center    w-full`} >
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
               {data?.subnet.map((subnet: any) => (
                 <SubnetSection key={subnet.id} subnet={subnet} />

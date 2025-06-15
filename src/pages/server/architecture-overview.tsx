@@ -6,15 +6,15 @@ import { useNavigate } from "react-router-dom";
 export const ArchitectureOverview = () => {
   const navigate = useNavigate();
   return (
-    <div
-     
-     
-    >
+    <div>
       <div
         className={` w-full  bg-black h-fit  flex  rounded-xl p-4 lg:p-5  gap-4`}
       >
         {vpcData.map((item) => (
-          <div  onClick={() => navigate(`/dashboard/architecture/${item.id}`)} className="flex cursor-pointer w-full flex-col gap-4 border  rounded-sm border-dashed">
+          <div
+            onClick={() => navigate(`/dashboard/architecture/${item.id}`)}
+            className="flex cursor-pointer w-full flex-col gap-4 border  rounded-sm border-dashed"
+          >
             <p className="text-white text-start text-base pl-2 pt-2 font-bold">
               {item.whereDeployed === "AWS" && <AwsLogo />}
               {item.whereDeployed === "Huawei" && <HuaweiLogo />}

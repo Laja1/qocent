@@ -1,4 +1,13 @@
-import { Home, BookOpen, School, Award, Settings, User, Command, Construction } from "lucide-react";
+import {
+  Home,
+  BookOpen,
+  School,
+  Award,
+  Settings,
+  User,
+  Command,
+  Construction,
+} from "lucide-react";
 import type { SVGProps } from "react";
 import {
   // Cloud,
@@ -349,8 +358,7 @@ export const resources: ResourceData[] = [
             status: "ACTIVE",
           },
         ],
-        sanDisks: [
-        ],
+        sanDisks: [],
         subnets: [
           {
             id: "100234006",
@@ -704,7 +712,7 @@ export const serverColumns: Array<{
   {
     header: "CREDIT (USD)",
   },
-]
+];
 
 export const serverRoomResources = {
   servers: [
@@ -828,131 +836,8 @@ export const subnetData = [
 export const vpcData = [
   {
     vpcId: "vpc-001", // Unique identifier for the VPC
-    whereDeployed:'AWS',
-    cidrBlock: "10.0.0.0/16", 
-    id: 1,
-    numberOfSubnets: 2, // Updated to reflect total number of subnets
-    subnet: [
-      {
-        id: 1,
-        subnet: "Public",
-        availabilityZone: "us-east-1a",
-        resourcesDeployed: [
-          {
-            id: 101,
-            name: "Proxy",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
-          },
-          {
-            id: 102,
-            name: "Proxy",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
-          },
-          {
-            id: 101,
-            name: "Proxy",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
-          },
-          {
-            id: 101,
-            name: "Proxy",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
-          },
-          {
-            id: 101,
-            name: "Proxy",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
-          },
-        ],
-        routeTable: "rtb-001", // Example route table associated with the subnet
-        securityGroups: ["sg-001", "sg-002"], // Example security groups associated with the subnet
-      },
-      {
-        id: 1,
-        subnet: "Public",
-        availabilityZone: "us-east-1a",
-        resourcesDeployed: [
-          {
-            id: 101,
-            name: "Proxy",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
-          },
-          {
-            id: 102,
-            name: "Proxy",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
-          },
-          {
-            id: 101,
-            name: "Proxy",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
-          },
-          {
-            id: 101,
-            name: "Proxy",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
-          },
-          {
-            id: 101,
-            name: "Proxy",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
-          },
-        ],
-        routeTable: "rtb-001", // Example route table associated with the subnet
-        securityGroups: ["sg-001", "sg-002"], // Example security groups associated with the subnet
-      },
-      {
-        id: 2,
-        subnet: "Private",
-        availabilityZone: "us-east-1a",
-        resourcesDeployed: [
-          {
-            id: 201,
-            name: "API Server",
-            instanceType: "t2.large",
-            status: "running",
-          },
-          {
-            id: 202,
-            name: "File Cabinet",
-            instanceType: "t2.medium",
-            status: "stopped",
-          },
-        ],
-        routeTable: "rtb-003",
-        securityGroups: ["sg-004"],
-      },
-      {
-        id: 3,
-        subnet: "Private", // Changed id to 4 for consistency
-        availabilityZone: "us-east-1b", // Fixed inconsistency in availability zones
-        resourcesDeployed: [
-          {
-            id: 203,
-            name: "Database Server",
-            instanceType: "t2.xlarge",
-            status: "running",
-          },
-        ],
-        routeTable: "rtb-004",
-        securityGroups: ["sg-005"],
-      },
-    ],
-  },
-  {
-    vpcId: "vpc-001", // Unique identifier for the VPC
-    whereDeployed:'AWS',
-    cidrBlock: "10.0.0.0/16", 
+    whereDeployed: "AWS",
+    cidrBlock: "10.0.0.0/16",
     id: 1,
     numberOfSubnets: 2, // Updated to reflect total number of subnets
     subnet: [
@@ -972,7 +857,95 @@ export const vpcData = [
         routeTable: "rtb-001", // Example route table associated with the subnet
         securityGroups: ["sg-001", "sg-002"], // Example security groups associated with the subnet
       },
-      
+      {
+        id: 1,
+        subnet: "Public",
+        availabilityZone: "us-east-1a",
+        resourcesDeployed: [
+          {
+            id: 101,
+            name: "Proxy",
+            instanceType: "t2.micro", // Add instance type for resources
+            status: "running", // Add status of resource
+          },
+          
+          {
+            id: 101,
+            name: "Proxy",
+            instanceType: "t2.micro", // Add instance type for resources
+            status: "running", // Add status of resource
+          },
+          {
+            id: 102,
+            name: "Proxy",
+            instanceType: "t2.micro", // Add instance type for resources
+            status: "running", // Add status of resource
+          },
+        ],
+        routeTable: "rtb-001", // Example route table associated with the subnet
+        securityGroups: ["sg-001", "sg-002"], // Example security groups associated with the subnet
+      },
+      {
+        id: 2,
+        subnet: "Private",
+        availabilityZone: "us-east-1a",
+        resourcesDeployed: [
+          {
+            id: 201,
+            name: "API Server",
+            instanceType: "t2.large",
+            status: "running",
+          },
+          {
+            id: 202,
+            name: "File Cabinet",
+            instanceType: "t2.medium",
+            status: "stopped",
+          },
+        ],
+        routeTable: "rtb-003",
+        securityGroups: ["sg-004"],
+      },
+      {
+        id: 3,
+        subnet: "Private", // Changed id to 4 for consistency
+        availabilityZone: "us-east-1b", // Fixed inconsistency in availability zones
+        resourcesDeployed: [
+          {
+            id: 102,
+            name: "Proxy",
+            instanceType: "t2.micro", // Add instance type for resources
+            status: "running", // Add status of resource
+          },
+        ],
+        routeTable: "rtb-004",
+        securityGroups: ["sg-005"],
+      },
+    ],
+  },
+  {
+    vpcId: "vpc-001", // Unique identifier for the VPC
+    whereDeployed: "AWS",
+    cidrBlock: "10.0.0.0/16",
+    id: 1,
+    numberOfSubnets: 2, // Updated to reflect total number of subnets
+    subnet: [
+      {
+        id: 1,
+        subnet: "Public",
+        availabilityZone: "us-east-1a",
+        resourcesDeployed: [
+          {
+            id: 101,
+            name: "Proxy",
+            instanceType: "t2.micro", // Add instance type for resources
+            status: "running", // Add status of resource
+          },
+        ],
+        routeTable: "rtb-001", // Example route table associated with the subnet
+        securityGroups: ["sg-001", "sg-002"], // Example security groups associated with the subnet
+      },
+
       {
         id: 2,
         subnet: "Private",
@@ -1011,11 +984,11 @@ export const vpcData = [
       },
     ],
   },
-  
+
   // {
   //   vpcId: "vpc-001", // Unique identifier for the VPC
   //   whereDeployed:'AWS',
-  //   cidrBlock: "10.0.0.0/16", 
+  //   cidrBlock: "10.0.0.0/16",
   //   id: 1,
   //   numberOfSubnets: 2, // Updated to reflect total number of subnets
   //   subnet: [
@@ -1034,7 +1007,7 @@ export const vpcData = [
   //       routeTable: "rtb-001", // Example route table associated with the subnet
   //       securityGroups: ["sg-001", "sg-002"], // Example security groups associated with the subnet
   //     },
-      
+
   //     // {
   //     //   id: 2,
   //     //   subnet: "Private",
@@ -1073,11 +1046,11 @@ export const vpcData = [
   //     // },
   //   ],
   // },
-  
+
   {
     vpcId: "vpc-002",
     cidrBlock: "192.168.0.0/16",
-    whereDeployed:'Huawei',
+    whereDeployed: "Huawei",
     id: 2,
     numberOfSubnets: 2,
     subnet: [
@@ -1120,4 +1093,3 @@ export const vpcData = [
     ],
   },
 ];
-
