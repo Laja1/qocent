@@ -39,7 +39,7 @@ const buttonVariants = cva("button", {
       true: "w-full",
     },
     size: {
-      small: ["text-xs", "rounded-sm", "py-3", "px-2"],
+      small: ["text-xs", "rounded-sm", "py-2", "px-2"],
       medium: ["text-sm", "rounded-sm", "py-2", "px-4"],
       large: ["text-base", "rounded-sm", "py-4", "px-7"],
       rounded: ["text-base", "rounded-full", "py-2", "px-3"],

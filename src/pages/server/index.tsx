@@ -1,8 +1,9 @@
 import { resources } from "@/utilities/constants/config";
 import { useParams } from "react-router-dom";
-import { DataTable, Header } from "@/components/shared";
-import { Architecture } from "./architecure";
+import { Button, DataTable, Header, type ColumnDef } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
+import { Plus } from "lucide-react";
+import { ArchitectureOverview } from "./architecture-overview";
 
 export const Server = () => {
   const params = useParams();
@@ -12,7 +13,14 @@ export const Server = () => {
     (serverRoom) => serverRoom.id === params.id
   );
 
-  const serverRoomColumns = [
+  type ServerRoom = {
+    id: string;
+    name: string;
+    type: string;
+    status: "ACTIVE" | "INACTIVE";
+  };
+
+  const serverRoomColumns: ColumnDef<ServerRoom>[] = [
     {
       id: "id",
       header: "ID",
@@ -50,65 +58,80 @@ export const Server = () => {
     },
   ];
 
+  type resourceDataType = {
+    id: string;
+    name: string;
+    type: string;
+    status: 'ACTIVE' | 'INACTIVE';
+  }
   // Gather all resource data (servers, databases, file cabinets, etc.)
-  const resourceData = serverRoom?.resources.flatMap((resource) => [
+  const resourceData: resourceDataType[] =
+  serverRoom?.resources?.flatMap((resource) => [
     ...resource.servers.map((server) => ({
       id: server.id,
       name: server.name,
       type: server.type,
-      status: server.status,
+      status: server.status as 'ACTIVE' | 'INACTIVE', // <-- If needed
     })),
     ...resource.databases.map((database) => ({
       id: database.id,
       name: database.name,
       type: database.type,
-      status: database.status,
+      status: database.status as 'ACTIVE' | 'INACTIVE',
     })),
     ...resource.fileCabinets.map((fileCabinet) => ({
       id: fileCabinet.id,
       name: fileCabinet.name,
       type: fileCabinet.type,
-      status: fileCabinet.status,
+      status: fileCabinet.status as 'ACTIVE' | 'INACTIVE',
     })),
     ...resource.sanDisks.map((sanDisk) => ({
       id: sanDisk.id,
       name: sanDisk.name,
       type: sanDisk.type,
-      status: sanDisk.status,
+      status: sanDisk.status as 'ACTIVE' | 'INACTIVE',
     })),
     ...resource.subnets.map((subnet) => ({
       id: subnet.id,
       name: subnet.name,
       type: subnet.type,
-      status: subnet.status,
+      status: subnet.status as 'ACTIVE' | 'INACTIVE',
     })),
     ...resource.vpc.map((vpc) => ({
       id: vpc.id,
       name: vpc.name,
       type: vpc.type,
-      status: vpc.status,
+      status: vpc.status as 'ACTIVE' | 'INACTIVE',
     })),
-  ]);
+  ]) ?? []; 
+
 
   return (
     <div>
       <div>
-      <Header navigateBack={true} title={serverRoom?.name} description={serverRoom?.id} />
-       
-      
+        <Header
+          navigateBack={true}
+          title={serverRoom?.name}
+          description={serverRoom?.id}
+        ><Button intent='secondary' size="small" prefixIcon={<Plus className="size-4"/>} label="Deploy new resource"/></Header>
+
         <div className="flex flex-col w-full">
           <div className="p-5">
-            <DataTable
+            <DataTable<resourceDataType>
               data={resourceData || []}
               columns={serverRoomColumns}
               title={`${serverRoom?.name} Resources`}
               description={`${resourceData?.length} resources`}
               searchPlaceholder="Search by resource type..."
-              onRowClick={(row) => console.log("Clicked:", row.original)}
+              // onRowClick={(row) => console.log("Clicked:")}
               initialSorting={{ id: "name", desc: false }}
             />
+
+            <div className=" w-full  pt-5 flex flex-col">
+              <p className="text-xl font-bold">Data Center</p>
+              <ArchitectureOverview />
+            </div>
           </div>
-          <Architecture />
         </div>
       </div>
     </div>

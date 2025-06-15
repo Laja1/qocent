@@ -1,9 +1,9 @@
 import Home from "@/pages/home";
 import SignIn from "@/pages/auth/sign-in";
 import SignUp from "@/pages/auth/sign-up";
-import { Dashboard } from "@/pages/dashboard";
 import { ServerRoom } from "@/pages/server-room";
 import { Server } from "@/pages/server";
+import { ArchitectureRoom } from "@/pages/architectural-room/architecture";
 
 
 export const generalRoutes = [
@@ -33,14 +33,14 @@ export const dashboardRoutesWithSidebar = [
   },
 ];
 
-// export const dashboardRoutesWithoutSidebar = [
-//   {
-//     path: "/dashboard/server/:id",
-//     element: <Server />,
-//     name: "Home",
-//     metadata: {isProtected: true, hasSideBar: true, displayName: "Server"}
-//   },
-// ];
+export const dashboardRoutesWithoutSidebar = [
+  {
+    path: "/dashboard/architecture/:id",
+    element: <ArchitectureRoom />,
+    name: "Home",
+    metadata: {isProtected: true, hasSideBar: true, displayName: "Server"}
+  },
+];
 
 export const authRoutes = [
   {
