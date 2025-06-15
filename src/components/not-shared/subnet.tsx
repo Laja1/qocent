@@ -1,3 +1,4 @@
+import { deployedToRender } from "@/utilities/constants/helper";
 import { ICON_MAP } from "@/utilities/constants/icons";
 import { Globe, Lock } from "lucide-react";
 type Resource = {
@@ -12,12 +13,12 @@ type Subnet = {
   resourcesDeployed: Resource[];
 };
 
-type SubnetSectionProps = {
+export type SubnetSectionProps = {
   subnet: Subnet;
 };
 export const SubnetSection = ({ subnet }: SubnetSectionProps) => {
   const isPublic = subnet.subnet.toLowerCase() === "public";
-
+ const style= deployedToRender(subnet.resourcesDeployed.length)
   const containerClass = isPublic ? " border-[#A17246]" : " border-blue-300";
   const icon = isPublic ? (
     <Globe className="h-6 w-6 text-green-600 mx-auto mb-1" />
@@ -29,7 +30,7 @@ export const SubnetSection = ({ subnet }: SubnetSectionProps) => {
     <div className={`rounded-xl w-full   border p-2 mb-6 shadow-sm ${containerClass}`}>
       <div className="flex items-start">{icon}</div>
 
-      <div className="flex w-full    items-center justify-center gap-4">
+      <div className={`${style} w-full    items-center justify-center gap-4`}>
         {subnet.resourcesDeployed.map((resource) => (
           <div key={resource.id} className="text-center">
             {ICON_MAP[resource.name] ?? (

@@ -1,33 +1,36 @@
-import { vpcData } from "./config";
-export const RowsToRender = () => {
-    // If there's only one VPC, return 1
-    if (vpcData.length === 1) return 1;
-  
-    // If there are exactly 2 VPCs
-    if (vpcData.length === 2) {
-      // Count total subnets across both VPCs
-      const totalSubnets = vpcData.reduce((acc, item) => acc + item.numberOfSubnets, 0);
-  
-      // Count total resources deployed across both VPCs
-      const totalResources = vpcData.reduce((acc, item) => {
-        return acc + item.subnet.reduce((subnetAcc, subnet) => subnetAcc + subnet.resourcesDeployed.length, 0);
-      }, 0);
-  
-      // If the total subnets exceed 6 or resources exceed 8, return 1
-      if (totalSubnets > 6 || totalResources > 8) {
-        return 1;
-      }
-  
-      // If neither of the above conditions are true, return 2
-      return 2;
-    }
-  
-    // If there are more than 2 VPCs, return 1
-    if (vpcData.length > 2) return 1;
-  
-    return 2; // Default return 1
-  };
-  
-  
+import type { VPC } from "@/types";
 
-  
+export const RowsToRender = (vpcData: VPC): string => {
+  const vpcSubnet = vpcData.subnet;
+
+  if (vpcSubnet.length > 4) {
+    return "grid grid-cols-1 lg:grid-cols-2";
+  }
+
+  const totalResourcesDeployed = vpcSubnet.reduce(
+    (acc, subnet) => acc + subnet.resourcesDeployed.length,
+    0
+  );
+
+  if (vpcSubnet.length <= 4 && totalResourcesDeployed > 8) {
+    return "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4";
+  }
+
+  if (vpcSubnet.length <= 3 && totalResourcesDeployed <= 8) {
+    return "flex flex-row";
+  }
+
+  return "grid grid-cols-1 md:grid-cols-2";
+};
+
+export const deployedToRender = (resourcesDeployed:number) => {
+  const vpcSubnet = resourcesDeployed;
+  // const totalResourcesDeployed = vpcSubnet.reduce(
+  //     (acc, subnet) => acc + subnet.resourcesDeployed.length,
+  //     0
+  // );
+  if (vpcSubnet > 4) {
+    return "flex flex-wrap";
+  }
+  return "flex";
+};
