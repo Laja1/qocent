@@ -26,12 +26,12 @@ export const SubnetSection = ({ subnet }: SubnetSectionProps) => {
   );
 
   return (
-    <div className={`rounded-xl  border p-2 mb-6 shadow-sm ${containerClass}`}>
+    <div className={`rounded-xl w-full   border p-2 mb-6 shadow-sm ${containerClass}`}>
       <div className="flex items-start">{icon}</div>
 
-      <div className="flex flex-wrap  items-center justify-center gap-4">
+      <div className="flex w-full    items-center justify-center gap-4">
         {subnet.resourcesDeployed.map((resource) => (
-          <div key={resource.id}>
+          <div key={resource.id} className="text-center">
             {ICON_MAP[resource.name] ?? (
               <span className="text-red-500">Unknown</span>
             )}
