@@ -206,7 +206,7 @@ export function DataTable<T>({
                   <TableHead
                     key={column.id}
                     className={`font-semibold h-10 ${
-                      column.sortable ? "cursor-pointer select-none" : ""
+                      column.sortable ? "cursor-pointer select-none text-right" : ""
                     }`}
                     onClick={
                       column.sortable ? () => handleSort(column.id) : undefined

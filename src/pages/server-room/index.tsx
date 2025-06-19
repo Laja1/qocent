@@ -71,7 +71,7 @@ export const ServerRoom = () => {
       header: "BILL (USD)",
       accessorKey: "bill",
       cell: (row) => (
-        <span className=" text-green-700   text-right">
+        <span className="block text-green-700 text-right">
           {row.bill.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
       ),
@@ -82,7 +82,7 @@ export const ServerRoom = () => {
       header: "CREDIT (USD)",
       accessorKey: "credit",
       cell: (row) => (
-        <span className=" text-green-700  justify-end text-right">
+        <span className="block text-green-700  justify-end text-right">
           {row.credit.toLocaleString("en-US", { minimumFractionDigits: 2 })}
         </span>
       ),
