@@ -16,19 +16,17 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import {
-  CardContent,
-  CardDescription,
-  CardHeader,
-} from "@/components/ui/card";
+import { CardContent, CardDescription, CardHeader } from "@/components/ui/card";
 import { Search, Filter, Download, ChevronDown, ChevronUp } from "lucide-react";
 
 export type ColumnDef<T> = {
   id: string;
   header: string;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   accessorKey: keyof T | ((row: T) => any);
   cell?: (row: T) => React.ReactNode;
   sortable?: boolean;
+  headerClassName?: string;
   filterType?: "text" | "select";
   filterOptions?: { label: string; value: string }[];
 };
@@ -47,7 +45,7 @@ export type DataTableProps<T> = {
   onRowClick?: (row: T) => void;
   initialSorting?: SortingState;
   filterableColumns?: string[];
-};
+}
 
 export function DataTable<T>({
   data,
@@ -151,7 +149,7 @@ export function DataTable<T>({
   );
 
   return (
-  <div className="bg-white rounded-lg font-brfirma shadow-md py-2">
+    <div className="bg-white rounded-lg font-brfirma shadow-md py-2">
       <CardHeader>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -205,14 +203,22 @@ export function DataTable<T>({
                 {columns.map((column) => (
                   <TableHead
                     key={column.id}
-                    className={`font-semibold h-10 ${
-                      column.sortable ? "cursor-pointer select-none text-right" : ""
+                    className={`font-semibold text-sm h-10 ${
+                      column.sortable
+                        ? "cursor-pointer select-none text-right"
+                        : ""
                     }`}
                     onClick={
                       column.sortable ? () => handleSort(column.id) : undefined
                     }
                   >
-                    <div className="flex items-center">
+                    <div
+                      className={`flex items-center   w-full ${
+                        column.headerClassName?.includes("text-right")
+                          ? "justify-end"
+                          : ""
+                      }`}
+                    >
                       {column.header}
                       {column.sortable && sorting?.id === column.id && (
                         <span className="ml-1">
@@ -248,7 +254,10 @@ export function DataTable<T>({
                     onClick={onRowClick ? () => onRowClick(row) : undefined}
                   >
                     {columns.map((column) => (
-                      <td key={column.id} className="border-b py-1 px-2 text-xs">
+                      <td
+                        key={column.id}
+                        className="border-b py-1 px-2 text-xs"
+                      >
                         {column.cell
                           ? column.cell(row)
                           : String(getAccessor(column)(row))}

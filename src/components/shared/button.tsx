@@ -20,11 +20,12 @@ const buttonVariants = cva("button", {
         "border-[#DFDFE5]",
         "hover:bg-gray-100",
       ],
-      tetiary: [
-        "bg-[#F5F5F5]",
-        "text-[#18143E]",
+      tertiary: [
+        "bg-[#edf2ef]",
+        "text-[#000]",
         "border-transparent",
         "hover:bg-gray-200",
+        "text-xs"
       ],
       quaternary: [
         "bg-black",
@@ -50,7 +51,7 @@ const buttonVariants = cva("button", {
     size: "medium",
   },
 });
-type buttonState = "primary" | "secondary" | "tetiary" | "quaternary";
+type buttonState = "primary" | "secondary" | "tertiary" | "quaternary";
 interface ButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "disabled">,
     VariantProps<typeof buttonVariants> {
@@ -94,6 +95,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "opacity-10 cursor-not-allowed ": disabled,
         "hover:bg-gray-800 ": !disabled && intent === "primary",
       },
+      'hover:cursor-pointer',
       className
     );
 

@@ -1,4 +1,4 @@
-import { Cloud } from "lucide-react";
+import { Cloud, LogOut } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -11,12 +11,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { sidebarItems } from "@/utilities/constants/config";
 
 export const SidebarLayout = () => {
   const { pathname } = useLocation();
-
+  const navigate = useNavigate();
   const isItemActive = (itemHref: string) => {
     // Exact match for dashboard root
     if (itemHref === "/dashboard" && pathname === "/dashboard") {
@@ -64,9 +64,11 @@ export const SidebarLayout = () => {
         </SidebarGroup>
       </SidebarContent>
       <SidebarFooter className="border-t  bg-[#edf2ef] border-gray-200 p-4">
-        <div className="text-xs text-gray-500">
-          <p>Region: US East (N. Virginia)</p>
-          <p>Account ID: 123456789012</p>
+        <div
+          onClick={() => navigate("/auth/sign-in")}
+          className="text-xs flex items-center text-red-700 gap-2 hover:cursor-pointer"
+        >
+          <LogOut className="size-4 " /> <p>Logout</p>
         </div>
       </SidebarFooter>
     </Sidebar>

@@ -17,12 +17,12 @@ export const Server = () => {
     id: string;
     name: string;
     type: string;
-    status: "ACTIVE" | "INACTIVE";
+    status: "Active" | "Suspended";
   };
 
   const serverRoomColumns: ColumnDef<ServerRoom>[] = [
     {
-      id: "id",
+      id: "id", 
       header: "ID",
       accessorKey: "id",
       cell: (row) => <span className="block text-amber-800">{row.id}</span>,
@@ -47,7 +47,7 @@ export const Server = () => {
         <Badge
           variant="outline"
           className={
-            row.status === "ACTIVE"
+            row.status === "Active"
               ? "bg-green-50 text-green-700 text-[10px] border-green-200"
               : "bg-red-50 text-red-700 text-[10px] border-red-200"
           }
@@ -62,7 +62,7 @@ export const Server = () => {
     id: string;
     name: string;
     type: string;
-    status: 'ACTIVE' | 'INACTIVE';
+    status: 'Active' | 'Suspended';
   }
   // Gather all resource data (servers, databases, file cabinets, etc.)
   const resourceData: resourceDataType[] =
@@ -71,37 +71,37 @@ export const Server = () => {
       id: server.id,
       name: server.name,
       type: server.type,
-      status: server.status as 'ACTIVE' | 'INACTIVE', // <-- If needed
+      status: server.status as 'Active' | 'Suspended' // <-- If needed
     })),
     ...resource.databases.map((database) => ({
       id: database.id,
       name: database.name,
       type: database.type,
-      status: database.status as 'ACTIVE' | 'INACTIVE',
+      status: database.status as 'Active' | 'Suspended'
     })),
     ...resource.fileCabinets.map((fileCabinet) => ({
       id: fileCabinet.id,
       name: fileCabinet.name,
       type: fileCabinet.type,
-      status: fileCabinet.status as 'ACTIVE' | 'INACTIVE',
+      status: fileCabinet.status as 'Active' | 'Suspended'
     })),
     ...resource.sanDisks.map((sanDisk) => ({
       id: sanDisk.id,
       name: sanDisk.name,
       type: sanDisk.type,
-      status: sanDisk.status as 'ACTIVE' | 'INACTIVE',
+      status: sanDisk.status as 'Active' | 'Suspended'
     })),
     ...resource.subnets.map((subnet) => ({
       id: subnet.id,
       name: subnet.name,
       type: subnet.type,
-      status: subnet.status as 'ACTIVE' | 'INACTIVE',
+      status: subnet.status as 'Active' | 'Suspended'
     })),
     ...resource.vpc.map((vpc) => ({
       id: vpc.id,
       name: vpc.name,
       type: vpc.type,
-      status: vpc.status as 'ACTIVE' | 'INACTIVE',
+      status: vpc.status as 'Active' | 'Suspended'
     })),
   ]) ?? []; 
 

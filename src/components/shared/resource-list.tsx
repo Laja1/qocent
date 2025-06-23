@@ -164,7 +164,7 @@ export const ResourceList = ({
                       className="cursor-pointer"
                       onClick={() =>
                         navigate(
-                          `/console/server-rooms/${serverRoomId}/servers/${server.id}`
+                          `/console/server-sites/${serverRoomId}/servers/${server.id}`
                         )
                       }
                     >
@@ -264,7 +264,7 @@ export const ResourceList = ({
                         surfixIcon={<ExternalLink className="h-4 w-4" />}
                         onClick={() =>
                           navigate(
-                            `/console/server-rooms/${serverRoomId}/servers/${server.id}`
+                            `/console/server-sites/${serverRoomId}/servers/${server.id}`
                           )
                         }
                       />

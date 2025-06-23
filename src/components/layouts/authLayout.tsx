@@ -23,7 +23,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
         return (
           <p className="text-center text-sm text-gray-700">
             Not registered yet?{" "}
-            <Link to={authRoutes[1].path} className="text-gray-700">
+            <Link to={authRoutes[1].path} className="text-red-700">
               Sign up
             </Link>
           </p>
@@ -32,7 +32,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
         return (
           <p className="text-center text-sm text-gray-700">
             Already have an account?{" "}
-            <Link to={authRoutes[0].path} className="text-gray-700">
+            <Link to={authRoutes[0].path} className="text-red-700">
               Sign in
             </Link>
           </p>
@@ -41,7 +41,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
         return (
           <p className="text-center text-sm text-gray-700">
             Didn't get a code?{" "}
-            <Link to={authRoutes[0].path} className="text-gray-700">
+            <Link to={authRoutes[0].path} className="text-red-700">
               Resend OTP
             </Link>
           </p>

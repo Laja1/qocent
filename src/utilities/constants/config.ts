@@ -4,23 +4,17 @@ import {
   School,
   Award,
   Settings,
-  User,
-  Command,
   Construction,
+  Warehouse,
+  Fan,
+  Briefcase,
+  Wallet,
+  Users,
+  RotateCcwKey,
+  Anchor,
 } from "lucide-react";
 import type { SVGProps } from "react";
-import {
-  // Cloud,
-  Server,
-  // HardDrive,
-  // FolderOpen,
-  // Shield,
-  // Database,
-  // Network,
-  // Plus,
-  Activity,
-  DollarSign,
-} from "lucide-react";
+
 
 type dashboardItemType = {
   name: string;
@@ -29,15 +23,17 @@ type dashboardItemType = {
 };
 
 export interface ServerRoomType {
-  id: string;
-  name: string;
-  description: string;
-  resourceCount: number;
+  siteId: string;
+  siteName: string;
+  houses: string;
+  alerts: number;
   region: string;
+  provider: string;
+  siteCode: string;
   status: string;
   createdAt: string;
   bill: number;
-  credit: number;
+  balance: number;
 }
 
 export const dashboardItems: dashboardItemType[] = [
@@ -70,115 +66,139 @@ export const dashboardItems: dashboardItemType[] = [
 
 export const sidebarItems = [
   {
-    title: "Server Rooms",
-    icon: Server,
+    title: "Server Sites (Accouts)",
+    icon: Fan,
+    href: "/dashboard/server-sites",
+    isActive: false,
+  },
+  {
+    title: "Server Houses (VPCs)",
+    icon: Warehouse,
+    href: "/dashboard/server-houses",
+    isActive: false,
+  },
+  {
+    title: "Server Rooms (Subnets)",
+    icon: Construction,
     href: "/dashboard/server-rooms",
     isActive: false,
   },
   {
     title: "Resources",
-    icon: Activity,
+    icon: Anchor,
     href: "/dashboard/resources",
     isActive: false,
   },
   {
     title: "Projects",
-    icon: Construction,
-    href: "/dashboard/projects",
-    isActive: false,
-  },
-  {
-    title: "Billing",
-    icon: DollarSign,
-    href: "/dashboard/billing",
-    isActive: false,
-  },
-  {
-    title: "IAM Center(Identity Access Management)",
-    icon: User,
+    icon: Briefcase,
     href: "/dashboard/identity-center",
     isActive: false,
   },
   {
-    title: "Command Center",
-    icon: Command,
+    title: "Access Management",
+    icon: RotateCcwKey,
     href: "/dashboard/command-center",
+    isActive: false,
+  },
+  {
+    title: "Billing & Statements",
+    icon: Wallet,
+    href: "/dashboard/settings",
+    isActive: false,
+  },
+  {
+    title: "Organization",
+    icon: Users,
+    href: "/dashboard/settings",
     isActive: false,
   },
   {
     title: "Settings",
     icon: Settings,
-    href: "/dashboard/settings",
+    href: "Settings",
     isActive: false,
   },
 ];
 
 export const serverRooms: ServerRoomType[] = [
   {
-    id: "100234001",
-    name: "Tymer",
-    description: "Production environment for the Tymer application",
-    resourceCount: 12,
+    siteId: "1001",
+    siteName: "Rubies Production Site",
+    houses: "2",
+    alerts: 0,
+    provider: "AWS",
     region: "US (California)",
-    status: "ACTIVE",
-    createdAt: "1945-02-03",
+    siteCode: "RUB-PROD-SITE-1",
+    status: "Active",
+    createdAt: "2025-01-09",
     bill: 76902.0,
-    credit: 7718.0,
+    balance: 7718.0,
   },
   {
-    id: "100234002",
-    name: "Rubies",
-    description: "Production environment for the Rubies application",
-    resourceCount: 8,
+    siteId: "1002",
+    siteName: "Rubies Production Site",
+    houses: "1",
+    alerts: 8,
+    provider: "Huawei",
     region: "US (Virginia)",
-    status: "ACTIVE",
-    createdAt: "1945-02-04",
+    status: "Active",
+    siteCode: "RUB-PROD-SITE-1",
+    createdAt: "2025-01-09",
     bill: 34460.0,
-    credit: 661.0,
+    balance: 661.0,
   },
   {
-    id: "100234003",
-    name: "Qoovest",
-    description: "Development environment for the Qoovest project",
-    resourceCount: 5,
+    siteId: "1003",
+    siteName: "Qoovest",
+    houses: "2",
+    alerts: 5,
+    siteCode: "RUB-PROD-SITE-1",
     region: "UK",
-    status: "ACTIVE",
-    createdAt: "1945-02-05",
+    status: "Active",
+    provider: "Huawei",
+    createdAt: "2025-01-09",
     bill: 11671.0,
-    credit: 547.0,
+    balance: 547.0,
   },
   {
-    id: "100234004",
-    name: "Qoonity",
-    description: "Testing environment for the Qoonity service",
-    resourceCount: 9,
+    siteId: "1004",
+    siteName: "Qoonity",
+    houses: "1",
+    provider: "Huawei",
+    siteCode: "RUB-PROD-SITE-1",
+    alerts: 9,
     region: "France",
-    status: "ACTIVE",
-    createdAt: "1945-02-06",
+    status: "Active",
+    createdAt: "2025-01-09",
     bill: 87829.0,
-    credit: 4877.0,
+    balance: 4877.0,
   },
   {
-    id: "100234005",
-    name: "NCube",
-    description: "Staging environment for the NCube platform",
-    resourceCount: 15,
+    siteId: "1005",
+    provider: "AWS",
+    siteCode: "RUB-PROD-SITE-1",
+    siteName: "NCube",
+    houses: "3",
+    alerts: 15,
     region: "Germany",
-    status: "ACTIVE",
-    createdAt: "1945-02-07",
+    status: "Active",
+    createdAt: "2025-01-09",
     bill: 75488.0,
-    credit: 2267.0,
+    balance: 2267.0,
   },
   {
-    id: "100234006",
-    name: "Tymer",
-    description: "Backup environment for Tymer",
-    resourceCount: 6,
+    siteId: "1006",
+    siteName: "Tymer",
+    provider: "AWS",
+    siteCode: "RUB-PROD-SITE-1",
+    houses: "4",
+    alerts: 6,
     region: "South Africa",
-    status: "MAINTENANCE",
-    createdAt: "1945-02-08",
+    status: "Suspended",
+    createdAt: "2025-01-09",
     bill: 74891.0,
-    credit: 6397.0,
+    balance: 6397.0,
   },
 ];
 
@@ -225,37 +245,37 @@ interface ResourceData {
   id: string;
   name: string;
   description: string;
-  resourceCount: number;
+  alerts: number;
   region: string;
   status: string;
   createdAt: string;
   bill: number;
-  credit: number;
+  balance: number;
   resources: ResourceType[];
 }
 
 export const resources: ResourceData[] = [
   {
-    id: "100234001",
+    id: "1001",
     name: "Tymer",
     description: "Production environment for the Tymer application",
-    resourceCount: 12,
+    alerts: 12,
     region: "US (California)",
-    status: "ACTIVE",
-    createdAt: "1945-02-03",
+    status: "Active",
+    createdAt: "2025-01-09",
     bill: 76902.0,
-    credit: 7718.0,
+    balance: 7718.0,
     resources: [
       {
         servers: [
           {
-            id: "100234001",
+            id: "1001",
             name: "Server 1",
             type: "t3.medium",
             status: "ACTIVE",
           },
           {
-            id: "100234002",
+            id: "1002",
             name: "Server 2",
             type: "t3.medium",
             status: "ACTIVE",
@@ -263,13 +283,13 @@ export const resources: ResourceData[] = [
         ],
         databases: [
           {
-            id: "100234003",
+            id: "1003",
             name: "Database 1",
             type: "mysql",
             status: "ACTIVE",
           },
           {
-            id: "100234004",
+            id: "1004",
             name: "Database 2",
             type: "mysql",
             status: "ACTIVE",
@@ -277,7 +297,7 @@ export const resources: ResourceData[] = [
         ],
         fileCabinets: [
           {
-            id: "100234005",
+            id: "1005",
             name: "File Cabinet 1",
             type: "s3",
             status: "ACTIVE",
@@ -285,7 +305,7 @@ export const resources: ResourceData[] = [
         ],
         sanDisks: [
           {
-            id: "100234006",
+            id: "1006",
             name: "SAN Disk 1",
             type: "ssd",
             status: "ACTIVE",
@@ -293,7 +313,7 @@ export const resources: ResourceData[] = [
         ],
         subnets: [
           {
-            id: "100234007",
+            id: "1007",
             name: "Subnet 1",
             type: "subnet",
             status: "ACTIVE",
@@ -301,7 +321,7 @@ export const resources: ResourceData[] = [
         ],
         vpc: [
           {
-            id: "100234008",
+            id: "1008",
             name: "VPC 1",
             type: "vpc",
             status: "ACTIVE",
@@ -311,26 +331,27 @@ export const resources: ResourceData[] = [
     ],
   },
   {
-    id: "100234002",
-    name: "Rubies",
-    description: "Production environment for the Rubies application",
-    resourceCount: 8,
+    id: "1002",
+    name: "Rubies Production Site",
+    description:
+      "Production environment for the Rubies Production Site application",
+    alerts: 8,
     region: "US (Virginia)",
     status: "ACTIVE",
-    createdAt: "1945-02-04",
+    createdAt: "2025-01-09",
     bill: 34460.0,
-    credit: 661.0,
+    balance: 661.0,
     resources: [
       {
         servers: [
           {
-            id: "100234001",
+            id: "1001",
             name: "Server 1",
             type: "t3.medium",
             status: "ACTIVE",
           },
           {
-            id: "100234002",
+            id: "1002",
             name: "Server 2",
             type: "t3.medium",
             status: "ACTIVE",
@@ -338,13 +359,13 @@ export const resources: ResourceData[] = [
         ],
         databases: [
           {
-            id: "100234003",
+            id: "1003",
             name: "Database 1",
             type: "mysql",
             status: "ACTIVE",
           },
           {
-            id: "100234004",
+            id: "1004",
             name: "Database 2",
             type: "mysql",
             status: "ACTIVE",
@@ -352,7 +373,7 @@ export const resources: ResourceData[] = [
         ],
         fileCabinets: [
           {
-            id: "100234005",
+            id: "1005",
             name: "File Cabinet 1",
             type: "s3",
             status: "ACTIVE",
@@ -361,7 +382,7 @@ export const resources: ResourceData[] = [
         sanDisks: [],
         subnets: [
           {
-            id: "100234006",
+            id: "1006",
             name: "Subnet 1",
             type: "subnet",
             status: "ACTIVE",
@@ -369,7 +390,7 @@ export const resources: ResourceData[] = [
         ],
         vpc: [
           {
-            id: "100234007",
+            id: "1007",
             name: "VPC 1",
             type: "vpc",
             status: "ACTIVE",
@@ -379,26 +400,26 @@ export const resources: ResourceData[] = [
     ],
   },
   {
-    id: "100234003",
+    id: "1003",
     name: "Qoovest",
     description: "Development environment for the Qoovest project",
-    resourceCount: 5,
+    alerts: 5,
     region: "UK",
     status: "ACTIVE",
-    createdAt: "1945-02-05",
+    createdAt: "2025-01-09",
     bill: 11671.0,
-    credit: 547.0,
+    balance: 547.0,
     resources: [
       {
         servers: [
           {
-            id: "100234001",
+            id: "1001",
             name: "Server 1",
             type: "t3.medium",
             status: "ACTIVE",
           },
           {
-            id: "100234002",
+            id: "1002",
             name: "Server 2",
             type: "t3.medium",
             status: "ACTIVE",
@@ -406,13 +427,13 @@ export const resources: ResourceData[] = [
         ],
         databases: [
           {
-            id: "100234003",
+            id: "1003",
             name: "Database 1",
             type: "mysql",
             status: "ACTIVE",
           },
           {
-            id: "100234004",
+            id: "1004",
             name: "Database 2",
             type: "mysql",
             status: "ACTIVE",
@@ -420,7 +441,7 @@ export const resources: ResourceData[] = [
         ],
         fileCabinets: [
           {
-            id: "100234005",
+            id: "1005",
             name: "File Cabinet 1",
             type: "s3",
             status: "ACTIVE",
@@ -428,7 +449,7 @@ export const resources: ResourceData[] = [
         ],
         sanDisks: [
           {
-            id: "100234006",
+            id: "1006",
             name: "SAN Disk 1",
             type: "ssd",
             status: "ACTIVE",
@@ -436,7 +457,7 @@ export const resources: ResourceData[] = [
         ],
         subnets: [
           {
-            id: "100234007",
+            id: "1007",
             name: "Subnet 1",
             type: "subnet",
             status: "ACTIVE",
@@ -444,7 +465,7 @@ export const resources: ResourceData[] = [
         ],
         vpc: [
           {
-            id: "100234008",
+            id: "1008",
             name: "VPC 1",
             type: "vpc",
             status: "ACTIVE",
@@ -454,26 +475,26 @@ export const resources: ResourceData[] = [
     ],
   },
   {
-    id: "100234004",
+    id: "1004",
     name: "Qoonity",
     description: "Testing environment for the Qoonity service",
-    resourceCount: 9,
+    alerts: 9,
     region: "France",
     status: "ACTIVE",
-    createdAt: "1945-02-06",
+    createdAt: "2025-01-09",
     bill: 87829.0,
-    credit: 4877.0,
+    balance: 4877.0,
     resources: [
       {
         servers: [
           {
-            id: "100234001",
+            id: "1001",
             name: "Server 1",
             type: "t3.medium",
             status: "ACTIVE",
           },
           {
-            id: "100234002",
+            id: "1002",
             name: "Server 2",
             type: "t3.medium",
             status: "ACTIVE",
@@ -481,13 +502,13 @@ export const resources: ResourceData[] = [
         ],
         databases: [
           {
-            id: "100234003",
+            id: "1003",
             name: "Database 1",
             type: "mysql",
             status: "ACTIVE",
           },
           {
-            id: "100234004",
+            id: "1004",
             name: "Database 2",
             type: "mysql",
             status: "ACTIVE",
@@ -495,7 +516,7 @@ export const resources: ResourceData[] = [
         ],
         fileCabinets: [
           {
-            id: "100234005",
+            id: "1005",
             name: "File Cabinet 1",
             type: "s3",
             status: "ACTIVE",
@@ -503,7 +524,7 @@ export const resources: ResourceData[] = [
         ],
         sanDisks: [
           {
-            id: "100234006",
+            id: "1006",
             name: "SAN Disk 1",
             type: "ssd",
             status: "ACTIVE",
@@ -511,7 +532,7 @@ export const resources: ResourceData[] = [
         ],
         subnets: [
           {
-            id: "100234007",
+            id: "1007",
             name: "Subnet 1",
             type: "subnet",
             status: "ACTIVE",
@@ -519,7 +540,7 @@ export const resources: ResourceData[] = [
         ],
         vpc: [
           {
-            id: "100234008",
+            id: "1008",
             name: "VPC 1",
             type: "vpc",
             status: "ACTIVE",
@@ -529,26 +550,26 @@ export const resources: ResourceData[] = [
     ],
   },
   {
-    id: "100234005",
+    id: "1005",
     name: "NCube",
     description: "Staging environment for the NCube platform",
-    resourceCount: 15,
+    alerts: 15,
     region: "Germany",
     status: "ACTIVE",
     createdAt: "1945-02-07",
     bill: 75488.0,
-    credit: 2267.0,
+    balance: 2267.0,
     resources: [
       {
         servers: [
           {
-            id: "100234001",
+            id: "1001",
             name: "Server 1",
             type: "t3.medium",
             status: "ACTIVE",
           },
           {
-            id: "100234002",
+            id: "1002",
             name: "Server 2",
             type: "t3.medium",
             status: "ACTIVE",
@@ -556,13 +577,13 @@ export const resources: ResourceData[] = [
         ],
         databases: [
           {
-            id: "100234003",
+            id: "1003",
             name: "Database 1",
             type: "mysql",
             status: "ACTIVE",
           },
           {
-            id: "100234004",
+            id: "1004",
             name: "Database 2",
             type: "mysql",
             status: "ACTIVE",
@@ -570,7 +591,7 @@ export const resources: ResourceData[] = [
         ],
         fileCabinets: [
           {
-            id: "100234005",
+            id: "1005",
             name: "File Cabinet 1",
             type: "s3",
             status: "ACTIVE",
@@ -578,7 +599,7 @@ export const resources: ResourceData[] = [
         ],
         sanDisks: [
           {
-            id: "100234006",
+            id: "1006",
             name: "SAN Disk 1",
             type: "ssd",
             status: "ACTIVE",
@@ -586,7 +607,7 @@ export const resources: ResourceData[] = [
         ],
         subnets: [
           {
-            id: "100234007",
+            id: "1007",
             name: "Subnet 1",
             type: "subnet",
             status: "ACTIVE",
@@ -594,7 +615,7 @@ export const resources: ResourceData[] = [
         ],
         vpc: [
           {
-            id: "100234008",
+            id: "1008",
             name: "VPC 1",
             type: "vpc",
             status: "ACTIVE",
@@ -604,26 +625,26 @@ export const resources: ResourceData[] = [
     ],
   },
   {
-    id: "100234006",
+    id: "1006",
     name: "Tymer",
     description: "Backup environment for Tymer",
-    resourceCount: 6,
+    alerts: 6,
     region: "South Africa",
-    status: "MAINTENANCE",
-    createdAt: "1945-02-08",
+    status: "Suspended",
+    createdAt: "2025-01-09",
     bill: 74891.0,
-    credit: 6397.0,
+    balance: 6397.0,
     resources: [
       {
         servers: [
           {
-            id: "100234001",
+            id: "1001",
             name: "Server 1",
             type: "t3.medium",
             status: "ACTIVE",
           },
           {
-            id: "100234002",
+            id: "1002",
             name: "Server 2",
             type: "t3.medium",
             status: "ACTIVE",
@@ -631,13 +652,13 @@ export const resources: ResourceData[] = [
         ],
         databases: [
           {
-            id: "100234003",
+            id: "1003",
             name: "Database 1",
             type: "mysql",
             status: "ACTIVE",
           },
           {
-            id: "100234004",
+            id: "1004",
             name: "Database 2",
             type: "mysql",
             status: "ACTIVE",
@@ -645,7 +666,7 @@ export const resources: ResourceData[] = [
         ],
         fileCabinets: [
           {
-            id: "100234005",
+            id: "1005",
             name: "File Cabinet 1",
             type: "s3",
             status: "ACTIVE",
@@ -653,7 +674,7 @@ export const resources: ResourceData[] = [
         ],
         sanDisks: [
           {
-            id: "100234006",
+            id: "1006",
             name: "SAN Disk 1",
             type: "ssd",
             status: "ACTIVE",
@@ -661,7 +682,7 @@ export const resources: ResourceData[] = [
         ],
         subnets: [
           {
-            id: "100234007",
+            id: "1007",
             name: "Subnet 1",
             type: "subnet",
             status: "ACTIVE",
@@ -669,7 +690,7 @@ export const resources: ResourceData[] = [
         ],
         vpc: [
           {
-            id: "100234008",
+            id: "1008",
             name: "VPC 1",
             type: "vpc",
             status: "ACTIVE",
@@ -710,7 +731,7 @@ export const serverColumns: Array<{
     header: "BILL (USD)",
   },
   {
-    header: "CREDIT (USD)",
+    header: "balance (USD)",
   },
 ];
 
@@ -852,7 +873,6 @@ export const vpcData = [
             instanceType: "t2.micro", // Add instance type for resources
             status: "running", // Add status of resource
           },
-          
         ],
         routeTable: "rtb-001", // Example route table associated with the subnet
         securityGroups: ["sg-001", "sg-002"], // Example security groups associated with the subnet
@@ -868,7 +888,7 @@ export const vpcData = [
             instanceType: "t2.micro", // Add instance type for resources
             status: "running", // Add status of resource
           },
-          
+
           {
             id: 101,
             name: "Proxy",

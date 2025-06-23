@@ -21,7 +21,7 @@ export const Header = ({
   return (
     <header className="border-b w-full font-brfirma  bg-green-950 text-white border-gray-200 px-6 py-[5px]">
       <div className="flex items-center justify-between">
-        <div className="flex items-center space-x-2">
+        <div className="flex items-start space-x-1">
           {
             navigateBack? <div
             onClick={() => navigate(-1)}

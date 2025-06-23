@@ -13,8 +13,8 @@ import { useState } from "react";
 
 const cloudResources = [
   {
-    id: "server-room",
-    name: "Server Room",
+    id: "server-site",
+    name: "Server site",
     description: "Create isolated network environments for your resources",
     icon: Network,
     awsEquivalent: "VPC",
