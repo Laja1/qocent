@@ -15,7 +15,7 @@ type FlexibleTabsProps = {
     )
     return (
       <Tabs   defaultValue={defaultTab} className={flexibleTabStyle}>
-        <TabsList className="w-full">
+        <TabsList>
           {tabs.map((tab) => (
             <TabsTrigger key={tab.value} value={tab.value}>
               {tab.label}

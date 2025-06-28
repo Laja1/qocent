@@ -13,7 +13,7 @@ const SignIn = () => {
   const formik = useFormik({
     initialValues: signInInit,
     onSubmit,
-    validationSchema:loginFormValidationSchema
+    validationSchema: loginFormValidationSchema,
   });
   const navigate = useNavigate();
   return (
@@ -24,7 +24,7 @@ const SignIn = () => {
       <div className="flex flex-col gap-3">
         <Textfield
           formik={formik}
-          name='emailAddress'
+          name="emailAddress"
           label="Email"
           placeholder="Enter your email"
           error={
@@ -35,9 +35,9 @@ const SignIn = () => {
         />
         <Textfield
           label="Password"
-          name='password'
+          name="password"
           placeholder="Enter your password"
-          type={seePassword ?  "text":"password" }
+          type={seePassword ? "text" : "password"}
           suffixIcon={
             <button onClick={() => setSeePassword((prev) => !prev)}>
               {seePassword ? <EyeIcon size={16} /> : <EyeClosed size={16} />}
@@ -54,7 +54,7 @@ const SignIn = () => {
           label="Sign In"
           className="w-full mt-3"
           disabled={!formik?.isValid}
-          onClick={() => navigate("/dashboard/server-sites")}
+          onClick={() => navigate("/server-sites")}
         />
       </div>
     </AuthLayout>

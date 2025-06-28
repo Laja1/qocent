@@ -7,3 +7,5 @@ export * from "./resource-list";
 export * from "./table";
 export * from './tabs'
 export * from './selectfield'
+export * from './textfield2'
+export * from './selectfield2'

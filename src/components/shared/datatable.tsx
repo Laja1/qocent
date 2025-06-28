@@ -99,7 +99,7 @@ export function DataTable<T>({
   onRowClick,
   initialSorting = null,
   filterableColumns = [],
-  pageSize = 10,
+  pageSize = 100,
   actions = [],
   bulkActions = [],
   getRowId = (_, index) => index.toString(),
@@ -227,29 +227,28 @@ export function DataTable<T>({
     if (actions.length > 0) {
       cols.push({
         id: "actions",
-        header: "Actions",
-
+        header: "",
         accessorKey: () => "",
         cell: (row: T) => (
-          <div className="justify-center  flex">
+          <div className="justify-center flex">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
+              <DropdownMenuContent align="end" className=" rounded-xs ">
                 {actions.map((action, index) => (
                   <DropdownMenuItem
                     key={index}
                     onClick={() => action.onClick(row)}
-                    className={`cursor-pointer ${
+                    className={`cursor-pointer  ${
                       action.variant === "destructive"
                         ? "text-red-600 focus:text-red-600"
                         : ""
                     }`}
                   >
-                    {action.icon && <action.icon className="h-4 w-4 mr-2" />}
+                    {action.icon && <action.icon className={`h-4 w-4 mr-2`} />}
                     {action.label}
                   </DropdownMenuItem>
                 ))}
@@ -260,12 +259,13 @@ export function DataTable<T>({
         headerClassName: "",
       } as ColumnDef<T>);
     }
-
+  
     return cols;
   }, [columns, actions]);
+  
 
   return (
-    <div className="bg-white rounded-lg p-2 font-brfirma shadow-sm">
+    <div className="bg-white  py-2 font-brfirma ">
       <CardHeader>
         <div className="flex flex-col  md:flex-row md:items-center md:justify-between gap-4">
           <div>
@@ -305,16 +305,15 @@ export function DataTable<T>({
                   </SelectContent>
                 </Select>
               ))}
-              <Button variant="outline" size="icon">
+              <button className="border border-sm p-2">
                 <Download className="h-4 w-4" />
-              </Button>
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Bulk Actions */}
         {showBulkActions && (
-          <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-sm">
             <span className="text-sm font-medium text-blue-900">
               {selectedRows.size} item{selectedRows.size !== 1 ? "s" : ""}{" "}
               selected
@@ -345,7 +344,7 @@ export function DataTable<T>({
         )}
       </CardHeader>
       <CardContent>
-        <div className="rounded-md border">
+        <div className="rounded-xs border">
           <Table>
             <TableHeader>
               <TableRow>

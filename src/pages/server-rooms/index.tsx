@@ -1,15 +1,13 @@
-import { useState } from "react";
 import { imgLinks } from "@/assets/assetLink";
 import { Button, Header, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
-import { ServerRoomsTab } from "./server-rooms-tab";
 import type { roomType } from "./type";
 import { roomData } from "./config";
 
 export const ServerRooms = () => {
-  const [rowId, setRowId] = useState("1001");
+  // const [rowId, setRowId] = useState("R-0001");
 
   const serverRoomColumns: ColumnDef<roomType>[] = [
     {
@@ -30,7 +28,9 @@ export const ServerRooms = () => {
       id: "roomCode",
       header: "ROOM CODE",
       accessorKey: "siteCode",
-      cell: (row) => <span className="text-amber-800 line-clamp-1">{row.roomCode}</span>,
+      cell: (row) => (
+        <span className="text-amber-800 line-clamp-1">{row.roomCode}</span>
+      ),
       sortable: true,
       filterType: "select",
     },
@@ -46,7 +46,9 @@ export const ServerRooms = () => {
       id: "siteCode",
       header: "SITE CODE",
       accessorKey: "siteCode",
-      cell: (row) => <span className="text-amber-800 line-clamp-1">{row.siteCode}</span>,
+      cell: (row) => (
+        <span className="text-amber-800 line-clamp-1">{row.siteCode}</span>
+      ),
       sortable: true,
       filterType: "select",
     },
@@ -142,12 +144,12 @@ export const ServerRooms = () => {
     },
   ];
 
-  const room = roomData.find((room) => room.roomId === rowId) as
-    | roomType
-    | undefined;
+  // const room = roomData.find((room) => room.roomId === rowId) as
+  //   | roomType
+  //   | undefined;
 
   return (
-    <div className="">
+    <div className="bg-white h-full">
       <Header title="Server Rooms" description="Manage your server room">
         <Button
           intent="tertiary"
@@ -157,19 +159,19 @@ export const ServerRooms = () => {
         />
       </Header>
 
-      <div className="p-5 flex flex-col">
+      <div className=" flex mt-14 flex-col">
         <DataTable
           data={roomData}
           columns={serverRoomColumns}
           searchPlaceholder="Search server rooms by name, ID, or region..."
           pageSize={5}
           actions={actions}
-          onRowClick={(row) => setRowId(row.roomId)}
+          // onRowClick={(row) => setRowId(row.roomId)}
           getRowId={(row) => row.roomId}
           initialSorting={{ id: "siteName", desc: false }}
         />
       </div>
-      <ServerRoomsTab serverRoom={room} />
+      {/* <ServerRoomsTab serverRoom={room} /> */}
     </div>
   );
 };

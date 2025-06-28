@@ -1,7 +1,6 @@
 import { imgLinks } from "@/assets/assetLink";
 import { FlexibleTabs } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import type { roomType } from "./type";
 
@@ -18,9 +17,9 @@ interface ServerRoomTabProps {
     
   return (
     <div><div className="m-5 ">
-     <Card className="w-full bg-gradient-to-tl from-bg-[#edf2ef] to-[#649c7b] text-black">
+   
       <div className="px-5 ">
-        <h1 className="font-bold text-2xl text-center">
+        <h1 className="font-bold text-2xl text-left mb-2">
           {serverRoom?.roomName} ({serverRoom?.roomCode})
         </h1>
         <FlexibleTabs tabs={tabs} defaultValue="room-details">
@@ -28,11 +27,11 @@ interface ServerRoomTabProps {
             switch (value) {
               case "room-details":
                 return (
-                  <div>
+                  <div className="w-[300px]  lg:w-[400px]">
                     <div className="space-y-1"></div>
                     <Separator className="my-4" />
                     <div className="space-y-4 text-sm">
-                      {[
+                    {[
                         { label: "Room ID", value: serverRoom?.roomId },
                         { label: "Room Name", value: serverRoom?.roomName },
                         { label: "Resources Deployed", value: serverRoom?.resourcesDeployed },
@@ -92,7 +91,6 @@ interface ServerRoomTabProps {
           }}
         </FlexibleTabs>
       </div>
-    </Card>
   </div></div>
   )
 }

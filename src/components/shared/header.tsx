@@ -1,44 +1,56 @@
 import { useNavigate } from "react-router-dom";
 import { SidebarTrigger } from "../ui/sidebar";
 import { ArrowLeftCircle } from "lucide-react";
+import { svgLinks } from "@/assets/assetLink";
 
 type HeaderProps = {
   title?: string;
   description?: string;
   children?: React.ReactNode;
-  navigateBack?:boolean
+  navigateBack?: boolean;
 };
-
-
 
 export const Header = ({
   title,
   description,
   children,
-  navigateBack
+  navigateBack,
 }: HeaderProps) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
   return (
-    <header className="border-b w-full font-brfirma  bg-green-950 text-white border-gray-200 px-6 py-[5px]">
-      <div className="flex items-center justify-between">
-        <div className="flex items-start space-x-1">
-          {
-            navigateBack? <div
-            onClick={() => navigate(-1)}
-            className="flex cursor-pointer  items-center space-x-2"
+    <header className="relative z-10 bg-green-950 text-white font-brfirma  top-0 h-14 px-6 py-2">
+      
+      <img
+        src={svgLinks.grunge}
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-30 pointer-events-none"
+        alt="background texture"
+      />
+
+      {/* Header Content */}
+      <div className="relative z-10 flex items-center justify-between w-full">
+        <div className="flex items-start gap-3">
+          {navigateBack ? (
+            <button
+              onClick={() => navigate(-1)}
+              className="flex items-center space-x-2 text-white hover:opacity-80"
             >
               <ArrowLeftCircle className="size-6" />
-          </div> : <SidebarTrigger />
-          }
-         
-          <div className="flex flex-col ">
-            <h1 className="text-lg font-bold text-white">{title}</h1>
-            <p className="text-xs text-gray-600">{description}</p>
-          </div>{" "}
+            </button>
+          ) : (
+            <SidebarTrigger />
+          )}
+
+          <div className="flex flex-col">
+            {title && <h1 className="text-lg font-bold">{title}</h1>}
+            {description && (
+              <p className="text-xs text-gray-400 leading-tight">{description}</p>
+            )}
+          </div>
         </div>
-        <div>
-          {children}
-        </div>
+
+        {/* Right Slot for Actions */}
+        <div>{children}</div>
       </div>
     </header>
   );

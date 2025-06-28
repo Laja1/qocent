@@ -17,7 +17,6 @@ export type HouseData = {
     rooms: string;
     alerts: number;
     provider: string;
-    region: string;
     siteCode: string;
     houseCode: string;
     status: string;

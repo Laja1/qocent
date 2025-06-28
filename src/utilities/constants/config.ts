@@ -1,8 +1,4 @@
 import {
-  Home,
-  BookOpen,
-  School,
-  Award,
   Settings,
   Construction,
   Warehouse,
@@ -13,21 +9,14 @@ import {
   RotateCcwKey,
   Anchor,
 } from "lucide-react";
-import type { SVGProps } from "react";
 
 
-type dashboardItemType = {
-  name: string;
-  href: string;
-  icon: React.FC<SVGProps<SVGSVGElement>>;
-};
 
 export interface ServerRoomType {
   siteId: string;
   siteName: string;
   houses: string;
   alerts: number;
-  region: string;
   provider: string;
   siteCode: string;
   status: string;
@@ -36,81 +25,55 @@ export interface ServerRoomType {
   balance: number;
 }
 
-export const dashboardItems: dashboardItemType[] = [
-  {
-    name: "Dashboard",
-    href: "/dashboard",
-    icon: Home,
-  },
-  {
-    name: "My Courses",
-    href: "/dashboard/my-course",
-    icon: BookOpen,
-  },
-  {
-    name: "My Schools",
-    href: "/dashboard/my-school",
-    icon: School,
-  },
-  {
-    name: "Certificates",
-    href: "/dashboard/certificates",
-    icon: Award,
-  },
-  {
-    name: "Settings",
-    href: "/dashboard/settings",
-    icon: Settings,
-  },
-];
+
 
 export const sidebarItems = [
   {
     title: "Server Sites (Accouts)",
     icon: Fan,
-    href: "/dashboard/server-sites",
+    href: "/server-sites",
     isActive: false,
   },
   {
     title: "Server Houses (VPCs)",
     icon: Warehouse,
-    href: "/dashboard/server-houses",
+    href: "/server-houses",
     isActive: false,
   },
   {
     title: "Server Rooms (Subnets)",
     icon: Construction,
-    href: "/dashboard/server-rooms",
+    href: "/server-rooms",
     isActive: false,
   },
   {
     title: "Resources",
     icon: Anchor,
-    href: "/dashboard/resources",
+    href: "/resources",
     isActive: false,
   },
   {
     title: "Projects",
     icon: Briefcase,
-    href: "/dashboard/identity-center",
+    href: "/identity-center",
     isActive: false,
   },
   {
     title: "Access Management",
     icon: RotateCcwKey,
-    href: "/dashboard/command-center",
+    href: "/command-center",
     isActive: false,
   },
   {
     title: "Billing & Statements",
     icon: Wallet,
-    href: "/dashboard/settings",
+    href: "/settings",
     isActive: false,
   },
   {
     title: "Organization",
     icon: Users,
-    href: "/dashboard/settings",
+    href: "/settings",
     isActive: false,
   },
   {
@@ -128,8 +91,7 @@ export const serverRooms: ServerRoomType[] = [
     houses: "2",
     alerts: 0,
     provider: "AWS",
-    region: "US (California)",
-    siteCode: "RUB-PROD-SITE-1",
+    siteCode: "Rub-Prod-Site-1",
     status: "Active",
     createdAt: "2025-01-09",
     bill: 76902.0,
@@ -137,24 +99,10 @@ export const serverRooms: ServerRoomType[] = [
   },
   {
     siteId: "1002",
-    siteName: "Rubies Production Site",
-    houses: "1",
-    alerts: 8,
-    provider: "Huawei",
-    region: "US (Virginia)",
-    status: "Active",
-    siteCode: "RUB-PROD-SITE-1",
-    createdAt: "2025-01-09",
-    bill: 34460.0,
-    balance: 661.0,
-  },
-  {
-    siteId: "1003",
     siteName: "Qoovest",
     houses: "2",
     alerts: 5,
-    siteCode: "RUB-PROD-SITE-1",
-    region: "UK",
+    siteCode: "Qoov-Prod-Site-1",
     status: "Active",
     provider: "Huawei",
     createdAt: "2025-01-09",
@@ -162,45 +110,54 @@ export const serverRooms: ServerRoomType[] = [
     balance: 547.0,
   },
   {
-    siteId: "1004",
+    siteId: "1003",
     siteName: "Qoonity",
     houses: "1",
     provider: "Huawei",
-    siteCode: "RUB-PROD-SITE-1",
+    siteCode: "Qoon-Prod-Site-1",
     alerts: 9,
-    region: "France",
     status: "Active",
     createdAt: "2025-01-09",
     bill: 87829.0,
     balance: 4877.0,
   },
   {
-    siteId: "1005",
+    siteId: "1004",
     provider: "AWS",
-    siteCode: "RUB-PROD-SITE-1",
+    siteCode: "NC-Prod-Site-1",
     siteName: "NCube",
     houses: "3",
     alerts: 15,
-    region: "Germany",
     status: "Active",
     createdAt: "2025-01-09",
     bill: 75488.0,
     balance: 2267.0,
   },
   {
-    siteId: "1006",
+    siteId: "1005",
     siteName: "Tymer",
     provider: "AWS",
-    siteCode: "RUB-PROD-SITE-1",
-    houses: "4",
+    siteCode: "Tymer-Prod-Site-1",
+    houses: "2",
     alerts: 6,
-    region: "South Africa",
     status: "Suspended",
     createdAt: "2025-01-09",
     bill: 74891.0,
     balance: 6397.0,
   },
-];
+  {
+    siteId: "1006",
+    siteName: "Tymer",
+    provider: "AWS",
+    siteCode: "Tymer-Prod-Site-1",
+    houses: "4",
+    alerts: 6,
+    status: "Suspended",
+    createdAt: "2025-01-09",
+    bill: 74891.0,
+    balance: 6397.0,
+  },
+]
 
 type ResourceType = {
   servers: {

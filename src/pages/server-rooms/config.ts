@@ -1,78 +1,27 @@
+import { houseData } from "../server-houses/config";
 import type { roomType } from "./type";
 
-export const roomData: roomType[] = [
-  {
-    roomId: "1001",
-    roomName: "Rubies Production Site",
-    houseCode: "PROD-HSE-1",
-    provider: "AWS",
-    siteCode: "RUB-PROD-SITE-1",
-    roomCode: "db-subnet",
-    type: "Private",
-    createdAt: "2025-01-09",
-    resourcesDeployed: 9,
-    ipRange: "10.10.4.3",
-  },
-  {
-    roomId: "1002",
-    roomName: "Rubies Production Site",
+export const roomData: roomType[] = [];
 
-    provider: "Huawei",
-    type: "Public",
-    houseCode: "PROD-HSE-2",
-    siteCode: "RUB-PROD-SITE-1",
-    roomCode: "webapp-subnet",
-    createdAt: "2025-01-09",
-    resourcesDeployed: 9,
-    ipRange: "10.10.4.3",
-  },
-  {
-    roomId: "1003",
-    roomName: "Qoovest",
-    houseCode: "PROD-HSE-1",
-    siteCode: "RUB-PROD-SITE-1",
-    roomCode: "appserver-subnet",
-    type: "Public",
-    provider: "Huawei",
-    resourcesDeployed: 9,
-    createdAt: "2025-01-09",
-    ipRange: "10.10.4.3",
-  },
-  {
-    roomId: "1004",
-    roomName: "Qoonity",
-    provider: "Huawei",
-    siteCode: "RUB-PROD-SITE-1",
-    roomCode: "lb-subnet",
-    houseCode: "PROD-HSE-1",
-    type: "Private",
-    createdAt: "2025-01-09",
-    resourcesDeployed: 9,
-    ipRange: "10.10.4.3",
-  },
-  {
-    roomId: "1005",
-    provider: "AWS",
-    siteCode: "RUB-PROD-SITE-1",
-    roomCode: "vpn-subnet",
-    roomName: "NCube",
-    houseCode: "PROD-HSE-1",
-    type: "Private",
-    createdAt: "2025-01-09",
-    resourcesDeployed: 9,
+let roomCounter = 1;
 
-    ipRange: "10.10.4.3",
-  },
-  {
-    roomId: "1006",
-    roomName: "Tymer",
-    provider: "AWS",
-    siteCode: "RUB-PROD-SITE-1",
-    roomCode: "db-subnet",
-    houseCode: "PROD-HSE-1",
-    type: "Private",
-    createdAt: "2025-01-09",
-    resourcesDeployed: 9,
-    ipRange: "10.10.4.3",
-  },
-];
+houseData.forEach((house) => {
+  const numberOfRooms = parseInt(house.rooms, 10) || 0;
+
+  for (let i = 0; i < numberOfRooms; i++) {
+    roomData.push({
+      roomId: `R-${roomCounter.toString().padStart(4, "0")}`,
+      roomName: house.houseName,
+      provider: house.provider,
+      siteCode: house.siteCode,
+      houseCode: house.houseCode,
+      roomCode: `${house.houseCode}-subnet-${i + 1}`,
+      type: i % 2 === 0 ? "Private" : "Public",
+      createdAt: house.createdAt,
+      resourcesDeployed: 5 + ((roomCounter % 4) * 2), 
+      ipRange: house.ipRange,
+    });
+
+    roomCounter++;
+  }
+});

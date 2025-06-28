@@ -1,3 +1,4 @@
+import { svgLinks } from "@/assets/assetLink";
 import { authRoutes } from "@/routes/routes";
 import { Link, useLocation } from "react-router-dom";
 type AuthLayoutProps = {
@@ -50,12 +51,20 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
   };
 
   return (
+    <div className="h-full w-full">
+       <img
+            src={svgLinks.grunge}
+            className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 pointer-events-none"
+            alt="background texture"
+          />
     <div
       className={
-        "flex  flex-col items-center  justify-between min-h-screen  py-5"
+        "flex  flex-col items-center relative  justify-between min-h-screen  py-5"
       }
     >
+     
       <div>
+
         <h1 className="text-4xl text-gray-700 font-alumni">
           QUCOON CLOUD SERVICES
         </h1>
@@ -77,7 +86,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
           QMS. All rights reserved. © {new Date().getFullYear()}
         </h1>
       </div>
-    </div>
+    </div></div>
   );
 };
 

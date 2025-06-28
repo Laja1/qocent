@@ -7,8 +7,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
+import { getIn } from "formik";
 
-export const SelectField = ({
+export const SelectField2 = ({
   error,
   placeholder,
   label,
@@ -17,30 +18,37 @@ export const SelectField = ({
   options,
   value,
   className,
-}: SelectProps) => {
+  onChange, // Add custom onChange prop
+}: SelectProps & { onChange?: (value: string) => void }) => {
   const selectfieldClasses = clsx(
-    "block w-full placeholder:text-[#000] bg-white font-normal items-center border border-gray-300   placeholder:font-light  px-3 placeholder:text-[8px] inset-ring-green-800 ring-2 ring-green-800 text-xs border-0 shadow-sm  leading-6 disabled:text-gray-400 disabled:cursor-not-allowed focus:ring-[1px] focus:ring-primary rounded-xs",
+    "block w-full placeholder:text-[#000] bg-white font-normal items-center border border-gray-300 placeholder:font-light px-3 placeholder:text-[8px] inset-ring-green-800 ring-2 ring-green-800 text-xs border-0 shadow-sm leading-6 disabled:text-gray-400 disabled:cursor-not-allowed focus:ring-[1px] focus:ring-primary rounded-xs",
     className
   );
 
   const handleChange = (selectedValue: string) => {
-    if (formik) {
+    if (onChange) {
+      // Use custom onChange if provided (for our dynamic nested fields)
+      onChange(selectedValue);
+    } else if (formik) {
+      // Default formik behavior
       formik.setFieldValue(name, selectedValue);
     }
   };
 
+  // Use getIn for nested field names like "nestedFields[0].selectedOption"
+  const selectedValue = value || (formik ? getIn(formik.values, name) : "") || "";
+
   return (
     <div className="w-full">
-      {label && (
-        <label htmlFor={name} className="text-sm text-tetiary-lighter">
-          {label}
-        </label>
-      )}
-      <div className="relative mt-1">
-        <Select
-          value={value || formik?.values[name] || ""}
-          onValueChange={handleChange}
-        >
+      <div className="flex flex-row items-center gap-2">
+        {label && (
+          <label htmlFor={name} className="text-sm text-tetiary-lighter">
+            {label}
+          </label>
+        )}
+      </div>
+      <div className="relative w-full">
+        <Select value={selectedValue} onValueChange={handleChange}>
           <SelectTrigger
             id={name}
             className={clsx(

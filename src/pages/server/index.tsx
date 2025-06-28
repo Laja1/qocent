@@ -131,7 +131,7 @@ export const Server = () => {
 
             <div className=" w-full  pt-5 flex flex-col">
               <p className="text-xl font-bold">Data Center</p>
-              <ArchitectureOverview />
+              <ArchitectureOverview  />
             </div>
           </div>
         </div>

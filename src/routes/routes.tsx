@@ -1,13 +1,14 @@
 import Home from "@/pages/home";
 import SignIn from "@/pages/auth/sign-in";
 import SignUp from "@/pages/auth/sign-up";
-import { Server} from "@/pages/server";
+import { Server } from "@/pages/server";
 import { ArchitectureRoom } from "@/pages/architectural-room/architecture";
 import { ServerSites } from "@/pages/server-sites";
 import { ServerHouses } from "@/pages/server-houses";
 import { ServerRooms } from "@/pages/server-rooms";
 import { Resources } from "@/pages/resources";
-import { CreateResource } from "@/pages/auth/create-new-resource";
+import { CreateResource } from "@/pages/create-new-resource";
+import { Resource } from "@/pages/resource";
 
 export const generalRoutes = [
   {
@@ -19,7 +20,7 @@ export const generalRoutes = [
 
 export const dashboardRoutesWithSidebar = [
   {
-    path: "/dashboard/server-sites",
+    path: "/server-sites",
     element: <ServerSites />,
     name: "ServerSite",
     metadata: {
@@ -29,7 +30,7 @@ export const dashboardRoutesWithSidebar = [
     },
   },
   {
-    path: "/dashboard/server-houses",
+    path: "/server-houses",
     element: <ServerHouses />,
     name: "ServerHouses",
     metadata: {
@@ -39,7 +40,7 @@ export const dashboardRoutesWithSidebar = [
     },
   },
   {
-    path: "/dashboard/server-rooms",
+    path: "/server-rooms",
     element: <ServerRooms />,
     name: "ServerRooms",
     metadata: {
@@ -49,17 +50,27 @@ export const dashboardRoutesWithSidebar = [
     },
   },
   {
-    path: "/dashboard/resources",
-    element: <Resources />,
-    name: "Resources",
+    path: "/resource",
+    element: <Resource />,
+    name: "ServerRooms",
     metadata: {
       isProtected: true,
       hasSideBar: true,
-      displayName: "Resources",
+      displayName: "Server Rooms",
     },
   },
   {
-    path: "/dashboard/create-resource",
+    path: "/resources",
+    element: <Resources />,
+    name: "Resource",
+    metadata: {
+      isProtected: true,
+      hasSideBar: true,
+      displayName: "Resource",
+    },
+  },
+  {
+    path: "/create-resource",
     element: <CreateResource />,
     name: "Resources",
     metadata: {
@@ -69,7 +80,7 @@ export const dashboardRoutesWithSidebar = [
     },
   },
   {
-    path: "/dashboard/server/:id",
+    path: "/server/:id",
     element: <Server />,
     name: "Server",
     metadata: { isProtected: true, hasSideBar: true, displayName: "Server" },
@@ -78,7 +89,7 @@ export const dashboardRoutesWithSidebar = [
 
 export const dashboardRoutesWithoutSidebar = [
   {
-    path: "/dashboard/architecture/:id",
+    path: "/architecture/:id",
     element: <ArchitectureRoom />,
     name: "Home",
     metadata: { isProtected: true, hasSideBar: true, displayName: "Server" },

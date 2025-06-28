@@ -1,26 +1,23 @@
 import { imgLinks } from "@/assets/assetLink";
-import {
-  Button,
-  Header,
-  type ColumnDef,
-} from "@/components/shared";
+import { Button, Header, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Badge } from "@/components/ui/badge";
 import { serverRooms, type ServerRoomType } from "@/utilities/constants/config";
-import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
+import { Edit, Eye, Trash2, PlusIcon, Plus } from "lucide-react";
 import { useState } from "react";
-import { ServerSitesTab, type ServerSite } from "./server-sites-tab";
+import { ServerSitesTable2 } from "./server-sites-table";
+import { useNavigate } from "react-router-dom";
 
 export const ServerSites = () => {
-  const [rowId, setRowId] = useState("1005");
-  console.log(rowId);
+  const navigate = useNavigate();
+  const [rowId, setRowId] = useState("1001");
 
   const serverRoomColumns: ColumnDef<ServerRoomType>[] = [
     {
       id: "siteId",
       header: "SITE ID",
       accessorKey: "siteId",
-      cell: (row) => <span className="text-amber-800">{row.siteId}</span>,
+      cell: (row) => <span className="">{row.siteId}</span>,
       sortable: true,
     },
     {
@@ -34,16 +31,18 @@ export const ServerSites = () => {
       id: "siteCode",
       header: "SITE CODE",
       accessorKey: "siteCode",
-      cell: (row) => <span className="text-amber-800 line-clamp-1">{row.siteCode}</span>,
+      cell: (row) => (
+        <span className="hover:text-red-900 line-clamp-1">{row.siteCode}</span>
+      ),
       sortable: true,
       filterType: "select",
-      filterOptions: [
-        { label: "US", value: "US" },
-        { label: "UK", value: "UK" },
-        { label: "France", value: "France" },
-        { label: "Germany", value: "Germany" },
-        { label: "South Africa", value: "South Africa" },
-      ],
+      // filterOptions: [
+      //   { label: "US", value: "US" },
+      //   { label: "UK", value: "UK" },
+      //   { label: "France", value: "France" },
+      //   { label: "Germany", value: "Germany" },
+      //   { label: "South Africa", value: "South Africa" },
+      // ],
     },
     {
       id: "alerts",
@@ -51,16 +50,17 @@ export const ServerSites = () => {
       accessorKey: "alerts",
       sortable: true,
       cell: (row) => (
-        <Badge
-          variant="outline"
-          className={`${
-            row.alerts > 0
-              ? "border-red-200 bg-red-50 text-red-700"
-              : "border-green-200 bg-green-50 text-green-700"
-          } text-right justify-center flex w-full`}
-        >
-          {row.alerts}
-        </Badge>
+        <div className="items-center justify-center flex">
+          <div
+            className={`${
+              row.alerts > 0
+                ? "border-red-200 bg-red-50 text-red-700"
+                : "border-green-200 bg-green-50 text-green-700"
+            } text-center justify-center items-center rounded-full inline-flex w-5 h-5 text-[10px]`}
+          >
+            {row.alerts}
+          </div>
+        </div>
       ),
     },
     {
@@ -164,6 +164,14 @@ export const ServerSites = () => {
       },
     },
     {
+      label: "Deploy Resource",
+      icon: Plus,
+      onClick: (row: ServerRoomType) => {
+        navigate("/create-resource", { state: row });
+        // TODO: Implement view functionality
+      },
+    },
+    {
       label: "Delete",
       icon: Trash2,
       onClick: (row: ServerRoomType) => {
@@ -174,11 +182,8 @@ export const ServerSites = () => {
     },
   ];
 
-
-  const serverSite = serverRooms.find((site) => site.siteId === rowId) as ServerSite | undefined;
-
   return (
-    <div className="">
+    <div className=" h-full">
       <Header title="Server Sites" description="Manage your server site">
         <Button
           intent="tertiary"
@@ -188,7 +193,7 @@ export const ServerSites = () => {
         />
       </Header>
 
-      <div className="p-5 flex flex-col">
+      <div className="  flex gap-4 flex-col overflow-y-auto h-full">
         <DataTable
           data={serverRooms}
           columns={serverRoomColumns}
@@ -197,10 +202,11 @@ export const ServerSites = () => {
           actions={actions}
           onRowClick={(row) => setRowId(row.siteId)}
           getRowId={(row) => row.siteId}
-          initialSorting={{ id: "siteName", desc: false }}
+          initialSorting={{ id: "siteId", desc: false }}
         />
+
+        <ServerSitesTable2 rowId={rowId} />
       </div>
-      <ServerSitesTab serverSite={serverSite}/>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { imgLinks } from "@/assets/assetLink";
 import { Button, Header, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
@@ -7,17 +6,18 @@ import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import type { resourceType } from "./type";
 import { resourceData } from "./config";
 import { useNavigate } from "react-router-dom";
-import { ResourceTab } from "./resource-tab";
 
 export const Resources = () => {
-  const [rowId, setRowId] = useState("1001");
+  // const [rowId, setRowId] = useState("1001");
   const navigate = useNavigate();
   const resourcesColumns: ColumnDef<resourceType>[] = [
     {
       id: "resourceId",
       header: "RESOURCE ID",
       accessorKey: "resourceId",
-      cell: (row) => <span className="text-amber-800 line-clamp-1">{row.resourceId}</span>,
+      cell: (row) => (
+        <span className="text-amber-800 line-clamp-1">{row.resourceId}</span>
+      ),
       sortable: true,
     },
     {
@@ -31,7 +31,9 @@ export const Resources = () => {
       id: "resourceCode",
       header: "CODE",
       accessorKey: "siteCode",
-      cell: (row) => <span className="text-amber-800 line-clamp-1">{row.resourceCode}</span>,
+      cell: (row) => (
+        <span className="text-amber-800 line-clamp-1">{row.resourceCode}</span>
+      ),
       sortable: true,
       filterType: "select",
     },
@@ -142,12 +144,12 @@ export const Resources = () => {
     },
   ];
 
-  const resource = resourceData.find(
-    (resource) => resource.resourceId === rowId
-  ) as resourceType | undefined;
+  // const resource = resourceData.find(
+  //   (resource) => resource.resourceId === rowId
+  // ) as resourceType | undefined;
 
   return (
-    <div className="">
+    <div className="bg-white h-full">
       <Header
         title="Server Resources"
         description="Manage your server resource"
@@ -157,23 +159,22 @@ export const Resources = () => {
           label="Create New resource"
           prefixIcon={<PlusIcon className="size-4" />}
           size="small"
-          onClick={() => navigate("/dashboard/create-resource")}
+          onClick={() => navigate("/create-resource")}
         />
       </Header>
 
-      <div className="p-5 flex flex-col">
+      <div className=" flex mt-14 flex-col">
         <DataTable
           data={resourceData}
           columns={resourcesColumns}
           searchPlaceholder="Search server resources by name, ID, or region..."
           pageSize={5}
           actions={actions}
-          onRowClick={(row) => setRowId(row.resourceId)}
           getRowId={(row) => row.resourceId}
           initialSorting={{ id: "siteName", desc: false }}
         />
       </div>
-      <ResourceTab resource={resource} />
+      {/* <ResourceTab resource={resource} /> */}
     </div>
   );
 };

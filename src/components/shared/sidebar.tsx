@@ -13,18 +13,19 @@ import {
 } from "@/components/ui/sidebar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { sidebarItems } from "@/utilities/constants/config";
+import {  svgLinks } from "@/assets/assetLink";
 
 export const SidebarLayout = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const isItemActive = (itemHref: string) => {
     // Exact match for dashboard root
-    if (itemHref === "/dashboard" && pathname === "/dashboard") {
+    if (itemHref === "" && pathname === "") {
       return true;
     }
     // For other routes, check if the current path starts with the item's href
     // but make sure it's a complete segment match
-    if (itemHref !== "/dashboard") {
+    if (itemHref !== "") {
       return pathname.startsWith(itemHref + "/") || pathname === itemHref;
     }
     return false;
@@ -32,7 +33,13 @@ export const SidebarLayout = () => {
 
   return (
     <Sidebar className="font-brfirma">
-      <SidebarHeader className="bg-green-950   text-white  border-gray-200 p-[7px]">
+      <SidebarHeader className="bg-green-950   text-white  border-gray-200 h-14 p-[7px]">
+          
+      <img
+        src={svgLinks.grunge}
+        className="absolute inset-0 w-full h-full object-cover z-0 opacity-50 pointer-events-none"
+        alt="background texture"
+      />
         <div className="flex items-center space-x-2">
           <Cloud className="h-6 w-6" color="white" />
           <div>

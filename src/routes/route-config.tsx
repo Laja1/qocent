@@ -1,8 +1,13 @@
 import Home from "@/pages/home";
 import { Outlet } from "react-router-dom";
-import { authRoutes, dashboardRoutesWithoutSidebar, dashboardRoutesWithSidebar } from "./routes";
+import {
+  authRoutes,
+  dashboardRoutesWithoutSidebar,
+  dashboardRoutesWithSidebar,
+} from "./routes";
 import { DashboardLayoutWithSidebar } from "@/components/layouts/dashboardLayout";
 import { DashboardLayoutWithoutSidebar } from "@/components/layouts/dashboardWithSidebarLayout";
+
 
 export const routeConfig = [
   {
@@ -21,12 +26,12 @@ export const routeConfig = [
     children: [...authRoutes],
   },
   {
-    path: "/dashboard",
+    path: "/",
     element: <DashboardLayoutWithSidebar />,
     children: [...dashboardRoutesWithSidebar],
   },
   {
-    path: "/dashboard",
+    path: "",
     element: <DashboardLayoutWithoutSidebar />,
     children: [...dashboardRoutesWithoutSidebar],
   },

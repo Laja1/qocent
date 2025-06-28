@@ -1,20 +1,12 @@
 import { imgLinks } from "@/assets/assetLink";
-import {
-  Button,
-  Header,
-  type ColumnDef,
-} from "@/components/shared";
+import { Button, Header, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
-import { useState } from "react";
-import type { HouseData, houseRoomType } from "./type";
+import type { houseRoomType } from "./type";
 import { houseData } from "./config";
-import { ServerHousesTab } from "./server-houses-tab";
 
 export const ServerHouses = () => {
-  const [rowId, setRowId] = useState("1005");
-
   const serverHouseColumn: ColumnDef<houseRoomType>[] = [
     {
       id: "houseId",
@@ -34,10 +26,21 @@ export const ServerHouses = () => {
       id: "houseCode",
       header: "HOUSE CODE",
       accessorKey: "houseCode",
-      cell: (row) => <span className="text-amber-800 line-clamp-1">{row.houseCode}</span>,
+      cell: (row) => (
+        <span className="text-amber-800 line-clamp-1">{row.houseCode}</span>
+      ),
       sortable: true,
       filterType: "select",
-      
+    },
+    {
+      id: "siteCode",
+      header: "SITE CODE",
+      accessorKey: "siteCode",
+      cell: (row) => (
+        <span className="text-amber-800 line-clamp-1">{row.siteCode}</span>
+      ),
+      sortable: true,
+      filterType: "select",
     },
     {
       id: "alerts",
@@ -97,8 +100,6 @@ export const ServerHouses = () => {
       sortable: true,
       cell: (row) => <span className="text-right block">{row.createdAt}</span>,
     },
-     
-   
   ];
 
   const actions = [
@@ -129,11 +130,12 @@ export const ServerHouses = () => {
     },
   ];
 
-
-  const serverHouse = houseData.find((house) => house.houseId === rowId) as HouseData
+  // const serverHouse = houseData.find(
+  //   (house) => house.houseId === rowId
+  // ) as HouseData;
 
   return (
-    <div className="">
+    <div className="bg-white h-full">
       <Header title="Server Houses" description="Manage your server house">
         <Button
           intent="tertiary"
@@ -143,19 +145,22 @@ export const ServerHouses = () => {
         />
       </Header>
 
-      <div className="p-5 flex flex-col">
+      <div className=" flex mt-14 flex-col">
         <DataTable
           data={houseData}
           columns={serverHouseColumn}
           searchPlaceholder="Search server rooms by name, ID, or code..."
           pageSize={5}
           actions={actions}
-          onRowClick={(row) => setRowId(row.houseId)}
+          // onRowClick={(row) => setRowId(row.houseId)}
           getRowId={(row) => row.houseId}
           initialSorting={{ id: "houseName", desc: false }}
         />
       </div>
-      <ServerHousesTab serverHouse={serverHouse}/>
+
+      {/* <div className="w-full bg-white p-5">
+        <ServerHousesTab serverHouse={serverHouse} />
+      </div> */}
     </div>
   );
 };

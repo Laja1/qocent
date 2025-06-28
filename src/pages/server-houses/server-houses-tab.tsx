@@ -1,9 +1,9 @@
 import { imgLinks } from "@/assets/assetLink";
 import { FlexibleTabs } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import type { HouseData } from "./type";
+import { HouseView } from "./house-view";
 
 
 
@@ -23,9 +23,9 @@ export const ServerHousesTab: React.FC<ServerHousesTabProps> = ({
   return (
     <div>
       <div className="m-5 ">
-      <Card className="w-full bg-gradient-to-tl from-bg-[#edf2ef] to-[#649c7b] text-black">
+    
           <div className="px-5 ">
-            <h1 className="font-bold text-2xl text-center">
+            <h1 className="font-bold text-2xl mb-2 text-left">
               {serverHouse?.houseName} ({serverHouse?.houseCode})
             </h1>
             <FlexibleTabs tabs={tabs} defaultValue="house-details">
@@ -33,7 +33,7 @@ export const ServerHousesTab: React.FC<ServerHousesTabProps> = ({
                 switch (value) {
                   case "house-details":
                     return (
-                      <div>
+                      <div className="w-[300px] lg:w-[400px]">
                         <div className="space-y-1"></div>
                         <Separator className="my-4" />
                         <div className="space-y-4 text-sm">
@@ -103,12 +103,12 @@ export const ServerHousesTab: React.FC<ServerHousesTabProps> = ({
                       </div>
                     );
                   case "house-view":
-                    return <div>Analytics dashboard here</div>;
+                    return <HouseView id={serverHouse?.houseCode} />;
                 }
               }}
             </FlexibleTabs>
           </div>
-        </Card>
+   
       </div>
     </div>
   );
