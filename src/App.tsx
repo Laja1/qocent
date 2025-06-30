@@ -1,4 +1,4 @@
-import { RouteRenderer } from "./routes/route-renderer";
+import { RouteRenderer } from "./router/route-renderer";
 
 const App = () => {
   return (

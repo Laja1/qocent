@@ -5,7 +5,7 @@ export const siteData: SiteData[] = [
     id: "1",
     resource: "MySQL-Prod-01",
     parentCode: "1001",
-    cateogry: "Database",
+    category: "Database",
     alerts: 2,
     parent: "Rubies Production Site",
     code: "DB-01",
@@ -15,7 +15,7 @@ export const siteData: SiteData[] = [
   {
     id: "11",
     resource: "MySQL-Prod-01",
-    cateogry: "Database",
+    category: "Database",
     parentCode: "1001",
     alerts: 2,
     parent: "Rubies Production Site",
@@ -27,7 +27,7 @@ export const siteData: SiteData[] = [
   {
     id: "19",
     resource: "Main Web Server",
-    cateogry: "Server",
+    category: "Server",
     alerts: 5,
     parentCode: "1001",
     parent: "Tymer",
@@ -38,7 +38,7 @@ export const siteData: SiteData[] = [
   {
     id: "18",
     resource: "Auth Service",
-    cateogry: "API",
+    category: "API",
     alerts: 1,
     parentCode: "1001",
     parent: "NCube",
@@ -49,7 +49,7 @@ export const siteData: SiteData[] = [
   {
     id: "1010",
     resource: "Mongo-Staging",
-    cateogry: "Database",
+    category: "Database",
     alerts: 3,
     parent: "Qoonity",
     code: "DB-ST-01",
@@ -60,7 +60,7 @@ export const siteData: SiteData[] = [
   {
     id: "17",
     resource: "Worker Node 1",
-    cateogry: "Compute",
+    category: "Compute",
     alerts: 0,
     parent: "Qoovest",
     code: "SRV-W-01",
@@ -71,7 +71,7 @@ export const siteData: SiteData[] = [
   {
     id: "12",
     resource: "Postgres-Analytics",
-    cateogry: "Database",
+    category: "Database",
     alerts: 0,
     parent: "Qoovest",
     code: "DB-AN-02",
@@ -82,7 +82,7 @@ export const siteData: SiteData[] = [
   {
     id: "13",
     resource: "Main Web Server",
-    cateogry: "Server",
+    category: "Server",
     alerts: 5,
     parentCode: "1001",
     parent: "Tymer",
@@ -93,7 +93,7 @@ export const siteData: SiteData[] = [
   {
     id: "14",
     resource: "Auth Service",
-    cateogry: "API",
+    category: "API",
     alerts: 1,
     parentCode: "1003",
     parent: "NCube",
@@ -104,7 +104,7 @@ export const siteData: SiteData[] = [
   {
     id: "15",
     resource: "Mongo-Staging",
-    cateogry: "Database",
+    category: "Database",
     alerts: 3,
     parent: "Qoonity",
     code: "DB-ST-01",
@@ -115,7 +115,7 @@ export const siteData: SiteData[] = [
   {
     id: "16",
     resource: "Worker Node 1",
-    cateogry: "Compute",
+    category: "Compute",
     parentCode: "1005",
     alerts: 0,
     parent: "Qoovest",

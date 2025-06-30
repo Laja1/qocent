@@ -14,6 +14,7 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { sidebarItems } from "@/utilities/constants/config";
 import {  svgLinks } from "@/assets/assetLink";
+import { RouteConstant } from "@/router/routes";
 
 export const SidebarLayout = () => {
   const { pathname } = useLocation();
@@ -33,7 +34,7 @@ export const SidebarLayout = () => {
 
   return (
     <Sidebar className="font-brfirma">
-      <SidebarHeader className="bg-green-950   text-white  border-gray-200 h-14 p-[7px]">
+      <SidebarHeader className="bg-green-950   text-white  border-gray-200  p-[8px]">
           
       <img
         src={svgLinks.grunge}
@@ -43,8 +44,8 @@ export const SidebarLayout = () => {
         <div className="flex items-center space-x-2">
           <Cloud className="h-6 w-6" color="white" />
           <div>
-            <h2 className="font-bold ">Qucoon Cloud</h2>
-            <p className="text-xs ">ife@example.com</p>
+            <h2 className="font-bold text-base">Qucoon Cloud</h2>
+            <p className="text-xs text-gray-400 leading-tight">ife@example.com</p>
           </div>
         </div>
       </SidebarHeader>
@@ -72,7 +73,7 @@ export const SidebarLayout = () => {
       </SidebarContent>
       <SidebarFooter className="border-t  bg-[#edf2ef] border-gray-200 p-4">
         <div
-          onClick={() => navigate("/auth/sign-in")}
+          onClick={() => navigate(RouteConstant.auth.sigin.path)}
           className="text-xs flex items-center text-red-700 gap-2 hover:cursor-pointer"
         >
           <LogOut className="size-4 " /> <p>Logout</p>

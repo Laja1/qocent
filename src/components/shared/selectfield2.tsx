@@ -16,6 +16,7 @@ export const SelectField2 = ({
   name,
   formik,
   options,
+  labelClassname,
   value,
   className,
   onChange, // Add custom onChange prop
@@ -40,9 +41,9 @@ export const SelectField2 = ({
 
   return (
     <div className="w-full">
-      <div className="flex flex-row items-center gap-2">
+      <div className="flex flex-col items-start gap-2">
         {label && (
-          <label htmlFor={name} className="text-sm text-tetiary-lighter">
+          <label htmlFor={name} className={`text-sm text-tetiary-lighter ${labelClassname}`}>
             {label}
           </label>
         )}

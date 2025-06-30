@@ -19,7 +19,7 @@ export const Header = ({
   const navigate = useNavigate();
 
   return (
-    <header className="relative z-10 bg-green-950 text-white font-brfirma  top-0 h-14 px-6 py-2">
+    <header className="relative z-10 bg-green-950 text-white font-brfirma  top-0  px-6 py-2">
       
       <img
         src={svgLinks.grunge}
@@ -42,7 +42,7 @@ export const Header = ({
           )}
 
           <div className="flex flex-col">
-            {title && <h1 className="text-lg font-bold">{title}</h1>}
+            {title && <h1 className="text-base font-bold">{title}</h1>}
             {description && (
               <p className="text-xs text-gray-400 leading-tight">{description}</p>
             )}

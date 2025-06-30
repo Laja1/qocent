@@ -14,7 +14,7 @@ export const ServerRooms = () => {
       id: "roomId",
       header: "ROOM ID",
       accessorKey: "roomId",
-      cell: (row) => <span className="text-amber-800">{row.roomId}</span>,
+      cell: (row) => <span className="">{row.roomId}</span>,
       sortable: true,
     },
     {
@@ -29,7 +29,7 @@ export const ServerRooms = () => {
       header: "ROOM CODE",
       accessorKey: "siteCode",
       cell: (row) => (
-        <span className="text-amber-800 line-clamp-1">{row.roomCode}</span>
+        <span className=" line-clamp-1">{row.roomCode}</span>
       ),
       sortable: true,
       filterType: "select",
@@ -159,7 +159,7 @@ export const ServerRooms = () => {
         />
       </Header>
 
-      <div className=" flex mt-14 flex-col">
+      <div className=" flex  flex-col">
         <DataTable
           data={roomData}
           columns={serverRoomColumns}

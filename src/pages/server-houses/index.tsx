@@ -1,7 +1,6 @@
 import { imgLinks } from "@/assets/assetLink";
 import { Button, Header, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
-import { Badge } from "@/components/ui/badge";
 import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import type { houseRoomType } from "./type";
 import { houseData } from "./config";
@@ -12,7 +11,7 @@ export const ServerHouses = () => {
       id: "houseId",
       header: "HOUSE ID",
       accessorKey: "houseId",
-      cell: (row) => <span className="text-amber-800">{row.houseId}</span>,
+      cell: (row) => <span className="">{row.houseId}</span>,
       sortable: true,
     },
     {
@@ -27,7 +26,7 @@ export const ServerHouses = () => {
       header: "HOUSE CODE",
       accessorKey: "houseCode",
       cell: (row) => (
-        <span className="text-amber-800 line-clamp-1">{row.houseCode}</span>
+        <span className=" line-clamp-1">{row.houseCode}</span>
       ),
       sortable: true,
       filterType: "select",
@@ -37,7 +36,7 @@ export const ServerHouses = () => {
       header: "SITE CODE",
       accessorKey: "siteCode",
       cell: (row) => (
-        <span className="text-amber-800 line-clamp-1">{row.siteCode}</span>
+        <span className=" line-clamp-1">{row.siteCode}</span>
       ),
       sortable: true,
       filterType: "select",
@@ -48,16 +47,17 @@ export const ServerHouses = () => {
       accessorKey: "alerts",
       sortable: true,
       cell: (row) => (
-        <Badge
-          variant="outline"
-          className={`${
-            row.alerts > 0
-              ? "border-red-200 bg-red-50 text-red-700"
-              : "border-green-200 bg-green-50 text-green-700"
-          } text-right justify-center flex w-full`}
-        >
-          {row.alerts}
-        </Badge>
+        <div className="items-center justify-center flex">
+          <div
+            className={`${
+              row.alerts > 0
+                ? "border-red-200 bg-red-50 text-red-700"
+                : "border-green-200 bg-green-50 text-green-700"
+            } text-center justify-center items-center rounded-full inline-flex w-5 h-5 text-[10px]`}
+          >
+            {row.alerts}
+          </div>
+        </div>
       ),
     },
     {
@@ -145,7 +145,7 @@ export const ServerHouses = () => {
         />
       </Header>
 
-      <div className=" flex mt-14 flex-col">
+      <div className=" flex flex-col">
         <DataTable
           data={houseData}
           columns={serverHouseColumn}

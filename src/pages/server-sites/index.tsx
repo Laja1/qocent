@@ -204,8 +204,10 @@ export const ServerSites = () => {
           getRowId={(row) => row.siteId}
           initialSorting={{ id: "siteId", desc: false }}
         />
+<div className="ml-6">
+          <ServerSitesTable2 rowId={rowId} />
 
-        <ServerSitesTable2 rowId={rowId} />
+          </div>
       </div>
     </div>
   );

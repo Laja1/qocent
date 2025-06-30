@@ -124,8 +124,8 @@ export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
 
   return (
     <div className="bg-white h-full">
-      <div className="px-7">
-        <div className="shadow-md bg-green-950 h-full p-5 w-full max-w-[800px]">
+      <div className="">
+        <div className="shadow-md bg-green-950 rounded-xs h-full p-5 w-full max-w-[800px]">
           <p className="text-white text-left pb-5">{rowSelected?.siteName}</p>
           <DataTable
             data={serverSite}

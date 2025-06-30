@@ -11,9 +11,7 @@ const createFieldValidation = (field: DynamicFormField): Yup.Schema<any> => {
 
   switch (field.fieldInputType) {
     case "number":
-      validator = Yup.number()
-        .typeError("Must be a valid number")
-        .required("This field is required");
+      validator = Yup.string().trim().required("This field is required");
       break;
     case "text":
       validator = Yup.string().trim().required("This field is required");
@@ -38,10 +36,12 @@ const createNestedFieldsValidation = (
       fieldInputType: Yup.string().required(),
       selectedOption: Yup.lazy((value, context) => {
         // Get the current field from the context
+        console.log(value)
         const currentField = context.parent as DynamicFormField;
         return createFieldValidation(currentField);
       }),
       nestedFields: Yup.lazy((value, context) => {
+        console.log(value)
         const currentField = context.parent as DynamicFormField;
         if (currentField.nestedFields && currentField.nestedFields.length > 0) {
           return createNestedFieldsValidation(currentField.nestedFields);
@@ -137,7 +137,3 @@ export const createSimpleValidationSchema = () => {
     nestedFields: Yup.array().of(fieldSchema).required(),
   });
 };
-
-// Usage example for your CreateResource component:
-// Replace your current validationSchema with:
-// validationSchema: createSimpleValidationSchema(),

@@ -163,7 +163,7 @@ export const Resources = () => {
         />
       </Header>
 
-      <div className=" flex mt-14 flex-col">
+      <div className=" flex flex-col">
         <DataTable
           data={resourceData}
           columns={resourcesColumns}

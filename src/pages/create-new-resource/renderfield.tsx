@@ -3,6 +3,7 @@ import { SelectField2, Textfield2 } from "@/components/shared";
 import type { DynamicFormField } from "@/models/request/resourceRequest";
 import mapBackendToInitialValues from "@/models/request/resourceRequest";
 import { getIn } from "formik";
+import { HelpCircle, Info } from "lucide-react";
 import { useCallback } from "react";
 
 interface RenderFieldProps {
@@ -21,68 +22,78 @@ export default function RenderField({
   const name = `${fieldPath}.selectedOption`;
 
   // Generate dropdown options from fieldDropdowns
-  const options = field.fieldDropdowns?.map((dropdown) => ({
-    label: dropdown.dropdownName,
-    value: dropdown.dropdownValue,
-  })) || [];
+  const options =
+    field.fieldDropdowns?.map((dropdown) => ({
+      label: dropdown.dropdownName,
+      value: dropdown.dropdownValue,
+    })) || [];
 
- 
-  const handleDropdownChange = useCallback((value: string) => {
-    // Set the selected value
-    formik.setFieldValue(name, value);
+  const handleDropdownChange = useCallback(
+    (value: string) => {
+      // Set the selected value
+      formik.setFieldValue(name, value);
 
-    // Handle nested fields based on selection
-    if (field.fieldInputType === "dropdown") {
-      const selectedDropdown = field.fieldDropdowns?.find(
-        (dropdown) => dropdown.dropdownValue === value
-      );
+      // Handle nested fields based on selection
+      if (field.fieldInputType === "dropdown") {
+        const selectedDropdown = field.fieldDropdowns?.find(
+          (dropdown) => dropdown.dropdownValue === value
+        );
 
-      if (selectedDropdown?.nestedFields) {
-        // Map the nested fields to form structure
-        const mappedNestedFields = mapBackendToInitialValues(selectedDropdown.nestedFields);
-        formik.setFieldValue(`${fieldPath}.nestedFields`, mappedNestedFields);
-      } else {
-        // Clear nested fields if no nested fields for selected option
-        formik.setFieldValue(`${fieldPath}.nestedFields`, []);
+        if (selectedDropdown?.nestedFields) {
+          // Map the nested fields to form structure
+          const mappedNestedFields = mapBackendToInitialValues(
+            selectedDropdown.nestedFields
+          );
+          formik.setFieldValue(`${fieldPath}.nestedFields`, mappedNestedFields);
+        } else {
+          // Clear nested fields if no nested fields for selected option
+          formik.setFieldValue(`${fieldPath}.nestedFields`, []);
+        }
       }
-    }
-  }, [field.fieldDropdowns, field.fieldInputType, fieldPath, formik, name]);
+    },
+    [field.fieldDropdowns, field.fieldInputType, fieldPath, formik, name]
+  );
 
   return (
-    <div className="mb-4 ">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
+    <div className=" ">
+      <div className="border-gray-900 border-2 p-5 rounded-sm mb-1  gap-4 items-start">
         <label className="text-sm font-medium text-gray-700 block">
           {field.fieldName}
         </label>
-<div>
-        {field.fieldInputType === "dropdown" ? (
-          <SelectField2
-            name={name}
-            placeholder="Select an option"
-            formik={formik}
-            className="w-full"
-            options={options}
-            onChange={handleDropdownChange}
-          />
-        ) : (
-          <Textfield2
-            name={name}
-            type={field.fieldInputType}
-            placeholder={`Enter ${field.fieldName}`}
-            formik={formik}
-            className="w-full"
-          />
-        )}
-        {error && (
-        <p className="text-sm  text-red-500 mt-1">{error}</p>
-      )}
+        <div>
+          {field.fieldInputType === "dropdown" ? (
+            <>
+              <SelectField2
+                name={name}
+                placeholder="Select an option"
+                formik={formik}
+                className="w-full"
+                options={options}
+                onChange={handleDropdownChange}
+              />
+            </>
+          ) : (
+            <Textfield2
+              name={name}
+              type={field.fieldInputType}
+              placeholder={`Enter ${field.fieldName}`}
+              formik={formik}
+              className="w-full"
+            />
+          )}
+          <div className="text-xs mt-2 flex items-start gap-2">
+            <p>{field.fieldDescription}</p>
+          </div>
+          <div className="text-xs mt-2 flex items-center">
+            <Info fill="green" color="white" size={20} />
+            <HelpCircle fill="green" color="white" size={20}/>
+          </div>
+          {error && <p className="text-sm  text-red-500 mt-1">{error}</p>}
+        </div>
       </div>
-      </div>
-      
 
-      {/* Render nested fields if they exist */}
       {field.nestedFields && field.nestedFields.length > 0 && (
-        <div className="w-full mt-4  border-gray-200 ">
+        <div className="w-full mt-1  border-gray-200 ">
           {field.nestedFields.map((nestedField, index) => (
             <RenderField
               key={`${fieldPath}.nestedFields[${index}]`}

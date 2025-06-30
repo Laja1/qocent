@@ -1,7 +1,7 @@
 export type SiteData = {
   id: string;
   resource: string;
-  cateogry: string;
+  category: string;
   alerts: number;
   parent: string;
   parentCode:string
