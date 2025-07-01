@@ -36,7 +36,6 @@ export const Resource = () => {
       ),
       sortable: false,
     },
-    // Dynamically create columns for each server
     ...serverColumns.map((server) => ({
       id: server.id,
       header: server.label,

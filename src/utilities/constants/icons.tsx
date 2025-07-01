@@ -54,10 +54,10 @@ export const ApiServerIcon = () => {
 };
 
 export const ICON_MAP = {
-  'Proxy': <Network className="text-red-500 size-6"/>,
-  "Server": <Server className="text-purple-600 size-6"/>,
-  "S3": <File className="text-blue-600 size-6"/>,
+  'Proxy': <Network className="text-red-500 size-4"/>,
+  "Server": <Server className="text-purple-600 size-4"/>,
+  "S3": <File className="text-blue-600 size-5"/>,
   "API": <ApiServerIcon />,
-  "Database": <DatabaseIcon className="text-green-600 size-6"/>,
+  "Database": <DatabaseIcon className="text-green-600 size-4"/>,
 };
 

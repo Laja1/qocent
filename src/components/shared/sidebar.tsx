@@ -33,7 +33,7 @@ export interface SidebarItem {
 
 const sidebarItems:SidebarItem[] = [
   {
-    title: "Server Sites (Accouts)",
+    title: "Server Sites (Accounts)",
     icon: <Fan className="text-green-700"/>,
     href: "/server-sites",
     isActive: false,

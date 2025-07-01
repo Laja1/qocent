@@ -18,11 +18,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
-import {
-  CardContent,
-  CardDescription,
-  CardTitle,
-} from "@/components/ui/card";
+import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -250,15 +246,15 @@ export function DataTable<T>({
           </div>
 
           {(showSearch || filterColumns.length > 0 || showDownload) && (
-            <div className="flex flex-col   md:flex-row gap-2">
+            <div className="flex flex-col  md:flex-row gap-2">
               {showSearch && (
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2  transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     placeholder={searchPlaceholder}
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 placeholder:text-xs w-full md:w-[350px]"
+                    className="pl-10 rounded-xs placeholder:text-xs w-full md:w-[350px]"
                   />
                 </div>
               )}
@@ -387,13 +383,9 @@ export function DataTable<T>({
                   return (
                     <tr
                       key={rowId}
-                      className={` ${
-                        onRowClick ? "cursor-pointer" : ""
-                      } ${selectedRows.has(rowId) ? "bg-blue-50" : ""} ${
-                        highlightedRowId === rowId
-                          ? "bg-gray-200 "
-                          : ""
-                      }`}
+                      className={` ${onRowClick ? "cursor-pointer" : ""} ${
+                        selectedRows.has(rowId) ? "bg-blue-50" : ""
+                      } ${highlightedRowId === rowId ? "bg-gray-200 " : ""}`}
                       onClick={onRowClick ? () => onRowClick(row) : undefined}
                     >
                       {enhancedColumns.map((column) => (
