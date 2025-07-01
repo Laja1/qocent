@@ -159,7 +159,7 @@ export const ServerRooms = () => {
         />
       </Header>
 
-      <div className=" flex  flex-col">
+      <div className="px-5 flex flex-col">
         <DataTable
           data={roomData}
           columns={serverRoomColumns}

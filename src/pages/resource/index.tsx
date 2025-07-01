@@ -68,7 +68,7 @@ export const Resource = () => {
   ];
 
   return (
-    <div className=" h-full">
+    <div className=" h-full mx-5">
       <Header title={row?.parent} description={row?.category}>
         <Button
           intent="tertiary"

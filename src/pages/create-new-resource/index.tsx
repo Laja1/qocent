@@ -15,10 +15,12 @@ export const CreateResource = () => {
 
   // Generate Resource Type options from backend data
   const resourceTypeOptions = useMemo(() => {
-    return backendResponse.data[0]?.fieldDropdowns?.map((dropdown) => ({
-      label: dropdown.dropdownName,
-      value: dropdown.dropdownValue,
-    })) || [];
+    return (
+      backendResponse.data[0]?.fieldDropdowns?.map((dropdown) => ({
+        label: dropdown.dropdownName,
+        value: dropdown.dropdownValue,
+      })) || []
+    );
   }, []);
 
   // Mock options for Resource Site Code - replace with your actual data
@@ -42,7 +44,7 @@ export const CreateResource = () => {
   // Handle Resource Type dropdown change
   const handleResourceTypeChange = (value: string) => {
     formik.setFieldValue("resourceType", value);
-    
+
     // Find the selected resource type data
     const selectedResourceType = backendResponse.data[0]?.fieldDropdowns?.find(
       (dropdown) => dropdown.dropdownValue === value
@@ -50,7 +52,9 @@ export const CreateResource = () => {
 
     if (selectedResourceType?.nestedFields) {
       // Map the nested fields for the selected resource type
-      const mappedNestedFields = mapBackendToInitialValues(selectedResourceType.nestedFields);
+      const mappedNestedFields = mapBackendToInitialValues(
+        selectedResourceType.nestedFields
+      );
       formik.setFieldValue("nestedFields", mappedNestedFields);
     } else {
       // Clear nested fields if no selection
@@ -65,7 +69,8 @@ export const CreateResource = () => {
   };
 
   // Only show nested fields if both dropdowns are selected
-  const shouldShowNestedFields = formik.values.resourceType && formik.values.resourceSiteCode;
+  const shouldShowNestedFields =
+    formik.values.resourceType && formik.values.resourceSiteCode;
 
   console.log("Form values:", formik.values);
   console.log("Form errors:", formik.errors);
@@ -76,53 +81,53 @@ export const CreateResource = () => {
         title="Create Resources"
         description="A server Room can have one or more server centres. A server centre is provided by a provider."
       />
-      
-      <div className="bg-green-950 flex-col p-5 mt-5 mx-5 space-y-5 rounded-sm">
-        <div className="max-w-[600px]  space-y-5">
+
+      <div className="flex-col p-5 mt-5  space-y-5 rounded-sm">
+        <div className="w-[400px]  gap-3  space-y-5">
           <SelectField2
-          name="resourceType"
-          label="Resource Type"
-          placeholder="Select a resource type"
-          formik={formik}
-        labelClassname='text-white'
-          options={resourceTypeOptions}
-          onChange={handleResourceTypeChange}
-        />
-        <SelectField2 
-          name="resourceSiteCode" 
-          label="Resource Site Code" 
-          formik={formik} 
-          placeholder="Select a site code"
-         labelClassname='text-white'
-          options={resourceSiteCodeOptions}
-          onChange={handleResourceSiteCodeChange}
-        />
-      </div></div> 
+            name="resourceType"
+            label="Resource Type"
+            placeholder="Select a resource type"
+            formik={formik}
+            options={resourceTypeOptions}
+            onChange={handleResourceTypeChange}
+          />
+          <SelectField2
+            name="resourceSiteCode"
+            label="Resource Site Code"
+            formik={formik}
+            placeholder="Select a site code"
+            options={resourceSiteCodeOptions}
+            onChange={handleResourceSiteCodeChange}
+          />
+        </div>
+      </div>
 
-      <div className="flex gap-3 my-2">
-        <div className="w-2/4 flex flex-col gap-4 rounded-sm p-4">
+      <div className="flex w-full gap-3">
+        <div className=" flex flex-col gap-4 rounded-sm p-4 w-[400px]">
           {/* Show message when dropdowns are not selected */}
-          {!shouldShowNestedFields && (
+          {/* {!shouldShowNestedFields && (
             <div className="text-gray-500 text-center p-8 border-2 border-dashed border-gray-300 rounded-md">
-              Please select both Resource Type and Resource Site Code to configure your resource.
+              Please select both Resource Type and Resource Site Code to
+              configure your resource.
             </div>
-          )}
+          )} */}
 
-          {/* Render nested fields only when both dropdowns are selected */}
-          {shouldShowNestedFields && formik.values.nestedFields.map((field, index) => (
-            <RenderField
-              key={index}
-              field={field}
-              formik={formik}
-              fieldPath={`nestedFields[${index}]`}
-              error={getIn(
-                formik.errors,
-                `nestedFields[${index}].selectedOption`
-              )}
-            />
-          ))}
+         <div className="w-[400px] gap-3">
+          {shouldShowNestedFields &&
+            formik.values.nestedFields.map((field, index) => (
+              <RenderField
+                key={index}
+                field={field}
+                formik={formik}
+                fieldPath={`nestedFields[${index}]`}
+                error={getIn(
+                  formik.errors,
+                  `nestedFields[${index}].selectedOption`
+                )}
+              />
+            ))}</div>
 
-          {/* Submit button - only show when fields are rendered */}
           {shouldShowNestedFields && (
             <div className="flex justify-end">
               <Button
@@ -134,8 +139,6 @@ export const CreateResource = () => {
             </div>
           )}
         </div>
-        
-        
       </div>
     </div>
   );

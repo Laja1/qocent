@@ -3,15 +3,21 @@ import { Outlet } from "react-router-dom";
 import { DashboardLayoutWithSidebar } from "@/components/layouts/dashboardLayout";
 import { authRoute } from "./route/authRoute";
 import { dashboardRoute } from "./route/dashboardRoute";
+import { publicRoute } from "./route/publicRoute";
+
+const publicRoutesMapped = publicRoute.map(route => ({
+  path: route.path,
+  element: route.component, 
+}));
 
 const authRoutesMapped = authRoute.map(route => ({
   path: route.path,
-  element: route.component, // ✅ you stored JSX directly
+  element: route.component, 
 }));
 
 const dashboardRoutesMapped = dashboardRoute.map(route => ({
   path: route.path,
-  element: route.component, // ✅ you stored JSX directly
+  element: route.component, 
 }));
 
 export const routeConfig = [
@@ -24,6 +30,11 @@ export const routeConfig = [
         element: <Home />,
       },
     ],
+  },
+  {
+    path: "/",
+    element: <Outlet />,
+    children:publicRoutesMapped
   },
   {
     path: "/",

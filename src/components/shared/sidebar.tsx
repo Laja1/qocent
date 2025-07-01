@@ -1,20 +1,92 @@
-import { Cloud, LogOut } from "lucide-react";
+import { Cloud, Fan, LogOut, Settings,
+  Construction,
+  Warehouse,
+  Briefcase,
+  Wallet,
+  Users,
+  RotateCcwKey,
+  Anchor, } from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { sidebarItems } from "@/utilities/constants/config";
-import {  svgLinks } from "@/assets/assetLink";
 import { RouteConstant } from "@/router/routes";
+import type { ReactElement } from "react";
+
+
+
+
+export interface SidebarItem {
+  title: string;
+  icon: ReactElement;
+  href: string;
+  isActive: boolean;
+}
+
+const sidebarItems:SidebarItem[] = [
+  {
+    title: "Server Sites (Accouts)",
+    icon: <Fan className="text-green-700"/>,
+    href: "/server-sites",
+    isActive: false,
+  },
+  {
+    title: "Server Houses (VPCs)",
+    icon: <Warehouse className="text-purple-700"/>,
+    href: "/server-houses",
+    isActive: false,
+  },
+  {
+    title: "Server Rooms (Subnets)",
+    icon: <Construction className="text-blue-600"/>,
+    href: "/server-rooms",
+    isActive: false,
+  },
+  {
+    title: "Resources",
+    icon: <Anchor className="text-red-700"/>,
+    href: "/resources",
+    isActive: false,
+  },
+  {
+    title: "Projects",
+    icon: <Briefcase className="text-emerald-700"/>,
+    href: "/identity-center",
+    isActive: false,
+  },
+  {
+    title: "Access Management",
+    icon: <RotateCcwKey className="text-red-800"/>,
+    href: "/command-center",
+    isActive: false,
+  },
+  {
+    title: "Billing & Statements",
+    icon: <Wallet className="text-green-800"/>,
+    href: "/settings",
+    isActive: false,
+  },
+  {
+    title: "Organization",
+    icon: <Users className=""/>,
+    href: "/settings",
+    isActive: false,
+  },
+  {
+    title: "Settings",
+    icon: <Settings className="text-red-700"/>,
+    href: "Settings",
+    isActive: false,
+  },
+];
 
 export const SidebarLayout = () => {
   const { pathname } = useLocation();
@@ -35,23 +107,19 @@ export const SidebarLayout = () => {
   return (
     <Sidebar className="font-brfirma">
       <SidebarHeader className="bg-green-950   text-white  border-gray-200  p-[8px]">
-          
-      <img
-        src={svgLinks.grunge}
-        className="absolute inset-0 w-full h-full object-cover z-0 opacity-50 pointer-events-none"
-        alt="background texture"
-      />
         <div className="flex items-center space-x-2">
           <Cloud className="h-6 w-6" color="white" />
           <div>
             <h2 className="font-bold text-base">Qucoon Cloud</h2>
-            <p className="text-xs text-gray-400 leading-tight">ife@example.com</p>
+            <p className="text-xs text-gray-400 leading-tight">
+              ife@example.com
+            </p>
           </div>
         </div>
       </SidebarHeader>
-      <SidebarContent className="bg-[#edf2ef] ">
+      <SidebarContent className="bg-[#fff] ">
         <SidebarGroup>
-          <SidebarGroupLabel className="">ACCOUNT</SidebarGroupLabel>
+          {/* <SidebarGroupLabel className="">ACCOUNT</SidebarGroupLabel> */}
           <SidebarGroupContent>
             <SidebarMenu>
               {sidebarItems.map((item) => {
@@ -60,7 +128,7 @@ export const SidebarLayout = () => {
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton isActive={isActive} asChild>
                       <Link to={item.href}>
-                        <item.icon className="h-4 w-4" />
+                        {item.icon}
                         <span>{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -71,9 +139,9 @@ export const SidebarLayout = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t  bg-[#edf2ef] border-gray-200 p-4">
+      <SidebarFooter className="border-t  bg-[#fff] border-gray-200 p-4">
         <div
-          onClick={() => navigate(RouteConstant.auth.sigin.path)}
+          onClick={() => navigate(RouteConstant.auth.signin.path)}
           className="text-xs flex items-center text-red-700 gap-2 hover:cursor-pointer"
         >
           <LogOut className="size-4 " /> <p>Logout</p>

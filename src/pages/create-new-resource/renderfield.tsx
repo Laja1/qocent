@@ -55,8 +55,8 @@ export default function RenderField({
   );
 
   return (
-    <div className=" ">
-      <div className="border-gray-900 border-2 p-5 rounded-sm mb-1  gap-4 items-start">
+    <div className="w-full ">
+      <div className="w-full  rounded-sm mb-1  gap-4 items-start">
         <label className="text-sm font-medium text-gray-700 block">
           {field.fieldName}
         </label>
@@ -85,8 +85,8 @@ export default function RenderField({
             <p>{field.fieldDescription}</p>
           </div>
           <div className="text-xs mt-2 flex items-center">
-            <Info fill="green" color="white" size={20} />
-            <HelpCircle fill="green" color="white" size={20}/>
+            <Info color="green" size={20} />
+            <HelpCircle color="green" size={20} />
           </div>
           {error && <p className="text-sm  text-red-500 mt-1">{error}</p>}
         </div>

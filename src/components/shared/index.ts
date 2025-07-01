@@ -8,4 +8,5 @@ export * from "./table";
 export * from './tabs'
 export * from './selectfield'
 export * from './textfield2'
+export * from './navbar'
 export * from './selectfield2'

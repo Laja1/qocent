@@ -1,10 +1,11 @@
 import { type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
-import { serverRooms } from "@/utilities/constants/config";
 import { Edit, Eye, Trash2 } from "lucide-react";
 import type { SiteData } from "./type";
 import { siteData } from "./config";
 import { useNavigate } from "react-router-dom";
+import { Badge } from "@/components/ui/badge";
+import { ICON_MAP } from "@/utilities/constants/icons";
 
 export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
   const navigate = useNavigate();
@@ -53,23 +54,30 @@ export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
       sortable: true,
     },
     {
+      id: "resourceType",
+      header: "",
+      accessorKey: "resourceType",
+      cell: (row) => (
+        <span
+          
+          className="hover:cursor-pointer"
+        >
+          {ICON_MAP[row.resourceType as keyof typeof ICON_MAP]}
+          
+        </span>
+      ),
+      sortable: true,
+    },
+    {
       id: "resource",
-      header: "Resource",
+      header: "RESOURCES",
       accessorKey: "resource",
       cell: (row) => <span className="line-clamp-1">{row.resource}</span>,
       sortable: true,
     },
     {
-      id: "code",
-      header: "Code",
-      accessorKey: "code",
-      cell: (row) => <span className=" line-clamp-1">{row.code}</span>,
-      sortable: true,
-      filterType: "select",
-    },
-    {
       id: "type",
-      header: "Type",
+      header: "TYPE",
       accessorKey: "type",
       cell: (row) => (
         <span
@@ -82,17 +90,27 @@ export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
       sortable: true,
       filterType: "select",
     },
+    
+    {
+      id: "code",
+      header: "CODE",
+      accessorKey: "code",
+      cell: (row) => <span className=" line-clamp-1">{row.code}</span>,
+      sortable: true,
+      filterType: "select",
+    },
+    
 
     {
       id: "parent",
-      header: "Parent",
+      header: "PARENT",
       accessorKey: "parent",
       sortable: true,
       cell: (row) => <span className=" flex">{row.parent}</span>,
     },
     {
       id: "parentCode",
-      header: "Parent Code",
+      header: "PARENT CODE",
       accessorKey: "parentCode",
       sortable: true,
       cell: (row) => <span className=" flex">{row.parentCode}</span>,
@@ -102,40 +120,82 @@ export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
       header: "ALERTS",
       accessorKey: "alerts",
       sortable: true,
-
       cell: (row) => (
-        <div className=" flex">
+        <div className="items-center  flex">
           <div
             className={`${
               row.alerts > 0
-                ? "border-red-200 bg-red-50 text-red-700"
-                : "border-green-200 bg-green-50 text-green-700"
-            } text-center justify-center items-center rounded-full inline-flex w-5 h-5 text-[10px]`}
+                ? "border-red-200 bg-red-800 text-white"
+                : "border-green-200 bg-green-800 text-white"
+            } text-center justify-center items-center rounded-full inline-flex p-2 w-5 h-5 text-[10px]`}
           >
             {row.alerts}
           </div>
         </div>
       ),
     },
+    {
+      id: "status",
+      header: "STATUS",
+      accessorKey: "status",
+      cell: (row) => (
+        <div className="">
+          <Badge
+            variant="outline"
+            className={
+              row.status === "Active"
+                ? "bg-green-800 text-white text-[10px] border-green-200"
+                : "bg-red-800 text-white text-[10px] border-red-200"
+            }
+          >
+            {row.status}
+          </Badge>
+        </div>
+      ),
+      sortable: true,
+      filterType: "select",
+      filterOptions: [
+        { label: "Active", value: "Active" },
+        { label: "Maintenance", value: "Maintenance" },
+      ],
+    },
+    {
+      id: "createdAt",
+      header: "DATE CREATED",
+      headerClassName: "text-right",
+      accessorKey: "createdAt",
+      sortable: true,
+      cell: (row) => <span className="text-right block">{row.createdAt}</span>,
+    },
+    {
+      id: "bill",
+      header: "BILL (USD)",
+      accessorKey: "bill",
+      headerClassName: "text-right",
+      cell: (row) => (
+        <span className="block text-green-700 text-right">
+          {row.bill.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+        </span>
+      ),
+      sortable: true,
+    },
   ];
 
   const serverSite = siteData.filter((site) => site.parentCode === rowId);
-  const rowSelected = serverRooms.find((site) => site.siteId === rowId);
-
+console.log(rowId)
   return (
-    <div className="bg-white h-full">
-      <div className="">
-        <div className="shadow-md bg-green-950 rounded-xs h-full p-5 w-full max-w-[800px]">
-          <p className="text-white text-left pb-5">{rowSelected?.siteName}</p>
-          <DataTable
-            data={serverSite}
-            columns={serverSiteTable2}
-            actions={actions}
-            getRowId={(row) => row.id}
-            initialSorting={{ id: "id", desc: false }}
-          />
-        </div>
-      </div>
+   
+      <div className="h-full w-full">
+       
+        <DataTable
+          data={serverSite}
+          columns={serverSiteTable2}
+          showDownload={false}
+          showSearch={false}
+          actions={actions}
+          getRowId={(row) => row.id}
+          initialSorting={{ id: "id", desc: false }}
+        />
     </div>
   );
 };

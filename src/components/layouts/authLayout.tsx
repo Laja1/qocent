@@ -1,4 +1,4 @@
-import { svgLinks } from "@/assets/assetLink";
+
 import { RouteConstant } from "@/router/routes";
 import { Link, useLocation } from "react-router-dom";
 type AuthLayoutProps = {
@@ -17,10 +17,10 @@ type AuthLayoutProps = {
 const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
   const location = useLocation();
   const pathname = location.pathname;
-
+console.log(pathname,'pathname')
   const renderFooterText = (pathname: string) => {
     switch (pathname) {
-      case RouteConstant.auth.sigin.path:
+      case RouteConstant.auth.signin.path:
         return (
           <p className="text-center text-sm text-gray-700">
             Not registered yet?{" "}
@@ -33,7 +33,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
         return (
           <p className="text-center text-sm text-gray-700">
             Already have an account?{" "}
-            <Link to={RouteConstant.auth.sigin.path} className="text-red-700">
+            <Link to={RouteConstant.auth.signin.path} className="text-red-700">
               Sign in
             </Link>
           </p>
@@ -52,11 +52,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
 
   return (
     <div className="h-full w-full">
-      <img
-        src={svgLinks.grunge}
-        className="absolute inset-0 w-full h-full object-cover z-0 opacity-40 pointer-events-none"
-        alt="background texture"
-      />
+      
       <div
         className={
           "flex  flex-col items-center relative  justify-between min-h-screen  py-5"

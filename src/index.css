@@ -9,6 +9,7 @@
 @theme{
     --font-aeonikpro: AeonikPro, 'san-seriff';
     --font-brfirma: Br firma,'san-seriff';
+    --font-brfirma-bold: Br FirmaBold, 'san-seriff';
     --font-strawford: Strawford,'san-seriff';
     --color-background: #edf2ef;
     --color-sidebar: #F7F5F1;
@@ -28,6 +29,11 @@
 @font-face {
     font-family: Br Firma;
     src: url('./assets/fonts/BR-Firma-Regular.otf');
+}
+
+@font-face {
+    font-family: Br firmabold;
+    src: url('./assets/fonts/BR-Firma-Bold.otf');
 }
 
 
@@ -149,6 +155,6 @@
 }
 
 body{
-    background-color: #edf2ef;
+    background-color: #fff;
     font-family: var(--font-brfirma);
 }

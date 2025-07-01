@@ -1,5 +1,5 @@
 import { imgLinks } from "@/assets/assetLink";
-import { Network, Server } from "lucide-react";
+import { DatabaseIcon, File, Network, Server } from "lucide-react";
 
 // type IconProps = {
 //   id: number;
@@ -54,8 +54,10 @@ export const ApiServerIcon = () => {
 };
 
 export const ICON_MAP = {
-  'Proxy': <ProxyIcon />,
-  "Web Server": <WebServerIcon />,
-  "File Cabinet": <FileCabinetIcon />,
-  "API Server": <ApiServerIcon />,
+  'Proxy': <Network className="text-red-500 size-6"/>,
+  "Server": <Server className="text-purple-600 size-6"/>,
+  "S3": <File className="text-blue-600 size-6"/>,
+  "API": <ApiServerIcon />,
+  "Database": <DatabaseIcon className="text-green-600 size-6"/>,
 };
+

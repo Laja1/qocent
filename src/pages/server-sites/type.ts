@@ -6,8 +6,11 @@ export type SiteData = {
   parent: string;
   parentCode:string
   code: string;
-  status: string;
-  type: "Database" | "Server";
+  status: "Active" | "Suspended";
+  resourceType: "Database" | "Server" | "API" | "Proxy" | "S3";
+  type: "Database" | "Server" | "API" | "Proxy" | "S3";
+  createdAt: string;
+  bill: number;
 };
 
 export type SiteDataProps = {

@@ -17,7 +17,7 @@ export const Hero = () => {
       description:
         "Lorem ipsum dolor sit amet consectetur acing elit. Quisquam, quos.",
       icon: <ArrowRightIcon className="w-4 h-4" />,
-      path: RouteConstant.auth.sigin.path,
+      path: RouteConstant.auth.signin.path,
     },
   ];
   return (

@@ -1,60 +1,85 @@
-export const navRoutes= [
+export const navRoutes = [
   {
     id: "explore",
-    path: "explore",
-    name: "Explore",
-  },
-  
-  {
-    id: "schools",
-    path: "schools",
-    name: "Schools",
+    path: "/explore",
+    name: "Explore Services",
   },
   {
     id: "dashboard",
-    path: "dashboard",
+    path: "/dashboard",
     name: "Dashboard",
   },
   {
-    path: "terms",
+    id: "projects",
+    path: "/projects",
+    name: "Projects",
+  },
+  {
+    id: "billing",
+    path: "/billing",
+    name: "Billing",
+  },
+  {
+    id: "docs",
+    path: "/docs",
+    name: "Documentation",
+  },
+  {
+    id: "support",
+    path: "/support",
+    name: "Support",
+  },
+  {
+    id: "settings",
+    path: "/settings",
+    name: "Account Settings",
+  },
+  {
+    id: "terms",
+    path: "/terms",
     name: "Terms & Conditions",
   },
   {
-    path: "help",
-    name: "Help",
+    id: "help",
+    path: "/help",
+    name: "Help Center",
   },
-]
+];
 
 export const RouteConstant = {
   public: {
     home: {
-      path: "home",
+      path: "/home",
       name: "home",
+    },
+    landing: {
+      path: "/landing",
+      name: "Landing",
     },
   },
   auth: {   
-    sigin: {
-      path: "signin",
-      name: "signin",
+    signin: {
+      path: "/signin",
+      name: "Sign In",
     },
     signup: {
-      path: "signup",
-      name: "signup",
+      path: "/signup",
+      name: "Sign Up",
     },
     otp: {
-      path: "otp",
+      path: "/otp",
       name: "otp",
     },
     invite: {
-      path: "invite",
+      path: "/invite",
       name: "invite",
     },
     error: {
-      path: "error",
+      path: "/error",
       name: "error",
     },
     projects: {
-      path: "projects",
+      path: "/projects",
       name: "projects",
     },
     success: {

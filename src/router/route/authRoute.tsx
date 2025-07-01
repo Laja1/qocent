@@ -5,8 +5,8 @@ import SignUp from "@/pages/auth/sign-up";
 
 export const authRoute: RouteType[] = [
   {
-    path: RouteConstant.auth.sigin.path,
-    name: RouteConstant.auth.sigin.name,
+    path: RouteConstant.auth.signin.path,
+    name: RouteConstant.auth.signin.name,
     // component: LoginPage,
     component: <SignIn />,
     metadata: { isAuthenticated: false },

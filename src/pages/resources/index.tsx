@@ -163,7 +163,7 @@ export const Resources = () => {
         />
       </Header>
 
-      <div className=" flex flex-col">
+      <div className="px-5 flex flex-col">
         <DataTable
           data={resourceData}
           columns={resourcesColumns}
@@ -178,3 +178,4 @@ export const Resources = () => {
     </div>
   );
 };
+ 

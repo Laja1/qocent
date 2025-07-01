@@ -1,32 +1,40 @@
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import clsx from "clsx";
-type FlexibleTabsProps = {
-    tabs: { label: string; value: string }[];
-    defaultValue?: string;
-    className?: string;
-    children: (value: string) => React.ReactNode;
-  };
-  
+import { useState, type ReactElement } from "react";
 
-  export const FlexibleTabs = ({ tabs, defaultValue, className, children }: FlexibleTabsProps) => {
-    const defaultTab = defaultValue || tabs[0]?.value;
-    const flexibleTabStyle = clsx(
-        'w-full ',className
-    )
-    return (
-      <Tabs   defaultValue={defaultTab} className={flexibleTabStyle}>
-        <TabsList>
-          {tabs.map((tab) => (
-            <TabsTrigger key={tab.value} value={tab.value}>
-              {tab.label}
-            </TabsTrigger>
-          ))}
-        </TabsList>
+type TabItem = {
+  id: number;
+  text: string;
+  component: ReactElement;
+};
+
+type TabsProps = {
+  tabs: TabItem[];
+};
+
+export const Tabs = ({ tabs }: TabsProps) => {
+  const [currentTab, setCurrentTab] = useState(tabs[0]?.id || 0);
+
+  const activeTab = tabs.find((tab) => tab.id === currentTab);
+
+  return (
+    <div>
+      <div className="flex  gap-3 lg:gap-7 border-b border-gray-200">
         {tabs.map((tab) => (
-          <TabsContent key={tab.value} value={tab.value}>
-            {children(tab.value)}
-          </TabsContent>
+          <button
+            key={tab.id}
+            onClick={() => setCurrentTab(tab.id)}
+            className={`relative pb-2 hover:cursor-pointer transition duration-200 ease-in-out text-sm font-medium ${
+              currentTab === tab.id ? "text-red-600" : "text-gray-500"
+            }`}
+          >
+            {tab.text}
+            {currentTab === tab.id && (
+              <span className="absolute left-0 bottom-0 w-full h-0.5 bg-red-600 rounded"></span>
+            )}
+          </button>
         ))}
-      </Tabs>
-    );
-  };
+      </div>
+
+      <div className="mt-2">{activeTab?.component}</div>
+    </div>
+  );
+};

@@ -25,9 +25,7 @@ export const ServerHouses = () => {
       id: "houseCode",
       header: "HOUSE CODE",
       accessorKey: "houseCode",
-      cell: (row) => (
-        <span className=" line-clamp-1">{row.houseCode}</span>
-      ),
+      cell: (row) => <span className=" line-clamp-1">{row.houseCode}</span>,
       sortable: true,
       filterType: "select",
     },
@@ -35,9 +33,7 @@ export const ServerHouses = () => {
       id: "siteCode",
       header: "SITE CODE",
       accessorKey: "siteCode",
-      cell: (row) => (
-        <span className=" line-clamp-1">{row.siteCode}</span>
-      ),
+      cell: (row) => <span className=" line-clamp-1">{row.siteCode}</span>,
       sortable: true,
       filterType: "select",
     },
@@ -52,7 +48,7 @@ export const ServerHouses = () => {
             className={`${
               row.alerts > 0
                 ? "border-red-200 bg-red-50 text-red-700"
-                : "border-green-200 bg-green-50 text-green-700"
+                : "border-green-200 bg-green-800 text-white"
             } text-center justify-center items-center rounded-full inline-flex w-5 h-5 text-[10px]`}
           >
             {row.alerts}
@@ -145,7 +141,7 @@ export const ServerHouses = () => {
         />
       </Header>
 
-      <div className=" flex flex-col">
+      <div className="px-5 flex flex-col">
         <DataTable
           data={houseData}
           columns={serverHouseColumn}

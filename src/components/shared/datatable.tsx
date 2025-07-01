@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type React from "react";
 import { useState, useMemo } from "react";
 import {
@@ -20,7 +21,6 @@ import { Button } from "@/components/ui/button";
 import {
   CardContent,
   CardDescription,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card";
 import {
@@ -43,7 +43,6 @@ import {
 export type ColumnDef<T> = {
   id: string;
   header: string;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   accessorKey: keyof T | ((row: T) => any);
   cell?: (row: T, rowIndex?: number) => React.ReactNode;
   sortable?: boolean;
@@ -80,14 +79,13 @@ export type DataTableProps<T> = {
   onRowClick?: (row: T) => void;
   initialSorting?: SortingState;
   filterableColumns?: string[];
-  // Pagination
+  highlightedRowId?: string;
   pageSize?: number;
-  // Actions
   actions?: ActionItem<T>[];
-  // Bulk actions
   bulkActions?: BulkAction<T>[];
-  // Row selection
   getRowId?: (row: T, index: number) => string;
+  showSearch?: boolean;
+  showDownload?: boolean;
 };
 
 export function DataTable<T>({
@@ -95,6 +93,7 @@ export function DataTable<T>({
   columns,
   title,
   description,
+  highlightedRowId,
   searchPlaceholder = "Search...",
   onRowClick,
   initialSorting = null,
@@ -103,6 +102,8 @@ export function DataTable<T>({
   actions = [],
   bulkActions = [],
   getRowId = (_, index) => index.toString(),
+  showSearch = true,
+  showDownload = true,
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -117,24 +118,20 @@ export function DataTable<T>({
     return (row: T) => row[column.accessorKey as keyof T];
   };
 
-  // Filter and sort data
   const processedData = useMemo(() => {
     let result = [...data];
-
-    // Apply search filter
     if (searchTerm) {
-      result = result.filter((row) => {
-        return columns.some((column) => {
+      result = result.filter((row) =>
+        columns.some((column) => {
           const value = getAccessor(column)(row);
           return (
             value &&
             String(value).toLowerCase().includes(searchTerm.toLowerCase())
           );
-        });
-      });
+        })
+      );
     }
 
-    // Apply column-specific filters
     Object.entries(filters).forEach(([columnId, filterValue]) => {
       if (filterValue && filterValue !== "all") {
         const column = columns.find((col) => col.id === columnId);
@@ -147,7 +144,6 @@ export function DataTable<T>({
       }
     });
 
-    // Apply sorting
     if (sorting) {
       const column = columns.find((col) => col.id === sorting.id);
       if (column) {
@@ -158,7 +154,6 @@ export function DataTable<T>({
 
           if (valueA === valueB) return 0;
 
-          // Handle different types
           if (typeof valueA === "string" && typeof valueB === "string") {
             return sorting.desc
               ? valueB.localeCompare(valueA)
@@ -179,13 +174,11 @@ export function DataTable<T>({
     return result;
   }, [data, columns, searchTerm, filters, sorting]);
 
-  // Pagination calculations
   const totalPages = Math.ceil(processedData.length / pageSize);
   const startIndex = (currentPage - 1) * pageSize;
   const endIndex = startIndex + pageSize;
   const paginatedData = processedData.slice(startIndex, endIndex);
 
-  // Handle sorting
   const handleSort = (columnId: string) => {
     const column = columns.find((col) => col.id === columnId);
     if (!column?.sortable) return;
@@ -198,32 +191,17 @@ export function DataTable<T>({
     });
   };
 
-  //   const handleRowSelect = (rowId: string, checked: boolean) => {
-  //     const newSelected = new Set(selectedRows);
-  //     if (checked) {
-  //       newSelected.add(rowId);
-  //     } else {
-  //       newSelected.delete(rowId);
-  //     }
-  //     setSelectedRows(newSelected);
-  //   };
-
-  // Get filterable columns
   const filterColumns = columns.filter(
     (column) => filterableColumns.includes(column.id) && column.filterType
   );
 
-  // Check if we should show bulk actions
   const showBulkActions = bulkActions.length > 0 && selectedRows.size > 0;
   const selectedRowsData = paginatedData.filter((row, index) =>
     selectedRows.has(getRowId(row, startIndex + index))
   );
 
-  // Enhanced columns with actions
   const enhancedColumns = useMemo(() => {
     const cols = [...columns];
-
-    // Add actions column if actions are provided
     if (actions.length > 0) {
       cols.push({
         id: "actions",
@@ -259,64 +237,75 @@ export function DataTable<T>({
         headerClassName: "",
       } as ColumnDef<T>);
     }
-  
     return cols;
   }, [columns, actions]);
-  
 
   return (
-    <div className="bg-white  py-2 font-brfirma ">
-      <CardHeader>
-        <div className="flex flex-col  md:flex-row md:items-center md:justify-between gap-4">
+    <div className="bg-white  font-brfirma">
+      <div className="mb-2">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 ">
           <div>
             {title && <CardTitle>{title}</CardTitle>}
             {description && <CardDescription>{description}</CardDescription>}
           </div>
-          <div className="flex flex-col  md:flex-row gap-2">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-              <Input
-                placeholder={searchPlaceholder}
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-10 placeholder:text-xs w-full md:w-[350px]"
-              />
+
+          {(showSearch || filterColumns.length > 0 || showDownload) && (
+            <div className="flex flex-col   md:flex-row gap-2">
+              {showSearch && (
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Input
+                    placeholder={searchPlaceholder}
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10 placeholder:text-xs w-full md:w-[350px]"
+                  />
+                </div>
+              )}
+
+              {(filterColumns.length > 0 || showDownload) && (
+                <div className="flex gap-2">
+                  {filterColumns.map((column) => (
+                    <Select
+                      key={column.id}
+                      value={filters[column.id] || "all"}
+                      onValueChange={(value) =>
+                        setFilters((prev) => ({
+                          ...prev,
+                          [column.id]: value,
+                        }))
+                      }
+                    >
+                      <SelectTrigger className="w-[140px]">
+                        <Filter className="h-4 w-4 mr-2" />
+                        <SelectValue placeholder={column.header} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">All {column.header}</SelectItem>
+                        {column.filterOptions?.map((option) => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  ))}
+                  {showDownload && (
+                    <button className="border border-sm p-2">
+                      <Download className="h-4 w-4" />
+                    </button>
+                  )}
+                </div>
+              )}
             </div>
-            <div className="flex gap-2">
-              {filterColumns.map((column) => (
-                <Select
-                  key={column.id}
-                  value={filters[column.id] || "all"}
-                  onValueChange={(value) =>
-                    setFilters((prev) => ({ ...prev, [column.id]: value }))
-                  }
-                >
-                  <SelectTrigger className="w-[140px]">
-                    <Filter className="h-4 w-4 mr-2" />
-                    <SelectValue placeholder={column.header} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="all">All {column.header}</SelectItem>
-                    {column.filterOptions?.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              ))}
-              <button className="border border-sm p-2">
-                <Download className="h-4 w-4" />
-              </button>
-            </div>
-          </div>
+          )}
         </div>
 
         {showBulkActions && (
           <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-sm">
             <span className="text-sm font-medium text-blue-900">
-              {selectedRows.size} item{selectedRows.size !== 1 ? "s" : ""}{" "}
-              selected
+              {selectedRows.size} item
+              {selectedRows.size !== 1 ? "s" : ""} selected
             </span>
             <div className="flex gap-2 ml-auto">
               {bulkActions.map((action, index) => (
@@ -342,7 +331,8 @@ export function DataTable<T>({
             </div>
           </div>
         )}
-      </CardHeader>
+      </div>
+
       <CardContent>
         <div className="rounded-xs border">
           <Table>
@@ -351,7 +341,7 @@ export function DataTable<T>({
                 {enhancedColumns.map((column) => (
                   <TableHead
                     key={column.id}
-                    className={`font-semibold text-sm h-10 ${
+                    className={`font-semibold text-xs font-brfirma-bold h-8 ${
                       column.sortable ? "cursor-pointer select-none" : ""
                     } ${column.headerClassName || ""}`}
                     onClick={
@@ -397,13 +387,17 @@ export function DataTable<T>({
                   return (
                     <tr
                       key={rowId}
-                      className={`hover:bg-gray-50  ${
+                      className={` ${
                         onRowClick ? "cursor-pointer" : ""
-                      } ${selectedRows.has(rowId) ? "bg-blue-50" : ""}`}
+                      } ${selectedRows.has(rowId) ? "bg-blue-50" : ""} ${
+                        highlightedRowId === rowId
+                          ? "bg-gray-200 "
+                          : ""
+                      }`}
                       onClick={onRowClick ? () => onRowClick(row) : undefined}
                     >
                       {enhancedColumns.map((column) => (
-                        <td key={column.id} className="border-b px-2  text-xs">
+                        <td key={column.id} className="border-b px-2 text-xs">
                           {column.cell
                             ? column.cell(row, rowIndex)
                             : String(getAccessor(column)(row))}
@@ -416,6 +410,7 @@ export function DataTable<T>({
             </TableBody>
           </Table>
         </div>
+
         {totalPages > 1 && (
           <div className="flex items-center justify-between mt-4">
             <div className="text-sm text-gray-500">

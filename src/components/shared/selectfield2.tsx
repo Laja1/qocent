@@ -41,7 +41,7 @@ export const SelectField2 = ({
 
   return (
     <div className="w-full">
-      <div className="flex flex-col items-start gap-2">
+      <div className="flex flex-col mb-1  items-start gap-2">
         {label && (
           <label htmlFor={name} className={`text-sm text-tetiary-lighter ${labelClassname}`}>
             {label}
