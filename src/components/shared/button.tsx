@@ -10,6 +10,7 @@ const buttonVariants = cva("button", {
         "bg-black",
         "text-center",
         "text-white",
+        "text-xs",
         "border-transparent",
         // "hover:bg-gray-800",
       ],
@@ -23,6 +24,13 @@ const buttonVariants = cva("button", {
       tertiary: [
         "bg-[#edf2ef]",
         "text-[#000]",
+        "border-transparent",
+        "hover:bg-gray-200",
+        "text-xs"
+      ],
+      quinary: [
+        "bg-green-700",
+        "text-white",
         "border-transparent",
         "hover:bg-gray-200",
         "text-xs"
@@ -51,7 +59,7 @@ const buttonVariants = cva("button", {
     size: "medium",
   },
 });
-type buttonState = "primary" | "secondary" | "tertiary" | "quaternary";
+type buttonState = "primary" | "secondary" | "tertiary" | "quaternary" | "quinary"  ;
 interface ButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "disabled">,
     VariantProps<typeof buttonVariants> {

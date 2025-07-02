@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { Button, DataTable, Header, type ColumnDef } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { Plus } from "lucide-react";
-import { ArchitectureOverview } from "./architecture-overview";
+
 
 export const Server = () => {
   const params = useParams();
@@ -131,7 +131,7 @@ export const Server = () => {
 
             <div className=" w-full  pt-5 flex flex-col">
               <p className="text-xl font-bold">Data Center</p>
-              <ArchitectureOverview  />
+             
             </div>
           </div>
         </div>

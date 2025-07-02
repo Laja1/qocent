@@ -4,7 +4,8 @@ export type SiteData = {
   category: string;
   alerts: number;
   parent: string;
-  parentCode:string
+  parentId?:string;
+  parentType:string
   code: string;
   status: "Active" | "Suspended";
   resourceType: "Database" | "Server" | "API" | "Proxy" | "S3";

@@ -188,7 +188,7 @@ export const resources: ResourceData[] = [
         fileCabinets: [
           {
             id: "100005",
-            name: "File Cabinet 1",
+            name: "Server 1",
             type: "s3",
             status: "ACTIVE",
           },
@@ -264,7 +264,7 @@ export const resources: ResourceData[] = [
         fileCabinets: [
           {
             id: "100005",
-            name: "File Cabinet 1",
+            name: "Server 1",
             type: "s3",
             status: "ACTIVE",
           },
@@ -332,7 +332,7 @@ export const resources: ResourceData[] = [
         fileCabinets: [
           {
             id: "100005",
-            name: "File Cabinet 1",
+            name: "Server 1",
             type: "s3",
             status: "ACTIVE",
           },
@@ -407,7 +407,7 @@ export const resources: ResourceData[] = [
         fileCabinets: [
           {
             id: "100005",
-            name: "File Cabinet 1",
+            name: "Server 1",
             type: "s3",
             status: "ACTIVE",
           },
@@ -482,7 +482,7 @@ export const resources: ResourceData[] = [
         fileCabinets: [
           {
             id: "100005",
-            name: "File Cabinet 1",
+            name: "Server 1",
             type: "s3",
             status: "ACTIVE",
           },
@@ -557,7 +557,7 @@ export const resources: ResourceData[] = [
         fileCabinets: [
           {
             id: "100005",
-            name: "File Cabinet 1",
+            name: "Server 1",
             type: "s3",
             status: "ACTIVE",
           },
@@ -629,14 +629,14 @@ export const serverRoomResources = {
   servers: [
     {
       id: "srv-00001",
-      name: "API Server",
+      name: "Database",
       type: "t3.medium",
       status: "Running",
       ip: "10.0.1.5",
     },
     {
       id: "srv-00002",
-      name: "Database Server",
+      name: "Server",
       type: "r5.large",
       status: "Running",
       ip: "10.0.1.6",
@@ -719,11 +719,11 @@ export const subnetData = [
     resourcesDeployed: [
       {
         id: 201,
-        name: "API Server",
+        name: "Database",
       },
       {
         id: 202,
-        name: "File Cabinet",
+        name: "Server",
       },
     ],
   },
@@ -734,81 +734,85 @@ export const subnetData = [
     resourcesDeployed: [
       {
         id: 201,
-        name: "API Server",
+        name: "Database",
       },
       {
         id: 202,
-        name: "File Cabinet",
+        name: "Server",
       },
     ],
   },
 ];
 
-export const vpcData = [
-  {
-    vpcId: "vpc-00001", // Unique identifier for the VPC
-    whereDeployed: "AWS",
+export const sitesData ={
+  noOfVPCDeployed:3,
+  whereDeployed: "AWS",
+  parentId:"100001",
+  parent:"Rubies Production Site",
+  vpcDeployed:[
+    {
+    vpcId: "vpc-00001", 
+    houseName:"Rubies House 1",
     cidrBlock: "10.0.0.0/16",
-    id: 1,
-    numberOfSubnets: 2, // Updated to reflect total number of subnets
     subnet: [
       {
         id: 1,
         subnet: "Public",
+        
         availabilityZone: "us-east-1a",
         resourcesDeployed: [
           {
             id: 101,
             name: "Proxy",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
+            instanceType: "t2.micro", 
+            status: "running", 
           },
         ],
-        routeTable: "rtb-00001", // Example route table associated with the subnet
-        securityGroups: ["sg-00001", "sg-00002"], // Example security groups associated with the subnet
+        routeTable: "rtb-00001",
+        securityGroups: ["sg-00001", "sg-00002"], 
       },
       {
-        id: 1,
+        id: 2,
         subnet: "Public",
         availabilityZone: "us-east-1a",
         resourcesDeployed: [
           {
             id: 101,
-            name: "Proxy",
+            name: "Server",
             instanceType: "t2.micro", // Add instance type for resources
             status: "running", // Add status of resource
           },
 
           {
             id: 101,
-            name: "Proxy",
+            name: "Database",
             instanceType: "t2.micro", // Add instance type for resources
             status: "running", // Add status of resource
           },
           {
             id: 102,
-            name: "Proxy",
+            name: "Server",
             instanceType: "t2.micro", // Add instance type for resources
             status: "running", // Add status of resource
           },
         ],
         routeTable: "rtb-00001", // Example route table associated with the subnet
-        securityGroups: ["sg-00001", "sg-00002"], // Example security groups associated with the subnet
+        securityGroups: ["sg-00001", "sg-00002"], 
       },
       {
-        id: 2,
+        id: 3,
         subnet: "Private",
         availabilityZone: "us-east-1a",
         resourcesDeployed: [
           {
             id: 201,
-            name: "API Server",
+            name: "Database",
             instanceType: "t2.large",
             status: "running",
           },
           {
             id: 202,
-            name: "File Cabinet",
+            name: "Server",
             instanceType: "t2.medium",
             status: "stopped",
           },
@@ -817,7 +821,7 @@ export const vpcData = [
         securityGroups: ["sg-00004"],
       },
       {
-        id: 3,
+        id: 4,
         subnet: "Private", // Changed id to 4 for consistency
         availabilityZone: "us-east-1b", // Fixed inconsistency in availability zones
         resourcesDeployed: [
@@ -833,12 +837,14 @@ export const vpcData = [
       },
     ],
   },
+  
+  
   {
-    vpcId: "vpc-00001", // Unique identifier for the VPC
-    whereDeployed: "AWS",
+    vpcId: "vpc-00201", 
+    houseName:"Rubies House 2",
     cidrBlock: "10.0.0.0/16",
-    id: 1,
-    numberOfSubnets: 2, // Updated to reflect total number of subnets
+    id: 2,
+  
     subnet: [
       {
         id: 1,
@@ -853,7 +859,7 @@ export const vpcData = [
           },
         ],
         routeTable: "rtb-00001", // Example route table associated with the subnet
-        securityGroups: ["sg-00001", "sg-00002"], // Example security groups associated with the subnet
+        securityGroups: ["sg-00001", "sg-00002"], 
       },
 
       {
@@ -863,13 +869,13 @@ export const vpcData = [
         resourcesDeployed: [
           {
             id: 201,
-            name: "API Server",
+            name: "Database",
             instanceType: "t2.large",
             status: "running",
           },
           {
             id: 202,
-            name: "File Cabinet",
+            name: "Server",
             instanceType: "t2.medium",
             status: "stopped",
           },
@@ -884,7 +890,7 @@ export const vpcData = [
         resourcesDeployed: [
           {
             id: 203,
-            name: "Database Server",
+            name: "Server",
             instanceType: "t2.xlarge",
             status: "running",
           },
@@ -895,73 +901,73 @@ export const vpcData = [
     ],
   },
 
-  // {
-  //   vpcId: "vpc-00001", // Unique identifier for the VPC
-  //   whereDeployed:'AWS',
-  //   cidrBlock: "10.0.0.0/16",
-  //   id: 1,
-  //   numberOfSubnets: 2, // Updated to reflect total number of subnets
-  //   subnet: [
-  //     {
-  //       id: 1,
-  //       subnet: "Public",
-  //       availabilityZone: "us-east-1a",
-  //       resourcesDeployed: [
-  //         {
-  //           id: 101,
-  //           name: "Proxy",
-  //           instanceType: "t2.micro", // Add instance type for resources
-  //           status: "running", // Add status of resource
-  //         },
-  //       ],
-  //       routeTable: "rtb-00001", // Example route table associated with the subnet
-  //       securityGroups: ["sg-00001", "sg-00002"], // Example security groups associated with the subnet
-  //     },
-
-  //     // {
-  //     //   id: 2,
-  //     //   subnet: "Private",
-  //     //   availabilityZone: "us-east-1a",
-  //     //   resourcesDeployed: [
-  //     //     {
-  //     //       id: 201,
-  //     //       name: "API Server",
-  //     //       instanceType: "t2.large",
-  //     //       status: "running",
-  //     //     },
-  //     //     {
-  //     //       id: 202,
-  //     //       name: "File Cabinet",
-  //     //       instanceType: "t2.medium",
-  //     //       status: "stopped",
-  //     //     },
-  //     //   ],
-  //     //   routeTable: "rtb-00003",
-  //     //   securityGroups: ["sg-00004"],
-  //     // },
-  //     // {
-  //     //   id: 3,
-  //     //   subnet: "Private", // Changed id to 4 for consistency
-  //     //   availabilityZone: "us-east-1b", // Fixed inconsistency in availability zones
-  //     //   resourcesDeployed: [
-  //     //     {
-  //     //       id: 203,
-  //     //       name: "Database Server",
-  //     //       instanceType: "t2.xlarge",
-  //     //       status: "running",
-  //     //     },
-  //     //   ],
-  //     //   routeTable: "rtb-00004",
-  //     //   securityGroups: ["sg-00005"],
-  //     // },
-  //   ],
-  // },
+  {
+    vpcId: "vpc-0201", 
+   
+    houseName:"Rubies House 3",
+    cidrBlock: "10.0.0.0/16",
+    id: 1,
+    
+    subnet: [
+      {
+        id: 1,
+        subnet: "Public",
+        availabilityZone: "us-east-1a",
+        resourcesDeployed: [
+          {
+            id: 101,
+            name: "Proxy",
+            instanceType: "t2.micro", // Add instance type for resources
+            status: "running", // Add status of resource
+          },
+        ],
+        routeTable: "rtb-00001", // Example route table associated with the subnet
+        securityGroups: ["sg-00001", "sg-00002"], 
+      },
+      {
+        id: 2,
+        subnet: "Private",
+        availabilityZone: "us-east-1a",
+        resourcesDeployed: [
+          {
+            id: 201,
+            name: "Database",
+            instanceType: "t2.large",
+            status: "running",
+          },
+          {
+            id: 202,
+            name: "Server",
+            instanceType: "t2.medium",
+            status: "stopped",
+          },
+        ],
+        routeTable: "rtb-00003",
+        securityGroups: ["sg-00004"],
+      },
+      {
+        id: 3,
+        subnet: "Private", // Changed id to 4 for consistency
+        availabilityZone: "us-east-1b", // Fixed inconsistency in availability zones
+        resourcesDeployed: [
+          {
+            id: 203,
+            name: "Server",
+            instanceType: "t2.xlarge",
+            status: "running",
+          },
+        ],
+        routeTable: "rtb-00004",
+        securityGroups: ["sg-00005"],
+      },
+    ],
+  },
 
   {
-    vpcId: "vpc-002",
+    vpcId: "vpc-0202",
     cidrBlock: "192.168.0.0/16",
-    whereDeployed: "Huawei",
-    id: 2,
+    houseName:"Rubies House 4",
+    id: 32,
     numberOfSubnets: 2,
     subnet: [
       {
@@ -986,13 +992,13 @@ export const vpcData = [
         resourcesDeployed: [
           {
             id: 201,
-            name: "API Server",
+            name: "Database",
             instanceType: "t2.large",
             status: "running",
           },
           {
             id: 202,
-            name: "File Cabinet",
+            name: "Server",
             instanceType: "t2.medium",
             status: "stopped",
           },
@@ -1002,4 +1008,6 @@ export const vpcData = [
       },
     ],
   },
-];
+
+]
+}

@@ -53,6 +53,14 @@ export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
       ),
       sortable: true,
     },
+    
+    {
+      id: "resource",
+      header: "RESOURCES",
+      accessorKey: "resource",
+      cell: (row) => <span className="line-clamp-1">{row.resource}</span>,
+      sortable: true,
+    },
     {
       id: "resourceType",
       header: "",
@@ -66,13 +74,6 @@ export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
           
         </span>
       ),
-      sortable: true,
-    },
-    {
-      id: "resource",
-      header: "RESOURCES",
-      accessorKey: "resource",
-      cell: (row) => <span className="line-clamp-1">{row.resource}</span>,
       sortable: true,
     },
     {
@@ -109,11 +110,11 @@ export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
       cell: (row) => <span className=" flex">{row.parent}</span>,
     },
     {
-      id: "parentCode",
-      header: "PARENT CODE",
-      accessorKey: "parentCode",
+      id: "parentType",
+      header: "PARENT TYPE",
+      accessorKey: "parentType",
       sortable: true,
-      cell: (row) => <span className=" flex">{row.parentCode}</span>,
+      cell: (row) => <span className=" flex">{row.parentType}</span>,
     },
     {
       id: "alerts",
@@ -121,17 +122,15 @@ export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
       accessorKey: "alerts",
       sortable: true,
       cell: (row) => (
-        <div className="items-center  flex">
-          <div
-            className={`${
-              row.alerts > 0
-                ? "border-red-200 bg-red-800 text-white"
-                : "border-green-200 bg-green-800 text-white"
-            } text-center justify-center items-center rounded-full inline-flex p-2 w-5 h-5 text-[10px]`}
-          >
-            {row.alerts}
-          </div>
-        </div>
+        <div
+        className={`flex items-center justify-center w-5 text-[10px] h-5 rounded-full ${
+          row.alerts > 0
+            ? "bg-red-50 text-red-800 border border-red-500"
+            : "bg-green-50 text-green-800 border border-green-500"
+        }`}
+      >
+        {row.alerts}
+      </div>
       ),
     },
     {
@@ -140,12 +139,12 @@ export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
       accessorKey: "status",
       cell: (row) => (
         <div className="">
-          <Badge
+         <Badge
             variant="outline"
             className={
               row.status === "Active"
-                ? "bg-green-800 text-white text-[10px] border-green-200"
-                : "bg-red-800 text-white text-[10px] border-red-200"
+                ? "bg-green-50 text-green-800 border-green-500 text-[10px] "
+                : "bg-red-50 text-red-800 border-red-500 text-[10px]"
             }
           >
             {row.status}
@@ -181,7 +180,7 @@ export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
     },
   ];
 
-  const serverSite = siteData.filter((site) => site.parentCode === rowId);
+  const serverSite = siteData.filter((site) => site.parentId === rowId);
 console.log(rowId)
   return (
    

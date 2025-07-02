@@ -12,7 +12,6 @@ import { Button } from "./button";
 import {
   ApiServerIcon,
   ProxyIcon,
-  WebServerIcon,
 } from "@/utilities/constants/icons";
 
 export const ArchitectureDiagram = ({
@@ -59,7 +58,7 @@ export const ArchitectureDiagram = ({
               <Globe className="h-6 w-6 text-green-600 mx-auto mb-1" />
               <p className="font-medium text-green-800">Public Subnet</p>
               <div className="mt-2 grid grid-cols-2 gap-2">
-                <WebServerIcon />
+                {/* <WebServerIcon /> */}
                 <ProxyIcon />
               </div>
             </div>

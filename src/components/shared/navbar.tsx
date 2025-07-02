@@ -12,13 +12,13 @@ export const NavBar = () => {
   return (
     <div className="text-primary">
       <div className="justify-between px-20 py-5 items-center hidden lg:flex flex-row">
-        <p  onClick={() => navigate('/')} className="text-black text-2xl cursor-pointer font-bold">QCS</p>
+        <p  onClick={() => navigate('/')} className="text-black text-2xl text-green-800 cursor-pointer font-bold">QCS</p>
         <div className="flex flex-row text-lg gap-10">
           {navRoutes.slice(0, 6).map((route, index) => (
             <a
               key={index}
               onClick={() => navigate(route.path)}
-              className="hover:text-red-700 text-base cursor-pointer"
+              className="hover:text-red-700 text-green-800 text-base cursor-pointer"
             >
               {route.name}
             </a>
@@ -28,13 +28,13 @@ export const NavBar = () => {
         <div className="flex-row flex items-center gap-10">
           <h1
             onClick={() => navigate(RouteConstant.auth.signin.path)}
-            className="cursor-pointer hover:hover:text-red-700"
+            className="cursor-pointer text-green-700 hover:hover:text-red-700"
           >
             {RouteConstant.auth.signin.name}
           </h1>
           <Button
                       label="Sign up"
-                      
+                     
             onClick={() => navigate(RouteConstant.auth.signup.path)}
           />
         </div>
@@ -68,7 +68,7 @@ export const NavBar = () => {
           <div className="flex-col flex gap-6">
             <h2
               onClick={() => navigate(RouteConstant.auth.signin.path)}
-              className="cursor-pointer text-[16px] text-black hover:text-gray-600"
+              className="cursor-pointer text-green-700 text-[16px] text-black hover:text-gray-600"
             >
               {RouteConstant.auth.signin.name}
             </h2>

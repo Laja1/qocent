@@ -8,6 +8,7 @@ import { useState } from "react";
 import { ServerSitesTable2 } from "./server-sites-table";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
+import { SiteLevel } from "../architectural-room/site-level";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
@@ -65,17 +66,16 @@ export const ServerSites = () => {
       accessorKey: "alerts",
       sortable: true,
       cell: (row) => (
-        <div className="items-center  flex">
-          <div
-            className={`${
-              row.alerts > 0
-                ? "border-red-200 bg-red-800 text-white"
-                : "border-green-200 bg-green-800 text-white"
-            } text-center justify-center items-center rounded-full inline-flex p-2 w-5 h-5 text-[10px]`}
-          >
-            {row.alerts}
-          </div>
-        </div>
+        <div
+        className={`flex items-center justify-center w-5 text-[10px] h-5 rounded-full ${
+          row.alerts > 0
+            ? "bg-red-50 text-red-800 border border-red-500"
+            : "bg-green-50 text-green-800 border border-green-500"
+        }`}
+      >
+        {row.alerts}
+      </div>
+      
       ),
     },
     {
@@ -112,8 +112,8 @@ export const ServerSites = () => {
             variant="outline"
             className={
               row.status === "Active"
-                ? "bg-green-800 text-white text-[10px] border-green-200"
-                : "bg-red-800 text-white text-[10px] border-red-200"
+                ? "bg-green-50 text-green-800 border-green-500 text-[10px] "
+                : "bg-red-50 text-red-800 border-red-500 text-[10px]"
             }
           >
             {row.status}
@@ -210,7 +210,7 @@ export const ServerSites = () => {
     {
       id: 2,
       text: "Architecture",
-      component: <div>This is the Settings tab content.</div>,
+      component: <SiteLevel />,
     },
 
     {
@@ -250,7 +250,7 @@ export const ServerSites = () => {
             initialSorting={{ id: "siteName", desc: false }}
           />
         </Card>
-        <div className="mx-5 mb-10">
+        <div className="mx-5 mt-5 mb-10">
           <Tabs tabs={tabData} />
         </div>
       </div>

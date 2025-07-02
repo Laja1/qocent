@@ -1,48 +1,23 @@
-import { ArrowRightIcon } from "lucide-react";
-import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { RouteConstant } from "@/router/routes";
+import { NavBar } from "@/components/shared";
+import { Button } from "@/components/shared/button";
 
 export const Hero = () => {
-  const heroData = [
-    {
-      title: "Sign Up",
-      description:
-        "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam, quos.",
-      icon: <ArrowRightIcon className="w-4 h-4" />,
-      path: RouteConstant.auth.signup.path,
-    },
-    {
-      title: "Sign In",
-      description:
-        "Lorem ipsum dolor sit amet consectetur acing elit. Quisquam, quos.",
-      icon: <ArrowRightIcon className="w-4 h-4" />,
-      path: RouteConstant.auth.signin.path,
-    },
-  ];
+  
   return (
-    <div className="flex gap-4 text-white">
-      {heroData.map((item) => (
-        <motion.div
-          key={item.description}
-          initial={{ scale: 1 }}
-          whileHover={{ scale: 1.05 }}
-          transition={{ duration: 0.7, ease: "easeInOut" }}
-          className="bg-gradient-to-tr from-gray-600 to-black relative rounded-lg w-[280px] h-[300px] p-4"
-        >
-          <div className="flex flex-col gap-4">
-            <h1 className="text-4xl font-bold">{item.title}</h1>
-            <p className="text-sm text-gray-500">{item.description}</p>
-          </div>
-          <div className="flex absolute bottom-4 right-3">
-            <div className=" items-center p-2 rounded-full border border-white  inline-block">
-              <Link to={item.path}>
-                <ArrowRightIcon className="w-4 h-4" />
-              </Link>
-            </div>
-          </div>
-        </motion.div>
-      ))}
+    <div className="bg-gradient-to-tr from-amber-100 to-[#edf2ef] h-screen w-full">
+      <NavBar />
+      <div className="flex flex-col items-center justify-center mt-20  text-center px-4">
+        <h1 className="text-4xl md:text-5xl font-bold text-gray-800 max-w-2xl">
+          Empowering the Future with Cloud Technology
+        </h1>
+        <p className="mt-4 text-base md:text-xl text-gray-600 max-w-xl">
+          Discover scalable solutions, fast deployment, and real-time access to infrastructure with our cloud-first approach.
+        </p>
+       <div>  <Button label="Get Started with Cloud" className="mt-8 w-[200px]" onClick={()=>{
+        window.location.href = "/signup";
+       }}/></div> 
+      </div>
+     
     </div>
   );
 };

@@ -7,6 +7,9 @@ import type { resourceType } from "./type";
 import { resourceData } from "./config";
 import { useNavigate } from "react-router-dom";
 
+
+
+
 export const Resources = () => {
   // const [rowId, setRowId] = useState("1001");
   const navigate = useNavigate();
@@ -174,6 +177,10 @@ export const Resources = () => {
           initialSorting={{ id: "siteName", desc: false }}
         />
       </div>
+     <div className="flex gap-5 w-full">
+      
+    </div>
+     
       {/* <ResourceTab resource={resource} /> */}
     </div>
   );

@@ -9,6 +9,7 @@ export const svgLinks = {
     cube: '/svg/cubes.svg',
     mosaic: '/svg/mosaic.svg',
     grunge:'/svg/grunge.svg',
-    
+    router:'/svg/router.svg',
+    igw:'/svg/igw.svg'
     
 }
