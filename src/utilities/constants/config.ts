@@ -767,6 +767,12 @@ export const sitesData ={
             instanceType: "t2.micro", 
             status: "running", 
           },
+          {
+            id: 102,
+            name: "Server",
+            instanceType: "t2.micro", // Add instance type for resources
+            status: "running", // Add status of resource
+          },
         ],
         routeTable: "rtb-00001",
         securityGroups: ["sg-00001", "sg-00002"], 
@@ -789,12 +795,7 @@ export const sitesData ={
             instanceType: "t2.micro", // Add instance type for resources
             status: "running", // Add status of resource
           },
-          {
-            id: 102,
-            name: "Server",
-            instanceType: "t2.micro", // Add instance type for resources
-            status: "running", // Add status of resource
-          },
+         
         ],
         routeTable: "rtb-00001", // Example route table associated with the subnet
         securityGroups: ["sg-00001", "sg-00002"], 
@@ -861,54 +862,6 @@ export const sitesData ={
         routeTable: "rtb-00001", // Example route table associated with the subnet
         securityGroups: ["sg-00001", "sg-00002"], 
       },
-
-      {
-        id: 2,
-        subnet: "Private",
-        availabilityZone: "us-east-1a",
-        resourcesDeployed: [
-          {
-            id: 201,
-            name: "Database",
-            instanceType: "t2.large",
-            status: "running",
-          },
-          {
-            id: 202,
-            name: "Server",
-            instanceType: "t2.medium",
-            status: "stopped",
-          },
-        ],
-        routeTable: "rtb-00003",
-        securityGroups: ["sg-00004"],
-      },
-      {
-        id: 3,
-        subnet: "Private", // Changed id to 4 for consistency
-        availabilityZone: "us-east-1b", // Fixed inconsistency in availability zones
-        resourcesDeployed: [
-          {
-            id: 203,
-            name: "Server",
-            instanceType: "t2.xlarge",
-            status: "running",
-          },
-        ],
-        routeTable: "rtb-00004",
-        securityGroups: ["sg-00005"],
-      },
-    ],
-  },
-
-  {
-    vpcId: "vpc-0201", 
-   
-    houseName:"Rubies House 3",
-    cidrBlock: "10.0.0.0/16",
-    id: 1,
-    
-    subnet: [
       {
         id: 1,
         subnet: "Public",
@@ -963,51 +916,143 @@ export const sitesData ={
     ],
   },
 
-  {
-    vpcId: "vpc-0202",
-    cidrBlock: "192.168.0.0/16",
-    houseName:"Rubies House 4",
-    id: 32,
-    numberOfSubnets: 2,
-    subnet: [
-      {
-        id: 1,
-        subnet: "Public",
-        availabilityZone: "us-east-1b",
-        resourcesDeployed: [
-          {
-            id: 301,
-            name: "Proxy",
-            instanceType: "t2.micro",
-            status: "running",
-          },
-        ],
-        routeTable: "rtb-005",
-        securityGroups: ["sg-006"],
-      },
-      {
-        id: 2,
-        subnet: "Private",
-        availabilityZone: "us-east-1a",
-        resourcesDeployed: [
-          {
-            id: 201,
-            name: "Database",
-            instanceType: "t2.large",
-            status: "running",
-          },
-          {
-            id: 202,
-            name: "Server",
-            instanceType: "t2.medium",
-            status: "stopped",
-          },
-        ],
-        routeTable: "rtb-006",
-        securityGroups: ["sg-007"],
-      },
-    ],
-  },
+  // {
+  //   vpcId: "vpc-0201", 
+   
+  //   houseName:"Rubies House 3",
+  //   cidrBlock: "10.0.0.0/16",
+  //   id: 1,
+    
+  //   subnet: [
+  //     {
+  //       id: 1,
+  //       subnet: "Public",
+  //       availabilityZone: "us-east-1a",
+  //       resourcesDeployed: [
+  //         {
+  //           id: 101,
+  //           name: "Proxy",
+  //           instanceType: "t2.micro", // Add instance type for resources
+  //           status: "running", // Add status of resource
+  //         },
+  //       ],
+  //       routeTable: "rtb-00001", // Example route table associated with the subnet
+  //       securityGroups: ["sg-00001", "sg-00002"], 
+  //     },
+  //     {
+  //       id: 2,
+  //       subnet: "Private",
+  //       availabilityZone: "us-east-1a",
+  //       resourcesDeployed: [
+  //         {
+  //           id: 201,
+  //           name: "Database",
+  //           instanceType: "t2.large",
+  //           status: "running",
+  //         },
+  //         {
+  //           id: 202,
+  //           name: "Server",
+  //           instanceType: "t2.medium",
+  //           status: "stopped",
+  //         },
+  //       ],
+  //       routeTable: "rtb-00003",
+  //       securityGroups: ["sg-00004"],
+  //     },
+  //     {
+  //       id: 3,
+  //       subnet: "Private", // Changed id to 4 for consistency
+  //       availabilityZone: "us-east-1b", // Fixed inconsistency in availability zones
+  //       resourcesDeployed: [
+  //         {
+  //           id: 203,
+  //           name: "Server",
+  //           instanceType: "t2.xlarge",
+  //           status: "running",
+  //         },
+  //       ],
+  //       routeTable: "rtb-00004",
+  //       securityGroups: ["sg-00005"],
+  //     },
+  //   ],
+  // },
 
-]
+  // {
+  //   vpcId: "vpc-0202",
+  //   cidrBlock: "192.168.0.0/16",
+  //   houseName:"Rubies House 4",
+  //   id: 32,
+  //   numberOfSubnets: 2,
+  //   subnet: [
+  //     {
+  //       id: 1,
+  //       subnet: "Public",
+  //       availabilityZone: "us-east-1b",
+  //       resourcesDeployed: [
+  //         {
+  //           id: 301,
+  //           name: "Proxy",
+  //           instanceType: "t2.micro",
+  //           status: "running",
+  //         },
+  //       ],
+  //       routeTable: "rtb-005",
+  //       securityGroups: ["sg-006"],
+  //     },
+  //     {
+  //       id: 2,
+  //       subnet: "Private",
+  //       availabilityZone: "us-east-1a",
+  //       resourcesDeployed: [
+  //         {
+  //           id: 201,
+  //           name: "Database",
+  //           instanceType: "t2.large",
+  //           status: "running",
+  //         },
+  //         {
+  //           id: 202,
+  //           name: "Server",
+  //           instanceType: "t2.medium",
+  //           status: "stopped",
+  //         },
+  //       ],
+  //       routeTable: "rtb-006",
+  //       securityGroups: ["sg-007"],
+  //     },
+  //   ],
+  // },
+
+],
+extraResources : {
+  resources: [
+   
+    {
+      name: 'R53',
+      id: 1,
+      type: 'Identity',
+      status: 'active',
+      createdAt: '2025-07-03T08:00:00Z',
+      owner: 'admin',
+    },
+    {
+      name: 'S3',
+      id: 2,
+      type: 'Storage',
+      status: 'available',
+      createdAt: '2025-07-02T15:30:00Z',
+      owner: 'backup-service',
+    },
+    {
+      name: 'CloudWatch',
+      id: 3,
+      type: 'Monitoring',
+      status: 'enabled',
+      createdAt: '2025-07-01T12:10:00Z',
+      owner: 'devops',
+    },
+  ],
+}
+
 }

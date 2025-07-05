@@ -8,3 +8,9 @@ export type ReadProductFieldResponseData = {
     nestedFields?: ReadProductFieldResponseData[];
   }[];
 };
+
+
+export type CreateNewResourceProps = {
+resourceParamter:string
+resource:string
+};

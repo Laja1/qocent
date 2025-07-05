@@ -146,9 +146,13 @@ export const RouteConstant = {
      
     },
     createResources:{
-      path: "create-resource",  
-      name: "Resources",
+      path: "create-new-resource",  
+      name: "create-new-resource",
     },
+    createnewsite:{
+      path:'create-new-site',
+      name:"Create New Site" 
+      },
     serverId:{
       path: "server:id",
       name: "Server",

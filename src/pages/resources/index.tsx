@@ -162,7 +162,7 @@ export const Resources = () => {
           label="Create New resource"
           prefixIcon={<PlusIcon className="size-4" />}
           size="small"
-          onClick={() => navigate("/create-resource")}
+          onClick={() => navigate("/create-new-resource")}
         />
       </Header>
 

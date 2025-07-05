@@ -17,3 +17,19 @@ export type SiteData = {
 export type SiteDataProps = {
   Data: SiteData[];
 };
+
+export interface summaryType {
+  resourceType: string
+  count:number
+}
+
+
+export interface secutiyAnalysisType {
+  id:string
+  category: string
+  type:string
+  recommendation:string
+  risk:'Low' | 'Medium' | 'High'
+  description:string
+}
+

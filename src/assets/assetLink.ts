@@ -10,6 +10,7 @@ export const svgLinks = {
     mosaic: '/svg/mosaic.svg',
     grunge:'/svg/grunge.svg',
     router:'/svg/router.svg',
-    igw:'/svg/igw.svg'
-    
+    igw:'/svg/igw.svg',
+    s3:'/svg/s3.svg',
+    r53:'/svg/r53.svg'
 }

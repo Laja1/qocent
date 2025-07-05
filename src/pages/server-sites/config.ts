@@ -1,4 +1,4 @@
-import type { SiteData } from "./type";
+import type { secutiyAnalysisType, SiteData } from "./type";
 
 export const siteData: SiteData[] = [
   {
@@ -198,7 +198,7 @@ export const siteData: SiteData[] = [
   },
 
   {
-    id: "100013",
+    id: "1022013",
     resource: "Main Web Server",
     category: "Server",
     parentId:"100003",
@@ -273,7 +273,7 @@ export const siteData: SiteData[] = [
     bill: 100,
   },
   {
-    id: "100018",
+    id: "100081",
     resource: "Main Web Server",
     category: "Server",
     alerts: 5,
@@ -288,7 +288,7 @@ export const siteData: SiteData[] = [
     bill: 100,
   },
   {
-    id: "100019",
+    id: "120019",
     resource: "Auth Service",
     category: "API",
     alerts: 1,
@@ -364,7 +364,7 @@ export const siteData: SiteData[] = [
   },
 
   {
-    id: "100003",
+    id: "101003",
     resource: "Main Web Server",
     category: "Server",
     parentId:"100003",
@@ -379,7 +379,7 @@ export const siteData: SiteData[] = [
     bill: 100,
   },
   {
-    id: "100004",
+    id: "100054",
     resource: "Auth Service",
     category: "API",
     parentId:"100004",
@@ -439,7 +439,7 @@ export const siteData: SiteData[] = [
     bill: 100,
   },
   {
-    id: "100008",
+    id: "120008",
     resource: "Main Web Server",
     category: "Server",
     alerts: 5,
@@ -454,7 +454,7 @@ export const siteData: SiteData[] = [
     bill: 100,
   },
   {
-    id: "100009",
+    id: "100091",
     resource: "Auth Service",
     category: "API",
     alerts: 1,
@@ -545,7 +545,7 @@ export const siteData: SiteData[] = [
     bill: 100,
   },
   {
-    id: "100014",
+    id: "102014",
     resource: "Auth Service",
     category: "API",
     parentId:"100004",
@@ -664,4 +664,118 @@ export const siteData: SiteData[] = [
     createdAt: "2025-01-01",
     bill: 100,
   },
+];
+
+
+export const summaryData=[
+  {
+    id:1,
+    resourceType:'Server Houses',
+    count:3
+  },
+  {
+    id:2,
+    resourceType:'Server Rooms',
+    count:3
+  },
+  {
+    id:3,
+    resourceType:'Database',
+    count:3
+  },
+  {
+    id:4,
+    resourceType:'Server',
+    count:1
+  },
+  {
+    id:5,
+    resourceType:'Nat Gateway',
+    count:2
+  },
+ 
+]
+
+
+export const securityAnalysisData: secutiyAnalysisType[] = [
+  {
+    id: "101",
+    category: "IAM",
+    type: "Configuration",
+    description: "Root user has active access keys that have not been rotated in over 90 days.",
+    recommendation: "Delete or rotate root access keys and enforce MFA on the root account.",
+    risk: "High",
+  },
+  {
+    id: "102",
+    category: "Data Protection",
+    type: "Configuration",
+    description: "S3 buckets are publicly accessible.",
+    recommendation: "Update bucket policies to restrict public access and enable S3 Block Public Access.",
+    risk: "High",
+  },
+  {
+    id: "103",
+    category: "Infrastructure Security",
+    type: "Configuration",
+    description: "Security groups allow unrestricted SSH access (0.0.0.0/0) to EC2 instances.",
+    recommendation: "Restrict SSH access to trusted IP ranges only.",
+    risk: "Medium",
+  },
+  {
+    id: "104",
+    category: "Application Security",
+    type: "Best Practices",
+    description: "Application endpoints lack rate limiting or throttling mechanisms.",
+    recommendation: "Implement API throttling and DDoS protection using WAF or API Gateway.",
+    risk: "Medium",
+  },
+  {
+    id: "105",
+    category: "Monitoring & Observability",
+    type: "Configuration",
+    description: "CloudTrail is not enabled in all regions.",
+    recommendation: "Enable CloudTrail in all regions to ensure auditability of user actions.",
+    risk: "Low",
+  },
+  {
+    id: "106",
+    category: "IAM",
+    type: "Recommendation",
+    description: "All IAM roles use AWS managed policies instead of custom scoped ones.",
+    recommendation: "Create least privilege custom policies for better access control.",
+    risk: "Medium",
+  },
+  {
+    id: "107",
+    category: "Data Protection",
+    type: "Recommendation",
+    description: "RDS snapshots are not encrypted.",
+    recommendation: "Enable encryption on RDS snapshots and automate snapshot creation.",
+    risk: "High",
+  },
+  {
+    id: "108",
+    category: "Monitoring & Observability",
+    type: "Configuration",
+    description: "No alarm thresholds set on critical metrics like CPU and memory usage.",
+    recommendation: "Set CloudWatch alarms to proactively respond to resource stress.",
+    risk: "Low",
+  },
+  {
+    id: "109",
+    category: "Application Security",
+    type: "Configuration",
+    description: "Web application does not use HTTPS.",
+    recommendation: "Enforce HTTPS using load balancer listener rules or ACM certificates.",
+    risk: "High",
+  },
+  {
+    id: "110",
+    category: "Infrastructure Security",
+    type: "Recommendation",
+    description: "No bastion host configured for production VPC.",
+    recommendation: "Use a bastion host with logging and restricted access for better SSH security.",
+    risk: "Medium",
+  }
 ];

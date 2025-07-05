@@ -1,144 +1,103 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Header, SelectField2 } from "@/components/shared";
-import mapBackendToInitialValues from "@/models/request/resourceRequest";
+import { useState } from "react";
 import { useFormik } from "formik";
-import { backendResponse } from "./config";
-import { createValidationSchema } from "./validation";
-import { getIn } from "formik";
-import RenderField from "./renderfield";
-import { useMemo } from "react";
+import { Plus, PlusIcon } from "lucide-react";
+import type { ColumnDef } from "@/components/shared/datatable";
+import { DataTable } from "@/components/shared/datatable";
+import { Button, Header, Textfield } from "@/components/shared";
+import { DeployResources } from "@/components/not-shared/deploy-resources";
+import { useModal } from "@/components/shared/modal";
+import type { CreateNewResourceProps } from "./type";
 
-export const CreateResource = () => {
-  const onSubmit = (values: any) => {
-    console.log("Submitted values:", values);
-  };
+const resourceData: CreateNewResourceProps[] = [
+  { resourceParamter: "Availability Zone", resource: "availabilityZone" },
+  { resourceParamter: "Instance Type", resource: "instanceType" },
+  { resourceParamter: "Region", resource: "region" },
+];
 
-  // Generate Resource Type options from backend data
-  const resourceTypeOptions = useMemo(() => {
-    return (
-      backendResponse.data[0]?.fieldDropdowns?.map((dropdown) => ({
-        label: dropdown.dropdownName,
-        value: dropdown.dropdownValue,
-      })) || []
-    );
-  }, []);
-
-  // Mock options for Resource Site Code - replace with your actual data
-  const resourceSiteCodeOptions = [
-    { label: "Rubies Production Site A", value: "rubies-site-a" },
-    { label: "Rubies Production Site B", value: "rubies-site-b" },
-    { label: "Rubies Production Site C", value: "srubies-site-c" },
-  ];
+export const CreateNewResource = () => {
+  const { openModal, closeModal } = useModal();
+  const [resourceType, setResourceType] = useState(resourceData[0].resource);
 
   const formik = useFormik({
     initialValues: {
-      resourceType: "",
-      resourceSiteCode: "",
-      nestedFields: [],
+      availabilityZone: "",
+      instanceType: "",
+      region: "",
     },
-    onSubmit,
-    validationSchema: createValidationSchema(backendResponse?.data),
+    onSubmit: (values) => {
+      console.log("Form values:", values);
+    },
     enableReinitialize: true,
   });
 
-  // Handle Resource Type dropdown change
-  const handleResourceTypeChange = (value: string) => {
-    formik.setFieldValue("resourceType", value);
+  const resourceColumns: ColumnDef<CreateNewResourceProps>[] = [
+    {
+      id: "label",
+      header: "Resource Parameters",
+      accessorKey: "resourceParamter",
+      cell: (row) => (
+        <span className="text-amber-800 font-brfirma-bold font-medium line-clamp-1">
+          {row.resourceParamter}
+        </span>
+      ),
+    },
+    {
+      id: "value",
+      header: "Value",
+      accessorKey: "resource",
+      cell: (row) => {
+        const fieldName = row.resource as keyof typeof formik.initialValues;
+  
+        return (
+          <Textfield formik={formik} name={fieldName} className="h-6" />
+        );
+      },
+    },
+  ];
+  
+  
 
-    // Find the selected resource type data
-    const selectedResourceType = backendResponse.data[0]?.fieldDropdowns?.find(
-      (dropdown) => dropdown.dropdownValue === value
-    );
-
-    if (selectedResourceType?.nestedFields) {
-      // Map the nested fields for the selected resource type
-      const mappedNestedFields = mapBackendToInitialValues(
-        selectedResourceType.nestedFields
-      );
-      formik.setFieldValue("nestedFields", mappedNestedFields);
-    } else {
-      // Clear nested fields if no selection
-      formik.setFieldValue("nestedFields", []);
-    }
-  };
-
-  // Handle Resource Site Code dropdown change
-  const handleResourceSiteCodeChange = (value: string) => {
-    formik.setFieldValue("resourceSiteCode", value);
-    // Add any additional logic here if site code affects the form
-  };
-
-  // Only show nested fields if both dropdowns are selected
-  const shouldShowNestedFields =
-    formik.values.resourceType && formik.values.resourceSiteCode;
-
-  console.log("Form values:", formik.values);
-  console.log("Form errors:", formik.errors);
+  const actions = [
+    {
+      label: "Add resource",
+      icon: Plus,
+      onClick: (row: CreateNewResourceProps) => {
+        setResourceType(row.resource);
+        openModal({
+          id: `deploy-${row.resource}`,
+          content: (
+            <DeployResources
+              id={row.resource}
+              closeModal={closeModal}
+            />
+          ),
+        });
+      },
+    },
+  ];
 
   return (
-    <div className="flex flex-col">
-      <Header
-        title="Create Resources"
-        description="A server Room can have one or more server centres. A server centre is provided by a provider."
-      />
+    <div className="w-full">
+      <Header title="Create New Resource" description="ss">
+        <Button
+          intent="tertiary"
+          label={`Create New 'Resource'`}
+          prefixIcon={<PlusIcon className="size-4" />}
+          size="small"
+        />
+      </Header>
 
-      <div className="flex-col p-5 mt-5  space-y-5 rounded-sm">
-        <div className="w-[400px]  gap-3  space-y-5">
-          <SelectField2
-            name="resourceType"
-            label="Resource Type"
-            placeholder="Select a resource type"
-            formik={formik}
-            options={resourceTypeOptions}
-            onChange={handleResourceTypeChange}
-          />
-          <SelectField2
-            name="resourceSiteCode"
-            label="Resource Site Code"
-            formik={formik}
-            placeholder="Select a site code"
-            options={resourceSiteCodeOptions}
-            onChange={handleResourceSiteCodeChange}
-          />
-        </div>
-      </div>
-
-      <div className="flex w-full gap-3">
-        <div className=" flex flex-col gap-4 rounded-sm p-4 w-[400px]">
-          {/* Show message when dropdowns are not selected */}
-          {/* {!shouldShowNestedFields && (
-            <div className="text-gray-500 text-center p-8 border-2 border-dashed border-gray-300 rounded-md">
-              Please select both Resource Type and Resource Site Code to
-              configure your resource.
-            </div>
-          )} */}
-
-         <div className="w-[400px] gap-3">
-          {shouldShowNestedFields &&
-            formik.values.nestedFields.map((field, index) => (
-              <RenderField
-                key={index}
-                field={field}
-                formik={formik}
-                fieldPath={`nestedFields[${index}]`}
-                error={getIn(
-                  formik.errors,
-                  `nestedFields[${index}].selectedOption`
-                )}
-              />
-            ))}</div>
-
-          {shouldShowNestedFields && (
-            <div className="flex justify-end">
-              <Button
-                label="Create Resource"
-                className=""
-                disabled={!formik.isValid}
-                onClick={formik.handleSubmit}
-              />
-            </div>
-          )}
-        </div>
+      <div className="mx-5">
+        <DataTable
+          data={resourceData}
+          columns={resourceColumns}
+          actions={actions}
+          highlightedRowId={resourceType}
+          onRowClick={(row) => setResourceType(row.resource)}
+          showDownload={false}
+          showSearch={false}
+          getRowId={(row) => row.resource}
+        />
       </div>
     </div>
   );

@@ -1,3 +1,4 @@
+
 import clsx from "clsx";
 import type { SelectfieldOptions, SelectProps } from "./types";
 import {
@@ -22,9 +23,10 @@ export const SelectField2 = ({
   onChange, // Add custom onChange prop
 }: SelectProps & { onChange?: (value: string) => void }) => {
   const selectfieldClasses = clsx(
-    "block w-full placeholder:text-[#000] bg-white font-normal items-center border border-gray-300 placeholder:font-light px-3 placeholder:text-[8px] inset-ring-green-800 ring-2 ring-green-800 text-xs border-0 shadow-sm leading-6 disabled:text-gray-400 disabled:cursor-not-allowed focus:ring-[1px] focus:ring-primary rounded-xs",
+    "block w-full placeholder:text-[#000] text-[12px] bg-white font-normal items-center border border-gray-300 px-2  ring-1 ring-green-800 shadow-sm disabled:text-gray-400 disabled:cursor-not-allowed focus:ring-[1px] focus:ring-primary rounded-xs ",
     className
   );
+  
 
   const handleChange = (selectedValue: string) => {
     if (onChange) {
@@ -41,7 +43,7 @@ export const SelectField2 = ({
 
   return (
     <div className="w-full">
-      <div className="flex flex-col mb-1  items-start gap-2">
+      <div className="flex flex-col  items-start gap-2">
         {label && (
           <label htmlFor={name} className={`text-sm text-tetiary-lighter ${labelClassname}`}>
             {label}
@@ -59,7 +61,7 @@ export const SelectField2 = ({
           >
             <SelectValue
               placeholder={placeholder || "Select an option"}
-              className="flex-grow placeholder:text-black"
+              className="flex-grow text-[8px] placeholder:text-black"
             />
           </SelectTrigger>
           <SelectContent>

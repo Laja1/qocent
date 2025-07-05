@@ -19,7 +19,8 @@ const buttonVariants = cva("button", {
         "text-[#161C2D]",
         "border-[1px]",
         "border-[#DFDFE5]",
-        "hover:bg-gray-100",
+        "hover:bg-black",
+        "hover:text-white"
       ],
       tertiary: [
         "bg-[#edf2ef]",

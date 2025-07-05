@@ -36,6 +36,12 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+export type HeaderAction = {
+  icon: React.ComponentType<{ className?: string }>;
+  onClick: () => void;
+  tooltip?: string;
+};
+
 export type ColumnDef<T> = {
   id: string;
   header: string;
@@ -45,6 +51,7 @@ export type ColumnDef<T> = {
   filterType?: "text" | "select";
   headerClassName?: string;
   filterOptions?: { label: string; value: string }[];
+  headerAction?: HeaderAction;
 };
 
 export type SortingState = {
@@ -207,7 +214,7 @@ export function DataTable<T>({
           <div className="justify-center flex">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
+                <Button variant="ghost" size="sm" className="h-7 w-8 p-0">
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -237,7 +244,7 @@ export function DataTable<T>({
   }, [columns, actions]);
 
   return (
-    <div className="bg-white  font-brfirma">
+    <div className="bg-white font-brfirma">
       <div className="mb-2">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 ">
           <div>
@@ -246,10 +253,10 @@ export function DataTable<T>({
           </div>
 
           {(showSearch || filterColumns.length > 0 || showDownload) && (
-            <div className="flex flex-col  md:flex-row gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               {showSearch && (
                 <div className="relative">
-                  <Search className="absolute left-3 top-1/2  transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
                   <Input
                     placeholder={searchPlaceholder}
                     value={searchTerm}
@@ -351,16 +358,32 @@ export function DataTable<T>({
                           : ""
                       }`}
                     >
-                      {column.header}
-                      {column.sortable && sorting?.id === column.id && (
-                        <span className="ml-1">
-                          {sorting.desc ? (
-                            <ChevronDown className="h-4 w-4" />
-                          ) : (
-                            <ChevronUp className="h-4 w-4" />
-                          )}
-                        </span>
-                      )}
+                      <div className="flex items-center">
+                        {column.header}
+                        {column.headerAction && (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-6 w-6 p-0 ml-1 hover:bg-gray-100"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              column.headerAction!.onClick();
+                            }}
+                            title={column.headerAction.tooltip}
+                          >
+                            <column.headerAction.icon className="h-3 w-3" />
+                          </Button>
+                        )}
+                        {column.sortable && sorting?.id === column.id && (
+                          <span className="ml-1">
+                            {sorting.desc ? (
+                              <ChevronDown className="h-4 w-4" />
+                            ) : (
+                              <ChevronUp className="h-4 w-4" />
+                            )}
+                          </span>
+                        )}
+                      </div>
                     </div>
                   </TableHead>
                 ))}
@@ -389,7 +412,7 @@ export function DataTable<T>({
                       onClick={onRowClick ? () => onRowClick(row) : undefined}
                     >
                       {enhancedColumns.map((column) => (
-                        <td key={column.id} className="border-b px-2 text-xs">
+                        <td key={column.id} className="border-b pl-2 text-xs">
                           {column.cell
                             ? column.cell(row, rowIndex)
                             : String(getAccessor(column)(row))}
@@ -405,7 +428,7 @@ export function DataTable<T>({
 
         {totalPages > 1 && (
           <div className="flex items-center justify-between mt-4">
-            <div className="text-sm text-gray-500">
+            <div className="text-xs text-gray-500">
               Showing {startIndex + 1} to{" "}
               {Math.min(endIndex, processedData.length)} of{" "}
               {processedData.length} items

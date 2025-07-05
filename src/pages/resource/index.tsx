@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {  PlusIcon, Info } from "lucide-react";
+import {  PlusIcon, Info, Pen, } from "lucide-react";
 import { Button, Header, type ColumnDef } from "@/components/shared";
 import { useLocation } from "react-router-dom";
 import { resourceData } from "./resource-config";
@@ -24,13 +24,14 @@ export const Resource = () => {
     { id: "dbServer" as const, label: "DB Server" },
   ];
 
+
   const resourcesColumns: ColumnDef<ResourceDataProps>[] = [
     {
       id: "label",
-      header: "Resource Paramaters",
+      header: "Resource Parameters",
       accessorKey: "label",
       cell: (row: ResourceDataProps) => (
-        <span className="text-amber-800 font-medium line-clamp-1">
+        <span className="text-amber-800 font-brfirma-bold font-medium line-clamp-1">
           {row.label}
         </span>
       ),
@@ -44,6 +45,14 @@ export const Resource = () => {
         <span className="line-clamp-1">{row[server.id]}</span>
       ),
       sortable: false,
+      headerAction: {
+        icon: Pen,
+        onClick: () => {
+          // Handle your edit action here
+          console.log(`Edit action for ${server.label}`);
+        },
+        tooltip: `Edit ${server.label}`,
+      },
     })),
   ];
 
@@ -77,11 +86,13 @@ export const Resource = () => {
         />
       </Header>
 
-      <div className=" mt-2 flex gap-4 flex-col overflow-y-auto h-full">
+      <div className=" flex gap-4 flex-col overflow-y-auto overflow-y-hidden h-full">
         <DataTable<ResourceDataProps>
           data={resourceData}
           columns={resourcesColumns}
           actions={actions}
+          showDownload={false}
+          showSearch={false}
           searchPlaceholder="Search resources by name, type, or server..."
           onRowClick={(row) => console.log("Row Clicked:", row.id)}
           initialSorting={{ id: "label", desc: false }}

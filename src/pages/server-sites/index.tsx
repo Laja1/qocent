@@ -6,13 +6,21 @@ import { serverRooms, type ServerRoomType } from "@/utilities/constants/config";
 import { Edit, Eye, Trash2, PlusIcon, Plus } from "lucide-react";
 import { useState } from "react";
 import { ServerSitesTable2 } from "./server-sites-table";
-import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { SiteLevel } from "../architectural-room/site-level";
+import { AlertBox } from "@/components/shared/alerts";
+import { SummaryTable } from "./summary-table";
+import { Resource } from "../resource";
+import { SecurityTable } from "./security-table";
+import { DeployResources } from "@/components/not-shared/deploy-resources";
+import { useModal } from "@/components/shared/modal";
+import { Link } from "react-router-dom";
 
 export const ServerSites = () => {
-  const navigate = useNavigate();
+  const { openModal, closeModal } = useModal();
   const [rowId, setRowId] = useState("100004");
+  const [showAlert, setShowAlert] = useState(true);
+
   const serverRoomColumns: ColumnDef<ServerRoomType>[] = [
     // {
     //   id: "favourite",
@@ -51,7 +59,7 @@ export const ServerSites = () => {
         <span className="hover:text-red-500 line-clamp-1">{row.siteCode}</span>
       ),
       sortable: true,
-      filterType: "select",
+
       // filterOptions: [
       //   { label: "US", value: "US" },
       //   { label: "UK", value: "UK" },
@@ -67,15 +75,14 @@ export const ServerSites = () => {
       sortable: true,
       cell: (row) => (
         <div
-        className={`flex items-center justify-center w-5 text-[10px] h-5 rounded-full ${
-          row.alerts > 0
-            ? "bg-red-50 text-red-800 border border-red-500"
-            : "bg-green-50 text-green-800 border border-green-500"
-        }`}
-      >
-        {row.alerts}
-      </div>
-      
+          className={`flex items-center justify-center w-5 text-[10px] h-5 rounded-full ${
+            row.alerts > 0
+              ? "bg-red-50 text-red-800 border border-red-500"
+              : "bg-green-50 text-green-800 border border-green-500"
+          }`}
+        >
+          {row.alerts}
+        </div>
       ),
     },
     {
@@ -182,8 +189,10 @@ export const ServerSites = () => {
       label: "Deploy Resource",
       icon: Plus,
       onClick: (row: ServerRoomType) => {
-        navigate("/create-resource", { state: row });
-        // TODO: Implement view functionality
+        openModal({
+          id: `deploy-${row.id}`,
+          content: <DeployResources siteCodeId={row.id} closeModal={closeModal} />,
+        });
       },
     },
     {
@@ -207,36 +216,53 @@ export const ServerSites = () => {
         </div>
       ),
     },
+
     {
       id: 2,
+      text: "Summary",
+      component: (
+        <div className="flex">
+          <div className="w-1/4 flex">
+           
+            <div className=" flex flex-col w-full">
+            <SummaryTable />
+              <Button label="Add Resource" prefixIcon={<PlusIcon className="size-4"/>} size="small" className="mt-2 py-0 bg-black" intent='secondary' onClick={()=>openModal({
+          id: `deploy-${rowId}`,
+          content: <DeployResources  closeModal={closeModal} />,
+        })}/>
+            </div>
+          </div>
+          <div className="w-3/4">
+            <Resource />
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 3,
       text: "Architecture",
       component: <SiteLevel />,
     },
-
-    {
-      id: 3,
-      text: "Security",
-      component: <div>This is the Settings tab content.</div>,
-    },
     {
       id: 4,
-      text: "Cost",
-      component: <div>This is the Settings tab content.</div>,
+      text: "Security",
+      component: <SecurityTable />,
     },
   ];
 
   return (
     <div className=" h-full mt-5">
       <Header title="Server Sites" description="Manage your server site">
+        <Link to='/create-new-site'>
         <Button
           intent="tertiary"
           label="Create New Site"
-          prefixIcon={<PlusIcon className="size-4" />}
+          prefixIcon={<PlusIcon className="size-4"/>}
           size="small"
-        />
+        /></Link>
       </Header>
 
-      <div className="flex gap-4  flex-col overflow-y-auto h-full">
+      <div className="flex gap-4  flex-col overflow-y-auto overflow-y-hidden h-full">
         <Card className="mx-5 px-5 rounded-sm">
           <DataTable
             data={serverRooms}
@@ -249,9 +275,20 @@ export const ServerSites = () => {
             highlightedRowId={rowId}
             initialSorting={{ id: "siteName", desc: false }}
           />
+    
         </Card>
-        <div className="mx-5 mt-5 mb-10">
+        <div className="mx-5 mt-5 ">
           <Tabs tabs={tabData} />
+        </div>
+        <div className="mx-5 mb-20">
+          {showAlert && (
+            <AlertBox
+              variant="default"
+              title="AWS Notice"
+              description="Server Room Provisioning in progress"
+              onClose={() => setShowAlert(false)}
+            />
+          )}
         </div>
       </div>
     </div>
