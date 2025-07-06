@@ -1,8 +1,9 @@
 import { resources } from "@/utilities/constants/config";
 import { useParams } from "react-router-dom";
-import { Button, DataTable, Header, type ColumnDef } from "@/components/shared";
+import { Button,  Header, type ColumnDef } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { Plus } from "lucide-react";
+import { DataTable } from "@/components/shared/datatable";
 
 
 export const Server = () => {

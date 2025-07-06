@@ -1,49 +1,27 @@
 export const navRoutes = [
   {
-    id: "explore",
-    path: "/explore",
+   
+    link: "/explore",
     name: "Explore Services",
   },
   {
     id: "dashboard",
-    path: "/dashboard",
+    link: "/dashboard",
     name: "Dashboard",
   },
   {
     id: "projects",
-    path: "/projects",
+    link: "/projects",
     name: "Projects",
   },
-  {
-    id: "billing",
-    path: "/billing",
-    name: "Billing",
-  },
+  
   {
     id: "docs",
-    path: "/docs",
+    link: "/docs",
     name: "Documentation",
   },
-  {
-    id: "support",
-    path: "/support",
-    name: "Support",
-  },
-  {
-    id: "settings",
-    path: "/settings",
-    name: "Account Settings",
-  },
-  {
-    id: "terms",
-    path: "/terms",
-    name: "Terms & Conditions",
-  },
-  {
-    id: "help",
-    path: "/help",
-    name: "Help Center",
-  },
+  
+ 
 ];
 
 export const RouteConstant = {

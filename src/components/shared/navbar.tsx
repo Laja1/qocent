@@ -1,86 +1,90 @@
-import { FiMenu } from "react-icons/fi";
-import { MdClose } from "react-icons/md";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+"use client";
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  NavbarButton,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+} from "@/components/ui/resizable-navbar";
 import { navRoutes, RouteConstant } from "@/router/routes";
-import { Button } from "./button";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 
-export const NavBar = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
+export default function NavbarDemo({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
-    <div className="text-primary">
-      <div className="justify-between px-20 py-5 items-center hidden lg:flex flex-row">
-        <p  onClick={() => navigate('/')} className="text-black text-2xl font-brfirma-bold cursor-pointer font-bold">QCS</p>
-        <div className="flex flex-row text-lg gap-10">
-          {navRoutes.slice(0, 6).map((route, index) => (
-            <a
-              key={index}
-              onClick={() => navigate(route.path)}
-              className="hover:text-red-700  text-base cursor-pointer"
-            >
-              {route.name}
-            </a>
-          ))}
-        </div>
+    <div className="relative w-full">
+      <Navbar>
+        {/* Desktop Nav */}
+        <NavBody>
+          <p className="text-xl font-bold">QCS</p>
 
-        <div className="flex-row flex items-center gap-10">
-          <h1
-            onClick={() => navigate(RouteConstant.auth.signin.path)}
-            className="cursor-pointer text-green-700 hover:hover:text-red-700"
+          <NavItems items={navRoutes} />
+          <div className="flex items-center gap-4">
+            <Link to={RouteConstant.auth.signin.path}>
+              <NavbarButton variant="secondary">Login</NavbarButton>
+            </Link>
+            {/* <NavbarButton href="/book" variant="primary">Book a call</NavbarButton> */}
+          </div>
+        </NavBody>
+
+        {/* Mobile Nav */}
+        <MobileNav>
+          <MobileNavHeader>
+            <p className="text-xl font-bold">QCS</p>
+
+            <MobileNavToggle
+              isOpen={isMobileMenuOpen}
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            />
+          </MobileNavHeader>
+
+          <MobileNavMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
           >
-            {RouteConstant.auth.signin.name}
-          </h1>
-          <Button
-                      label="Sign up"
-                     
-            onClick={() => navigate(RouteConstant.auth.signup.path)}
-          />
-        </div>
-      </div>
-
-      <div className="justify-between px-5 pt-10 items-center flex lg:hidden flex-row">
-        <p className="text-2xl font-brfirma-bold items-center gap-10">QCS</p>
-        <button
-          onClick={() => setIsOpen((prev) => !prev)}
-          aria-label="Toggle menu"
-        >
-          {isOpen ? (
-            <MdClose color="black" size={24} />
-          ) : (
-            <FiMenu color="black" size={24} />
-          )}
-        </button>
-      </div>
-
-      {isOpen && (
-        <div className="bg-[#fff] p-5 absolute shadow-xl w-full z-10 transition-all duration-300">
-          <div className="flex flex-col text-lg gap-3 mb-3">
-            {navRoutes.slice(0, 8).map((route, index) => (
-              <a key={index} href={`#${route.id}`}>
-                <h2 className="hover:text-gray-600  text-black cursor-pointer">
-                  {route.name}
-                </h2>
+            {navRoutes.map((item, idx) => (
+              <a
+                key={`mobile-link-${idx}`}
+                href={item.link}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="relative text-neutral-600 dark:text-neutral-300"
+              >
+                <span className="block">{item.name}</span>
               </a>
             ))}
-          </div>
-          <div className="flex-col flex gap-6">
-            <h2
-              onClick={() => navigate(RouteConstant.auth.signin.path)}
-              className="cursor-pointer  text-[18px] text-black hover:text-gray-600"
-            >
-              {RouteConstant.auth.signin.name}
-            </h2>
+            <div className="flex w-full flex-col gap-4">
+              <NavbarButton
+                href={RouteConstant.auth.signin.path}
+                onClick={() => setIsMobileMenuOpen(false)}
+                variant="primary"
+                className="w-full"
+              >
+                Login
+              </NavbarButton>
+              <NavbarButton
+                href={RouteConstant.auth.signup.path}
+                onClick={() => setIsMobileMenuOpen(false)}
+                variant="primary"
+                className="w-full"
+              >
+                Sign Up
+              </NavbarButton>
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </Navbar>
 
-            <Button
-              label="Sign up"
-              className="w-full"
-              onClick={() => navigate(RouteConstant.auth.signup.path)}
-            />
-          </div>
-        </div>
-      )}
+      {/* Dummy content */}
+      <div className=" p-4 text-center">{children}</div>
     </div>
   );
-};
+}

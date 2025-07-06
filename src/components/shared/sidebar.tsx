@@ -1,4 +1,4 @@
-import { Cloud, Fan, LogOut, Settings,
+import { Cloud, LogOut, Settings,
   Construction,
   Warehouse,
   Briefcase,
@@ -20,6 +20,7 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { RouteConstant } from "@/router/routes";
 import type { ReactElement } from "react";
+import { IconCloudComputing } from "@tabler/icons-react";
 
 
 
@@ -34,7 +35,7 @@ export interface SidebarItem {
 const sidebarItems:SidebarItem[] = [
   {
     title: "Server Sites (Accounts)",
-    icon: <Fan className="text-green-700"/>,
+    icon: <IconCloudComputing className="text-green-700"/>,
     href: "/server-sites",
     isActive: false,
   },
