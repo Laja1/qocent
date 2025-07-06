@@ -1,8 +1,25 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useMemo } from "react";
-import { Search, Download, ChevronDown, ChevronUp, ChevronLeft, ChevronRight, Save, X, Edit } from "lucide-react";
+import {
+  Search,
+  Download,
+  ChevronDown,
+  ChevronUp,
+  ChevronLeft,
+  ChevronRight,
+  Save,
+  X,
+  Edit,
+} from "lucide-react";
 import { Button } from "../ui/button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "../ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "../ui/table";
 import { Input } from "../ui/input";
 
 // Enhanced column definition with editable support
@@ -11,7 +28,12 @@ export type ColumnDef<T> = {
   header: string;
   accessorKey: keyof T | ((row: T) => any);
   cell?: (row: T, rowIndex?: number) => React.ReactNode;
-  editCell?: (row: T, rowIndex: number, value: any, onChange: (value: any) => void) => React.ReactNode;
+  editCell?: (
+    row: T,
+    rowIndex: number,
+    value: any,
+    onChange: (value: any) => void
+  ) => React.ReactNode;
   sortable?: boolean;
   editable?: boolean;
   filterType?: "text" | "select";
@@ -26,6 +48,7 @@ export type DataTableProps<T> = {
   columns: ColumnDef<T>[];
   title?: string;
   description?: string;
+  showTableHeader?: boolean; // default: true
   searchPlaceholder?: string;
   onRowClick?: (row: T) => void;
   onDataChange?: (data: T[]) => void;
@@ -50,6 +73,7 @@ export function EditableDataTable<T extends Record<string, any>>({
   onRowClick,
   onDataChange,
   initialSorting = null,
+  showTableHeader = true,
   filterableColumns = [],
   pageSize = 100,
   getRowId = (_, index) => index.toString(),
@@ -60,10 +84,14 @@ export function EditableDataTable<T extends Record<string, any>>({
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
-  const [sorting, setSorting] = useState<{ id: string; desc: boolean } | null>(initialSorting);
+  const [sorting, setSorting] = useState<{ id: string; desc: boolean } | null>(
+    initialSorting
+  );
   const [currentPage, setCurrentPage] = useState(1);
   const [editingRows, setEditingRows] = useState<Set<string>>(new Set());
-  const [editData, setEditData] = useState<Record<string, Record<string, any>>>({});
+  const [editData, setEditData] = useState<Record<string, Record<string, any>>>(
+    {}
+  );
   const [tableData, setTableData] = useState<T[]>(data);
 
   const getAccessor = (column: ColumnDef<T>) => {
@@ -139,8 +167,12 @@ export function EditableDataTable<T extends Record<string, any>>({
           }
 
           return sorting.desc
-            ? valueB > valueA ? 1 : -1
-            : valueA > valueB ? 1 : -1;
+            ? valueB > valueA
+              ? 1
+              : -1
+            : valueA > valueB
+            ? 1
+            : -1;
         });
       }
     }
@@ -166,7 +198,9 @@ export function EditableDataTable<T extends Record<string, any>>({
   };
 
   const handleEdit = (rowId: string) => {
-    const row = paginatedData.find((row, index) => getRowId(row, startIndex + index) === rowId);
+    const row = paginatedData.find(
+      (row, index) => getRowId(row, startIndex + index) === rowId
+    );
     if (row) {
       setEditingRows(new Set([...editingRows, rowId]));
       // Initialize edit data with current row values
@@ -176,13 +210,15 @@ export function EditableDataTable<T extends Record<string, any>>({
           initialEditData[column.id] = getAccessor(column)(row);
         }
       });
-      setEditData(prev => ({ ...prev, [rowId]: initialEditData }));
+      setEditData((prev) => ({ ...prev, [rowId]: initialEditData }));
     }
   };
 
   const handleSave = (rowId: string) => {
-    const rowIndex = tableData.findIndex((row, index) => getRowId(row, index) === rowId);
-    
+    const rowIndex = tableData.findIndex(
+      (row, index) => getRowId(row, index) === rowId
+    );
+
     if (formik) {
       formik.validateForm().then((errors: any) => {
         if (Object.keys(errors).length === 0) {
@@ -195,27 +231,27 @@ export function EditableDataTable<T extends Record<string, any>>({
   };
 
   const savePendingChanges = (rowId: string, rowIndex: number) => {
-    setEditingRows(new Set([...editingRows].filter(id => id !== rowId)));
-    
+    setEditingRows(new Set([...editingRows].filter((id) => id !== rowId)));
+
     if (rowIndex !== -1 && editData[rowId]) {
       const updatedData = [...tableData];
       const updatedRow = { ...updatedData[rowIndex] } as T;
-      
+
       // Apply edit changes
       Object.entries(editData[rowId]).forEach(([columnId, value]) => {
-        const column = columns.find(col => col.id === columnId);
-        if (column && typeof column.accessorKey === 'string') {
+        const column = columns.find((col) => col.id === columnId);
+        if (column && typeof column.accessorKey === "string") {
           (updatedRow as any)[column.accessorKey] = value;
         }
       });
-      
+
       updatedData[rowIndex] = updatedRow;
       setTableData(updatedData);
       onDataChange?.(updatedData);
-      
+
       // Clear edit state
-      setEditingRows(new Set([...editingRows].filter(id => id !== rowId)));
-      setEditData(prev => {
+      setEditingRows(new Set([...editingRows].filter((id) => id !== rowId)));
+      setEditData((prev) => {
         const newData = { ...prev };
         delete newData[rowId];
         return newData;
@@ -224,8 +260,8 @@ export function EditableDataTable<T extends Record<string, any>>({
   };
 
   const handleCancel = (rowId: string) => {
-    setEditingRows(new Set([...editingRows].filter(id => id !== rowId)));
-    setEditData(prev => {
+    setEditingRows(new Set([...editingRows].filter((id) => id !== rowId)));
+    setEditData((prev) => {
       const newData = { ...prev };
       delete newData[rowId];
       return newData;
@@ -234,27 +270,24 @@ export function EditableDataTable<T extends Record<string, any>>({
 
   const handleCellChange = (rowId: string, columnId: string, value: any) => {
     if (formik) {
-      columns.forEach(column => {
+      columns.forEach((column) => {
         if (column.editable) {
-          const row = paginatedData.find((row, index) => 
-            getRowId(row, startIndex + index) === rowId
+          const row = paginatedData.find(
+            (row, index) => getRowId(row, startIndex + index) === rowId
           );
           if (row) {
-            formik.setFieldValue(
-              column.id, 
-              getAccessor(column)(row)
-            );
+            formik.setFieldValue(column.id, getAccessor(column)(row));
           }
         }
       });
     }
-    
-    setEditData(prev => ({
+
+    setEditData((prev) => ({
       ...prev,
       [rowId]: {
         ...prev[rowId],
-        [columnId]: value
-      }
+        [columnId]: value,
+      },
     }));
   };
 
@@ -267,12 +300,12 @@ export function EditableDataTable<T extends Record<string, any>>({
     if (editable) {
       cols.push({
         id: "edit-actions",
-        header: "Actions",
+        header: "",
         accessorKey: () => "",
         cell: (row: T, rowIndex: number) => {
           const rowId = getRowId(row, startIndex + rowIndex);
           const isEditing = editingRows.has(rowId);
-          
+
           return (
             <div className="flex gap-2">
               {isEditing ? (
@@ -295,7 +328,7 @@ export function EditableDataTable<T extends Record<string, any>>({
                   className="m-1 rounded-sm text-[8px]"
                   onClick={() => handleEdit(rowId)}
                 >
-                  <Edit className="size-4"/>
+                  <Edit className="size-4" />
                 </button>
               )}
             </div>
@@ -308,11 +341,13 @@ export function EditableDataTable<T extends Record<string, any>>({
   }, [columns, editable, editingRows, startIndex]);
 
   return (
-    <div className="bg-white">
-      <div className="mb-6">
+    <div className="w-full overflow-x-auto overflow-x-hidden"> 
+  <div className="min-w-[300px]"> 
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
-            {title && <h2 className="text-2xl font-bold text-gray-900">{title}</h2>}
+            {title && (
+              <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+            )}
             {description && <p className="text-gray-600 mt-1">{description}</p>}
           </div>
 
@@ -365,38 +400,44 @@ export function EditableDataTable<T extends Record<string, any>>({
 
       <div className="border border-gray-200 rounded-xs overflow-hidden">
         <Table>
-          <TableHeader>
-            <TableRow>
-              {enhancedColumns.map((column) => (
-                <TableHead
-                  key={column.id}
-                  className={`font-semibold text-xs font-brfirma-bold h-8 ${
-                    column.sortable ? "cursor-pointer select-none" : ""
-                  } ${column.headerClassName || ""}`}
-                  onClick={
-                    column.sortable ? () => handleSort(column.id) : undefined
-                  }
-                >
-                  <div className="flex items-center">
-                    {column.header}
-                    {column.sortable && sorting?.id === column.id && (
-                      <span className="ml-1">
-                        {sorting.desc ? (
-                          <ChevronDown className="h-4 w-4" />
-                        ) : (
-                          <ChevronUp className="h-4 w-4" />
-                        )}
-                      </span>
-                    )}
-                  </div>
-                </TableHead>
-              ))}
-            </TableRow>
-          </TableHeader>
+          {showTableHeader && (
+            <TableHeader>
+              <TableRow>
+                {enhancedColumns.map((column) => (
+                  <TableHead
+                    key={column.id}
+                    className={`font-semibold text-xs font-brfirma-bold h-8 ${
+                      column.sortable ? "cursor-pointer select-none" : ""
+                    } ${column.headerClassName || ""}`}
+                    onClick={
+                      column.sortable ? () => handleSort(column.id) : undefined
+                    }
+                  >
+                    <div className="flex items-center">
+                      {column.header}
+                      {column.sortable && sorting?.id === column.id && (
+                        <span className="ml-1">
+                          {sorting.desc ? (
+                            <ChevronDown className="h-4 w-4" />
+                          ) : (
+                            <ChevronUp className="h-4 w-4" />
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  </TableHead>
+                ))}
+              </TableRow>
+            </TableHeader>
+          )}
+
           <TableBody>
             {processedData.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={enhancedColumns.length} className="text-center py-8">
+                <TableCell
+                  colSpan={enhancedColumns.length}
+                  className="text-center py-8"
+                >
                   No results found.
                 </TableCell>
               </TableRow>
@@ -405,14 +446,18 @@ export function EditableDataTable<T extends Record<string, any>>({
                 const actualIndex = startIndex + rowIndex;
                 const rowId = getRowId(row, actualIndex);
                 const isEditing = editingRows.has(rowId);
-                
+
                 return (
                   <tr
                     key={rowId}
-                    className={`${onRowClick ? "cursor-pointer" : " border-b border"} ${
-                      highlightedRowId === rowId ? "bg-yellow-50" : ""
-                    }`}
-                    onClick={onRowClick && !isEditing ? () => onRowClick(row) : undefined}
+                    className={`${
+                      onRowClick ? "cursor-pointer" : " border-b border"
+                    } ${highlightedRowId === rowId ? "bg-yellow-50" : ""}`}
+                    onClick={
+                      onRowClick && !isEditing
+                        ? () => onRowClick(row)
+                        : undefined
+                    }
                   >
                     {enhancedColumns.map((column) => (
                       <td key={column.id} className="border-b pl-2 text-xs">
@@ -423,26 +468,43 @@ export function EditableDataTable<T extends Record<string, any>>({
                             column.editCell(
                               row,
                               rowIndex,
-                              editData[rowId]?.[column.id] || getAccessor(column)(row),
-                              (value) => handleCellChange(rowId, column.id, value)
+                              editData[rowId]?.[column.id] ||
+                                getAccessor(column)(row),
+                              (value) =>
+                                handleCellChange(rowId, column.id, value)
                             )
                           ) : (
                             <div className="">
                               {column.editType === "select" ? (
                                 <select
                                   name={column.id}
-                                  value={formik ? (formik.values[column.id] || getAccessor(column)(row)) : (editData[rowId]?.[column.id] || getAccessor(column)(row))}
+                                  value={
+                                    formik
+                                      ? formik.values[column.id] ||
+                                        getAccessor(column)(row)
+                                      : editData[rowId]?.[column.id] ||
+                                        getAccessor(column)(row)
+                                  }
                                   onChange={(e) => {
                                     if (formik) {
                                       formik.handleChange(e);
                                     }
-                                    handleCellChange(rowId, column.id, e.target.value);
+                                    handleCellChange(
+                                      rowId,
+                                      column.id,
+                                      e.target.value
+                                    );
                                   }}
-                                  onBlur={formik ? formik.handleBlur : undefined}
+                                  onBlur={
+                                    formik ? formik.handleBlur : undefined
+                                  }
                                   className="block w-full bg-white border border-gray-300 rounded-[4px] h-[30px] px-3 text-xs inset-ring focus:ring-1 focus:ring-green-900 focus:border-black"
                                 >
                                   {column.editOptions?.map((option) => (
-                                    <option key={option.value} value={option.value}>
+                                    <option
+                                      key={option.value}
+                                      value={option.value}
+                                    >
                                       {option.label}
                                     </option>
                                   ))}
@@ -451,28 +513,42 @@ export function EditableDataTable<T extends Record<string, any>>({
                                 <input
                                   type={column.editType || "text"}
                                   name={column.id}
-                                  value={formik ? (formik.values[column.id] || getAccessor(column)(row)) : (editData[rowId]?.[column.id] || getAccessor(column)(row))}
+                                  value={
+                                    formik
+                                      ? formik.values[column.id] ||
+                                        getAccessor(column)(row)
+                                      : editData[rowId]?.[column.id] ||
+                                        getAccessor(column)(row)
+                                  }
                                   onChange={(e) => {
                                     if (formik) {
                                       formik.handleChange(e);
                                     }
-                                    handleCellChange(rowId, column.id, e.target.value);
+                                    handleCellChange(
+                                      rowId,
+                                      column.id,
+                                      e.target.value
+                                    );
                                   }}
-                                  onBlur={formik ? formik.handleBlur : undefined}
-                                  className="block w-full bg-white border border-gray-300 rounded-[4px] h-[30px] px-3 text-xs inset-ring focus:ring-1 focus:ring-green-900 focus:border-black"
+                                  onBlur={
+                                    formik ? formik.handleBlur : undefined
+                                  }
+                                  className="block w-full my-1 bg-white border border-gray-300 rounded-[4px] h-[30px] px-3 text-xs inset-ring focus:ring-1 focus:ring-green-900 focus:border-black"
                                 />
                               )}
-                              {formik && formik.touched[column.id] && formik.errors[column.id] ? (
+                              {formik &&
+                              formik.touched[column.id] &&
+                              formik.errors[column.id] ? (
                                 <div className="text-red-500 text-xs mt-1">
                                   {formik.errors[column.id]}
                                 </div>
                               ) : null}
                             </div>
                           )
+                        ) : column.cell ? (
+                          column.cell(row, rowIndex)
                         ) : (
-                          column.cell
-                            ? column.cell(row, rowIndex)
-                            : String(getAccessor(column)(row))
+                          String(getAccessor(column)(row))
                         )}
                       </td>
                     ))}
@@ -488,8 +564,8 @@ export function EditableDataTable<T extends Record<string, any>>({
         <div className="flex items-center justify-between mt-4">
           <div className="text-sm text-gray-500">
             Showing {startIndex + 1} to{" "}
-            {Math.min(endIndex, processedData.length)} of{" "}
-            {processedData.length} items
+            {Math.min(endIndex, processedData.length)} of {processedData.length}{" "}
+            items
           </div>
           <div className="flex items-center space-x-2">
             <Button

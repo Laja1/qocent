@@ -4,7 +4,6 @@ import { DataTable } from "@/components/shared/datatable";
 import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import type { houseRoomType } from "./type";
 import { houseData } from "./config";
-import Demo from "@/components/shared/Demo";
 
 export const ServerHouses = () => {
   const serverHouseColumn: ColumnDef<houseRoomType>[] = [
@@ -153,7 +152,6 @@ export const ServerHouses = () => {
           getRowId={(row) => row.houseId}
           initialSorting={{ id: "houseName", desc: false }}
         /> 
-        <Demo />
       </div>
 
       {/* <div className="w-full bg-white p-5">

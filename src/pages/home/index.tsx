@@ -8,7 +8,7 @@ import NavbarDemo from "@/components/shared/navbar";
 
 const Home = () => {
   return (
-    <div className="bg-gradient-to-tr from-white to-[#edf2ef] h-screen w-full">
+    <div className="bg-gradient-to-tr from-white to-[#edf2ef] h-full w-full">
       
      <NavbarDemo >
       <Hero />

@@ -2,7 +2,9 @@ export const imgLinks = {
     awsLogo:'/images/aws-white.webp',
     huawei: '/images/huawei.png',
     awsdark: '/images/aws-dark.png',
-    texture1: './images/texture1.png'
+    texture1: './images/texture1.png',
+    nibss: '/images/nibss.png',
+    rubies:'/images/rubies.png'
 }
 
 export const svgLinks = {

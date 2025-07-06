@@ -9,7 +9,7 @@ export const TrustedBy = () => {
       <p className="md:text-base text-sm lg:text-lg leading-[28px] text-gray-700">
       Every AI is the choice of all the fortune 500 companies.
       </p>
-      <div className="mt-10 flex items-center gap-10"><img src={imgLinks.awsdark} className="size-14 "/><img src={imgLinks.huawei} className="size-12 "/></div>
+      <div className="mt-10 flex items-center gap-10"><img src={imgLinks.awsdark} className="size-14 "/><img src={imgLinks.huawei} className="size-12 "/><img src={imgLinks.nibss} className="size-18 "/><img src={imgLinks.rubies} className="size-12 "/></div>
     </div>
   );
 };

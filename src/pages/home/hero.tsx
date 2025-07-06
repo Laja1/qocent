@@ -5,7 +5,7 @@ export const Hero = () => {
   return (
    <div>
       <div className="flex flex-col items-center justify-center mt-20  text-center px-4">
-        <h1 className="text-4xl font-brfirma-bold  md:text-5xl font-bold text-gray-800 max-w-2xl bg-gradient-to-r from-green-800  inline-block text-transparent to-[#A00B0B] bg-clip-text">
+        <h1 className="text-4xl font-brfirma-bold  md:text-6xl font-bold max-w-3xl bg-gradient-to-r from-yellow-500  inline-block text-transparent to-[#750505] bg-clip-text">
           Empowering the Future with Cloud Technology
         </h1>
         <p className="mt-4 text-base md:text-xl text-gray-600 max-w-xl">
