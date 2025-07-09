@@ -1,11 +1,24 @@
 import { imgLinks } from "@/assets/assetLink";
-import { Button, Header, type ColumnDef } from "@/components/shared";
+import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import type { houseRoomType } from "./type";
 import { houseData } from "./config";
+import { useNavigate } from "react-router-dom";
+import { SummaryTable } from "../server-sites/summary-table";
+import { DeployResources } from "@/components/not-shared/deploy-resources";
+import { Resource } from "../resource";
+import { ServerSitesTable2 } from "../server-sites/server-sites-table";
+import { SecurityTable } from "../server-sites/security-table";
+import { useState } from "react";
+import { useModal } from "@/components/shared/modal";
+import { houseArchitectureData } from "@/utilities/constants/config";
+import { HouseLevel } from "../architectural-room/house-level";
 
 export const ServerHouses = () => {
+  const navigate = useNavigate()
+  const { openModal, closeModal } = useModal();
+  const [rowId, setRowId] = useState("100004");
   const serverHouseColumn: ColumnDef<houseRoomType>[] = [
     {
       id: "houseId",
@@ -43,16 +56,14 @@ export const ServerHouses = () => {
       accessorKey: "alerts",
       sortable: true,
       cell: (row) => (
-        <div className="items-center justify-center flex">
-          <div
-            className={`${
-              row.alerts > 0
-                ? "border-red-200 bg-red-50 text-red-700"
-                : "border-green-200 bg-green-800 text-white"
-            } text-center justify-center items-center rounded-full inline-flex w-5 h-5 text-[10px]`}
-          >
-            {row.alerts}
-          </div>
+        <div
+          className={`flex items-center justify-center w-5 text-[10px] h-5 rounded-full ${
+            row.alerts > 0
+              ? "bg-red-50 text-red-800 border border-red-500"
+              : "bg-green-50 text-green-800 border border-green-500"
+          }`}
+        >
+          {row.alerts}
         </div>
       ),
     },
@@ -126,16 +137,63 @@ export const ServerHouses = () => {
     },
   ];
 
-  // const serverHouse = houseData.find(
-  //   (house) => house.houseId === rowId
-  // ) as HouseData;
-
+  const tabData = [
+    {
+      id: 1,
+      text: "Summary",
+      component: (
+        <div className="flex">
+          <div className="w-1/4 flex">
+            <div className=" flex mr-5 flex-col w-full">
+              <SummaryTable />
+              <Button
+                label="Add Resource"
+                prefixIcon={<PlusIcon className="size-4" />}
+                size="small"
+                className="mt-2 py-0 bg-black"
+                intent="secondary"
+                onClick={() =>
+                  openModal({
+                    id: `deploy-${rowId}`,
+                    content: <DeployResources closeModal={closeModal} />,
+                  })
+                }
+              />
+            </div>
+          </div>
+          <div className="w-3/4">
+            <Resource />
+          </div>
+        </div>
+      ),
+    },
+    {
+      id: 2,
+      text: "Resources",
+      component: (
+        <div className="">
+          <ServerSitesTable2 rowId={rowId} />
+        </div>
+      ),
+    },
+    {
+      id: 3,
+      text: "Architecture",
+      component: <HouseLevel houseData={houseArchitectureData}/>,
+    },
+    {
+      id: 4,
+      text: "Security",
+      component: <SecurityTable />,
+    },
+  ];
   return (
     <div className="bg-white h-full">
       <Header title="Server Houses" description="Manage your server house">
         <Button
           intent="tertiary"
           label="Create New House"
+          onClick={()=>navigate('/create-new-house')}
           prefixIcon={<PlusIcon className="size-4" />}
           size="small"
         />
@@ -148,15 +206,16 @@ export const ServerHouses = () => {
           searchPlaceholder="Search server rooms by name, ID, or code..."
           pageSize={5}
           actions={actions}
-          // onRowClick={(row) => setRowId(row.houseId)}
+          onRowClick={(row) => setRowId(row.houseId)}
+          highlightedRowId={rowId}
           getRowId={(row) => row.houseId}
           initialSorting={{ id: "houseName", desc: false }}
         /> 
       </div>
 
-      {/* <div className="w-full bg-white p-5">
-        <ServerHousesTab serverHouse={serverHouse} />
-      </div> */}
+      <div className="mx-5 mt-5 ">
+          <Tabs tabs={tabData} />
+        </div>
     </div>
   );
 };

@@ -1,5 +1,6 @@
 import { imgLinks, svgLinks } from "@/assets/assetLink";
-import { DatabaseIcon, File, Home, House, Network, RectangleVertical, Server, UserCheck } from "lucide-react";
+import { IconDoor } from "@tabler/icons-react";
+import { DatabaseIcon, File, House, Network, RectangleVertical, Server, UserCheck } from "lucide-react";
 import { MdRoom } from "react-icons/md";
 
 // type IconProps = {
@@ -80,7 +81,7 @@ export const ICON_MAP = {
   "API": <ApiServerIcon />,
   "Database": <DatabaseIcon className="text-green-600 size-4"/>,
   'Server Rooms': <RectangleVertical className="text-red-600 size-5"/>,
-  'Server House': <Home className="size-5 text-blue-600"/>,
+  'Server Houses': <IconDoor className="size-5 text-blue-600"/>,
 };
 
 export const RESOURCE_MAP = {
@@ -88,7 +89,7 @@ export const RESOURCE_MAP = {
   'Server': <ServerIcon />,
   'Database': <Database />,
   'Server Rooms': <MdRoom />,
-  'Server House': <House />,
+  'Server Houses': <House />,
   'API': <ApiServerIcon />,
   'IAM':<UserCheck />,
   'S3':<img src={svgLinks.s3} className="size-8"/>,

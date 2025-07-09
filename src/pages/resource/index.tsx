@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {  PlusIcon, Info, Pen, } from "lucide-react";
-import { Button, Header, type ColumnDef } from "@/components/shared";
+import { Info, Pen } from "lucide-react";
+import { type ColumnDef } from "@/components/shared";
 import { useLocation } from "react-router-dom";
 import { resourceData } from "./resource-config";
 import { DataTable } from "@/components/shared/datatable";
@@ -24,14 +24,13 @@ export const Resource = () => {
     { id: "dbServer" as const, label: "DB Server" },
   ];
 
-
   const resourcesColumns: ColumnDef<ResourceDataProps>[] = [
     {
       id: "label",
       header: "Resource Parameters",
       accessorKey: "label",
       cell: (row: ResourceDataProps) => (
-        <span className="text-amber-800 font-brfirma-bold font-medium line-clamp-1">
+        <span className="text-rose-700 font-brfirma-bold font-medium line-clamp-1">
           {row.label}
         </span>
       ),
@@ -76,17 +75,8 @@ export const Resource = () => {
   ];
 
   return (
-    <div className=" h-full mx-5">
-      <Header title={row?.parent} description={row?.category}>
-        <Button
-          intent="tertiary"
-          label={`Create New ${row?.category}`}
-          prefixIcon={<PlusIcon className="size-4" />}
-          size="small"
-        />
-      </Header>
-
-      <div className=" flex gap-4 flex-col overflow-y-auto overflow-y-hidden h-full">
+ 
+      <div className=" flex gap-4 flex-col  overflow-y-hidden h-full">
         <DataTable<ResourceDataProps>
           data={resourceData}
           columns={resourcesColumns}
@@ -98,6 +88,6 @@ export const Resource = () => {
           initialSorting={{ id: "label", desc: false }}
         />
       </div>
-    </div>
+  
   );
 };

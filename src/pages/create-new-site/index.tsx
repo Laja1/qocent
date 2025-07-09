@@ -1,7 +1,12 @@
-import { Button, Header } from "@/components/shared";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button, Header, RenderField } from "@/components/shared";
 import { useModal } from "@/components/shared/modal";
-import { ArrowRight } from "lucide-react";
-import { CreateNewSiteTable } from "./create-new-site-table";
+import { ArrowRight, Info } from "lucide-react";
+import { siteCreateJson } from "./json";
+import { useFormik } from "formik";
+import type { ParameterData } from "./type";
+import { providerOptions } from "@/components/not-shared/deploy-config";
+import { IconMichelinStar } from "@tabler/icons-react";
 
 export const CreateNewSite = () => {
   const { openModal, closeModal } = useModal();
@@ -15,9 +20,7 @@ export const CreateNewSite = () => {
             <h2 className="text-lg font-semibold border-b">Ready to Deploy?</h2>
           </div>
           <div className="text-sm text-gray-600 space-y-1">
-            <p>
-              {/* Add your deployment confirmation details here */}
-            </p>
+            <p>{/* Add your deployment confirmation details here */}</p>
           </div>
           <Button
             label="Deploy"
@@ -29,7 +32,41 @@ export const CreateNewSite = () => {
       ),
     });
   };
+  const descriptionModal = (row: ParameterData) => {
+    openModal({
+      id: "info-modal",
+      content: (
+        <div className="flex max-w-xs  flex-col gap-4 p-4">
+          <h2 className="text-lg uppercase border-b pb-2">
+            {row.ParameterLabel}
+          </h2>
+          <div className="text-sm text-gray-600 space-y-2">
+            {row.ParameterInfo1 && <p>{row.ParameterInfo1}</p>}
+            {row.ParameterInfo2 && <p>{row.ParameterInfo2}</p>}
+            {row.ParameterInfo3 && <p>{row.ParameterInfo3}</p>}
+          </div>
+          <div className="flex items-right justify-end">
+            <Button label="Close" onClick={() => closeModal()} />
+          </div>
+        </div>
+      ),
+    });
+  };
 
+  const initialValues = siteCreateJson.reduce((acc, item) => {
+    acc[item.ParameterName] = ""; // or any logic you need
+    return acc;
+  }, {} as Record<string, any>) as ParameterData;
+
+  const onSubmit = (values: typeof initialValues) => {
+    console.log("Form submitted:", values);
+  };
+
+  const formik = useFormik({
+    initialValues,
+    onSubmit,
+  });
+  console.log(formik.values);
   return (
     <div className="flex flex-col">
       <Header
@@ -37,20 +74,54 @@ export const CreateNewSite = () => {
         description="A server can have one or more server houses. A server house is provided by a provider."
       />
 
-      <div className="flex flex-col gap-5 mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
-        <div className="bg-gradient-to-r from-black to-green-800 rounded-t-md pl-3 sm:pl-5 py-6 sm:py-10">
-          <p className="text-base sm:text-lg text-white">Create Server Site</p>
+      <div className="flex flex-col  mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
+        <div className="bg-gradient-to-r flex justify-between from-black to-green-800 rounded-t-md px-3 sm:px-5 py-5">
+          <div><p className="text-base sm:text-lg text-white">Create Server Site</p>
           <p className="text-xs text-gray-400 leading-tight">
             A server can have one or more server houses. A server house is
             provided by a provider.
-          </p>
+          </p></div>
+          <div>
+            <IconMichelinStar color="white" size={40}/>
+          </div>
         </div>
-        
-        <div className="flex items-start justify-start w-full px-2 sm:px-4 lg:px-6">
-  <div className="w-full max-w-4xl">
-    <CreateNewSiteTable />
-  </div>
-</div>
+
+        <div className=" flex mt-5   flex-col">
+          {siteCreateJson.map((item) => (
+            <div
+              className="flex items-center w-full py-[1px] border-b"
+              key={item.ParameterSerial}
+            >
+              <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
+                {item.ParameterMandatory === "Yes" && (
+                  <span className="text-red-500 ml-1">*</span>
+                )}{" "}
+                {item.ParameterLabel}
+              </p>{" "}
+              <div className="lg:w-1/5 w-full pr-3 flex gap-1">
+                <RenderField
+                  name={item.ParameterName}
+                  formik={formik}
+                  type={item.ParameterInputType}
+                  options={
+                    item.ParameterSource === "ProviderList"
+                      ? providerOptions
+                      : []
+                  }
+                />
+                <div className=" flex justify-center">
+                  <button
+                    onClick={() => descriptionModal(item)}
+                    className="rounded-full  flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                    title="View more info"
+                  >
+                    <Info size={16} />
+                  </button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
 
         <div className="flex m-3 sm:m-5 justify-end">
           <Button

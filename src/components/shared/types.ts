@@ -34,7 +34,7 @@ export type SelectProps = {
   label?: string;
   register?: string;
   labelClassname?:string
-  disabled?: string;
+  disabled?: boolean;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formik?: any;
   options: SelectfieldOptions[];

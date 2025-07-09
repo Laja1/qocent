@@ -4,7 +4,7 @@ import { signInInit } from "@/pages/model/request/authRequest";
 import { loginFormValidationSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
 import { EyeClosed, EyeIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SignIn = () => {
@@ -16,6 +16,12 @@ const SignIn = () => {
     validationSchema: loginFormValidationSchema,
   });
   const navigate = useNavigate();
+
+
+  useEffect(()=> {
+    formik.validateForm()
+  },[])
+
   return (
     <AuthLayout
       title="Sign In"

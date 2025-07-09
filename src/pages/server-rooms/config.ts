@@ -25,3 +25,5 @@ houseData.forEach((house) => {
     roomCounter++;
   }
 });
+
+

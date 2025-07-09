@@ -17,7 +17,7 @@ export const Tabs = ({ tabs }: TabsProps) => {
 
   return (
     <div>
-      <div className="flex  gap-3 lg:gap-7 border-b border-gray-200">
+      <div className="flex  flex-wrap  gap-3 lg:gap-7 border-b border-gray-200">
         {tabs.map((tab) => (
           <button
             key={tab.id}

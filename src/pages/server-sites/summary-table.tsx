@@ -9,47 +9,43 @@ import { useState } from "react";
 
 export const SummaryTable = () => {
   const { openModal, closeModal } = useModal();
-  const [resourceType,setResourceType] = useState(summaryData[0].resourceType)
-    const summaryColums: ColumnDef<summaryType>[] = [
-      {
-        id: "resourceType",
-        header: "",
-        accessorKey: "resourceType",
-        
-        cell: (row) => (
-          <span
-            
-            className="hover:cursor-pointer "
-          >
-            {ICON_MAP[row.resourceType as keyof typeof ICON_MAP]}
-          </span>
-        ),
-        sortable: false,
-      },
-        {
-          id: "resourceType",
-          header: "Resource Type",
-          accessorKey: "resourceType",
-          cell: (row) => (
-            <span className="line-clamp-1   text-xs py-1">
-              {row.resourceType}
-            </span>
-          ),
-          sortable: false,
-        },
-        {
-          id: "count",
-          header: "Count",
-          accessorKey: "count",
-          cell: (row) => (
-            <span className="line-clamp-1   text-xs">
-              {row.count}
-            </span>
-          ),
-          sortable: true,
-        },
-       
-      ];
+  const [resourceType,setResourceType] = useState("")
+  const summaryColums: ColumnDef<summaryType>[] = [
+    {
+      id: "resourceIcon",  
+      header: "",
+      accessorKey: "resourceType",
+      cell: (row) => (
+        <span className="hover:cursor-pointer">
+          {ICON_MAP[row.resourceType as keyof typeof ICON_MAP]}
+        </span>
+      ),
+      sortable: false,
+    },
+    {
+      id: "resourceTypeText",  
+      header: "Resource Type",
+      accessorKey: "resourceType",
+      cell: (row) => (
+        <span className="line-clamp-1 text-xs py-1">
+          {row.resourceType}
+        </span>
+      ),
+      sortable: false,
+    },
+    {
+      id: "count",
+      header: "Count",
+      accessorKey: "count",
+      cell: (row) => (
+        <span className="line-clamp-1 text-xs">
+          {row.count}
+        </span>
+      ),
+      sortable: true,
+    },
+  ];
+  
       const actions = [
         {
           label: `Add resource`,
@@ -57,10 +53,10 @@ export const SummaryTable = () => {
           onClick: (row: summaryType) => {
             setResourceType(row.resourceType);
             openModal({
-              id: `deploy-${row.resourceType}`,
+              id: `deploy-${row.id}`,
               content: (
                 <DeployResources
-                  id={row.resourceType} // ✅ Pass the resource type as ID
+                  // id={row.id} 
                   closeModal={closeModal}
                 />
               ),
@@ -78,10 +74,10 @@ export const SummaryTable = () => {
           columns={summaryColums}
           actions={actions}
           highlightedRowId={resourceType}
-          onRowClick={(row) => setResourceType(row.resourceType)}
+          onRowClick={(row) => setResourceType(row.id)}
           showDownload={false}
           showSearch={false}
-          getRowId={(row) => row.resourceType}
+          getRowId={(row) => row.id}
           // initialSorting={{ id: "resourceType", }}
         />
     </div>

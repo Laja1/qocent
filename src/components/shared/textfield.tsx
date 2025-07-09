@@ -29,7 +29,7 @@ export const Textfield = ({
 
   // Memoize the textfield classes
   const textfieldClasses = useMemo(() => {
-    const textfieldBaseClass = `block w-full bg-white border border-gray-300 rounded-xs py-3 px-3 text-xs inset-ring-2 inset-ring-green-800 focus:ring-1 focus:ring-green-900 focus:border-black`;
+    const textfieldBaseClass = `block w-full bg-white border border-gray-300 rounded-xs py-2 px-3 text-xs focus:outline-none focus:ring-0.5 focus:ring-green-700 focus:border-green-700`;
     const textfieldState = error ? "ring-red-500" : "ring-[#E8EAEB]";
     
     return clsx(

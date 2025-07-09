@@ -1,11 +1,15 @@
-import { Cloud, LogOut, Settings,
+import {
+  Cloud,
+  LogOut,
+  Settings,
   Construction,
   Warehouse,
-  Briefcase,
   Wallet,
   Users,
   RotateCcwKey,
-  Anchor, } from "lucide-react";
+  Anchor,
+  Bot,
+} from "lucide-react";
 import {
   Sidebar,
   SidebarContent,
@@ -22,9 +26,6 @@ import { RouteConstant } from "@/router/routes";
 import type { ReactElement } from "react";
 import { IconCloudComputing } from "@tabler/icons-react";
 
-
-
-
 export interface SidebarItem {
   title: string;
   icon: ReactElement;
@@ -32,59 +33,60 @@ export interface SidebarItem {
   isActive: boolean;
 }
 
-const sidebarItems:SidebarItem[] = [
+const sidebarItems: SidebarItem[] = [
   {
     title: "Server Sites (Accounts)",
-    icon: <IconCloudComputing className="text-green-700"/>,
+    icon: <IconCloudComputing className="text-green-700" />,
     href: "/server-sites",
     isActive: false,
   },
   {
     title: "Server Houses (VPCs)",
-    icon: <Warehouse className="text-purple-700"/>,
+    icon: <Warehouse className="text-purple-700" />,
     href: "/server-houses",
     isActive: false,
   },
   {
     title: "Server Rooms (Subnets)",
-    icon: <Construction className="text-blue-600"/>,
+    icon: <Construction className="text-blue-600" />,
     href: "/server-rooms",
     isActive: false,
   },
   {
     title: "Resources",
-    icon: <Anchor className="text-red-700"/>,
+    icon: <Anchor className="text-red-700" />,
     href: "/resources",
     isActive: false,
   },
-  {
-    title: "Projects",
-    icon: <Briefcase className="text-emerald-700"/>,
-    href: "/identity-center",
-    isActive: false,
-  },
+ 
   {
     title: "Access Management",
-    icon: <RotateCcwKey className="text-red-800"/>,
+    icon: <RotateCcwKey className="text-red-800" />,
     href: "/command-center",
     isActive: false,
   },
   {
     title: "Billing & Statements",
-    icon: <Wallet className="text-green-800"/>,
-    href: "/settings",
+    icon: <Wallet className="text-green-800" />,
+    href: "/billings",
     isActive: false,
   },
   {
     title: "Organization",
-    icon: <Users className=""/>,
-    href: "/settings",
+    icon: <Users className="" />,
+    href: "/organizations",
     isActive: false,
   },
   {
     title: "Settings",
-    icon: <Settings className="text-red-700"/>,
-    href: "Settings",
+    icon: <Settings className="text-red-700" />,
+    href: "/settings",
+    isActive: false,
+  },
+  {
+    title: "Build with Qoonity AI",
+    icon: <Bot className="text-emerald-700" />,
+    href: "/identity-center",
     isActive: false,
   },
 ];
@@ -122,7 +124,7 @@ export const SidebarLayout = () => {
         <SidebarGroup>
           {/* <SidebarGroupLabel className="">ACCOUNT</SidebarGroupLabel> */}
           <SidebarGroupContent>
-            <SidebarMenu>
+            <SidebarMenu className="gap-2">
               {sidebarItems.map((item) => {
                 const isActive = isItemActive(item.href);
                 return (
@@ -130,7 +132,7 @@ export const SidebarLayout = () => {
                     <SidebarMenuButton isActive={isActive} asChild>
                       <Link to={item.href}>
                         {item.icon}
-                        <span>{item.title}</span>
+                        <span className="text-xs">{item.title}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

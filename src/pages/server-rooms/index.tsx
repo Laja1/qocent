@@ -5,8 +5,10 @@ import { Badge } from "@/components/ui/badge";
 import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import type { roomType } from "./type";
 import { roomData } from "./config";
+import { useNavigate } from "react-router-dom";
 
 export const ServerRooms = () => {
+  const navigate = useNavigate()
   // const [rowId, setRowId] = useState("R-0001");
 
   const serverRoomColumns: ColumnDef<roomType>[] = [
@@ -154,6 +156,7 @@ export const ServerRooms = () => {
         <Button
           intent="tertiary"
           label="Create New Room"
+          onClick={()=>navigate('/create-new-room')}
           prefixIcon={<PlusIcon className="size-4" />}
           size="small"
         />

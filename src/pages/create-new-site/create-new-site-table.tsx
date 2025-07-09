@@ -141,9 +141,9 @@ export const CreateNewSiteTable = () => {
             ) : row.ParameterInputType === "DateBox" ? (
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full justify-start text-left font-normal h-[30px] border-green-800 focus:ring-1 focus:ring-green-900 focus:border-black text-xs"
+                  <div
+                    
+                    className="w-full justify-start text-left font-normal py-1 bg-white rounded-sm px-3 my-1 flex item-center border justify-center border-green-800 focus:ring-1 focus:ring-green-900 focus:border-black text-xs"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4" />
                     {dateValues[row.ParameterName] ? (
@@ -151,7 +151,7 @@ export const CreateNewSiteTable = () => {
                     ) : (
                       <span>Pick a date</span>
                     )}
-                  </Button>
+                  </div>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <Calendar
@@ -161,7 +161,7 @@ export const CreateNewSiteTable = () => {
                       handleDateChange(row.ParameterName, date);
                       onChange(date ? format(date, "yyyy-MM-dd") : "");
                     }}
-                    className="rounded-lg border"
+                    className="rounded-xs border"
                   />
                 </PopoverContent>
               </Popover>

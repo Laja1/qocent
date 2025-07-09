@@ -3,6 +3,9 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  --chart-1: #8884d8;
+  --chart-2: #82ca9d;
+  --chart-3: #ffc658;
 }
 
 .logo {

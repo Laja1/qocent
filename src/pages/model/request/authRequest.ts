@@ -8,6 +8,6 @@ export const signUpInit = {
 
 
 export const signInInit = {
-    emailAddress: "ife@gmail.com",
-    password: "Ifeoluwa22.",
+    emailAddress: "laja@gmail.com",
+    password: "IfeOLUWA01.",
 }

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type React from "react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   Search,
-  Filter,
   Download,
   ChevronDown,
   ChevronUp,
@@ -35,6 +34,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { IconFilter2 } from "@tabler/icons-react";
 
 export type HeaderAction = {
   icon: React.ComponentType<{ className?: string }>;
@@ -82,6 +82,7 @@ export type DataTableProps<T> = {
   onRowClick?: (row: T) => void;
   initialSorting?: SortingState;
   filterableColumns?: string[];
+  onFilterChange?: (filters: Record<string, string>) => void;
   highlightedRowId?: string;
   pageSize?: number;
   actions?: ActionItem<T>[];
@@ -99,6 +100,7 @@ export function DataTable<T>({
   highlightedRowId,
   searchPlaceholder = "Search...",
   onRowClick,
+  onFilterChange,
   initialSorting = null,
   filterableColumns = [],
   pageSize = 100,
@@ -113,6 +115,13 @@ export function DataTable<T>({
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
+
+  // Use useEffect to notify parent of filter changes after render
+  useEffect(() => {
+    if (onFilterChange) {
+      onFilterChange(filters);
+    }
+  }, [filters, onFilterChange]);
 
   const getAccessor = (column: ColumnDef<T>) => {
     if (typeof column.accessorKey === "function") {
@@ -194,6 +203,13 @@ export function DataTable<T>({
     });
   };
 
+  const handleFilterChange = (columnId: string, value: string) => {
+    setFilters((prev) => ({
+      ...prev,
+      [columnId]: value,
+    }));
+  };
+
   const filterColumns = columns.filter(
     (column) => filterableColumns.includes(column.id) && column.filterType
   );
@@ -267,26 +283,21 @@ export function DataTable<T>({
               )}
 
               {(filterColumns.length > 0 || showDownload) && (
-                <div className="flex gap-2">
+                <div className="flex gap-2 ">
                   {filterColumns.map((column) => (
                     <Select
                       key={column.id}
                       value={filters[column.id] || "all"}
-                      onValueChange={(value) =>
-                        setFilters((prev) => ({
-                          ...prev,
-                          [column.id]: value,
-                        }))
-                      }
+                      onValueChange={(value) => handleFilterChange(column.id, value)}
                     >
-                      <SelectTrigger className="w-[140px]">
-                        <Filter className="h-4 w-4 mr-2" />
-                        <SelectValue placeholder={column.header} />
+                      <SelectTrigger className="w-full rounded-xs text-xs">
+                        <IconFilter2 className="h-4 w-4 mr-2" />
+                        <SelectValue className="text-xs" placeholder={column.header} />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="all">All {column.header}</SelectItem>
+                        <SelectItem className="text-xs" value="all">All {column.header}</SelectItem>
                         {column.filterOptions?.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
+                          <SelectItem className="text-xs" key={option.value} value={option.value}>
                             {option.label}
                           </SelectItem>
                         ))}
@@ -305,7 +316,7 @@ export function DataTable<T>({
         </div>
 
         {showBulkActions && (
-          <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-sm">
+          <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-xs">
             <span className="text-sm font-medium text-blue-900">
               {selectedRows.size} item
               {selectedRows.size !== 1 ? "s" : ""} selected
@@ -355,6 +366,10 @@ export function DataTable<T>({
                       className={`flex items-center w-full ${
                         column.headerClassName?.includes("text-right")
                           ? "justify-end"
+                          : ""
+                      } ${
+                        column.headerClassName?.includes("text-center")
+                          ? "justify-center"
                           : ""
                       }`}
                     >

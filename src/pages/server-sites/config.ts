@@ -1,4 +1,4 @@
-import type { secutiyAnalysisType, SiteData } from "./type";
+import type { level1CostTableType, secutiyAnalysisType, SiteData } from "./type";
 
 export const siteData: SiteData[] = [
   {
@@ -669,27 +669,27 @@ export const siteData: SiteData[] = [
 
 export const summaryData=[
   {
-    id:1,
+    id:"1",
     resourceType:'Server Houses',
     count:3
   },
   {
-    id:2,
+    id:"2",
     resourceType:'Server Rooms',
     count:3
   },
   {
-    id:3,
+    id:"3",
     resourceType:'Database',
     count:3
   },
   {
-    id:4,
+    id:"4",
     resourceType:'Server',
     count:1
   },
   {
-    id:5,
+    id:"5",
     resourceType:'Nat Gateway',
     count:2
   },
@@ -778,4 +778,104 @@ export const securityAnalysisData: secutiyAnalysisType[] = [
     recommendation: "Use a bastion host with logging and restricted access for better SSH security.",
     risk: "Medium",
   }
+];
+
+// Data definitions
+export const allcategories: level1CostTableType = {
+  id: "104",
+  type: "All Resources",
+  costs: {
+    January: 2000,
+    February: 2500,
+    March: 100,
+    April: 2200,
+    May: 1900,
+    June: 1200,
+    July: 1500,
+    August: 1600,
+    September: 1700,
+    October: 2100,
+    November: 1950,
+    December: 2300,
+  },
+};
+
+export const categories: level1CostTableType[] = [
+  {
+    id: "104",
+    type: "Compute",
+    costs: {
+      January: 2500,
+      February: 2500,
+      March: 1660,
+      April: 2200,
+      May: 1900,
+      June: 1200,
+      July: 1500,
+      August: 1600,
+      September: 1700,
+      October: 2100,
+      November: 1950,
+      December: 2300,
+    },
+  },
+  {
+    id: "105",
+    type: "Server",
+    costs: {
+      January: 2600,
+      February: 2000,
+      March: 100,
+      April: 2200,
+      May: 1200,
+      June: 1200,
+      July: 1500,
+      August: 1600,
+      September: 2700,
+      October: 2100,
+      November: 1950,
+      December: 2300,
+    },
+  },
+  {
+    id: "106",
+    type: "Networking",
+    costs: {
+      January: 2000,
+      February: 1500,
+      March: 1080,
+      April: 2200,
+      May: 2900,
+      June: 1200,
+      July: 1200,
+      August: 1600,
+      September: 1700,
+      October: 1100,
+      November: 1550,
+      December: 2300,
+    },
+  },
+  {
+    id: "107",
+    type: "Security",
+    costs: {
+      January: 2000,
+      February: 1500,
+      March: 1080,
+      April: 1200,
+      May: 2200,
+      June: 1100,
+      July: 1500,
+      August: 1000,
+      September: 1000,
+      October: 1100,
+      November: 1050,
+      December: 1000,
+    },
+  },
+];
+
+export const allMonths = [
+  "January", "February", "March", "April", "May", "June", 
+  "July", "August", "September", "October", "November", "December"
 ];

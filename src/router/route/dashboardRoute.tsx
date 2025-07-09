@@ -7,6 +7,11 @@ import { Resources } from "@/pages/resources";
 import type { RouteType } from "./type";
 import { CreateNewSite } from "@/pages/create-new-site";
 import { CreateNewResource } from "@/pages/create-new-resource";
+import { CreateNewHouse } from "@/pages/create-new-house";
+import { CreateNewRoom } from "@/pages/create-new-room";
+import { Settings } from "@/pages/settings";
+import { Organizations } from "@/pages/organization";
+import { Billings } from "@/pages/billings";
 
 
 
@@ -59,6 +64,35 @@ export const dashboardRoute: RouteType[] = [
     path: RouteConstant.dashboard.createnewsite.path,
     name: RouteConstant.dashboard.createnewsite.name,
     component: <CreateNewSite />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.createnewhouse.path,
+    name: RouteConstant.dashboard.createnewhouse.name,
+    component: <CreateNewHouse />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.createnewroom.path,
+    name: RouteConstant.dashboard.createnewroom.name,
+    component: <CreateNewRoom />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },{
+    path: RouteConstant.dashboard.settings.path,
+    name: RouteConstant.dashboard.settings.name,
+    component: <Settings />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.organizations.path,
+    name: RouteConstant.dashboard.organizations.name,
+    component: <Organizations />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.billings.path,
+    name: RouteConstant.dashboard.billings.name,
+    component: <Billings />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
 ]; 

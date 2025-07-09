@@ -16,3 +16,5 @@ export interface roomType {
 export type roomDataProps = {
   roomData: roomType[];
 };
+
+

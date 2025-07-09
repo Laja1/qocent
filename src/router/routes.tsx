@@ -85,52 +85,71 @@ export const RouteConstant = {
       name: "reset",
     },
     resetPassword: {
-      path: "reset-password",
+      path: "/reset-password",
       name: "reset-Password",
     },
     changePassword: {
-      path: "change-password",
+      path: "/change-password",
       name: "change-Password",
     },
   },
   dashboard: {
     dashboard: {
-      path: "dashboard",
+      path: "/dashboard",
       name: "dashboard",
     },
     serverSite:{
-      path: "server-sites",
+      path: "/server-sites",
       name: "ServerSite",
      
     },
     serverHouses:{
-      path: "server-houses",
+      path: "/server-houses",
       name: "ServerHouses"
      
     },
     serverRooms:{
-      path: "server-rooms",
+      path: "/server-rooms",
       name: "ServerRooms",
      
     },
     resource:{
-      path: "resource",
+      path: "/resource",
       name: "resource",
       
     },
     resources:{
-      path: "resources",
-      name: "Resource",
-     
+      path: "/resources",
+      name: "Resource", 
+    },
+    settings:{
+      path: "/settings",
+      name: "settings", 
+    },
+    organizations:{
+      path: "/organizations",
+      name: "organizations", 
+    },
+    billings:{
+      path: "/billings",
+      name: "billings", 
     },
     createResources:{
-      path: "create-new-resource",  
+      path: "/create-new-resource",  
       name: "create-new-resource",
     },
     createnewsite:{
-      path:'create-new-site',
+      path:'/create-new-site',
       name:"Create New Site" 
       },
+      createnewhouse:{
+        path:'/create-new-house',
+        name:"Create New house" 
+        },
+        createnewroom:{
+          path:'/create-new-room',
+          name:"Create New Room" 
+          },
     serverId:{
       path: "server:id",
       name: "Server",

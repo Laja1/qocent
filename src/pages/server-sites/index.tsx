@@ -2,7 +2,7 @@ import { imgLinks } from "@/assets/assetLink";
 import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Badge } from "@/components/ui/badge";
-import { serverRooms, type ServerRoomType } from "@/utilities/constants/config";
+import { serverRooms, sitesData, type ServerRoomType } from "@/utilities/constants/config";
 import { Edit, Eye, Trash2, PlusIcon, Plus } from "lucide-react";
 import { useState } from "react";
 import { ServerSitesTable2 } from "./server-sites-table";
@@ -15,6 +15,7 @@ import { SecurityTable } from "./security-table";
 import { DeployResources } from "@/components/not-shared/deploy-resources";
 import { useModal } from "@/components/shared/modal";
 import { Link } from "react-router-dom";
+import { CostTable } from "./cost";
 
 export const ServerSites = () => {
   const { openModal, closeModal } = useModal();
@@ -98,9 +99,11 @@ export const ServerSites = () => {
       id: "provider",
       header: "PROVIDER",
       accessorKey: "provider",
+
+      headerClassName: "text-center ",
       sortable: true,
       cell: (row) => (
-        <span className="text-center justify-center flex">
+        <span className="text-center justify-center items-left  flex">
           {row.provider === "AWS" ? (
             <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
           ) : (
@@ -168,7 +171,7 @@ export const ServerSites = () => {
     },
   ];
 
-  const actions = [
+ const actions = [
     {
       label: "View",
       icon: Eye,
@@ -191,7 +194,9 @@ export const ServerSites = () => {
       onClick: (row: ServerRoomType) => {
         openModal({
           id: `deploy-${row.id}`,
-          content: <DeployResources siteCodeId={row.id} closeModal={closeModal} />,
+          content: (
+            <DeployResources siteCodeId={row.id} closeModal={closeModal} />
+          ),
         });
       },
     },
@@ -209,27 +214,25 @@ export const ServerSites = () => {
   const tabData = [
     {
       id: 1,
-      text: "Resources",
-      component: (
-        <div className="">
-          <ServerSitesTable2 rowId={rowId} />
-        </div>
-      ),
-    },
-
-    {
-      id: 2,
       text: "Summary",
       component: (
         <div className="flex">
-          <div className="w-1/4 flex">
-           
+          <div className="w-1/4 mr-5 flex">
             <div className=" flex flex-col w-full">
-            <SummaryTable />
-              <Button label="Add Resource" prefixIcon={<PlusIcon className="size-4"/>} size="small" className="mt-2 py-0 bg-black" intent='secondary' onClick={()=>openModal({
-          id: `deploy-${rowId}`,
-          content: <DeployResources  closeModal={closeModal} />,
-        })}/>
+              <SummaryTable />
+              <Button
+                label="Add Resource"
+                prefixIcon={<PlusIcon className="size-4" />}
+                size="small"
+                className="mt-2 py-0 bg-black"
+                intent="secondary"
+                onClick={() =>
+                  openModal({
+                    id: `deploy-${rowId}`,
+                    content: <DeployResources closeModal={closeModal} />,
+                  })
+                }
+              />
             </div>
           </div>
           <div className="w-3/4">
@@ -239,30 +242,45 @@ export const ServerSites = () => {
       ),
     },
     {
+      id: 2,
+      text: "Resources",
+      component: (
+        <div className="">
+          <ServerSitesTable2 rowId={rowId} />
+        </div>
+      ),
+    },
+    {
       id: 3,
       text: "Architecture",
-      component: <SiteLevel />,
+      component: <SiteLevel sitesData={sitesData}/>,
     },
     {
       id: 4,
       text: "Security",
       component: <SecurityTable />,
     },
+    {
+      id: 5,
+      text: "Cost",
+      component: <CostTable />,
+    },
   ];
 
   return (
     <div className=" h-full mt-5">
       <Header title="Server Sites" description="Manage your server site">
-        <Link to='/create-new-site'>
-        <Button
-          intent="tertiary"
-          label="Create New Site"
-          prefixIcon={<PlusIcon className="size-4"/>}
-          size="small"
-        /></Link>
+        <Link to="/create-new-site">
+          <Button
+            intent="tertiary"
+            label="Create New Site"
+            prefixIcon={<PlusIcon className="size-4" />}
+            size="small"
+          />
+        </Link>
       </Header>
 
-      <div className="flex gap-4  flex-col overflow-y-auto overflow-y-hidden h-full">
+      <div className="flex gap-4  flex-col overflow-y-hidden h-full">
         <Card className="mx-5 px-5 rounded-sm">
           <DataTable
             data={serverRooms}
@@ -275,7 +293,6 @@ export const ServerSites = () => {
             highlightedRowId={rowId}
             initialSorting={{ id: "siteName", desc: false }}
           />
-    
         </Card>
         <div className="mx-5 mt-5 ">
           <Tabs tabs={tabData} />
