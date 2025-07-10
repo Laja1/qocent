@@ -2,7 +2,6 @@ import cx from "classnames";
 import { cva, type VariantProps } from "class-variance-authority";
 import React from "react";
 
-
 const buttonVariants = cva("button", {
   variants: {
     intent: {
@@ -20,21 +19,21 @@ const buttonVariants = cva("button", {
         "border-[1px]",
         "border-[#DFDFE5]",
         "hover:bg-black",
-        "hover:text-white"
+        "hover:text-white",
       ],
       tertiary: [
         "bg-[#edf2ef]",
         "text-[#000]",
         "border-transparent",
         "hover:bg-gray-200",
-        "text-xs"
+        "text-xs",
       ],
       quinary: [
         "bg-green-700",
         "text-white",
         "border-transparent",
         "hover:bg-gray-200",
-        "text-xs"
+        "text-xs",
       ],
       quaternary: [
         "bg-black",
@@ -60,7 +59,12 @@ const buttonVariants = cva("button", {
     size: "medium",
   },
 });
-type buttonState = "primary" | "secondary" | "tertiary" | "quaternary" | "quinary"  ;
+type buttonState =
+  | "primary"
+  | "secondary"
+  | "tertiary"
+  | "quaternary"
+  | "quinary";
 interface ButtonProps
   extends Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, "disabled">,
     VariantProps<typeof buttonVariants> {
@@ -104,7 +108,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         "opacity-10 cursor-not-allowed ": disabled,
         "hover:bg-gray-800 ": !disabled && intent === "primary",
       },
-      'hover:cursor-pointer',
+      "hover:cursor-pointer",
       className
     );
 

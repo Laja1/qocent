@@ -1,13 +1,5 @@
 import { string } from "yup";
-import {
-  containsAtleastOneLowerCase,
-  containsAtleastOneNumber,
-  containsAtLeastOneSpecialChar,
-  containsAtleastOneUpperCase,
-} from "../helper";
 
-const urlRegex =
-  /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/;
 
 export const defaultValidation = (name: string) =>
   string().required(`${name} is required`);
@@ -20,48 +12,42 @@ export const phoneValidation = (phoneNumber: string) =>
 export const optionValidation = (msg?: string) =>
   string().required(msg || "Select an option");
 
-export const urlValidation = (path: string, required = true) =>
-  required
-    ? string()
-        .matches(urlRegex, "Enter valid url!")
-        .required(`${path} is required`)
-    : string().test({
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        test: function (value: any) {
-          if (!value) return true;
-          return !urlRegex?.test(value)
-            ? this.createError({
-                message: "Invalid Url",
-                path,
-              })
-            : true;
-        },
-      });
+// export const urlValidation = (path: string, required = true) =>
+//   required
+//     ? string()
+//         .matches(urlRegex, "Enter valid url!")
+//         .required(`${path} is required`)
+//     : string().test({
+//         // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//         test: function (value: any) {
+//           if (!value) return true;
+//           return !urlRegex?.test(value)
+//             ? this.createError({
+//                 message: "Invalid Url",
+//                 path,
+//               })
+//             : true;
+//         },
+//       });
 
 export const emailValidation = () =>
   string().email("Invalid email address").required("Email address is required");
 
+
 export const passwordValidation = (label = "Password") =>
   string()
     .required(`${label} is required`)
-    .min(8, `${label} must be at least 8 characters`)
-    .test(
-      "uppercase",
-      `${label} must contain an uppercase letter`,
-      containsAtleastOneUpperCase
+    .matches(/[A-Z]/, `${label} must contain at least one uppercase letter`)
+    .matches(/[a-z]/, `${label} must contain at least one lowercase letter`)
+    .matches(/\d/, `${label} must contain at least one number`)
+    .matches(
+      /[@$!%*?&#^()_\-+=]/,
+      `${label} must contain at least one special character`
     )
-    .test(
-      "special",
-      `${label} must contain a special character`,
-      containsAtLeastOneSpecialChar
-    )
-    .test(
-      "lowercase",
-      `${label} must contain a lowercase character`,
-      containsAtleastOneLowerCase
-    )
-    .test(
-      "number",
-      `${label} must contain atleast one number`,
-      containsAtleastOneNumber
-    );
+    .min(8, `${label} must be at least 8 characters long`);
+
+    export const codeValidatiion = (name: string) =>
+      string()
+        .required(`${name} is required`)
+        .min(6, `Must be ${6} digits`)
+        .max(6, `Must be ${6} digits`);

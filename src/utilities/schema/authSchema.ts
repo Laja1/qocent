@@ -1,29 +1,30 @@
 import { string, object } from 'yup';
-import { defaultValidation, emailValidation, passwordValidation } from '.';
+import { codeValidatiion, defaultValidation, emailValidation, passwordValidation } from '.';
 
 export const loginFormValidationSchema = object().shape({
-  emailAddress: emailValidation(),
-  password: string().required('Password is required'),
+  userEmail: emailValidation(),
+  userPassword: passwordValidation(),
 });
 
 export const registerFormValidationSchema = object().shape({
-  firstName: defaultValidation('First Name'),
-  lastName: defaultValidation('Last Name'),
-  emailAddress: emailValidation(),
-  password: passwordValidation(),
-  confirmPassword: string()
-    .test(
-      'password-match',
-      'Password and Confirm Password must match',
-      function (value?: string) {
-        return this.parent.password === value;
-      }
-    )
-    .required('Confirm Password is required'),
+  userFirstName: defaultValidation('First Name'),
+  userLastName: defaultValidation('Last Name'),
+  userEmail: emailValidation(),
+  userPassword: passwordValidation(),
+
+});
+
+export const confirmAccountSchema = object().shape({
+  otp:codeValidatiion('OTP')
+});
+
+export const completePasswordSchema = object().shape({
+  otp:codeValidatiion('OTP'),
+  userPassword: passwordValidation(),
 });
 
 export const forgotPasswordFormValidationSchema = object().shape({
-  email: emailValidation(),
+  userEmail: emailValidation(),
 });
 
 export const resetPasswordFormValidationSchema = object().shape({

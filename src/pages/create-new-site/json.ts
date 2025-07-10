@@ -10,7 +10,6 @@ export const siteCreateJson=[
       "ParameterLabel": "Site Name",
       "ParameterLength": "20",
       "ParameterValidation": "",
-     
       "ParameterSource": "",
       "ParameterInfo1": "A sitename must be universally unique in the UCS universe. There are some recommendations to make your Site name unique",
       "ParameterInfo2": "Use lower case characters and hypheans, be sure to have some numenclature.",

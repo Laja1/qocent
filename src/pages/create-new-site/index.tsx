@@ -98,7 +98,7 @@ export const CreateNewSite = () => {
                 )}{" "}
                 {item.ParameterLabel}
               </p>{" "}
-              <div className="lg:w-1/5 w-full pr-3 flex gap-1">
+              <div className="lg:w-2/5 w-full pr-3 flex gap-1">
                 <RenderField
                   name={item.ParameterName}
                   formik={formik}

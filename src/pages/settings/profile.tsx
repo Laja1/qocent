@@ -1,12 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, RenderField } from "@/components/shared";
 import { useModal } from "@/components/shared/modal";
-import { Info } from "lucide-react";
+import { AlertTriangle, Info, Trash2 } from "lucide-react";
 import { useFormik } from "formik";
 import { providerOptions } from "@/components/not-shared/deploy-config";
 import { IconMichelinStar } from "@tabler/icons-react";
 import type { ParameterData } from "../create-new-site/type";
 import { siteCreateJson } from "@/components/shared/json";
+import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
 export const Profile = () => {
   const { openModal, closeModal } = useModal();
@@ -85,7 +86,7 @@ export const Profile = () => {
           </div>
         </div>
 
-        <div className=" grid grid-cols-2 px-5 mt-5   flex-col">
+        <div className=" grid grid-cols-1 lg:grid-cols-3  px-5 mt-5   flex-col">
           {siteCreateJson.map((item) => (
             <div className="   w-full py-[1px] " key={item.ParameterSerial}>
               <div>
@@ -119,6 +120,34 @@ export const Profile = () => {
         <div className="flex m-3 sm:m-5 justify-end">
           <Button label="Save" onClick={handleProceed} />
         </div>
+      </div>
+      <div className="inline-flex  gap-4  flex-col overflow-y-hidden h-full">
+        <Card className="border-red-200 rounded-xs bg-red-50 p-5 my-5">
+          <div>
+            <CardTitle className="flex items-center text-xs gap-1 text-red-800">
+              <AlertTriangle className="h-4 w-4 " />
+              Danger Zone
+            </CardTitle>
+          </div>
+          <CardContent className="space-y-4">
+            <div className="space-y-4">
+              <div>
+                <h3 className="text-sm font-medium text-red-800">
+                  Delete Account
+                </h3>
+                <p className="text-xs text-red-600 mb-2">
+                  Permanently delete this account and all its data
+                </p>
+                <Button
+                  label="Delete Account"
+                  intent="secondary"
+                  className="text-xs text-red-700"
+                  prefixIcon={<Trash2 className="h-4 w-4 text-red-700" />}
+                />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );

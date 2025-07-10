@@ -2,7 +2,11 @@ import { imgLinks } from "@/assets/assetLink";
 import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Badge } from "@/components/ui/badge";
-import { serverRooms, sitesData, type ServerRoomType } from "@/utilities/constants/config";
+import {
+  serverRooms,
+  sitesData,
+  type ServerRoomType,
+} from "@/utilities/constants/config";
 import { Edit, Eye, Trash2, PlusIcon, Plus } from "lucide-react";
 import { useState } from "react";
 import { ServerSitesTable2 } from "./server-sites-table";
@@ -14,10 +18,11 @@ import { Resource } from "../resource";
 import { SecurityTable } from "./security-table";
 import { DeployResources } from "@/components/not-shared/deploy-resources";
 import { useModal } from "@/components/shared/modal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { CostTable } from "./cost";
 
 export const ServerSites = () => {
+  const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
   const [rowId, setRowId] = useState("100004");
   const [showAlert, setShowAlert] = useState(true);
@@ -171,7 +176,9 @@ export const ServerSites = () => {
     },
   ];
 
- const actions = [
+  const row = serverRooms.find((item) => item.id === rowId);
+
+  const actions = [
     {
       label: "View",
       icon: Eye,
@@ -195,7 +202,11 @@ export const ServerSites = () => {
         openModal({
           id: `deploy-${row.id}`,
           content: (
-            <DeployResources siteCodeId={row.id} closeModal={closeModal} />
+            <DeployResources
+              siteCodeId={row.id}
+              closeModal={closeModal}
+              onProceed={() => navigate("/create-new-resource")}
+            />
           ),
         });
       },
@@ -219,7 +230,7 @@ export const ServerSites = () => {
         <div className="flex">
           <div className="w-1/4 mr-5 flex">
             <div className=" flex flex-col w-full">
-              <SummaryTable />
+              {row && <SummaryTable rowData={row} />}
               <Button
                 label="Add Resource"
                 prefixIcon={<PlusIcon className="size-4" />}
@@ -229,7 +240,12 @@ export const ServerSites = () => {
                 onClick={() =>
                   openModal({
                     id: `deploy-${rowId}`,
-                    content: <DeployResources closeModal={closeModal} />,
+                    content: (
+                      <DeployResources
+                        closeModal={closeModal}
+                        onProceed={() => navigate("/create-new-resource")}
+                      />
+                    ),
                   })
                 }
               />
@@ -253,7 +269,7 @@ export const ServerSites = () => {
     {
       id: 3,
       text: "Architecture",
-      component: <SiteLevel sitesData={sitesData}/>,
+      component: <SiteLevel sitesData={sitesData} />,
     },
     {
       id: 4,

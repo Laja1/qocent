@@ -6,13 +6,16 @@ import { summaryData } from "./config";
 import { DeployResources } from "@/components/not-shared/deploy-resources";
 import { useModal } from "@/components/shared/modal";
 import { useState } from "react";
+import type { ServerRoomType } from "@/utilities/constants/config";
+import { useNavigate } from "react-router-dom";
 
-export const SummaryTable = () => {
+export const SummaryTable = ({ rowData }: { rowData?: ServerRoomType }) => {
+  const navigate = useNavigate()
   const { openModal, closeModal } = useModal();
-  const [resourceType,setResourceType] = useState("")
+  const [resourceType, setResourceType] = useState("");
   const summaryColums: ColumnDef<summaryType>[] = [
     {
-      id: "resourceIcon",  
+      id: "resourceIcon",
       header: "",
       accessorKey: "resourceType",
       cell: (row) => (
@@ -23,13 +26,11 @@ export const SummaryTable = () => {
       sortable: false,
     },
     {
-      id: "resourceTypeText",  
+      id: "resourceTypeText",
       header: "Resource Type",
       accessorKey: "resourceType",
       cell: (row) => (
-        <span className="line-clamp-1 text-xs py-1">
-          {row.resourceType}
-        </span>
+        <span className="line-clamp-1 text-xs py-1">{row.resourceType}</span>
       ),
       sortable: false,
     },
@@ -37,49 +38,46 @@ export const SummaryTable = () => {
       id: "count",
       header: "Count",
       accessorKey: "count",
-      cell: (row) => (
-        <span className="line-clamp-1 text-xs">
-          {row.count}
-        </span>
-      ),
+      cell: (row) => <span className="line-clamp-1 text-xs">{row.count}</span>,
       sortable: true,
     },
   ];
-  
-      const actions = [
-        {
-          label: `Add resource`,
-          icon: Plus,
-          onClick: (row: summaryType) => {
-            setResourceType(row.resourceType);
-            openModal({
-              id: `deploy-${row.id}`,
-              content: (
-                <DeployResources
-                  // id={row.id} 
-                  closeModal={closeModal}
-                />
-              ),
-            });
-          },
-        },
-      ];
-      
-    return (
-   
-      <div className=" w-full">
-       
-        <DataTable
-          data={summaryData}
-          columns={summaryColums}
-          actions={actions}
-          highlightedRowId={resourceType}
-          onRowClick={(row) => setResourceType(row.id)}
-          showDownload={false}
-          showSearch={false}
-          getRowId={(row) => row.id}
-          // initialSorting={{ id: "resourceType", }}
-        />
+
+  const actions = [
+    {
+      label: `Add resource`,
+      icon: Plus,
+      onClick: (row: summaryType) => {
+        setResourceType(row.resourceType);
+        openModal({
+          id: `deploy-${row.id}`,
+          content: (
+            <DeployResources
+              id={row.resourceType}
+              siteCodeId={rowData?.id}
+              closeModal={closeModal}
+              onProceed={() => navigate("/create-new-resource")}
+
+            />
+          ),
+        });
+      },
+    },
+  ];
+
+  return (
+    <div className=" w-full">
+      <DataTable
+        data={summaryData}
+        columns={summaryColums}
+        actions={actions}
+        highlightedRowId={resourceType}
+        onRowClick={(row) => setResourceType(row.id)}
+        showDownload={false}
+        showSearch={false}
+        getRowId={(row) => row.id}
+        // initialSorting={{ id: "resourceType", }}
+      />
     </div>
-  )
-}
+  );
+};

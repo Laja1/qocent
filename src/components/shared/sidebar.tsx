@@ -25,6 +25,9 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { RouteConstant } from "@/router/routes";
 import type { ReactElement } from "react";
 import { IconCloudComputing } from "@tabler/icons-react";
+import { useDispatch, useSelector } from "react-redux";
+import { authStore } from "@/store/authSlice";
+import type { RootState } from "@/store";
 
 export interface SidebarItem {
   title: string;
@@ -58,7 +61,7 @@ const sidebarItems: SidebarItem[] = [
     href: "/resources",
     isActive: false,
   },
- 
+
   {
     title: "Access Management",
     icon: <RotateCcwKey className="text-red-800" />,
@@ -94,6 +97,7 @@ const sidebarItems: SidebarItem[] = [
 export const SidebarLayout = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const isItemActive = (itemHref: string) => {
     // Exact match for dashboard root
     if (itemHref === "" && pathname === "") {
@@ -107,6 +111,13 @@ export const SidebarLayout = () => {
     return false;
   };
 
+  const handleLogout = () => {
+    dispatch(authStore.action.logout());
+    navigate(RouteConstant.auth.signin.path);
+  };
+
+  const user = useSelector((state: RootState) => state.auth);
+
   return (
     <Sidebar className="font-brfirma">
       <SidebarHeader className="bg-green-950   text-white  border-gray-200  p-[8px]">
@@ -115,7 +126,7 @@ export const SidebarLayout = () => {
           <div>
             <h2 className="font-bold text-base">Qucoon Cloud</h2>
             <p className="text-xs text-gray-400 leading-tight">
-              ife@example.com
+              {user?.userEmail}
             </p>
           </div>
         </div>
@@ -144,7 +155,7 @@ export const SidebarLayout = () => {
       </SidebarContent>
       <SidebarFooter className="border-t  bg-[#fff] border-gray-200 p-4">
         <div
-          onClick={() => navigate(RouteConstant.auth.signin.path)}
+          onClick={() => handleLogout()}
           className="text-xs flex items-center text-red-700 gap-2 hover:cursor-pointer"
         >
           <LogOut className="size-4 " /> <p>Logout</p>

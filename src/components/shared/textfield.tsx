@@ -15,6 +15,7 @@ export const Textfield = ({
   searchField,
   name,
   labelClassName,
+  helperLabel,
   formik,
   ...rest
 }: textfieldProps) => {
@@ -46,9 +47,11 @@ export const Textfield = ({
 
   return (
     <div className="w-full text-start">
-      <label className={clsx("text-sm text-tetiary-lighter", labelClassName)}>
+      <div className="flex justify-between"><label className={clsx("text-sm text-tetiary-lighter", labelClassName)}>
         {label}
       </label>
+     
+      </div>
 
       <div className="mt-1 relative rounded-lg w-full">
         {!!computedPrefixIcon && (
@@ -74,8 +77,9 @@ export const Textfield = ({
           {...rest}
           className={textfieldClasses}
         /> 
+        
       </div>
-
+      {helperLabel&& <p className="text-[10px] text-right mt-2 text-red-500">{helperLabel}</p>}
       {error && (
         <p className="text-red-500 text-xs text-left items-start mt-2">
           {error}

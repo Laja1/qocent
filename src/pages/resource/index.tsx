@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Info, Pen } from "lucide-react";
 import { type ColumnDef } from "@/components/shared";
-import { useLocation } from "react-router-dom";
 import { resourceData } from "./resource-config";
 import { DataTable } from "@/components/shared/datatable";
 
@@ -14,9 +13,6 @@ interface ResourceDataProps {
 }
 
 export const Resource = () => {
-  const location = useLocation();
-  const row = location.state;
-  console.log("Selected Row:", row);
 
   const serverColumns = [
     { id: "webServer" as const, label: "Web Server" },
@@ -30,7 +26,7 @@ export const Resource = () => {
       header: "Resource Parameters",
       accessorKey: "label",
       cell: (row: ResourceDataProps) => (
-        <span className="text-rose-700 font-brfirma-bold font-medium line-clamp-1">
+        <span className="text-green-800 font-brfirma-bold font-medium line-clamp-1">
           {row.label}
         </span>
       ),

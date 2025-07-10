@@ -2,20 +2,26 @@ import { useFormik } from "formik";
 import { Button, ComboBoxField, SelectField2 } from "../shared";
 import { serverRooms } from "@/utilities/constants/config";
 import { resourceSiteCodeOptions, resourceTypeOptions } from "./deploy-config";
+import { deployModalSchema } from "@/utilities/schema/resourceSchema";
+import { useEffect } from "react";
 
 type DeployResourceProps = {
   id?: string;
   siteCodeId?: string;
   closeModal: () => void;
+  onProceed?: () => void;
 };
 
 export const DeployResources = ({
   id,
   siteCodeId,
+  onProceed,
   closeModal,
 }: DeployResourceProps) => {
   const serverSite = serverRooms.find((item) => item.id === siteCodeId);
-
+  console.log(serverSite);
+  const typeOption = resourceSiteCodeOptions.find((item) => item.label === id);
+  console.log(typeOption);
   const presetSiteOptions = serverSite
     ? [{ label: serverSite.siteName, value: serverSite.id }]
     : resourceSiteCodeOptions;
@@ -28,16 +34,18 @@ export const DeployResources = ({
     initialValues: {
       resourceType: id?.toLowerCase() || "",
       resourceSiteCode: serverSite?.id || "",
-      resourceSiteHouse:"",
-      resourceSiteRoom:""
     },
     onSubmit: (values) => {
       console.log("Deploying for ID:", id, "with values:", values);
       closeModal();
+      onProceed?.(); // ← trigger navigation
     },
+    validationSchema: deployModalSchema,
   });
 
-
+  useEffect(() => {
+    formik!.validateForm();
+  }, []);
 
   return (
     <form onSubmit={formik.handleSubmit} className="p-4 min-w-md space-y-4">
@@ -65,21 +73,6 @@ export const DeployResources = ({
           placeholder="Select a site code"
           options={presetSiteOptions}
         />
- <SelectField2
-          name="resourceSiteHouse"
-          label="Resource Site House"
-          formik={formik}
-          placeholder="Select a site house"
-          options={presetSiteOptions}
-        />
-        <SelectField2
-          name="resourceSiteRoom"
-          label="Resource Site Room"
-          formik={formik}
-          disabled={!formik.values.resourceSiteCode}
-          placeholder="Select a site room"
-          options={presetSiteOptions}
-        />
       </div>
 
       <div className="flex justify-end gap-3 pt-4 border-t">
@@ -89,9 +82,12 @@ export const DeployResources = ({
           intent="secondary"
           onClick={closeModal}
         />
-      <Button label="Proceed" type="submit" intent="primary" onClick={()=>{
-        window.location= "/create-new-resource" as (string & Location)
-      }}/>
+        <Button
+          label="Proceed"
+          type="submit"
+          intent="primary"
+          disabled={!formik.isValid}
+        />
       </div>
     </form>
   );

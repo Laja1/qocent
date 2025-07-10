@@ -64,8 +64,8 @@ export const ServerRooms = () => {
           variant="outline"
           className={`${
             row.type === "Private"
-              ? "border-blue-200 bg-blue-50 text-blue-700"
-              : "border-amber-200 bg-amber-50 text-amber-700"
+              ? "border-blue-500 bg-blue-50 text-blue-700"
+              : "border-amber-500 bg-amber-50 text-amber-700"
           } text-right justify-center flex w-full`}
         >
           {row.type}

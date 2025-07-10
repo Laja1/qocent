@@ -762,7 +762,7 @@ export const sitesData ={
         availabilityZone: "us-east-1a",
         resourcesDeployed: [
           {
-            id: 101,
+            id: 301,
             name: "Proxy",
             instanceType: "t2.micro", 
             status: "running", 
@@ -784,14 +784,14 @@ export const sitesData ={
         availabilityZone: "us-east-1a",
         resourcesDeployed: [
           {
-            id: 101,
+            id: 111,
             name: "Server",
             instanceType: "t2.micro",
             status: "running",
           },
 
           {
-            id: 101,
+            id: 201,
             name: "Database",
             instanceType: "t2.micro", // Add instance type for resources
             status: "running", // Add status of resource
@@ -854,7 +854,7 @@ export const sitesData ={
         availabilityZone: "us-east-1a",
         resourcesDeployed: [
           {
-            id: 101,
+            id: 111,
             name: "Proxy",
             instanceType: "t2.micro", // Add instance type for resources
             status: "running", // Add status of resource
@@ -869,7 +869,7 @@ export const sitesData ={
         availabilityZone: "us-east-1a",
         resourcesDeployed: [
           {
-            id: 101,
+            id:190,
             name: "Proxy",
             instanceType: "t2.micro", // Add instance type for resources
             status: "running", // Add status of resource
@@ -1075,7 +1075,7 @@ export const houseArchitectureData:HouseArchitectureData ={
         availabilityZone: "us-east-1a",
         resourcesDeployed: [
           {
-            id: 101,
+            id: 181,
             name: "Proxy",
             instanceType: "t2.micro", 
             status: "running", 
@@ -1097,14 +1097,14 @@ export const houseArchitectureData:HouseArchitectureData ={
         availabilityZone: "us-east-1a",
         resourcesDeployed: [
           {
-            id: 101,
+            id: 142,
             name: "Server",
             instanceType: "t2.micro",
             status: "running",
           },
 
           {
-            id: 101,
+            id: 111,
             name: "Database",
             instanceType: "t2.micro", // Add instance type for resources
             status: "running", // Add status of resource

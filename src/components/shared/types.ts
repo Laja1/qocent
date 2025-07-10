@@ -11,7 +11,8 @@ export type textfieldProps = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   formik?: FormikProps<any>;
   error?: string;
-  className?: string;
+  className?: string
+  helperLabel?:string
   suffixIcon?: React.ReactNode;
   type?: string;
   labelIcon?: React.ReactNode;

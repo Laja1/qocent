@@ -427,7 +427,7 @@ export function DataTable<T>({
                       onClick={onRowClick ? () => onRowClick(row) : undefined}
                     >
                       {enhancedColumns.map((column) => (
-                        <td key={column.id} className="border-b pl-2 text-xs">
+                        <td key={column.id} className="border-b px-2 text-xs">
                           {column.cell
                             ? column.cell(row, rowIndex)
                             : String(getAccessor(column)(row))}

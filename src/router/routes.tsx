@@ -1,6 +1,5 @@
 export const navRoutes = [
   {
-   
     link: "/explore",
     name: "Explore Services",
   },
@@ -14,14 +13,12 @@ export const navRoutes = [
     link: "/projects",
     name: "Projects",
   },
-  
+
   {
     id: "docs",
     link: "/docs",
     name: "Documentation",
   },
-  
- 
 ];
 
 export const RouteConstant = {
@@ -35,7 +32,7 @@ export const RouteConstant = {
       name: "Landing",
     },
   },
-  auth: {   
+  auth: {
     signin: {
       path: "/signin",
       name: "Sign In",
@@ -45,12 +42,12 @@ export const RouteConstant = {
       name: "Sign Up",
     },
     otp: {
-      path: "/otp",
-      name: "otp",
+      path: "/confirm-account",
+      name: "confirm-account",
     },
-    invite: {
-      path: "/invite",
-      name: "invite",
+    confirmPasswordReset: {
+      path: "/confirm-password-reset",
+      name: "confirm-password-reset",
     },
     error: {
       path: "/error",
@@ -80,9 +77,9 @@ export const RouteConstant = {
       path: "changed",
       name: "changed",
     },
-    reset: {
-      path: "reset",
-      name: "reset",
+    forgotPassword: {
+      path: "/forgot-password",
+      name: "forgot-password",
     },
     resetPassword: {
       path: "/reset-password",
@@ -98,62 +95,57 @@ export const RouteConstant = {
       path: "/dashboard",
       name: "dashboard",
     },
-    serverSite:{
+    serverSite: {
       path: "/server-sites",
       name: "ServerSite",
-     
     },
-    serverHouses:{
+    serverHouses: {
       path: "/server-houses",
-      name: "ServerHouses"
-     
+      name: "ServerHouses",
     },
-    serverRooms:{
+    serverRooms: {
       path: "/server-rooms",
       name: "ServerRooms",
-     
     },
-    resource:{
+    resource: {
       path: "/resource",
       name: "resource",
-      
     },
-    resources:{
+    resources: {
       path: "/resources",
-      name: "Resource", 
+      name: "Resource",
     },
-    settings:{
+    settings: {
       path: "/settings",
-      name: "settings", 
+      name: "settings",
     },
-    organizations:{
+    organizations: {
       path: "/organizations",
-      name: "organizations", 
+      name: "organizations",
     },
-    billings:{
+    billings: {
       path: "/billings",
-      name: "billings", 
+      name: "billings",
     },
-    createResources:{
-      path: "/create-new-resource",  
+    createResources: {
+      path: "/create-new-resource",
       name: "create-new-resource",
     },
-    createnewsite:{
-      path:'/create-new-site',
-      name:"Create New Site" 
-      },
-      createnewhouse:{
-        path:'/create-new-house',
-        name:"Create New house" 
-        },
-        createnewroom:{
-          path:'/create-new-room',
-          name:"Create New Room" 
-          },
-    serverId:{
+    createnewsite: {
+      path: "/create-new-site",
+      name: "Create New Site",
+    },
+    createnewhouse: {
+      path: "/create-new-house",
+      name: "Create New house",
+    },
+    createnewroom: {
+      path: "/create-new-room",
+      name: "Create New Room",
+    },
+    serverId: {
       path: "server:id",
       name: "Server",
-     
     },
   },
 };

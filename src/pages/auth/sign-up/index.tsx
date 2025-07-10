@@ -1,31 +1,97 @@
 import AuthLayout from "@/components/layouts/authLayout";
 import { Button } from "@/components/shared";
 import { Textfield } from "@/components/shared/textfield";
-import { signUpInit } from "@/pages/model/request/authRequest";
+import { showCustomToast } from "@/components/shared/toast";
+import {
+  signUpInit,
+  type signupRequest,
+} from "@/pages/model/request/authRequest";
+import { RouteConstant } from "@/router/routes";
+import { useSignUpMutation } from "@/service/authApi";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { registerFormValidationSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
-import { EyeClosed, EyeIcon } from "lucide-react";
-import { useState } from "react";
+import { EyeClosed, EyeIcon, Mail } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [seePassword, setSeePassword] = useState(false);
-  const [seeConfirmPassword, setSeeConfirmPassword] = useState(false);
-  const onSubmit = () => {};
+  const navigate = useNavigate();
+  // const [seeConfirmPassword, setSeeConfirmPassword] = useState(false);
+  const [signupMutation, { isLoading, error }] = useSignUpMutation();
+  console.log(error);
+  const handleSubmit = async (values: signupRequest) => {
+    try {
+      const res = await signupMutation(values).unwrap();
+      console.log(res);
+      showCustomToast(res?.responseMessage, {
+        toastOptions: {
+          type: "success",
+          autoClose: 5000,
+        },
+      });
+
+      navigate(RouteConstant.auth.otp.path, { state: values.userEmail });
+    } catch (error) {
+      const message = ErrorHandler.extractMessage(error);
+
+      showCustomToast(message, {
+        toastOptions: {
+          type: "error",
+          autoClose: 5000,
+        },
+      });
+    }
+  };
   const formik = useFormik({
     initialValues: signUpInit,
-    onSubmit,
-    validationSchema:registerFormValidationSchema
+    onSubmit: handleSubmit,
+    validationSchema: registerFormValidationSchema,
   });
+  console.log(formik.errors);
+  useEffect(() => {
+    formik.validateForm();
+  }, []);
+
   return (
     <AuthLayout title="Sign Up" subtitle="Sign up to your account">
       <div className="gap-3 flex flex-col">
-        <div className="flex gap-4">
-          <Textfield name="firstName" label="First Name" formik={formik} error={formik?.touched.firstName && formik?.errors.firstName?formik?.errors.firstName:''}/>{" "}
-          <Textfield name="lastName" label="Last Name" formik={formik} error={formik?.touched.lastName && formik?.errors.lastName?formik?.errors.lastName:''}/>
+        <div className="flex  lg:flex-row flex-col gap-4">
+          <Textfield
+            name="userFirstName"
+            label="First Name"
+            formik={formik}
+            error={
+              formik?.touched.userFirstName && formik?.errors.userFirstName
+                ? formik?.errors.userFirstName
+                : ""
+            }
+          />{" "}
+          <Textfield
+            name="userLastName"
+            label="Last Name"
+            formik={formik}
+            error={
+              formik?.touched.userLastName && formik?.errors.userLastName
+                ? formik?.errors.userLastName
+                : ""
+            }
+          />
         </div>
-        <Textfield name="emailAddress" label="Email" formik={formik} error={formik?.touched.emailAddress && formik?.errors.emailAddress?formik?.errors.emailAddress:''} />
         <Textfield
-          name="password"
+          name="userEmail"
+          label="Email"
+          formik={formik}
+          suffixIcon={<Mail size={16} />}
+          error={
+            formik?.touched.userEmail && formik?.errors.userEmail
+              ? formik?.errors.userEmail
+              : ""
+          }
+        />
+        <Textfield
+          name="userPassword"
           label="Password"
           type={seePassword ? "password" : "text"}
           suffixIcon={
@@ -34,9 +100,13 @@ const SignUp = () => {
             </button>
           }
           formik={formik}
-          error={formik?.touched.password && formik?.errors.password?formik?.errors.password:''}
+          error={
+            formik?.touched.userPassword && formik?.errors.userPassword
+              ? formik?.errors.userPassword
+              : ""
+          }
         />
-        <Textfield
+        {/* <Textfield
           name="confirmPassword"
           label="Confirm Password"
           type={seeConfirmPassword ? "password" : "text"}
@@ -50,9 +120,19 @@ const SignUp = () => {
             </button>
           }
           formik={formik}
-          error={formik?.touched.confirmPassword && formik?.errors.confirmPassword?formik?.errors.confirmPassword:''}
+          error={
+            formik?.touched.confirmPassword && formik?.errors.confirmPassword
+              ? formik?.errors.confirmPassword
+              : ""
+          }
+        /> */}
+        <Button
+          label="Sign Up"
+          className="w-full mt-3"
+          disabled={!formik.isValid || isLoading}
+          onClick={formik.handleSubmit}
+          isLoading={isLoading}
         />
-        <Button label="Sign Up" className="w-full mt-3" />
       </div>
     </AuthLayout>
   );
