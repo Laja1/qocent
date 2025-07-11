@@ -10,6 +10,7 @@ type RenderFieldProps = {
   formik: FormikProps<any>;
   options: { label: string; value: string }[];
   placeholder?: string;
+  autoComplete?: string; // Add this line
 };
 
 export const RenderField = ({
@@ -19,8 +20,11 @@ export const RenderField = ({
   label,
   formik,
   options,
+  autoComplete = "off", // Default to "off"
   ...rest
 }: RenderFieldProps) => {
+  const error = formik.touched[name] && formik.errors[name];
+
   return (
     <div className="w-full">
       {type === "Textbox" && (
@@ -29,7 +33,9 @@ export const RenderField = ({
           label={label}
           placeholder={placeholder}
           formik={formik}
+          error={error as string}
           className="w-full"
+          autoComplete={autoComplete} // Pass it down
           {...rest}
         />
       )}
@@ -37,9 +43,11 @@ export const RenderField = ({
         <TextArea
           name={name}
           label={label}
-          className="w-full"
           placeholder={placeholder}
           formik={formik}
+          error={error as string}
+          className="w-full"
+          autoComplete={autoComplete} // Pass it down
           {...rest}
         />
       )}
@@ -49,20 +57,24 @@ export const RenderField = ({
           label={label}
           options={options}
           placeholder={placeholder}
-          className="w-full"
           formik={formik}
+          error={error as string}
+          className="w-full"
+          // autoComplete={autoComplete}/
           {...rest}
         />
       )}
       {type === "DateBox" && (
         <DatePickerWithFormik
-          formik={formik}
           name={name}
-          className="w-full"
           label={label}
+          formik={formik}
+          className="w-full"
           placeholder={placeholder}
           dateFormat="MMM dd, yyyy"
           outputFormat="yyyy-MM-dd"
+          error={error as string}
+          // autoComplete={autoComplete} 
           {...rest}
         />
       )}

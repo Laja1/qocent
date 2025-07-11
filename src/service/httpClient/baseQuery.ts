@@ -33,7 +33,7 @@ export const baseQueryWithResponseCodeHandling: typeof baseQuery = async (
   if (result.responseCode === "00") {
     return {
       data: {
-        ...result.data, // Include the actual data
+        ...result, // Include the actual data
         responseMessage: result.responseMessage, // Include the response message
         responseCode: result.responseCode, // Include the response code
       },

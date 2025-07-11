@@ -4,7 +4,7 @@ import { showCustomToast } from "@/components/shared/toast";
 import {
   forgotPasswordInit,
   type forgotPasswordpRequest,
-} from "@/pages/model/request/authRequest";
+} from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
 import { useForgotPasswordMutation } from "@/service/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";

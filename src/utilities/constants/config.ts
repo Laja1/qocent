@@ -1,96 +1,23 @@
 import type { HouseArchitectureData } from "@/pages/architectural-room/house-level";
 
 export interface ServerRoomType {
-  id: string;
+  siteId: number;
   siteName: string;
-  houses: string;
-  alerts: number;
-  provider: string;
+  // houses: string;
+  // alerts: number;
+  siteProvider: string;
   siteCode: string;
-  status: string;
-  createdAt: string;
-  bill: number;
-  balance: number;
+  siteStatus: string;
+  siteCreatedAt: string;
+  // bill: number;
+  // balance: number;
 }
 
 
 
 
 
-export const serverRooms: ServerRoomType[] = [
-  {
-    id: "100001",
-    siteName: "Rubies Production Site",
-    houses: "2",
-    alerts: 0,
-    provider: "AWS",
-    siteCode: "Rub-Prod-Site-1",
-    status: "Active",
-    createdAt: "2025-01-09",
-    bill: 76902.0,
-    balance: 7718.0,
-  },
-  {
-    id: "100002",
-    siteName: "Qoovest",
-    houses: "2",
-    alerts: 5,
-    siteCode: "Qoov-Prod-Site-1",
-    status: "Active",
-    provider: "Huawei",
-    createdAt: "2025-01-09",
-    bill: 11671.0,
-    balance: 547.0,
-  },
-  {
-    id: "100003",
-    siteName: "Qoonity",
-    houses: "1",
-    provider: "Huawei",
-    siteCode: "Qoon-Prod-Site-1",
-    alerts: 9,
-    status: "Active",
-    createdAt: "2025-01-09",
-    bill: 87829.0,
-    balance: 4877.0,
-  },
-  {
-    id: "100004",
-    provider: "AWS",
-    siteCode: "NC-Prod-Site-1",
-    siteName: "NCube",
-    houses: "3",
-    alerts: 15,
-    status: "Active",
-    createdAt: "2025-01-09",
-    bill: 75488.0,
-    balance: 2267.0,
-  },
-  {
-    id: "100005",
-    siteName: "Tymer",
-    provider: "AWS",
-    siteCode: "Tymer-Prod-Site-1",
-    houses: "2",
-    alerts: 6,
-    status: "Suspended",
-    createdAt: "2025-01-09",
-    bill: 74891.0,
-    balance: 6397.0,
-  },
-  {
-    id: "100006",
-    siteName: "Tymer",
-    provider: "AWS",
-    siteCode: "Tymer-Prod-Site-1",
-    houses: "4",
-    alerts: 6,
-    status: "Suspended",
-    createdAt: "2025-01-09",
-    bill: 74891.0,
-    balance: 6397.0,
-  },
-]
+
 
 type ResourceType = {
   servers: {

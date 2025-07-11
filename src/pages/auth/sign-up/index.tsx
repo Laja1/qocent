@@ -2,10 +2,7 @@ import AuthLayout from "@/components/layouts/authLayout";
 import { Button } from "@/components/shared";
 import { Textfield } from "@/components/shared/textfield";
 import { showCustomToast } from "@/components/shared/toast";
-import {
-  signUpInit,
-  type signupRequest,
-} from "@/pages/model/request/authRequest";
+import { signUpInit, type signupRequest } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
 import { useSignUpMutation } from "@/service/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";

@@ -29,8 +29,9 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     setCredentials: (state, action: PayloadAction<Partial<AuthState>>) => {
+      console.log('Received payload:', action.payload); // Debug log
       state.token = action.payload.token || null;
-      state.isAuthenticated = true;
+      state.isAuthenticated = !!action.payload.token; // Only set true if token exists
       state.userEmail = action.payload.userEmail || null;
       state.userFirstName = action.payload.userFirstName || null;
       state.userLastName = action.payload.userLastName || null;

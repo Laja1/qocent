@@ -7,7 +7,7 @@ import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { ICON_MAP } from "@/utilities/constants/icons";
 
-export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
+export const ServerSitesTable2 = ({ rowId }: { rowId: number }) => {
   const navigate = useNavigate();
 
   const actions = [
@@ -180,7 +180,7 @@ export const ServerSitesTable2 = ({ rowId }: { rowId: string }) => {
     },
   ];
 
-  const serverSite = siteData.filter((site) => site.parentId === rowId);
+  const serverSite = siteData.filter((site) => site.parentId === String(rowId));
 console.log(rowId)
   return (
    

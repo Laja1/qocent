@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { imgLinks } from "@/assets/assetLink";
 import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Badge } from "@/components/ui/badge";
 import {
-  serverRooms,
   sitesData,
   type ServerRoomType,
 } from "@/utilities/constants/config";
@@ -20,11 +20,14 @@ import { DeployResources } from "@/components/not-shared/deploy-resources";
 import { useModal } from "@/components/shared/modal";
 import { Link, useNavigate } from "react-router-dom";
 import { CostTable } from "./cost";
+import { useGetSitesQuery } from "@/service/siteApi";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
+  const { data } = useGetSitesQuery();
+  console.log(data?.data, "daat");
   const { openModal, closeModal } = useModal();
-  const [rowId, setRowId] = useState("100004");
+  const [rowId, setRowId] = useState(100004);
   const [showAlert, setShowAlert] = useState(true);
 
   const serverRoomColumns: ColumnDef<ServerRoomType>[] = [
@@ -42,8 +45,8 @@ export const ServerSites = () => {
     {
       id: "id",
       header: "ID",
-      accessorKey: "id",
-      cell: (row) => <span className="">{row.id}</span>,
+      accessorKey: "siteId",
+      cell: (row) => <span className="">{row.siteId}</span>,
       sortable: true,
     },
     {
@@ -74,42 +77,41 @@ export const ServerSites = () => {
       //   { label: "South Africa", value: "South Africa" },
       // ],
     },
+    // {
+    //   id: "alerts",
+    //   header: "ALERTS",
+    //   accessorKey: "alerts",
+    //   sortable: true,
+    //   cell: (row) => (
+    //     <div
+    //       className={`flex items-center justify-center w-5 text-[10px] h-5 rounded-full ${
+    //         row.alerts > 0
+    //           ? "bg-red-50 text-red-800 border border-red-500"
+    //           : "bg-green-50 text-green-800 border border-green-500"
+    //       }`}
+    //     >
+    //       {row.alerts}
+    //     </div>
+    //   ),
+    // },
+    // {
+    //   id: "houses",
+    //   header: "HOUSES (VPC)",
+    //   accessorKey: "houses",
+    //   sortable: true,
+    //   cell: (row) => (
+    //     <span className="text-center justify-center flex">{row.houses}</span>
+    //   ),
+    // },
     {
-      id: "alerts",
-      header: "ALERTS",
-      accessorKey: "alerts",
-      sortable: true,
-      cell: (row) => (
-        <div
-          className={`flex items-center justify-center w-5 text-[10px] h-5 rounded-full ${
-            row.alerts > 0
-              ? "bg-red-50 text-red-800 border border-red-500"
-              : "bg-green-50 text-green-800 border border-green-500"
-          }`}
-        >
-          {row.alerts}
-        </div>
-      ),
-    },
-    {
-      id: "houses",
-      header: "HOUSES (VPC)",
-      accessorKey: "houses",
-      sortable: true,
-      cell: (row) => (
-        <span className="text-center justify-center flex">{row.houses}</span>
-      ),
-    },
-    {
-      id: "provider",
+      id: "siteProvider",
       header: "PROVIDER",
-      accessorKey: "provider",
-
+      accessorKey: "siteProvider",
       headerClassName: "text-center ",
       sortable: true,
       cell: (row) => (
         <span className="text-center justify-center items-left  flex">
-          {row.provider === "AWS" ? (
+          {row.siteProvider === "AWS" ? (
             <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
           ) : (
             <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
@@ -118,20 +120,20 @@ export const ServerSites = () => {
       ),
     },
     {
-      id: "status",
+      id: "siteStatus",
       header: "STATUS",
-      accessorKey: "status",
+      accessorKey: "siteStatus",
       cell: (row) => (
         <div className="">
           <Badge
             variant="outline"
             className={
-              row.status === "Active"
+              row.siteStatus === "ACTIVE"
                 ? "bg-green-50 text-green-800 border-green-500 text-[10px] "
                 : "bg-red-50 text-red-800 border-red-500 text-[10px]"
             }
           >
-            {row.status}
+            {row.siteStatus}
           </Badge>
         </div>
       ),
@@ -143,47 +145,47 @@ export const ServerSites = () => {
       ],
     },
     {
-      id: "createdAt",
+      id: "siteCreatedAt",
       header: "DATE CREATED",
       headerClassName: "text-right",
-      accessorKey: "createdAt",
+      accessorKey: "siteCreatedAt",
       sortable: true,
-      cell: (row) => <span className="text-right block">{row.createdAt}</span>,
+      cell: (row) => <span className="text-right block">{row.siteCreatedAt}</span>,
     },
-    {
-      id: "bill",
-      header: "BILL (USD)",
-      accessorKey: "bill",
-      headerClassName: "text-right",
-      cell: (row) => (
-        <span className="block text-green-700 text-right">
-          {row.bill.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-        </span>
-      ),
-      sortable: true,
-    },
-    {
-      id: "balance",
-      header: "BALANCE (USD)",
-      headerClassName: "text-right",
-      accessorKey: "balance",
-      cell: (row) => (
-        <span className="block text-right text-green-700">
-          {row.balance.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-        </span>
-      ),
-      sortable: true,
-    },
+    // {
+    //   id: "bill",
+    //   header: "BILL (USD)",
+    //   accessorKey: "bill",
+    //   headerClassName: "text-right",
+    //   cell: (row) => (
+    //     <span className="block text-green-700 text-right">
+    //       {row.bill.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+    //     </span>
+    //   ),
+    //   sortable: true,
+    // },
+    // {
+    //   id: "balance",
+    //   header: "BALANCE (USD)",
+    //   headerClassName: "text-right",
+    //   accessorKey: "balance",
+    //   cell: (row) => (
+    //     <span className="block text-right text-green-700">
+    //       {row.balance.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+    //     </span>
+    //   ),
+    //   sortable: true,
+    // },
   ];
 
-  const row = serverRooms.find((item) => item.id === rowId);
+  const row = data?.data.find((item:any) => item.siteId === rowId);
 
   const actions = [
     {
       label: "View",
       icon: Eye,
       onClick: (row: ServerRoomType) => {
-        console.log("View server room:", row.id);
+        console.log("View server room:", row.siteId);
         // TODO: Implement view functionality
       },
     },
@@ -191,7 +193,7 @@ export const ServerSites = () => {
       label: "Edit",
       icon: Edit,
       onClick: (row: ServerRoomType) => {
-        console.log("Edit server room:", row.id);
+        console.log("Edit server room:", row.siteId);
         // TODO: Implement edit functionality
       },
     },
@@ -200,10 +202,10 @@ export const ServerSites = () => {
       icon: Plus,
       onClick: (row: ServerRoomType) => {
         openModal({
-          id: `deploy-${row.id}`,
+          id: `deploy-${row.siteId}`,
           content: (
             <DeployResources
-              siteCodeId={row.id}
+              siteCodeId={row.siteId}
               closeModal={closeModal}
               onProceed={() => navigate("/create-new-resource")}
             />
@@ -215,7 +217,7 @@ export const ServerSites = () => {
       label: "Delete",
       icon: Trash2,
       onClick: (row: ServerRoomType) => {
-        console.log("Delete server room:", row.id);
+        console.log("Delete server room:", row.siteId);
         // TODO: Implement delete confirmation
       },
       variant: "destructive" as const,
@@ -299,14 +301,14 @@ export const ServerSites = () => {
       <div className="flex gap-4  flex-col overflow-y-hidden h-full">
         <Card className="mx-5 px-5 rounded-sm">
           <DataTable
-            data={serverRooms}
+            data={data?.data||[]}
             columns={serverRoomColumns}
             searchPlaceholder="Search server rooms by name, ID, or region..."
             pageSize={5}
             actions={actions}
-            onRowClick={(row) => setRowId(row.id)}
-            getRowId={(row) => row.id}
-            highlightedRowId={rowId}
+            onRowClick={(row) => setRowId(row.siteId)}
+            // getRowId={(row) => row.siteId}
+            // highlightedRowId={rowId}
             initialSorting={{ id: "siteName", desc: false }}
           />
         </Card>

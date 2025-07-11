@@ -5,7 +5,7 @@ import { showCustomToast } from "@/components/shared/toast";
 import {
   completePasswordResetInit,
   type completePasswordResetRequest,
-} from "@/pages/model/request/authRequest";
+} from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
 import {
   useCompletePasswordResetMutation,

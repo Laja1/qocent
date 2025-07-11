@@ -18,7 +18,7 @@ import { HouseLevel } from "../architectural-room/house-level";
 export const ServerHouses = () => {
   const navigate = useNavigate()
   const { openModal, closeModal } = useModal();
-  const [rowId, setRowId] = useState("100004");
+  const [rowId, setRowId] = useState(100004);
   const serverHouseColumn: ColumnDef<houseRoomType>[] = [
     {
       id: "houseId",
@@ -206,8 +206,8 @@ export const ServerHouses = () => {
           searchPlaceholder="Search server rooms by name, ID, or code..."
           pageSize={5}
           actions={actions}
-          onRowClick={(row) => setRowId(row.houseId)}
-          highlightedRowId={rowId}
+          onRowClick={(row) => setRowId(Number(row.houseId))}
+          // highlightedRowId={rowId}
           getRowId={(row) => row.houseId}
           initialSorting={{ id: "houseName", desc: false }}
         /> 

@@ -1,10 +1,7 @@
 import AuthLayout from "@/components/layouts/authLayout";
 import { Button, Textfield } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
-import {
-  signInInit,
-  type signInRequest,
-} from "@/pages/model/request/authRequest";
+import { signInInit, type signInRequest } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
 import { useSignInMutation } from "@/service/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
@@ -62,7 +59,6 @@ const SignIn = () => {
   useEffect(() => {
     formik.validateForm();
   }, []);
-
   return (
     <AuthLayout
       title="Sign In"

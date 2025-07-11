@@ -14,11 +14,10 @@ export const SelectField2 = ({
   value,
   className,
   onChange, 
+  ...rest
+
 }: SelectProps & { onChange?: (value: string) => void }) => {
-  const selectfieldClasses = clsx(
-    "block w-full placeholder:text-[#000] py-[9px] text-[12px] bg-white font-normal items-center border border-green-800  px-2 focus:ring-1 focus:ring-green-800 shadow-sm disabled:text-gray-400 disabled:cursor-not-allowed  rounded-xs cursor-pointer",
-    className
-  );
+
   
   const handleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = event.target.value;
@@ -34,7 +33,12 @@ export const SelectField2 = ({
 
   // Use getIn for nested field names like "nestedFields[0].selectedOption"
   const selectedValue = value || (formik ? getIn(formik.values, name) : "") || "";
-
+  const selectfieldClasses = clsx(
+    "block w-full py-[9px] text-[12px] bg-white font-normal items-center border border-green-800 px-2 focus:ring-1 focus:ring-green-800 shadow-sm disabled:text-gray-400 disabled:cursor-not-allowed rounded-xs cursor-pointer",
+    selectedValue === "" ? "text-gray-500" : "text-black", // <- dynamic text color
+    className
+  );
+  
   return (
     <div className="w-full">
       <div className="flex flex-col items-start gap-2">
@@ -52,9 +56,10 @@ export const SelectField2 = ({
           onChange={handleChange}
           disabled={disabled}
           className={selectfieldClasses}
+          {...rest}
         >
           {placeholder && (
-            <option value="" disabled>
+            <option value="" className="text-gray-500" disabled>
               {placeholder}
             </option>
           )}

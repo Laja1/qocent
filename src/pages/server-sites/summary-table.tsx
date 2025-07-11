@@ -54,7 +54,7 @@ export const SummaryTable = ({ rowData }: { rowData?: ServerRoomType }) => {
           content: (
             <DeployResources
               id={row.resourceType}
-              siteCodeId={rowData?.id}
+              siteCodeId={Number(rowData?.siteId)}
               closeModal={closeModal}
               onProceed={() => navigate("/create-new-resource")}
 
