@@ -90,7 +90,14 @@ export type DataTableProps<T> = {
   getRowId?: (row: T, index: number) => string;
   showSearch?: boolean;
   showDownload?: boolean;
+  isLoading?: boolean;
+  skeletonRows?: number;
 };
+
+// Skeleton component
+const Skeleton = ({ className = "" }: { className?: string }) => (
+  <div className={`animate-pulse bg-gray-200 rounded ${className}`} />
+);
 
 export function DataTable<T>({
   data,
@@ -109,6 +116,8 @@ export function DataTable<T>({
   getRowId = (_, index) => index.toString(),
   showSearch = true,
   showDownload = true,
+  isLoading = false,
+  skeletonRows = 10,
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -259,13 +268,34 @@ export function DataTable<T>({
     return cols;
   }, [columns, actions]);
 
+  // Render skeleton rows
+  const renderSkeletonRows = () => {
+    return Array.from({ length: skeletonRows }, (_, index) => (
+      <TableRow key={`skeleton-${index}`}>
+        {enhancedColumns.map((column) => (
+          <TableCell key={column.id} className="border-b px-2">
+            <Skeleton className="h-2 w-full" />
+          </TableCell>
+        ))}
+      </TableRow>
+    ));
+  };
+
   return (
     <div className="bg-white font-brfirma">
       <div className="mb-2">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 ">
           <div>
-            {title && <CardTitle>{title}</CardTitle>}
-            {description && <CardDescription>{description}</CardDescription>}
+            {title && (
+              <CardTitle>
+                {isLoading ? <Skeleton className="h-6 w-48" /> : title}
+              </CardTitle>
+            )}
+            {description && (
+              <CardDescription>
+                {isLoading ? <Skeleton className="h-4 w-64 mt-1" /> : description}
+              </CardDescription>
+            )}
           </div>
 
           {(showSearch || filterColumns.length > 0 || showDownload) && (
@@ -278,6 +308,7 @@ export function DataTable<T>({
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     className="pl-10 rounded-xs placeholder:text-xs w-full md:w-[350px]"
+                    disabled={isLoading}
                   />
                 </div>
               )}
@@ -289,6 +320,7 @@ export function DataTable<T>({
                       key={column.id}
                       value={filters[column.id] || "all"}
                       onValueChange={(value) => handleFilterChange(column.id, value)}
+                      disabled={isLoading}
                     >
                       <SelectTrigger className="w-full rounded-xs text-xs">
                         <IconFilter2 className="h-4 w-4 mr-2" />
@@ -305,7 +337,7 @@ export function DataTable<T>({
                     </Select>
                   ))}
                   {showDownload && (
-                    <button className="border border-sm p-2">
+                    <button className="border border-sm p-2" disabled={isLoading}>
                       <Download className="h-4 w-4" />
                     </button>
                   )}
@@ -315,7 +347,7 @@ export function DataTable<T>({
           )}
         </div>
 
-        {showBulkActions && (
+        {showBulkActions && !isLoading && (
           <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-xs">
             <span className="text-sm font-medium text-blue-900">
               {selectedRows.size} item
@@ -356,10 +388,10 @@ export function DataTable<T>({
                   <TableHead
                     key={column.id}
                     className={`font-semibold text-xs font-brfirma-bold h-8 ${
-                      column.sortable ? "cursor-pointer select-none" : ""
+                      column.sortable && !isLoading ? "cursor-pointer select-none" : ""
                     } ${column.headerClassName || ""}`}
                     onClick={
-                      column.sortable ? () => handleSort(column.id) : undefined
+                      column.sortable && !isLoading ? () => handleSort(column.id) : undefined
                     }
                   >
                     <div
@@ -375,7 +407,7 @@ export function DataTable<T>({
                     >
                       <div className="flex items-center">
                         {column.header}
-                        {column.headerAction && (
+                        {column.headerAction && !isLoading && (
                           <Button
                             variant="ghost"
                             size="sm"
@@ -389,7 +421,7 @@ export function DataTable<T>({
                             <column.headerAction.icon className="h-3 w-3" />
                           </Button>
                         )}
-                        {column.sortable && sorting?.id === column.id && (
+                        {column.sortable && sorting?.id === column.id && !isLoading && (
                           <span className="ml-1">
                             {sorting.desc ? (
                               <ChevronDown className="h-4 w-4" />
@@ -405,7 +437,9 @@ export function DataTable<T>({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {processedData.length === 0 ? (
+              {isLoading ? (
+                renderSkeletonRows()
+              ) : processedData.length === 0 ? (
                 <TableRow>
                   <TableCell
                     colSpan={enhancedColumns.length}
@@ -441,7 +475,7 @@ export function DataTable<T>({
           </Table>
         </div>
 
-        {totalPages > 1 && (
+        {!isLoading && totalPages > 1 && (
           <div className="flex items-center justify-between mt-4">
             <div className="text-xs text-gray-500">
               Showing {startIndex + 1} to{" "}
@@ -510,6 +544,18 @@ export function DataTable<T>({
               >
                 <ChevronRight className="h-4 w-4 ml-1" />
               </Button>
+            </div>
+          </div>
+        )}
+
+        {isLoading && (
+          <div className="flex items-center justify-between mt-4">
+            <Skeleton className="h-4 w-48" />
+            <div className="flex items-center space-x-2">
+              <Skeleton className="h-8 w-8" />
+              <Skeleton className="h-8 w-8" />
+              <Skeleton className="h-8 w-8" />
+              <Skeleton className="h-8 w-8" />
             </div>
           </div>
         )}

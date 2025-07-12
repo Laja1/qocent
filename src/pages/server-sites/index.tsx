@@ -3,10 +3,7 @@ import { imgLinks } from "@/assets/assetLink";
 import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Badge } from "@/components/ui/badge";
-import {
-  sitesData,
-  type ServerRoomType,
-} from "@/utilities/constants/config";
+import { sitesData, type ServerRoomType } from "@/utilities/constants/config";
 import { Edit, Eye, Trash2, PlusIcon, Plus } from "lucide-react";
 import { useState } from "react";
 import { ServerSitesTable2 } from "./server-sites-table";
@@ -21,11 +18,16 @@ import { useModal } from "@/components/shared/modal";
 import { Link, useNavigate } from "react-router-dom";
 import { CostTable } from "./cost";
 import { useGetSitesQuery } from "@/service/siteApi";
+import { formatDate } from "@/utilities/helper";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
-  const { data } = useGetSitesQuery();
-  console.log(data?.data, "daat");
+  const user = useSelector((state: RootState) => state.auth);
+  const { data, isLoading, isFetching } = useGetSitesQuery({
+    userId: user.userId,
+  });
   const { openModal, closeModal } = useModal();
   const [rowId, setRowId] = useState(100004);
   const [showAlert, setShowAlert] = useState(true);
@@ -150,7 +152,11 @@ export const ServerSites = () => {
       headerClassName: "text-right",
       accessorKey: "siteCreatedAt",
       sortable: true,
-      cell: (row) => <span className="text-right block">{row.siteCreatedAt}</span>,
+      cell: (row) => (
+        <span className="text-right block">
+          {formatDate(row.siteCreatedAt)}
+        </span>
+      ),
     },
     // {
     //   id: "bill",
@@ -178,7 +184,7 @@ export const ServerSites = () => {
     // },
   ];
 
-  const row = data?.data.find((item:any) => item.siteId === rowId);
+  const row = data?.data.find((item: any) => item.siteId === rowId);
 
   const actions = [
     {
@@ -301,11 +307,13 @@ export const ServerSites = () => {
       <div className="flex gap-4  flex-col overflow-y-hidden h-full">
         <Card className="mx-5 px-5 rounded-sm">
           <DataTable
-            data={data?.data||[]}
+            data={data?.data || []}
             columns={serverRoomColumns}
             searchPlaceholder="Search server rooms by name, ID, or region..."
             pageSize={5}
+            isLoading={isLoading || isFetching}
             actions={actions}
+            skeletonRows={data?.data.length}
             onRowClick={(row) => setRowId(row.siteId)}
             // getRowId={(row) => row.siteId}
             // highlightedRowId={rowId}

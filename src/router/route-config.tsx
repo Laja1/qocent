@@ -4,6 +4,7 @@ import { DashboardLayoutWithSidebar } from "@/components/layouts/dashboardLayout
 import { authRoute } from "./route/authRoute";
 import { dashboardRoute } from "./route/dashboardRoute";
 import { publicRoute } from "./route/publicRoute";
+import { ProtectedRoute } from "./route/protectedRoute";
 
 const publicRoutesMapped = publicRoute.map(route => ({
   path: route.path,
@@ -43,7 +44,7 @@ export const routeConfig = [
   },
   {
     path: "/",
-    element: <DashboardLayoutWithSidebar />,
+    element: <ProtectedRoute><DashboardLayoutWithSidebar /></ProtectedRoute>,
     children: dashboardRoutesMapped
   },
   // {

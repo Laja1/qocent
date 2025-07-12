@@ -24,7 +24,7 @@ export const navRoutes = [
 export const RouteConstant = {
   public: {
     home: {
-      path: "/home",
+      path: "/",
       name: "home",
     },
     landing: {

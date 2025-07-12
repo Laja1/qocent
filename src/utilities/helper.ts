@@ -1,4 +1,4 @@
-// import moment from 'moment';
+import moment from 'moment';
 
 
 export const containsAtleastOneUpperCase = (val: string) => /(?=.*?[A-Z])/.test(val);
@@ -17,7 +17,9 @@ export const isOdd = (number: number) => number % 2 !== 0;
 
 
 
-
+export const formatDate =(date:string)=>{
+  return moment(date).format("LL");
+}
 
 
 
