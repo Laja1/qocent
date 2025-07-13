@@ -4,7 +4,8 @@ export const imgLinks = {
     awsdark: '/images/aws-dark.png',
     texture1: './images/texture1.png',
     nibss: '/images/nibss.png',
-    rubies:'/images/rubies.png'
+    rubies:'/images/rubies.png',
+    image:'/images/image.png'
 }
 
 export const svgLinks = {

@@ -143,9 +143,9 @@ export const RouteConstant = {
       path: "/create-new-room",
       name: "Create New Room",
     },
-    serverId: {
-      path: "server:id",
-      name: "Server",
+    console: {
+      path: "/console",
+      name: "console",
     },
   },
 };

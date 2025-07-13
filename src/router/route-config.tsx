@@ -1,10 +1,10 @@
 import Home from "@/pages/home";
 import { Outlet } from "react-router-dom";
-import { DashboardLayoutWithSidebar } from "@/components/layouts/dashboardLayout";
 import { authRoute } from "./route/authRoute";
 import { dashboardRoute } from "./route/dashboardRoute";
 import { publicRoute } from "./route/publicRoute";
 import { ProtectedRoute } from "./route/protectedRoute";
+import { DashboardLayoutRouter } from "@/components/layouts/DashboardLayoutRouter";
 
 const publicRoutesMapped = publicRoute.map(route => ({
   path: route.path,
@@ -44,9 +44,14 @@ export const routeConfig = [
   },
   {
     path: "/",
-    element: <ProtectedRoute><DashboardLayoutWithSidebar /></ProtectedRoute>,
-    children: dashboardRoutesMapped
+    element: (
+      <ProtectedRoute>
+        <DashboardLayoutRouter />
+      </ProtectedRoute>
+    ),
+    children: dashboardRoutesMapped,
   },
+  
   // {
   //   path: "",
   //   element: <DashboardLayoutWithoutSidebar />,

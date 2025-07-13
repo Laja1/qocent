@@ -1,4 +1,4 @@
-import {Cloud, User2Icon } from "lucide-react";
+import { Cloud, User2Icon } from "lucide-react";
 import { VpcLevel } from "./vpc-level";
 import { AwsLogo, HuaweiLogo, RESOURCE_MAP } from "@/utilities/constants/icons";
 export type Resource = {
@@ -21,7 +21,7 @@ export type VPC = {
   vpcId: string;
   houseName: string;
   cidrBlock: string;
-  id?: number; 
+  id?: number;
   subnet: Subnet[];
 };
 
@@ -46,12 +46,10 @@ export type SitesDataProps = {
 };
 
 export const SiteLevel = ({ sitesData }: { sitesData: SitesDataProps }) => {
-
-
   // const openArchitecture = () => {
   //   openModal({
   //     id: `architecture`,
-  //     content: (
+  //     content: () => (
   //       <div>
   //         {/* <SiteLevel /> */}
 
@@ -93,7 +91,7 @@ export const SiteLevel = ({ sitesData }: { sitesData: SitesDataProps }) => {
         </div>
         <div className="w-6/7 flex ">
           <div className="mt-6 w-full pb-5">
-            <VpcLevel vpcDeployed={sitesData.vpcDeployed}/>
+            <VpcLevel vpcDeployed={sitesData.vpcDeployed} />
           </div>
         </div>
 

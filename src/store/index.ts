@@ -5,19 +5,27 @@ import storage from "redux-persist/lib/storage";
 import { authApi } from "@/service/authApi";
 import { siteApi } from "@/service/siteApi";
 import { authStore } from "./authSlice";
+import { dashboardStore } from "./dashboardSlice";
+import { roomApi } from "@/service/roomApi";
+import { houseApi } from "@/service/houseApi";
 
 // Combine all your reducers
 const rootReducer = combineReducers({
   auth: authStore.reducer,
+  dashboard:dashboardStore.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [siteApi.reducerPath]: siteApi.reducer,
+  [roomApi.reducerPath]:roomApi.reducer,
+  [houseApi.reducerPath]:houseApi.reducer,
 });
 
 // Persist config for redux-persist
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["auth"], // Only persist the 'auth' slice
+  
+  whitelist: ["auth","dashboard"], // Only persist the 'auth' slice
+  // stateReconciler: false,
 };
 
 // Wrap root reducer with persistReducer
@@ -38,7 +46,7 @@ export const store = configureStore({
           "persist/REGISTER",
         ],
       },
-    }).concat(authApi.middleware, siteApi.middleware),
+    }).concat(authApi.middleware, siteApi.middleware,houseApi.middleware,roomApi.middleware),
 });
 
 // Persistor instance

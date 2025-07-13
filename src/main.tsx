@@ -4,6 +4,7 @@ import './index.css'
 import App from './App.tsx'
 import { ProviderWrapper } from './providers/index.tsx'
 
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ProviderWrapper>

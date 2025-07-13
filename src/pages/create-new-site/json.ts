@@ -17,31 +17,6 @@ export const siteCreateJson = [
       "Use lower case characters and hypheans, be sure to have some numenclature.",
     ParameterInfo3: "Example: banking-app-site",
   },
-
-  {
-    ParameterProvider: "cloudware",
-    ParameterParent: "site",
-    ParameterSerial: "2",
-    ParameterName: "siteProvider",
-    ParameterDataType: "Text",
-    ParameterInputType: "ListBox",
-    ParameterMandatory: "Yes",
-    ParameterLabel: "Site Provider",
-    ParameterLength: "20",
-    ParameterValidation: "",
-    ParameterDropdown: [
-      { label: "AWS - Amazon Web Services", value: "aws" },
-      { label: "Huawei Cloud", value: "huawei" },
-      // { "label": "Google Cloud Platform", "value": "gcp" },
-      // { "label": "Microsoft Azure", "value": "azure" }
-    ],
-    ParameterSource: "",
-    ParameterInfo1:
-      "A site provider can be any of the following supported Cloud service providers (CSPs):",
-    ParameterInfo2:
-      "AWS - Amazon Web Services, HCS - HUAWEI Cloud Services, GCP - Google Cloud Services and Microsoft Azure",
-    ParameterInfo3: "",
-  },
   {
     ParameterProvider: "cloudware",
     ParameterParent: "site",

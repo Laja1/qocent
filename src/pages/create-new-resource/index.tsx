@@ -15,7 +15,7 @@ export const CreateNewResource = () => {
   const handleProceed = () => {
     openModal({
       id: "deploy-confirm",
-      content: (
+      content: () => (
         <div className="flex flex-col w-full gap-4">
           <div className="items-center flex flex-col w-full space-y-2">
             <h2 className="text-lg font-semibold border-b">Ready to Deploy?</h2>
@@ -36,7 +36,7 @@ export const CreateNewResource = () => {
   const descriptionModal = (row: ParameterData) => {
     openModal({
       id: "info-modal",
-      content: (
+      content: () => (
         <div className="flex max-w-xs  flex-col gap-4 p-4">
           <h2 className="text-lg uppercase border-b pb-2">
             {row.ParameterLabel}
@@ -77,13 +77,15 @@ export const CreateNewResource = () => {
 
       <div className="flex flex-col  mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
         <div className="bg-gradient-to-r flex justify-between from-black to-green-800 rounded-t-md px-3 sm:px-5 py-5">
-          <div><p className="text-base sm:text-lg text-white">EC2</p>
-          <p className="text-xs text-gray-400 leading-tight">
-            A server can have one or more server houses. A server house is
-            provided by a provider.
-          </p></div>
           <div>
-            <IconMichelinStar color="white" size={40}/>
+            <p className="text-base sm:text-lg text-white">EC2</p>
+            <p className="text-xs text-gray-400 leading-tight">
+              A server can have one or more server houses. A server house is
+              provided by a provider.
+            </p>
+          </div>
+          <div>
+            <IconMichelinStar color="white" size={40} />
           </div>
         </div>
 

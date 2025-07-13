@@ -15,19 +15,22 @@ import { Resource } from "../resource";
 import { SecurityTable } from "./security-table";
 import { DeployResources } from "@/components/not-shared/deploy-resources";
 import { useModal } from "@/components/shared/modal";
-import { Link, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import { CostTable } from "./cost";
 import { useGetSitesQuery } from "@/service/siteApi";
 import { formatDate } from "@/utilities/helper";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
+import { RouteConstant } from "@/router/routes";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.auth);
+  const dashboard = useSelector((state: RootState) => state.dashboard);
   const { data, isLoading, isFetching } = useGetSitesQuery({
-    userId: user.userId,
+    provider: dashboard.provider,
   });
+console.log(dashboard)
+console.log(data)
   const { openModal, closeModal } = useModal();
   const [rowId, setRowId] = useState(100004);
   const [showAlert, setShowAlert] = useState(true);
@@ -113,7 +116,7 @@ export const ServerSites = () => {
       sortable: true,
       cell: (row) => (
         <span className="text-center justify-center items-left  flex">
-          {row.siteProvider === "AWS" ? (
+          {row.siteProvider === "aws" ? (
             <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
           ) : (
             <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
@@ -209,7 +212,7 @@ export const ServerSites = () => {
       onClick: (row: ServerRoomType) => {
         openModal({
           id: `deploy-${row.siteId}`,
-          content: (
+          content: () => (
             <DeployResources
               siteCodeId={row.siteId}
               closeModal={closeModal}
@@ -248,7 +251,7 @@ export const ServerSites = () => {
                 onClick={() =>
                   openModal({
                     id: `deploy-${rowId}`,
-                    content: (
+                    content: () => (
                       <DeployResources
                         closeModal={closeModal}
                         onProceed={() => navigate("/create-new-resource")}
@@ -294,14 +297,15 @@ export const ServerSites = () => {
   return (
     <div className=" h-full mt-5">
       <Header title="Server Sites" description="Manage your server site">
-        <Link to="/create-new-site">
+       
           <Button
             intent="tertiary"
             label="Create New Site"
+            onClick={()=>navigate(RouteConstant.dashboard.createnewsite.path)}
             prefixIcon={<PlusIcon className="size-4" />}
             size="small"
           />
-        </Link>
+       
       </Header>
 
       <div className="flex gap-4  flex-col overflow-y-hidden h-full">

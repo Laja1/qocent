@@ -37,6 +37,7 @@ export interface SidebarItem {
 }
 
 const sidebarItems: SidebarItem[] = [
+ 
   {
     title: "Server Sites (Accounts)",
     icon: <IconCloudComputing className="text-green-700" />,

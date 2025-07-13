@@ -10,7 +10,7 @@ import type { ServerRoomType } from "@/utilities/constants/config";
 import { useNavigate } from "react-router-dom";
 
 export const SummaryTable = ({ rowData }: { rowData?: ServerRoomType }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
   const [resourceType, setResourceType] = useState("");
   const summaryColums: ColumnDef<summaryType>[] = [
@@ -51,13 +51,12 @@ export const SummaryTable = ({ rowData }: { rowData?: ServerRoomType }) => {
         setResourceType(row.resourceType);
         openModal({
           id: `deploy-${row.id}`,
-          content: (
+          content: () => (
             <DeployResources
               id={row.resourceType}
               siteCodeId={Number(rowData?.siteId)}
               closeModal={closeModal}
               onProceed={() => navigate("/create-new-resource")}
-
             />
           ),
         });

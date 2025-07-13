@@ -15,20 +15,21 @@ export const SecurityTable = () => {
   const handleOpen = () =>
     openModal({
       id: `resource-${securityClicked?.id}`,
-      content: (
+      content: () => (
         <div className="p-4 space-y-4">
           <div className="text-xl font-semibold text-gray-800 border-b pb-2">
             {securityClicked?.category}
           </div>
-<div>
-<div className="flex gap-4 text-sm  text-gray-700">
-            <div className="flex w-full space-x-2">
-              <span className="font-medium text-sm text-gray-600">Instance Type:</span>
-              <div>{securityClicked?.type}</div>
+          <div>
+            <div className="flex gap-4 text-sm  text-gray-700">
+              <div className="flex w-full space-x-2">
+                <span className="font-medium text-sm text-gray-600">
+                  Instance Type:
+                </span>
+                <div>{securityClicked?.type}</div>
+              </div>
             </div>
-            
-          </div>
-          <div className="my-3 space-x-2">
+            <div className="my-3 space-x-2">
               <span className="font-medium  text-sm text-gray-600">Risk:</span>
               <div
                 className={`inline-block px-2 py-1 rounded-md text-xs font-bold ${
@@ -42,17 +43,18 @@ export const SecurityTable = () => {
                 {securityClicked?.risk}
               </div>
             </div>
-          
-<div className="">
+
+            <div className="">
               <p className="font-medium text-sm text-gray-600">Description:</p>
               <div className=" text-xs">{securityClicked?.description}</div>
             </div>
             <div className="sm:col-span-2 mt-2">
-              <span className="font-medium text-sm text-gray-600">Recommendation:</span>
+              <span className="font-medium text-sm text-gray-600">
+                Recommendation:
+              </span>
               <div className=" text-xs">{securityClicked?.recommendation}</div>
             </div>
-</div>
-         
+          </div>
 
           <div className="flex justify-end pt-4 border-t">
             <Button onClick={() => closeModal()} label="Close" />

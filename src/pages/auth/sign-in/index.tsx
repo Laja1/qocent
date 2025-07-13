@@ -21,7 +21,7 @@ const SignIn = () => {
     try {
       const res = await signIn(values).unwrap();
       console.log(res);
-      navigate(RouteConstant.dashboard.serverSite.path);
+      navigate(RouteConstant.dashboard.console.path);
       dispatch(
         authStore.action.setCredentials({
           token: res.token?.replace("Bearer ", ""),

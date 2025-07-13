@@ -1,4 +1,4 @@
-import {Cloud, User2Icon } from "lucide-react";
+import { Cloud, User2Icon } from "lucide-react";
 import { AwsLogo, HuaweiLogo, RESOURCE_MAP } from "@/utilities/constants/icons";
 import { HouseVpcLevel } from "./house-vpc-level";
 export type Resource = {
@@ -43,15 +43,15 @@ export type HouseArchitectureData = {
   };
 };
 
-
-
-export const HouseLevel = ({ houseData }: { houseData: HouseArchitectureData }) => {
-
-
+export const HouseLevel = ({
+  houseData,
+}: {
+  houseData: HouseArchitectureData;
+}) => {
   // const openArchitecture = () => {
   //   openModal({
   //     id: `architecture`,
-  //     content: (
+  //     content: () => (
   //       <div>
   //         {/* <SiteLevel /> */}
 
@@ -93,7 +93,7 @@ export const HouseLevel = ({ houseData }: { houseData: HouseArchitectureData }) 
         </div>
         <div className="w-6/7 flex ">
           <div className="mt-6 w-full pb-5">
-          <HouseVpcLevel currentVPC={houseData?.vpcDeployed}/>
+            <HouseVpcLevel currentVPC={houseData?.vpcDeployed} />
           </div>
         </div>
 

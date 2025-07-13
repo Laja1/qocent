@@ -19,8 +19,8 @@ export const siteApi = createApi({
       }),
       invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" }],
     }),
-    getSites: build.query<GetSiteListResponse, {userId:number|null}>({
-      query: ({userId}) => `/site/read-by-site-user-id/${userId}`,
+    getSites: build.query<GetSiteListResponse, {provider:string|null}>({
+      query: ({provider}) => `/site/read-by-site-provider/${provider}`,
       providesTags: (result) =>
         result?.data
           ? [

@@ -12,8 +12,7 @@ import { CreateNewRoom } from "@/pages/create-new-room";
 import { Settings } from "@/pages/settings";
 import { Organizations } from "@/pages/organization";
 import { Billings } from "@/pages/billings";
-
-
+import { Console } from "@/pages/console";
 
 export const dashboardRoute: RouteType[] = [
   {
@@ -25,7 +24,7 @@ export const dashboardRoute: RouteType[] = [
   {
     path: RouteConstant.dashboard.serverHouses.path,
     name: RouteConstant.dashboard.serverHouses.name,
-    component: <ServerHouses/>,
+    component: <ServerHouses />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
   {
@@ -42,10 +41,10 @@ export const dashboardRoute: RouteType[] = [
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
   {
-      path: RouteConstant.dashboard.resource.path,
-      name: RouteConstant.dashboard.resource.name,
-      component: <Resource />,
-      metadata: { isAuthenticated: true, hasSidebar: true },
+    path: RouteConstant.dashboard.resource.path,
+    name: RouteConstant.dashboard.resource.name,
+    component: <Resource />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
   },
   {
     path: RouteConstant.dashboard.resources.path,
@@ -54,10 +53,10 @@ export const dashboardRoute: RouteType[] = [
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
   {
-    path: RouteConstant.dashboard.serverId.path,
-    name: RouteConstant.dashboard.serverId.name,
-    component: <Resources />,
-    metadata: { isAuthenticated: true, hasSidebar: true },
+    path: RouteConstant.dashboard.console.path,
+    name: RouteConstant.dashboard.console.name,
+    component: <Console />,
+    metadata: { isAuthenticated: true, hasSidebar: false },
   },
 
   {
@@ -77,7 +76,8 @@ export const dashboardRoute: RouteType[] = [
     name: RouteConstant.dashboard.createnewroom.name,
     component: <CreateNewRoom />,
     metadata: { isAuthenticated: true, hasSidebar: true },
-  },{
+  },
+  {
     path: RouteConstant.dashboard.settings.path,
     name: RouteConstant.dashboard.settings.name,
     component: <Settings />,
@@ -95,4 +95,4 @@ export const dashboardRoute: RouteType[] = [
     component: <Billings />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
-]; 
+];

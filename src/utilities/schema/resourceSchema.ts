@@ -1,5 +1,5 @@
 import {  object } from 'yup';
-import { defaultValidation,  } from '.';
+import { cidrValidation, defaultValidation,  } from '.';
 
 export const deployModalSchema = object().shape({
     resourceType: defaultValidation('Resource type is required'),
@@ -23,6 +23,17 @@ export const createSiteSchema = object().shape({
     "Invalid provider selected"
   ),
   siteRegion: defaultValidation("Site region"),
+});
+
+
+export const houseSchema = object().shape({
+  houseSiteCode: defaultValidation("Site code"),
+  houseCode: defaultValidation("House code"),
+  houseName: defaultValidation("House name"),
+ 
+
+  houseRegion: defaultValidation("House region"),
+  houseCidr:cidrValidation('house cidr block')
 });
 
 

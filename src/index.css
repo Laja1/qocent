@@ -145,6 +145,16 @@
     --sidebar-ring: oklch(0.556 0 0);
 }
 
+/* Hide scrollbar but allow scroll */
+.scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+  
+
 @layer base {
     :root {
         --chart-1: oklch(0.646 0.222 41.116);

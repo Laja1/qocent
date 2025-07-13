@@ -36,7 +36,7 @@ export const CreateNewSite = () => {
   const handleProceed = () => {
     openModal({
       id: "deploy-confirm",
-      content: (
+      content: () => (
         <div className="flex flex-col w-full gap-4">
           <div className="items-center flex flex-col w-full space-y-2">
             {getIcon()}
@@ -58,7 +58,8 @@ export const CreateNewSite = () => {
               <strong>IP Address:</strong> {formik.values.ipAddress || "—"}
             </p>
             <p>
-              <strong>Description:</strong> {formik.values.siteDescription || "—"}
+              <strong>Description:</strong>{" "}
+              {formik.values.siteDescription || "—"}
             </p>
           </div>
 

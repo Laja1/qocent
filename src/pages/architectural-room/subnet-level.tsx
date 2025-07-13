@@ -30,24 +30,21 @@ export const SubnetLevel = ({ subnet, subnetId }: SubnetSectionProps) => {
   const handleOpen = (resource: Resource) =>
     openModal({
       id: `resource-${resource.id}`,
-      content: (
+      content: () => (
         <>
           <div className="text-lg font-bold">{resource.name}</div>
           <p className="text-sm">
             Instance type: {resource.instanceType} <br />
             Status: {resource.status}
           </p>
-          
+
           <div className="flex gap-4 mt-4">
-           
             <Button
-             
               onClick={() => {
-                
                 closeModal();
               }}
-            label="See More"/>
-             
+              label="See More"
+            />
           </div>
         </>
       ),
@@ -58,11 +55,14 @@ export const SubnetLevel = ({ subnet, subnetId }: SubnetSectionProps) => {
     ? "border-red-600 bg-red-50"
     : "border-purple-600 bg-purple-50";
 
-  const icon = isPublic
-    ? <Globe className="size-4 text-green-700" />
-    : <Lock className="size-4 text-purple-700" />;
+  const icon = isPublic ? (
+    <Globe className="size-4 text-green-700" />
+  ) : (
+    <Lock className="size-4 text-purple-700" />
+  );
 
-  const layoutClass = subnet.resourcesDeployed.length > 2 ? "grid grid-cols-2" : "flex flex-row";
+  const layoutClass =
+    subnet.resourcesDeployed.length > 2 ? "grid grid-cols-2" : "flex flex-row";
 
   return (
     <div className="gap-2 flex flex-col">
@@ -72,10 +72,14 @@ export const SubnetLevel = ({ subnet, subnetId }: SubnetSectionProps) => {
       >
         <p className="items-center text-[10px] flex p-1 gap-1">
           <span>{icon}</span>
-          <span className="lg:flex md:flex hidden">Server Room {subnet.id}</span>
+          <span className="lg:flex md:flex hidden">
+            Server Room {subnet.id}
+          </span>
         </p>
 
-        <div className={`w-full items-center ${layoutClass} justify-center lg:gap-4`}>
+        <div
+          className={`w-full items-center ${layoutClass} justify-center lg:gap-4`}
+        >
           {subnet.resourcesDeployed.map((resource) => (
             <div
               key={resource.id}

@@ -155,7 +155,7 @@ export const ServerHouses = () => {
                 onClick={() =>
                   openModal({
                     id: `deploy-${rowId}`,
-                    content: <DeployResources closeModal={closeModal} />,
+                    content:()=> <DeployResources closeModal={closeModal} />,
                   })
                 }
               />

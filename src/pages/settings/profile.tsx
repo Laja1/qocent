@@ -15,7 +15,7 @@ export const Profile = () => {
   const handleProceed = () => {
     openModal({
       id: "deploy-confirm",
-      content: (
+      content: () => (
         <div className="flex flex-col w-full gap-4">
           <div className="items-center flex flex-col w-full space-y-2">
             <h2 className="text-lg font-semibold border-b">Ready to Deploy?</h2>
@@ -36,7 +36,7 @@ export const Profile = () => {
   const descriptionModal = (row: ParameterData) => {
     openModal({
       id: "info-modal",
-      content: (
+      content: () => (
         <div className="flex max-w-xs  flex-col gap-4 p-4">
           <h2 className="text-lg uppercase border-b pb-2">
             {row.ParameterLabel}
