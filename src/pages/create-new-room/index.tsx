@@ -3,35 +3,41 @@ import { Button, Header, RenderField } from "@/components/shared";
 import { useModal } from "@/components/shared/modal";
 import { ArrowRight, Info } from "lucide-react";
 import { useFormik } from "formik";
-import { providerOptions } from "@/components/not-shared/deploy-config";
 import type { roomParameterItem } from "./type";
 import { roomCreateData } from "./data";
 import { IconServerBolt } from "@tabler/icons-react";
+import {
+  createRoomInit,
+  type createRoomRequest,
+} from "@/models/request/homeRequest";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useCreateServeRoomMutation } from "@/service/roomApi";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
+import { useGetHousesByProviderQuery } from "@/service/houseApi";
+import { SiteDeployModal } from "@/components/not-shared/site-modal";
+import { showCustomToast } from "@/components/shared/toast";
+import { RouteConstant } from "@/router/routes";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
 
 export const CreateNewRoom = () => {
+  const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
-
-  const handleProceed = () => {
-    openModal({
-      id: "deploy-confirm",
-      content: () => (
-        <div className="flex flex-col w-full gap-4">
-          <div className="items-center flex flex-col w-full space-y-2">
-            <h2 className="text-lg font-semibold border-b">Ready to Deploy?</h2>
-          </div>
-          <div className="text-sm text-gray-600 space-y-1">
-            <p>{/* Add your deployment confirmation details here */}</p>
-          </div>
-          <Button
-            label="Deploy"
-            onClick={() => {
-              closeModal();
-            }}
-          />
-        </div>
-      ),
-    });
-  };
+  const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
+  const dashboard = useSelector((state: RootState) => state.dashboard);
+  const user = useSelector((state: RootState) => state.auth);
+  const [createRoom, { isLoading }] = useCreateServeRoomMutation();
+  const { data: houseData } = useGetHousesByProviderQuery({
+    provider: dashboard.providerId,
+  });
+  console.log(houseData);
+  const houseOptions =
+    houseData?.data?.map((item) => ({
+      label: item.houseName,
+      value: String(item.houseCode),
+    })) ?? [];
   const descriptionModal = (row: roomParameterItem) => {
     openModal({
       id: "info-modal",
@@ -53,20 +59,67 @@ export const CreateNewRoom = () => {
     });
   };
 
-  const initialValues = roomCreateData.reduce((acc, item) => {
-    acc[item.ParameterName] = ""; // or any logic you need
-    return acc;
-  }, {} as Record<string, any>) as roomParameterItem;
-
-  const onSubmit = (values: typeof initialValues) => {
-    console.log("Form submitted:", values);
+  const handleCloseDeployModal = () => {
+    if (!isLoading) {
+      setIsDeployModalOpen(false);
+      setProgress(0);
+    }
   };
 
+  const handleDeploy = () => {
+    formik.handleSubmit();
+  };
+
+  const handleProceed = () => {
+    setIsDeployModalOpen(true);
+  };
+
+  async function handleSubmit(values: any) {
+    try {
+      const payload: createRoomRequest = {
+        ...values,
+        roomUserId: user?.userId,
+        roomHouseCode: houseSite?.houseCode,
+      };
+
+      const res = await createRoom(payload).unwrap();
+
+      // Simulate deployment progress
+      for (let i = 0; i <= 100; i += 10) {
+        setProgress(i);
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+
+      showCustomToast(res.responseMessage, {
+        toastOptions: {
+          type: "success",
+          autoClose: 5000,
+        },
+      });
+
+      setProgress(0);
+      setIsDeployModalOpen(false);
+      navigate(RouteConstant.dashboard.serverSite.path);
+    } catch (error: any) {
+      console.error("Error creating house:", error);
+      const message = ErrorHandler.extractMessage(error);
+      showCustomToast(message, {
+        toastOptions: {
+          type: "error",
+          autoClose: 5000,
+        },
+      });
+    }
+  }
   const formik = useFormik({
-    initialValues,
-    onSubmit,
+    initialValues: createRoomInit,
+    onSubmit: handleSubmit,
   });
   console.log(formik.values);
+
+  const houseSite = houseData?.data?.find(
+    (item) => item.houseSiteCode === (formik.values as any)["houseSiteCode"]
+  );
   return (
     <div className="flex flex-col">
       <Header
@@ -109,9 +162,7 @@ export const CreateNewRoom = () => {
                   formik={formik}
                   type={item.ParameterInputType}
                   options={
-                    item.ParameterSource === "ProviderList"
-                      ? providerOptions
-                      : []
+                    item.ParameterSource === "houseCode" ? houseOptions : []
                   }
                 />
                 <div className=" flex justify-center">
@@ -136,6 +187,15 @@ export const CreateNewRoom = () => {
           />
         </div>
       </div>
+      <SiteDeployModal
+        isOpen={isDeployModalOpen}
+        onClose={handleCloseDeployModal}
+        formik={formik}
+        json={roomCreateData}
+        isLoading={isLoading}
+        progress={progress}
+        onDeploy={handleDeploy}
+      />
     </div>
   );
 };

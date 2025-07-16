@@ -1,23 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithResponseCodeHandling } from "./httpClient/baseQuery";
+import { baseQuery } from "./httpClient/baseQuery";
 import type { genericResponse } from "@/models/response";
-// import type { GetHouseListResponse } from "@/models/response/houseResponse"; // ✅ Ensure correct response
 import { ApiEnums } from "@/utilities/enums";
-import type { createHouseRequest } from "@/models/request/houseRequest";
+import type { createRoomRequest } from "@/models/request/homeRequest";
 
 export const roomApi = createApi({
   reducerPath: "roomApi",
-  baseQuery: baseQueryWithResponseCodeHandling,
-  tagTypes: [ApiEnums.House],
+  baseQuery: baseQuery,
+  tagTypes: [ApiEnums.Room],
   endpoints: (build) => ({
-    createServerHouse: build.mutation<genericResponse, createHouseRequest>({
+    createServeRoom: build.mutation<genericResponse, createRoomRequest>({
       query: (body) => ({
-        url: "/house/create",
+        url: "/room/create",
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.House, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Room, id: "LIST" }],
     }),
 
     // getHousesByProvider: build.query<void, { provider: string | null }>({
@@ -37,6 +36,6 @@ export const roomApi = createApi({
 });
 
 export const {
-  useCreateServerHouseMutation,
+  useCreateServeRoomMutation,
 //   useGetHousesByProviderQuery,
 } = roomApi;

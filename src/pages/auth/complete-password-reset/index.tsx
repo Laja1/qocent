@@ -12,7 +12,7 @@ import {
   useResendOtpMutation,
 } from "@/service/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { completePasswordSchema } from "@/utilities/schema/authSchema";
+import { resetPasswordSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
 import { EyeClosed, EyeIcon } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -30,12 +30,12 @@ const CompletePasswordReset = () => {
   const onSubmit = async (values: completePasswordResetRequest) => {
     const payload = {
       userEmail: state,
-      userPassword: values?.userPassword,
-      otp: values?.otp,
+      newPassword: values?.newPassword,
+      otp: String(values?.otp),
     };
     try {
       const res = await completePasswordReset(payload).unwrap();
-      showCustomToast(res?.responseMessage, {
+      showCustomToast(res?.message, {
         toastOptions: {
           type: "success",
           autoClose: 5000,
@@ -43,6 +43,7 @@ const CompletePasswordReset = () => {
       });
       navigate(RouteConstant.auth.signin.path);
     } catch (error) {
+      console.log(error);
       const message = ErrorHandler.extractMessage(error);
 
       showCustomToast(message, {
@@ -81,7 +82,7 @@ const CompletePasswordReset = () => {
   const formik = useFormik({
     initialValues: completePasswordResetInit,
     onSubmit,
-    validationSchema: completePasswordSchema,
+    validationSchema: resetPasswordSchema,
   });
 
   useEffect(() => {
@@ -108,7 +109,7 @@ const CompletePasswordReset = () => {
         />
         <Textfield
           label="New Password"
-          name="userPassword"
+          name="newPassword"
           placeholder="Enter your password"
           type={seePassword ? "text" : "password"}
           suffixIcon={
@@ -118,8 +119,8 @@ const CompletePasswordReset = () => {
           }
           formik={formik}
           error={
-            formik?.touched.userPassword && formik?.errors.userPassword
-              ? formik?.errors.userPassword
+            formik?.touched.newPassword && formik?.errors.newPassword
+              ? formik?.errors.newPassword
               : ""
           }
         />

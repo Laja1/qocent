@@ -52,7 +52,7 @@ export type forgotPasswordpRequest = {
  export type completePasswordResetRequest = {
   otp: string,
  userEmail?: string,
- userPassword: string,
+ newPassword: string,
 }
 
 
@@ -63,5 +63,5 @@ export type forgotPasswordpRequest = {
 export const completePasswordResetInit:completePasswordResetRequest = {
   otp: "",
  userEmail: "",
- userPassword: "",
+ newPassword: "",
 }

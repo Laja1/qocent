@@ -3,15 +3,12 @@ import type { summaryType } from "./type";
 import { Plus } from "lucide-react";
 import { ICON_MAP } from "@/utilities/constants/icons";
 import { summaryData } from "./config";
-import { DeployResources } from "@/components/not-shared/deploy-resources";
-import { useModal } from "@/components/shared/modal";
 import { useState } from "react";
-import type { ServerRoomType } from "@/utilities/constants/config";
 import { useNavigate } from "react-router-dom";
+import { RouteConstant } from "@/router/routes";
 
-export const SummaryTable = ({ rowData }: { rowData?: ServerRoomType }) => {
+export const SummaryTable = () => {
   const navigate = useNavigate();
-  const { openModal, closeModal } = useModal();
   const [resourceType, setResourceType] = useState("");
   const summaryColums: ColumnDef<summaryType>[] = [
     {
@@ -49,17 +46,18 @@ export const SummaryTable = ({ rowData }: { rowData?: ServerRoomType }) => {
       icon: Plus,
       onClick: (row: summaryType) => {
         setResourceType(row.resourceType);
-        openModal({
-          id: `deploy-${row.id}`,
-          content: () => (
-            <DeployResources
-              id={row.resourceType}
-              siteCodeId={Number(rowData?.siteId)}
-              closeModal={closeModal}
-              onProceed={() => navigate("/create-new-resource")}
-            />
-          ),
-        });
+        navigate(RouteConstant.dashboard.createResources.path, {});
+        // openModal({
+        //   id: `deploy-${row.id}`,
+        //   content: () => (
+        //     <DeployResources
+        //       id={row.resourceType}
+        //       siteCodeId={Number(rowData?.siteId)}
+        //       closeModal={closeModal}
+        //       onProceed={() => navigate("/create-new-resource")}
+        //     />
+        //   ),
+        // });
       },
     },
   ];

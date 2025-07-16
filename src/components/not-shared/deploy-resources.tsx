@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { Button, ComboBoxField, SelectField2 } from "../shared";
+import { Button, ComboBoxField } from "../shared";
 import { resourceSiteCodeOptions, resourceTypeOptions } from "./deploy-config";
 import { deployModalSchema } from "@/utilities/schema/resourceSchema";
 import { useEffect } from "react";
@@ -14,7 +14,7 @@ type DeployResourceProps = {
 
 export const serverRooms: ServerRoomType[] = [
   {
-  siteId: 100001,
+    siteId: 100001,
     siteName: "Rubies Production Site",
     // alerts: 0,
     siteProvider: "AWS",
@@ -25,9 +25,9 @@ export const serverRooms: ServerRoomType[] = [
     // balance: 7718.0,
   },
   {
-  siteId: 100002,
+    siteId: 100002,
     siteName: "Qoovest",
-    
+
     // alerts: 5,
     siteCode: "Qoov-Prod-Site-1",
     siteStatus: "Active",
@@ -37,7 +37,7 @@ export const serverRooms: ServerRoomType[] = [
     // balance: 547.0,
   },
   {
-  siteId: 100003,
+    siteId: 100003,
     siteName: "Qoonity",
     siteProvider: "Huawei",
     siteCode: "Qoon-Prod-Site-1",
@@ -48,7 +48,7 @@ export const serverRooms: ServerRoomType[] = [
     // balance: 4877.0,
   },
   {
-  siteId: 100004,
+    siteId: 100004,
     siteProvider: "AWS",
     siteCode: "NC-Prod-Site-1",
     siteName: "NCube",
@@ -59,18 +59,18 @@ export const serverRooms: ServerRoomType[] = [
     // balance: 2267.0,
   },
   {
-  siteId: 100005,
+    siteId: 100005,
     siteName: "Tymer",
     siteProvider: "AWS",
     siteCode: "Tymer-Prod-Site-1",
-    
+
     siteStatus: "Suspended",
     siteCreatedAt: "2025-01-09",
     // bill: 74891.0,
     // balance: 6397.0,
   },
   {
-  siteId: 100006,
+    siteId: 100006,
     siteName: "Tymer",
     siteProvider: "AWS",
     siteCode: "Tymer-Prod-Site-1",
@@ -81,7 +81,7 @@ export const serverRooms: ServerRoomType[] = [
     // bill: 74891.0,
     // balance: 6397.0,
   },
-]
+];
 
 export const DeployResources = ({
   id,
@@ -93,10 +93,9 @@ export const DeployResources = ({
   console.log(serverSite);
   const typeOption = resourceSiteCodeOptions.find((item) => item.label === id);
   console.log(typeOption);
-  const presetSiteOptions = serverSite
-  ? [{ label: serverSite.siteName, value: serverSite.siteId.toString() }]
-  : resourceSiteCodeOptions;
-
+  // const presetSiteOptions = serverSite
+  // ? [{ label: serverSite.siteName, value: serverSite.siteId.toString() }]
+  // : resourceSiteCodeOptions;
 
   const presetTypeOptions = id
     ? [{ label: id, value: id.toLowerCase() }]
@@ -105,7 +104,7 @@ export const DeployResources = ({
   const formik = useFormik({
     initialValues: {
       resourceType: id?.toLowerCase() || "",
-      resourceSiteCode: serverSite?.siteId || "",
+      // resourceSiteCode: serverSite?.siteId || "",
     },
     onSubmit: (values) => {
       console.log("Deploying for ID:", id, "with values:", values);
@@ -138,13 +137,13 @@ export const DeployResources = ({
           formik={formik}
           options={presetTypeOptions}
         />
-        <SelectField2
+        {/* <SelectField2
           name="resourceSiteCode"
           label="Resource Site Code"
           formik={formik}
           placeholder="Select a site code"
           options={presetSiteOptions}
-        />
+        /> */}
       </div>
 
       <div className="flex justify-end gap-3 pt-4 border-t">

@@ -22,7 +22,7 @@ const SignUp = () => {
     try {
       const res = await signupMutation(values).unwrap();
       console.log(res);
-      showCustomToast(res?.responseMessage, {
+      showCustomToast(res?.message, {
         toastOptions: {
           type: "success",
           autoClose: 5000,

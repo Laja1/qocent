@@ -27,11 +27,12 @@ const ConfirmAccount = () => {
   const onSubmit = async (values: completeEnrollmentRequest) => {
     const payload = {
       userEmail: state,
-      otp: values?.otp,
+      otp: String(values?.otp),
     };
+    console.log(payload);
     try {
       const res = await completeEnrollment(payload).unwrap();
-      showCustomToast(res?.responseMessage, {
+      showCustomToast(res?.message, {
         toastOptions: {
           type: "success",
           autoClose: 5000,

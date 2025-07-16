@@ -1,5 +1,6 @@
 export enum ApiEnums {
     Site = "site",
-    House = "house"
+    House = "house",
+    Room= "room"
   }
   

@@ -7,7 +7,13 @@ type CardProps = {
   description: string;
   subTitle: string;
 };
-const HowItWorksCard = ({ icon, title, description, subTitle, bgColor }: CardProps & { bgColor: string }) => (
+const HowItWorksCard = ({
+  icon,
+  title,
+  description,
+  subTitle,
+  bgColor,
+}: CardProps & { bgColor: string }) => (
   <motion.div
     whileHover={{ scale: 1.02 }}
     transition={{ type: "tween", ease: "easeInOut" }}
@@ -19,7 +25,9 @@ const HowItWorksCard = ({ icon, title, description, subTitle, bgColor }: CardPro
       </div>
 
       <div className="px-2 pt-2">
-        <h6 className="text-sm lg:text-lg font-semibold text-center">{title}</h6>
+        <h6 className="text-sm lg:text-lg font-semibold text-center">
+          {title}
+        </h6>
         <p className="text-xs text-[#00000099] leading-relaxed text-center">
           {description}
         </p>
@@ -32,10 +40,15 @@ const HowItWorksCard = ({ icon, title, description, subTitle, bgColor }: CardPro
   </motion.div>
 );
 
-
 export const HowItWorks = () => {
   return (
     <div id="solutions" className=" flex flex-col items-center justify-center">
+      <p className="text-black md:text-3xl text-xl lg:text-5xl leading-[56px] font-bold">
+        Everything you need to scale
+      </p>
+      <p className="md:text-base text-sm lg:text-lg leading-[28px] text-neutral-400">
+        Every AI is the choice of all the fortune 500 companies.
+      </p>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 mt-14">
         <HowItWorksCard
           icon={<img src={svgLinks.threed4} className="size-40" />}

@@ -21,19 +21,17 @@ const SignIn = () => {
     try {
       const res = await signIn(values).unwrap();
       console.log(res);
-      navigate(RouteConstant.dashboard.console.path);
+      
       dispatch(
         authStore.action.setCredentials({
-          token: res.token?.replace("Bearer ", ""),
-          userEmail: res.userEmail,
-          userFirstName: res.data?.userFirstName,
-          userLastName: res.data?.userLastName,
-          userId: res.data?.userId,
-          userRoleId: res.data?.userRoleId,
-          privileges: res.privileges ?? [],
+          token: res.data.accessToken.replace("Bearer ", ""),
+          userEmail: res?.data?.user?.userEmail,
+          userFirstName: res?.data?.user?.userFirstName,
+          userLastName: res?.data?.user?.userLastName,
+          userId: res?.data?.user?.userId,
         })
       );
-
+      navigate(RouteConstant.dashboard.console.path);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       console.log(error);

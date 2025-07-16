@@ -21,7 +21,7 @@ const ForgotPassword = () => {
       console.log(res);
 
       // Now res.responseMessage will be available
-      showCustomToast(res?.responseMessage, {
+      showCustomToast(res?.message, {
         toastOptions: {
           type: "success",
           autoClose: 5000,

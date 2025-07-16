@@ -3,7 +3,7 @@ import { cidrValidation, defaultValidation,  } from '.';
 
 export const deployModalSchema = object().shape({
     resourceType: defaultValidation('Resource type is required'),
-    resourceSiteCode: defaultValidation('Resource side code is required'),
+    // resourceSiteCode: defaultValidation('Resource side code is required'),
 });
 
 export const createSiteSchema = object().shape({

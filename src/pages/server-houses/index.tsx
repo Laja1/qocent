@@ -3,7 +3,6 @@ import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import type { houseRoomType } from "./type";
-import { houseData } from "./config";
 import { useNavigate } from "react-router-dom";
 import { SummaryTable } from "../server-sites/summary-table";
 import { DeployResources } from "@/components/not-shared/deploy-resources";
@@ -14,24 +13,32 @@ import { useState } from "react";
 import { useModal } from "@/components/shared/modal";
 import { houseArchitectureData } from "@/utilities/constants/config";
 import { HouseLevel } from "../architectural-room/house-level";
+import { useGetHousesByProviderQuery } from "@/service/houseApi";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
+import { formatDate } from "@/utilities/helper";
+import { DataFlow } from "@/components/not-shared/data-flow";
 
 export const ServerHouses = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
   const [rowId, setRowId] = useState(100004);
+  const dashboard = useSelector((state: RootState) => state.dashboard);
   const serverHouseColumn: ColumnDef<houseRoomType>[] = [
     {
       id: "houseId",
       header: "HOUSE ID",
       accessorKey: "houseId",
-      cell: (row) => <span className="">{row.houseId}</span>,
+      cell: (row) => <span className="line-clamp-1">{row.houseId}</span>,
       sortable: true,
     },
     {
       id: "houseName",
       header: "HOUSE NAME",
       accessorKey: "houseName",
-      cell: (row) => <span className="line-clamp-1">{row.houseName}</span>,
+      cell: (row) => (
+        <span className="line-clamp-1 font-brfirma-bold">{row.houseName}</span>
+      ),
       sortable: true,
     },
     {
@@ -43,47 +50,47 @@ export const ServerHouses = () => {
       filterType: "select",
     },
     {
-      id: "siteCode",
+      id: "houseSiteCode",
       header: "SITE CODE",
-      accessorKey: "siteCode",
-      cell: (row) => <span className=" line-clamp-1">{row.siteCode}</span>,
+      accessorKey: "houseSiteCode",
+      cell: (row) => <span className=" line-clamp-1">{row.houseSiteCode}</span>,
       sortable: true,
       filterType: "select",
     },
+    // {
+    //   id: "alerts",
+    //   header: "ALERTS",
+    //   accessorKey: "alerts",
+    //   sortable: true,
+    //   cell: (row) => (
+    //     <div
+    //       className={`flex items-center justify-center w-5 text-[10px] h-5 rounded-full ${
+    //         row.alerts > 0
+    //           ? "bg-red-50 text-red-800 border border-red-500"
+    //           : "bg-green-50 text-green-800 border border-green-500"
+    //       }`}
+    //     >
+    //       {row.alerts}
+    //     </div>
+    //   ),
+    // },
+    // {
+    //   id: "rooms",
+    //   header: "ROOMS",
+    //   accessorKey: "rooms",
+    //   sortable: true,
+    //   cell: (row) => (
+    //     <span className="text-center justify-center flex">{row.rooms}</span>
+    //   ),
+    // },
     {
-      id: "alerts",
-      header: "ALERTS",
-      accessorKey: "alerts",
-      sortable: true,
-      cell: (row) => (
-        <div
-          className={`flex items-center justify-center w-5 text-[10px] h-5 rounded-full ${
-            row.alerts > 0
-              ? "bg-red-50 text-red-800 border border-red-500"
-              : "bg-green-50 text-green-800 border border-green-500"
-          }`}
-        >
-          {row.alerts}
-        </div>
-      ),
-    },
-    {
-      id: "rooms",
-      header: "ROOMS",
-      accessorKey: "rooms",
-      sortable: true,
-      cell: (row) => (
-        <span className="text-center justify-center flex">{row.rooms}</span>
-      ),
-    },
-    {
-      id: "provider",
+      id: "houseProviderId",
       header: "PROVIDER",
-      accessorKey: "provider",
+      accessorKey: "houseProviderId",
       sortable: true,
       cell: (row) => (
-        <span className="text-center justify-center flex">
-          {row.provider === "AWS" ? (
+        <span className="text-center justify-center flex line-clamp-1">
+          {row.houseProviderId === 1 ? (
             <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
           ) : (
             <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
@@ -92,23 +99,33 @@ export const ServerHouses = () => {
       ),
     },
     {
-      id: "createdAt",
+      id: "houseCreatedAt",
       header: "DATE CREATED",
       headerClassName: "text-right",
-      accessorKey: "createdAt",
+      accessorKey: "houseCreatedAt",
       sortable: true,
-      cell: (row) => <span className="text-right block">{row.createdAt}</span>,
+      cell: (row) => (
+        <span className="text-right block ">
+          {formatDate(row.houseCreatedAt)}
+        </span>
+      ),
     },
     {
-      id: "ipRange",
+      id: "houseCidr",
       header: "IP RANGE",
       headerClassName: "text-right",
-      accessorKey: "ipRange",
+      accessorKey: "houseCidr",
       sortable: true,
-      cell: (row) => <span className="text-right block">{row.createdAt}</span>,
+      cell: (row) => (
+        <span className="text-right block line-clamp-1">{row.houseCidr}</span>
+      ),
     },
   ];
 
+  const { data: houseData, isLoading } = useGetHousesByProviderQuery({
+    provider: dashboard.providerId,
+  });
+  console.log(houseData);
   const actions = [
     {
       label: "View",
@@ -155,7 +172,7 @@ export const ServerHouses = () => {
                 onClick={() =>
                   openModal({
                     id: `deploy-${rowId}`,
-                    content:()=> <DeployResources closeModal={closeModal} />,
+                    content: () => <DeployResources closeModal={closeModal} />,
                   })
                 }
               />
@@ -179,7 +196,14 @@ export const ServerHouses = () => {
     {
       id: 3,
       text: "Architecture",
-      component: <HouseLevel houseData={houseArchitectureData}/>,
+      component: (
+        <div>
+          <HouseLevel houseData={houseArchitectureData} />
+          <div className="my-10">
+            <DataFlow />
+          </div>
+        </div>
+      ),
     },
     {
       id: 4,
@@ -193,7 +217,7 @@ export const ServerHouses = () => {
         <Button
           intent="tertiary"
           label="Create New House"
-          onClick={()=>navigate('/create-new-house')}
+          onClick={() => navigate("/create-new-house")}
           prefixIcon={<PlusIcon className="size-4" />}
           size="small"
         />
@@ -201,21 +225,22 @@ export const ServerHouses = () => {
 
       <div className="px-5 flex flex-col">
         <DataTable
-          data={houseData}
+          data={houseData?.data ?? []}
           columns={serverHouseColumn}
+          isLoading={isLoading}
           searchPlaceholder="Search server rooms by name, ID, or code..."
           pageSize={5}
           actions={actions}
           onRowClick={(row) => setRowId(Number(row.houseId))}
-          // highlightedRowId={rowId}
+          highlightedRowId={rowId}
           getRowId={(row) => row.houseId}
           initialSorting={{ id: "houseName", desc: false }}
-        /> 
+        />
       </div>
 
       <div className="mx-5 mt-5 ">
-          <Tabs tabs={tabData} />
-        </div>
+        <Tabs tabs={tabData} />
+      </div>
     </div>
   );
 };

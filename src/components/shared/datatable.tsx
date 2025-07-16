@@ -83,11 +83,11 @@ export type DataTableProps<T> = {
   initialSorting?: SortingState;
   filterableColumns?: string[];
   onFilterChange?: (filters: Record<string, string>) => void;
-  highlightedRowId?: string;
+  highlightedRowId?: string | number;
   pageSize?: number;
   actions?: ActionItem<T>[];
   bulkActions?: BulkAction<T>[];
-  getRowId?: (row: T, index: number) => string;
+  getRowId?: (row: T, index: number) => string | number;
   showSearch?: boolean;
   showDownload?: boolean;
   isLoading?: boolean;
@@ -123,7 +123,9 @@ export function DataTable<T>({
   const [filters, setFilters] = useState<Record<string, string>>({});
   const [sorting, setSorting] = useState<SortingState>(initialSorting);
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedRows, setSelectedRows] = useState<Set<string>>(new Set());
+  const [selectedRows, setSelectedRows] = useState<Set<string | number>>(
+    new Set()
+  );
 
   // Use useEffect to notify parent of filter changes after render
   useEffect(() => {
@@ -293,7 +295,11 @@ export function DataTable<T>({
             )}
             {description && (
               <CardDescription>
-                {isLoading ? <Skeleton className="h-4 w-64 mt-1" /> : description}
+                {isLoading ? (
+                  <Skeleton className="h-4 w-64 mt-1" />
+                ) : (
+                  description
+                )}
               </CardDescription>
             )}
           </div>
@@ -319,17 +325,28 @@ export function DataTable<T>({
                     <Select
                       key={column.id}
                       value={filters[column.id] || "all"}
-                      onValueChange={(value) => handleFilterChange(column.id, value)}
+                      onValueChange={(value) =>
+                        handleFilterChange(column.id, value)
+                      }
                       disabled={isLoading}
                     >
                       <SelectTrigger className="w-full rounded-xs text-xs">
                         <IconFilter2 className="h-4 w-4 mr-2" />
-                        <SelectValue className="text-xs" placeholder={column.header} />
+                        <SelectValue
+                          className="text-xs"
+                          placeholder={column.header}
+                        />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem className="text-xs" value="all">All {column.header}</SelectItem>
+                        <SelectItem className="text-xs" value="all">
+                          All {column.header}
+                        </SelectItem>
                         {column.filterOptions?.map((option) => (
-                          <SelectItem className="text-xs" key={option.value} value={option.value}>
+                          <SelectItem
+                            className="text-xs"
+                            key={option.value}
+                            value={option.value}
+                          >
                             {option.label}
                           </SelectItem>
                         ))}
@@ -337,7 +354,10 @@ export function DataTable<T>({
                     </Select>
                   ))}
                   {showDownload && (
-                    <button className="border border-sm p-2" disabled={isLoading}>
+                    <button
+                      className="border border-sm p-2"
+                      disabled={isLoading}
+                    >
                       <Download className="h-4 w-4" />
                     </button>
                   )}
@@ -388,10 +408,14 @@ export function DataTable<T>({
                   <TableHead
                     key={column.id}
                     className={`font-semibold text-xs font-brfirma-bold h-8 ${
-                      column.sortable && !isLoading ? "cursor-pointer select-none" : ""
+                      column.sortable && !isLoading
+                        ? "cursor-pointer select-none"
+                        : ""
                     } ${column.headerClassName || ""}`}
                     onClick={
-                      column.sortable && !isLoading ? () => handleSort(column.id) : undefined
+                      column.sortable && !isLoading
+                        ? () => handleSort(column.id)
+                        : undefined
                     }
                   >
                     <div
@@ -421,15 +445,17 @@ export function DataTable<T>({
                             <column.headerAction.icon className="h-3 w-3" />
                           </Button>
                         )}
-                        {column.sortable && sorting?.id === column.id && !isLoading && (
-                          <span className="ml-1">
-                            {sorting.desc ? (
-                              <ChevronDown className="h-4 w-4" />
-                            ) : (
-                              <ChevronUp className="h-4 w-4" />
-                            )}
-                          </span>
-                        )}
+                        {column.sortable &&
+                          sorting?.id === column.id &&
+                          !isLoading && (
+                            <span className="ml-1">
+                              {sorting.desc ? (
+                                <ChevronDown className="h-4 w-4" />
+                              ) : (
+                                <ChevronUp className="h-4 w-4" />
+                              )}
+                            </span>
+                          )}
                       </div>
                     </div>
                   </TableHead>
@@ -454,7 +480,7 @@ export function DataTable<T>({
                   const rowId = getRowId(row, actualIndex);
                   return (
                     <tr
-                      key={rowId}
+                      key={String(rowId)}
                       className={` ${onRowClick ? "cursor-pointer" : ""} ${
                         selectedRows.has(rowId) ? "bg-blue-50" : ""
                       } ${highlightedRowId === rowId ? "bg-gray-200 " : ""}`}

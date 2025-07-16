@@ -5,7 +5,9 @@ export const imgLinks = {
     texture1: './images/texture1.png',
     nibss: '/images/nibss.png',
     rubies:'/images/rubies.png',
-    image:'/images/image.png'
+    image:'/images/image.png',
+    gcp:'/images/gcp.webp',
+
 }
 
 export const svgLinks = {

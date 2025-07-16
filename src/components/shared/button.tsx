@@ -11,6 +11,7 @@ const buttonVariants = cva("button", {
         "text-white",
         "text-xs",
         "border-transparent",
+        "hover:bg-neutral-900"
         // "hover:bg-gray-800",
       ],
       secondary: [

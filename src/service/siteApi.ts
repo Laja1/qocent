@@ -1,14 +1,13 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithResponseCodeHandling } from "./httpClient/baseQuery";
+import { baseQuery } from "./httpClient/baseQuery";
 import type { genericResponse } from "@/models/response";
 import type { createSiteRequest } from "@/models/request/siteRequest";
 import type { GetSiteListResponse } from "@/models/response/siteResponse";
 import { ApiEnums } from "@/utilities/enums";
 
-
 export const siteApi = createApi({
   reducerPath: "siteApi",
-  baseQuery: baseQueryWithResponseCodeHandling,
+  baseQuery: baseQuery,
   tagTypes: [ApiEnums.Site],
   endpoints: (build) => ({
     createServerSite: build.mutation<genericResponse, createSiteRequest>({
@@ -19,20 +18,20 @@ export const siteApi = createApi({
       }),
       invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" }],
     }),
-    getSites: build.query<GetSiteListResponse, {provider:string|null}>({
-      query: ({provider}) => `/site/read-by-site-provider/${provider}`,
+    getSites: build.query<GetSiteListResponse, { provider: string; userId: number }>({
+      query: ({ provider, userId }) => `/site/read-by-site-provider/${provider}/${userId}`,    
       providesTags: (result) =>
         result?.data
           ? [
-              { type: ApiEnums.Site, id: "LIST" },
+              { type: ApiEnums.Site, id: "LIST" } as const,
               ...result.data.map((site) => ({
-                type: ApiEnums.Site,
+                type: ApiEnums.Site as const,
                 id: site.siteId,
               })),
             ]
-          : [{ type: ApiEnums.Site, id: "LIST" }],
+          : [{ type: ApiEnums.Site, id: "LIST" } as const],
     }),
   }),
 });
 
-export const { useCreateServerSiteMutation, useGetSitesQuery } = siteApi;
+export const { useCreateServerSiteMutation, useGetSitesQuery,useLazyGetSitesQuery } = siteApi;

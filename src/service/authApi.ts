@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithResponseCodeHandling } from "./httpClient/baseQuery";
+import { baseQuery } from "./httpClient/baseQuery";
 import type {
   completeEnrollmentRequest,
   completePasswordResetRequest,
@@ -19,18 +19,18 @@ import type {
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: baseQueryWithResponseCodeHandling,
+  baseQuery: baseQuery,
   endpoints: (build) => ({
     signUp: build.mutation<signUpResponse, signupRequest>({
       query: (body) => ({
-        url: "/authentication/initiate-enrollment",
+        url: "/auth/signup",
         method: "POST",
         body: body,
       }),
     }),
     signIn: build.mutation<signInResponse, signInRequest>({
       query: (body) => ({
-        url: "/authentication/login",
+        url: "/auth/login",
         method: "POST",
         body: body,
       }),
@@ -40,14 +40,14 @@ export const authApi = createApi({
       completeEnrollmentRequest
     >({
       query: (body) => ({
-        url: "/authentication/complete-enrollment",
+        url: "/auth/verify-otp",
         method: "POST",
         body: body,
       }),
     }),
     resendOtp: build.mutation<resendOtpResponse, resendOtpRequest>({
       query: (body) => ({
-        url: "/authentication/resend-otp",
+        url: "/auth/reset-passsword",
         method: "POST",
         body: body,
       }),
@@ -57,7 +57,7 @@ export const authApi = createApi({
       forgotPasswordpRequest
     >({
       query: (body) => ({
-        url: "/authentication/initiate-password-reset",
+        url: "/auth/request-password-reset",
         method: "POST",
         body: body,
       }),
@@ -67,7 +67,7 @@ export const authApi = createApi({
       completePasswordResetRequest
     >({
       query: (body) => ({
-        url: "/authentication/complete-password-reset",
+        url: "/auth/reset-password",
         method: "POST",
         body: body,
       }),

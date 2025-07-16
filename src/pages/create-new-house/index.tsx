@@ -41,25 +41,17 @@ const PROVIDER_REGIONS: Record<string, { label: string; value: string }[]> = {
 };
 
 export const CreateNewHouse = () => {
-  // Hooks
   const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
-
-  // State
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
   const [progress, setProgress] = useState(0);
-
-  // Redux state
   const dashboard = useSelector((state: RootState) => state.dashboard);
   const user = useSelector((state: RootState) => state.auth);
-
-  // API hooks
   const [createHouse, { isLoading }] = useCreateServerHouseMutation();
   const { data: sitesData } = useGetSitesQuery({
     provider: dashboard.provider,
   });
   console.log(sitesData);
-  // Computed values
   const siteOptions =
     sitesData?.data?.map((item) => ({
       label: item.siteName,
@@ -115,7 +107,7 @@ export const CreateNewHouse = () => {
 
       setProgress(0);
       setIsDeployModalOpen(false);
-      navigate(RouteConstant.dashboard.serverSite.path);
+      navigate(RouteConstant.dashboard.serverHouses.path);
     } catch (error: any) {
       console.error("Error creating house:", error);
       const message = ErrorHandler.extractMessage(error);

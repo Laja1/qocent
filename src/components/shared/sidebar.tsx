@@ -9,6 +9,7 @@ import {
   RotateCcwKey,
   Anchor,
   Bot,
+  LayoutList,
 } from "lucide-react";
 import {
   Sidebar,
@@ -37,7 +38,6 @@ export interface SidebarItem {
 }
 
 const sidebarItems: SidebarItem[] = [
- 
   {
     title: "Server Sites (Accounts)",
     icon: <IconCloudComputing className="text-green-700" />,
@@ -57,12 +57,17 @@ const sidebarItems: SidebarItem[] = [
     isActive: false,
   },
   {
-    title: "Resources",
+    title: "Resources (Category)",
     icon: <Anchor className="text-red-700" />,
     href: "/resources",
     isActive: false,
   },
-
+  {
+    title: "Resources (Details)",
+    icon: <Anchor className="text-red-700" />,
+    href: "/resources",
+    isActive: false,
+  },
   {
     title: "Access Management",
     icon: <RotateCcwKey className="text-red-800" />,
@@ -81,16 +86,23 @@ const sidebarItems: SidebarItem[] = [
     href: "/organizations",
     isActive: false,
   },
-  {
-    title: "Settings",
-    icon: <Settings className="text-red-700" />,
-    href: "/settings",
-    isActive: false,
-  },
+
   {
     title: "Build with Qoonity AI",
     icon: <Bot className="text-emerald-700" />,
     href: "/identity-center",
+    isActive: false,
+  },
+  {
+    title: "Switch workspace",
+    icon: <LayoutList className="text-zinc-700" />,
+    href: "/console",
+    isActive: false,
+  },
+  {
+    title: "Settings",
+    icon: <Settings className="text-red-700" />,
+    href: "/settings",
     isActive: false,
   },
 ];
@@ -118,15 +130,17 @@ export const SidebarLayout = () => {
   };
 
   const user = useSelector((state: RootState) => state.auth);
-
+  const initials = `${user?.userFirstName?.[0] ?? ""}${
+    user?.userLastName?.[0] ?? ""
+  }`.toUpperCase();
   return (
     <Sidebar className="font-brfirma">
       <SidebarHeader className="bg-green-950   text-white  border-gray-200  p-[8px]">
         <div className="flex items-center space-x-2">
           <Cloud className="h-6 w-6" color="white" />
           <div>
-            <h2 className="font-bold text-base">Qucoon Cloud</h2>
-            <p className="text-xs text-gray-400 leading-tight">
+            <h2 className="font-bold text-base">Qocent</h2>
+            <p className="text-xs line-clamp-1 text-gray-400 leading-tight">
               {user?.userEmail}
             </p>
           </div>
@@ -154,12 +168,15 @@ export const SidebarLayout = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter className="border-t  bg-[#fff] border-gray-200 p-4">
+      <SidebarFooter className="border-t flex flex-row justify-between bg-[#fff] border-gray-200 px-4 py-2">
         <div
           onClick={() => handleLogout()}
           className="text-xs flex items-center text-red-700 gap-2 hover:cursor-pointer"
         >
           <LogOut className="size-4 " /> <p>Logout</p>
+        </div>
+        <div className="w-8 h-8 rounded-full bg-[#f4f4f4] text-black flex items-center justify-center text-sm font-medium">
+          {initials}
         </div>
       </SidebarFooter>
     </Sidebar>

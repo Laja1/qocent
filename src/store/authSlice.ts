@@ -7,8 +7,6 @@ interface AuthState {
   userFirstName: string | null;
   userLastName: string | null;
   userId: number | null;
-  userRoleId: number | null;
-  privileges: string[];
 }
 
 
@@ -19,8 +17,6 @@ const initialState: AuthState = {
   userFirstName: null,
   userLastName: null,
   userId: null,
-  userRoleId: null,
-  privileges: [],
 };
 
 
@@ -36,8 +32,6 @@ const authSlice = createSlice({
       state.userFirstName = action.payload.userFirstName || null;
       state.userLastName = action.payload.userLastName || null;
       state.userId = action.payload.userId ?? null;
-      state.userRoleId = action.payload.userRoleId ?? null;
-      state.privileges = action.payload.privileges || [];
     },
     logout: (state) => {
       Object.assign(state, initialState); // reset all values

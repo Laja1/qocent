@@ -2,7 +2,7 @@ import clsx from "clsx";
 import type { SelectfieldOptions, SelectProps } from "./types";
 import { getIn } from "formik";
 
-export const SelectField2 = ({
+export const SelectField3 = ({
   error,
   placeholder,
   label,

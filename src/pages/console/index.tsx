@@ -81,8 +81,9 @@ export const Console = () => {
     // Navigate to notifications page or open modal
     console.log("View all notifications");
   };
-
-
+  const initials = `${user?.userFirstName?.[0] ?? ""}${
+    user?.userLastName?.[0] ?? ""
+  }`.toUpperCase();
 
   return (
     <div className="relative h-screen w-full overflow-hidden">
@@ -101,25 +102,32 @@ export const Console = () => {
               onClearAll={handleClearAll}
               onViewAll={handleViewAll}
             />
-            <p className="text-xs">
-              {user?.userFirstName} {user?.userLastName}
-            </p>
+
+            <div className="flex flex-row items-center">
+              <div className="w-8 h-8 rounded-full bg-[#f4f4f4] text-black lg:hidden flex items-center justify-center text-sm font-medium">
+                {initials}
+              </div>
+
+              <p className="hidden lg:flex text-xs">
+                {user?.userFirstName} {user?.userLastName}
+              </p>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Layout */}
-      <div className="flex mt-12 h-[calc(100vh-3rem)]">
-        <aside className="w-1/7 h-full bg-white border-r z-10">
+      <div className="flex lg:flex-row flex-col mt-12 h-[calc(100vh-3rem)]">
+        <aside className="w-full lg:w-1/7 bg-white border-r z-10 relative">
           <ConsoleLeft />
         </aside>
 
-        <main className=" w-6/7 h-full scrollbar-hide overflow-y-auto px-4 pb-20">
+        <main className="w-full lg:w-6/7 h-full scrollbar-hide overflow-y-auto px-4 pb-20">
           <div className="my-2">
             <TopBanner />
           </div>
 
-          <div className="grid grid-cols-[3.5fr_1fr] gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[3.5fr_1fr] gap-4 lg:gap-10">
             <div className="space-y-3 flex flex-col">
               <AdsOverviewContainer />
               <ConsoleBot />

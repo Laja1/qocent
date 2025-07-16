@@ -3,11 +3,7 @@ export const navRoutes = [
     link: "/explore",
     name: "Explore Services",
   },
-  {
-    id: "dashboard",
-    link: "/dashboard",
-    name: "Dashboard",
-  },
+
   {
     id: "projects",
     link: "/projects",
@@ -18,6 +14,11 @@ export const navRoutes = [
     id: "docs",
     link: "/docs",
     name: "Documentation",
+  },
+  {
+    id: "dashboard",
+    link: "/dashboard",
+    name: "Dashboard",
   },
 ];
 

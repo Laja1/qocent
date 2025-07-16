@@ -47,12 +47,10 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
         }
       >
         <div>
-          <h1 className="text-4xl text-gray-700 font-alumni">
-            QUCOON CLOUD SERVICES
-          </h1>
+          <h1 className="text-4xl text-gray-700 font-alumni">QOCENT</h1>
         </div>
-        <div className="flex  rounded-sm  justify-center items-center w-[300px] md:w-[350px] lg:w-[420px]">
-          <div className="bg-[#FFFFFF0D]     max-w-md mx-5 rounded-xl py-5  px-3 w-full ">
+        <div className="flex  rounded-sm  justify-center items-center w-full lg:max-w-sm">
+          <div className="bg-[#FFFFFF0D]      mx-5 rounded-xl py-5  px-3 w-full ">
             <div className="justify-center items-center flex-col mt-5 flex space-y-3">
               <p className="font-bold lg:text-3xl text-xl">{title}</p>
               <p className="font-light lg:text-sm text-center text-xs pb-3 ">
@@ -65,7 +63,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
         </div>
         <div className="flex items-end  text-gray-500 bottom-0">
           <h1 className=" ">
-            QCS. All rights reserved. © {new Date().getFullYear()}
+            QOCENT. All rights reserved. © {new Date().getFullYear()}
           </h1>
         </div>
       </div>

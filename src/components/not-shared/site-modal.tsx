@@ -59,8 +59,10 @@ export const SiteDeployModal: React.FC<DeployModalProps> = ({
                   {json.map((item: any, index: any) => (
                     <div key={index} className="  my-2">
                       {" "}
-                      <p className="text-xs">{item?.ParameterLabel}</p>
-                      <p className="text-sm">
+                      <p className="text-sm font-brfirma-bold">
+                        {item?.ParameterLabel}
+                      </p>
+                      <p className="text-xs ">
                         {formik.values[item?.ParameterName]}
                       </p>
                     </div>

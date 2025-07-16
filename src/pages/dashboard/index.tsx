@@ -87,7 +87,7 @@ export const Dashboard = () => {
       <div className="p-6">
         <div className="mb-8">
           <h2 className="text-xl font-semibold text-gray-900 mb-2">
-            Welcome to Qucoon Cloud Services
+            Welcome to Qocent
           </h2>
           <p className="text-gray-600 mb-6">
             Choose from our intuitive cloud resources below. We've simplified

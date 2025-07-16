@@ -6,46 +6,61 @@ export type resendOtpResponse = {
 
 
   export type forgotPasswordResponse = {
-    responseCode: number,
-    responseMessage: string
+    success: boolean;
+    message: string;
+    error: string;
+    data: string
   }
   
+  
   export type signUpResponse = {
-    responseCode: number,
-    responseMessage: string
-  }
+    success: boolean;
+    message: string;
+    data: {
+      userId: number;
+      userEmail: string;
+      message: string;
+    };
+  };
+  
 
   export type completeEnrollmentResponse = {
-    responseCode: number,
-    responseMessage: string
+    success: boolean;
+    message: string;
+    error: string;
+    data: {
+      accessToken: string;
+      refreshToken: string;
+      user: {
+        userFirstName: string;
+        userLastName: string;
+        userEmail: string;
+        userId: number;
+      };
+    };
+  
   }
 
   export type completePasswordResetResponse = {
-    responseCode: number,
-    responseMessage: string
+    success: boolean;
+    message: string;
+    error: string;
+    data: string
   }
 
-  export interface UserData {
-    userAWSId: string | null;
-    userEmail: string;
-    userFirstName: string;
-    userHuaweiId: string | null;
-    userId: number;
-    userLastLoginDate: string;
-    userLastLoginIpAddress: string;
-    userLastName: string;
-    userLoginCount: number;
-    userPassword: string;
-    userRoleId: number;
-    userStatus: "ACTIVE" | "INACTIVE" | string; // Expand if needed
-  }
   
   export interface signInResponse {
-    userEmail: string;
-    privileges: string[];
-    token: string;
-    responseCode: string;
-    responseMessage: string;
-    data: UserData;
+    success: boolean;
+    message: string;
+    error: string;
+    data: {
+      accessToken: string;
+      refreshToken: string;
+      user: {
+        userFirstName: string;
+        userLastName: string;
+        userEmail: string;
+        userId: number;
+      }}
   }
   

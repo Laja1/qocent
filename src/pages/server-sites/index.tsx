@@ -15,22 +15,26 @@ import { Resource } from "../resource";
 import { SecurityTable } from "./security-table";
 import { DeployResources } from "@/components/not-shared/deploy-resources";
 import { useModal } from "@/components/shared/modal";
-import {  useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { CostTable } from "./cost";
 import { useGetSitesQuery } from "@/service/siteApi";
 import { formatDate } from "@/utilities/helper";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { RouteConstant } from "@/router/routes";
+import { MultiResourceForm } from "@/components/not-shared/resource-selectfield";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  const { data, isLoading, isFetching } = useGetSitesQuery({
+  const user = useSelector((state: RootState) => state.auth);
+  const [tabShow, setTabShow] = useState(false);
+  const { data, isLoading } = useGetSitesQuery({
     provider: dashboard.provider,
+    userId: user?.userId || 0,
   });
-console.log(dashboard)
-console.log(data)
+  console.log(dashboard);
+  console.log(data);
   const { openModal, closeModal } = useModal();
   const [rowId, setRowId] = useState(100004);
   const [showAlert, setShowAlert] = useState(true);
@@ -233,6 +237,11 @@ console.log(data)
     },
   ];
 
+  const handleRowClick = (row: ServerRoomType) => {
+    setTabShow(true);
+    setRowId(row.siteId);
+  };
+
   const tabData = [
     {
       id: 1,
@@ -241,7 +250,7 @@ console.log(data)
         <div className="flex">
           <div className="w-1/4 mr-5 flex">
             <div className=" flex flex-col w-full">
-              {row && <SummaryTable rowData={row} />}
+              {row && <SummaryTable />}
               <Button
                 label="Add Resource"
                 prefixIcon={<PlusIcon className="size-4" />}
@@ -297,15 +306,13 @@ console.log(data)
   return (
     <div className=" h-full mt-5">
       <Header title="Server Sites" description="Manage your server site">
-       
-          <Button
-            intent="tertiary"
-            label="Create New Site"
-            onClick={()=>navigate(RouteConstant.dashboard.createnewsite.path)}
-            prefixIcon={<PlusIcon className="size-4" />}
-            size="small"
-          />
-       
+        <Button
+          intent="tertiary"
+          label="Create New Site"
+          onClick={() => navigate(RouteConstant.dashboard.createnewsite.path)}
+          prefixIcon={<PlusIcon className="size-4" />}
+          size="small"
+        />
       </Header>
 
       <div className="flex gap-4  flex-col overflow-y-hidden h-full">
@@ -315,18 +322,22 @@ console.log(data)
             columns={serverRoomColumns}
             searchPlaceholder="Search server rooms by name, ID, or region..."
             pageSize={5}
-            isLoading={isLoading || isFetching}
+            isLoading={isLoading}
             actions={actions}
             skeletonRows={data?.data.length}
-            onRowClick={(row) => setRowId(row.siteId)}
-            // getRowId={(row) => row.siteId}
-            // highlightedRowId={rowId}
+            onRowClick={handleRowClick}
+            getRowId={(row) => row.siteId}
+            highlightedRowId={rowId}
             initialSorting={{ id: "siteName", desc: false }}
           />
         </Card>
-        <div className="mx-5 mt-5 ">
-          <Tabs tabs={tabData} />
-        </div>
+
+        {tabShow && (
+          <div className="mx-5 mt-5">
+            <Tabs tabs={tabData} />
+          </div>
+        )}
+
         <div className="mx-5 mb-20">
           {showAlert && (
             <AlertBox
@@ -337,6 +348,9 @@ console.log(data)
             />
           )}
         </div>
+      </div>
+      <div className="ml-3 w-full">
+        {/* <MultiResourceForm /> */}
       </div>
     </div>
   );

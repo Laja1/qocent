@@ -39,7 +39,7 @@ export default function NavbarDemo({
         {/* Mobile Nav */}
         <MobileNav>
           <MobileNavHeader>
-            <p className="text-xl font-bold">QCS</p>
+            <p className="text-xl font-bold">QOCENT</p>
 
             <MobileNavToggle
               isOpen={isMobileMenuOpen}

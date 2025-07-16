@@ -6,9 +6,10 @@ import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import type { roomType } from "./type";
 import { roomData } from "./config";
 import { useNavigate } from "react-router-dom";
+import { formatDate } from "@/utilities/helper";
 
 export const ServerRooms = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   // const [rowId, setRowId] = useState("R-0001");
 
   const serverRoomColumns: ColumnDef<roomType>[] = [
@@ -30,9 +31,7 @@ export const ServerRooms = () => {
       id: "roomCode",
       header: "ROOM CODE",
       accessorKey: "siteCode",
-      cell: (row) => (
-        <span className=" line-clamp-1">{row.roomCode}</span>
-      ),
+      cell: (row) => <span className=" line-clamp-1">{row.roomCode}</span>,
       sortable: true,
       filterType: "select",
     },
@@ -95,7 +94,9 @@ export const ServerRooms = () => {
       headerClassName: "text-right",
       accessorKey: "createdAt",
       sortable: true,
-      cell: (row) => <span className="text-right block">{row.createdAt}</span>,
+      cell: (row) => (
+        <span className="text-right block">{formatDate(row.createdAt)}</span>
+      ),
     },
     {
       id: "resourcesDeployed",
@@ -156,7 +157,7 @@ export const ServerRooms = () => {
         <Button
           intent="tertiary"
           label="Create New Room"
-          onClick={()=>navigate('/create-new-room')}
+          onClick={() => navigate("/create-new-room")}
           prefixIcon={<PlusIcon className="size-4" />}
           size="small"
         />

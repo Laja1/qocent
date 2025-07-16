@@ -23,6 +23,11 @@ export const completePasswordSchema = object().shape({
   userPassword: passwordValidation(),
 });
 
+export const resetPasswordSchema = object().shape({
+  otp:codeValidatiion('OTP'),
+  newPassword: passwordValidation(),
+});
+
 export const forgotPasswordFormValidationSchema = object().shape({
   userEmail: emailValidation(),
 });

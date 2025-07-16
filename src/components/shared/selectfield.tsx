@@ -62,7 +62,7 @@ export const SelectField = ({
           </SelectContent>
         </Select>
       </div>
-      {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
+      {error && <p className="text-red-500 text-xs my-1">{error}</p>}
     </div>
   );
 };
