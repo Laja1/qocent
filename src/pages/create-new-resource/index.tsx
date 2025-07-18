@@ -3,69 +3,95 @@ import { Button, Header, RenderField } from "@/components/shared";
 import { useModal } from "@/components/shared/modal";
 import { ArrowRight, Info } from "lucide-react";
 import { useFormik } from "formik";
-
-import { providerOptions } from "@/components/not-shared/deploy-config";
 import { IconMichelinStar } from "@tabler/icons-react";
 import type { ParameterData } from "../create-new-site/type";
-import { siteCreateJson } from "@/components/shared/json";
+import { useGetResourceTemplateQuery } from "@/service/resourceApi";
+import { useLocation, useNavigate } from "react-router-dom";
+import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
+import { SiteDeployModal } from "@/components/not-shared/site-modal";
+import { useState } from "react";
+import { showCustomToast } from "@/components/shared/toast";
+import { RouteConstant } from "@/router/routes";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
 
 export const CreateNewResource = () => {
+  const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
+  const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
+  const location = useLocation();
+  const [progress, setProgress] = useState(0);
+  console.log(location.state);
+  const { data: resourceTemplate, isLoading } =useGetResourceTemplateQuery({resource:location.state}); 
 
-  const handleProceed = () => {
-    openModal({
-      id: "deploy-confirm",
-      content: () => (
-        <div className="flex flex-col w-full gap-4">
-          <div className="items-center flex flex-col w-full space-y-2">
-            <h2 className="text-lg font-semibold border-b">Ready to Deploy?</h2>
-          </div>
-          <div className="text-sm text-gray-600 space-y-1">
-            <p>{/* Add your deployment confirmation details here */}</p>
-          </div>
-          <Button
-            label="Deploy"
-            onClick={() => {
-              closeModal();
-            }}
-          />
-        </div>
-      ),
-    });
+  console.log(resourceTemplate?.data, "resourceTemplate?.data");
+
+  const handleSubmit = async (values: any) => {
+    console.log(values)
+    try {
+      // const payload = {
+      //   ...values,
+      //   // siteUserId: user.userId||'',
+      // };
+
+      // Simulate deployment progress
+      for (let i = 0; i <= 100; i += 10) {
+        setProgress(i);
+        await new Promise((resolve) => setTimeout(resolve, 100));
+      }
+
+      // const res = await createSite(payload).unwrap();
+      showCustomToast('e', {
+        toastOptions: { type: "success", autoClose: 5000 },
+      });
+
+      setProgress(0);
+      setIsDeployModalOpen(false);
+      navigate(RouteConstant.dashboard.resource.path);
+    } catch (error: any) {
+      const message = ErrorHandler.extractMessage(error);
+      showCustomToast(message, {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
+      setProgress(0);
+    }
   };
+
   const descriptionModal = (row: ParameterData) => {
     openModal({
       id: "info-modal",
       content: () => (
-        <div className="flex max-w-xs  flex-col gap-4 p-4">
+        <div className="flex max-w-xs flex-col gap-4 p-4">
           <h2 className="text-lg uppercase border-b pb-2">
-            {row.ParameterLabel}
+            {row.parameterLabel}
           </h2>
           <div className="text-sm text-gray-600 space-y-2">
-            {row.ParameterInfo1 && <p>{row.ParameterInfo1}</p>}
-            {row.ParameterInfo2 && <p>{row.ParameterInfo2}</p>}
-            {row.ParameterInfo3 && <p>{row.ParameterInfo3}</p>}
+            {row.parameterInfo1 && <p>{row.parameterInfo1}</p>}
+            {row.parameterInfo2 && <p>{row.parameterInfo2}</p>}
+            {row.parameterInfo3 && <p>{row.parameterInfo3}</p>}
           </div>
-          <div className="flex items-right justify-end">
-            <Button label="Close" onClick={() => closeModal()} />
+          <div className="flex justify-end">
+            <Button label="Close" onClick={closeModal} />
           </div>
         </div>
       ),
     });
   };
 
-  const initialValues = siteCreateJson.reduce((acc, item) => {
-    acc[item.ParameterName] = ""; // or any logic you need
-    return acc;
-  }, {} as Record<string, any>) as ParameterData;
-
-  const onSubmit = (values: typeof initialValues) => {
-    console.log("Form submitted:", values);
-  };
+  const initialValues =
+    resourceTemplate?.data?.reduce(
+      (acc: Record<string, string>, item: ParameterData) => ({
+        ...acc,
+        [item.parameterName]: "",
+      }),
+      {}
+    ) || {};
 
   const formik = useFormik({
     initialValues,
-    onSubmit,
+    onSubmit: handleSubmit,
+    validationSchema: () => generateDynamicSchema(resourceTemplate?.data),
+    validateOnMount: true,
+    enableReinitialize: true,
   });
   console.log(formik.values);
   return (
@@ -90,37 +116,33 @@ export const CreateNewResource = () => {
         </div>
 
         <div className=" flex mt-5   flex-col">
-          {siteCreateJson.map((item) => (
+          {resourceTemplate?.data.map((item) => (
             <div
               className="flex items-center w-full py-[1px] border-b"
-              key={item.ParameterSerial}
+              key={item.parameterSerial}
             >
               <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-                {item.ParameterMandatory === "Yes" && (
+                {item.parameterMandatory && (
                   <span className="text-red-500 ml-1">*</span>
-                )}{" "}
-                {item.ParameterLabel}
-              </p>{" "}
+                )}
+                {item.parameterLabel}
+              </p>
               <div className="lg:w-2/5 w-full pr-3 flex gap-1">
                 <RenderField
-                  name={item.ParameterName}
+                  name={item.parameterName}
                   formik={formik}
-                  type={item.ParameterInputType}
-                  options={
-                    item.ParameterSource === "ProviderList"
-                      ? providerOptions
-                      : []
-                  }
+                  placeholder={`Enter your ${item.parameterLabel}`}
+                  type={item.parameterInputType || "text"}
+                  options={[]}
+                  autoComplete="off"
                 />
-                <div className=" flex justify-center">
-                  <button
-                    onClick={() => descriptionModal(item)}
-                    className="rounded-full  flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                    title="View more info"
-                  >
-                    <Info size={16} />
-                  </button>
-                </div>
+                <button
+                  onClick={() => descriptionModal(item)}
+                  className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                  title="View more info"
+                >
+                  <Info size={16} />
+                </button>
               </div>
             </div>
           ))}
@@ -129,11 +151,21 @@ export const CreateNewResource = () => {
         <div className="flex m-3 sm:m-5 justify-end">
           <Button
             label="Proceed"
-            onClick={handleProceed}
+            disabled={!formik.isValid || isLoading}
+            onClick={() => setIsDeployModalOpen(true)}
             surfixIcon={<ArrowRight className="size-3" />}
           />
         </div>
       </div>
+      <SiteDeployModal
+        isOpen={isDeployModalOpen}
+        onClose={() => !isLoading && setIsDeployModalOpen(false)}
+        formik={formik}
+        json={resourceTemplate}
+        isLoading={isLoading}
+        progress={progress}
+        onDeploy={formik.handleSubmit}
+      />
     </div>
   );
 };

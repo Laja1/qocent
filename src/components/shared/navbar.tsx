@@ -25,7 +25,7 @@ export default function NavbarDemo({
       <Navbar>
         {/* Desktop Nav */}
         <NavBody>
-          <p className="text-xl font-bold">QCS</p>
+          <p className="text-xl font-bold">QOCENT</p>
 
           <NavItems items={navRoutes} />
           <div className="flex items-center gap-4">

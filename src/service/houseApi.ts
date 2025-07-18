@@ -4,7 +4,6 @@ import { baseQuery } from "./httpClient/baseQuery";
 import type { genericResponse } from "@/models/response";
 // import type { GetHouseListResponse } from "@/models/response/houseResponse"; // ✅ Ensure correct response
 import { ApiEnums } from "@/utilities/enums";
-import type { createHouseRequest } from "@/models/request/houseRequest";
 import type { getHouseResponse } from "@/models/response/homeResponse";
 
 export const houseApi = createApi({
@@ -12,7 +11,7 @@ export const houseApi = createApi({
   baseQuery: baseQuery,
   tagTypes: [ApiEnums.House],
   endpoints: (build) => ({
-    createServerHouse: build.mutation<genericResponse, createHouseRequest>({
+    createServerHouse: build.mutation<genericResponse, void>({
       query: (body) => ({
         url: "/house/create",
         method: "POST",

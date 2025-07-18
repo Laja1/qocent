@@ -1,8 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { imgLinks } from "@/assets/assetLink";
 import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
-import type { houseRoomType } from "./type";
 import { useNavigate } from "react-router-dom";
 import { SummaryTable } from "../server-sites/summary-table";
 import { DeployResources } from "@/components/not-shared/deploy-resources";
@@ -13,47 +13,57 @@ import { useState } from "react";
 import { useModal } from "@/components/shared/modal";
 import { houseArchitectureData } from "@/utilities/constants/config";
 import { HouseLevel } from "../architectural-room/house-level";
-import { useGetHousesByProviderQuery } from "@/service/houseApi";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { formatDate } from "@/utilities/helper";
 import { DataFlow } from "@/components/not-shared/data-flow";
+import { useGetResourceByProviderQuery } from "@/service/resourceApi";
+import type { resourceType } from "@/models/response/resourceResponse";
+import { ApiEnums } from "@/utilities/enums";
 
 export const ServerHouses = () => {
   const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
   const [rowId, setRowId] = useState(100004);
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  const serverHouseColumn: ColumnDef<houseRoomType>[] = [
+  const { data, isLoading } = useGetResourceByProviderQuery({
+    provider: dashboard.provider,
+    resource: ApiEnums.House,
+  });
+  const serverHouseColumn: ColumnDef<resourceType>[] = [
     {
-      id: "houseId",
+      id: "resourceId",
       header: "HOUSE ID",
-      accessorKey: "houseId",
-      cell: (row) => <span className="line-clamp-1">{row.houseId}</span>,
+      accessorKey: "resourceId",
+      cell: (row) => <span className="line-clamp-1">{row?.resourceId}</span>,
       sortable: true,
     },
     {
-      id: "houseName",
+      id: "resourceName",
       header: "HOUSE NAME",
-      accessorKey: "houseName",
+      accessorKey: "resourceName",
       cell: (row) => (
-        <span className="line-clamp-1 font-brfirma-bold">{row.houseName}</span>
+        <span className="line-clamp-1 font-brfirma-bold">
+          {row.resourceName}
+        </span>
       ),
       sortable: true,
     },
     {
-      id: "houseCode",
+      id: "resourceCode",
       header: "HOUSE CODE",
-      accessorKey: "houseCode",
-      cell: (row) => <span className=" line-clamp-1">{row.houseCode}</span>,
+      accessorKey: "resourceCode",
+      cell: (row) => <span className=" line-clamp-1">{row.resourceCode}</span>,
       sortable: true,
       filterType: "select",
     },
     {
-      id: "houseSiteCode",
+      id: "resourceSiteCode",
       header: "SITE CODE",
-      accessorKey: "houseSiteCode",
-      cell: (row) => <span className=" line-clamp-1">{row.houseSiteCode}</span>,
+      accessorKey: "resourceSiteCode",
+      cell: (row) => (
+        <span className=" line-clamp-1">{row.resourceSiteCode}</span>
+      ),
       sortable: true,
       filterType: "select",
     },
@@ -84,13 +94,13 @@ export const ServerHouses = () => {
     //   ),
     // },
     {
-      id: "houseProviderId",
+      id: "resourceProviderId",
       header: "PROVIDER",
-      accessorKey: "houseProviderId",
+      accessorKey: "resourceProviderId",
       sortable: true,
       cell: (row) => (
         <span className="text-center justify-center flex line-clamp-1">
-          {row.houseProviderId === 1 ? (
+          {row.resourceProviderId === "1" ? (
             <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
           ) : (
             <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
@@ -99,70 +109,67 @@ export const ServerHouses = () => {
       ),
     },
     {
-      id: "houseCreatedAt",
+      id: "resourceCreatedAt",
       header: "DATE CREATED",
       headerClassName: "text-right",
-      accessorKey: "houseCreatedAt",
+      accessorKey: "resourceCreatedAt",
       sortable: true,
       cell: (row) => (
         <span className="text-right block ">
-          {formatDate(row.houseCreatedAt)}
+          {formatDate(row.resourceCreatedAt)}
         </span>
       ),
     },
     {
-      id: "houseCidr",
+      id: "resourceIP",
       header: "IP RANGE",
       headerClassName: "text-right",
-      accessorKey: "houseCidr",
+      accessorKey: "resourceIP",
       sortable: true,
       cell: (row) => (
-        <span className="text-right block line-clamp-1">{row.houseCidr}</span>
+        <span className="text-right block line-clamp-1">{row.resourceIP}</span>
       ),
     },
   ];
 
-  const { data: houseData, isLoading } = useGetHousesByProviderQuery({
-    provider: dashboard.providerId,
-  });
-  console.log(houseData);
   const actions = [
     {
       label: "View",
       icon: Eye,
-      onClick: (row: houseRoomType) => {
-        console.log("View server room:", row.houseId);
+      onClick: (row: resourceType) => {
+        console.log("View server room:", row.resourceId);
         // TODO: Implement view functionality
       },
     },
     {
       label: "Edit",
       icon: Edit,
-      onClick: (row: houseRoomType) => {
-        console.log("Edit server room:", row.houseId);
+      onClick: (row: resourceType) => {
+        console.log("Edit server room:", row.resourceType);
         // TODO: Implement edit functionality
       },
     },
     {
       label: "Delete",
       icon: Trash2,
-      onClick: (row: houseRoomType) => {
-        console.log("Delete server room:", row.houseId);
+      onClick: (row: resourceType) => {
+        console.log("Delete server room:", row.resourceName);
         // TODO: Implement delete confirmation
       },
       variant: "destructive" as const,
     },
   ];
+  const row = data?.data.find((item: any) => item.siteId === rowId);
 
   const tabData = [
     {
       id: 1,
       text: "Summary",
       component: (
-        <div className="flex">
-          <div className="w-1/4 flex">
-            <div className=" flex mr-5 flex-col w-full">
-              <SummaryTable />
+        <div className="flex lg:flex-row flex-col">
+          <div className=" lg:w-1/4 lg:mr-5 flex">
+            <div className=" flex flex-col w-full ">
+              {row && <SummaryTable />}
               <Button
                 label="Add Resource"
                 prefixIcon={<PlusIcon className="size-4" />}
@@ -172,13 +179,21 @@ export const ServerHouses = () => {
                 onClick={() =>
                   openModal({
                     id: `deploy-${rowId}`,
-                    content: () => <DeployResources closeModal={closeModal} />,
+                    content: () => (
+                      <DeployResources
+                        closeModal={closeModal}
+                        onProceed={() => navigate("/create-new-resource")}
+                        onNavigate={(path, state) => {
+                          navigate(path, { state });
+                        }}
+                      />
+                    ),
                   })
                 }
               />
             </div>
           </div>
-          <div className="w-3/4">
+          <div className="w-full lg:w-3/4">
             <Resource />
           </div>
         </div>
@@ -225,15 +240,15 @@ export const ServerHouses = () => {
 
       <div className="px-5 flex flex-col">
         <DataTable
-          data={houseData?.data ?? []}
+          data={data?.data ?? []}
           columns={serverHouseColumn}
           isLoading={isLoading}
-          searchPlaceholder="Search server rooms by name, ID, or code..."
+          searchPlaceholder="Search server house by name, ID, or code..."
           pageSize={5}
           actions={actions}
-          onRowClick={(row) => setRowId(Number(row.houseId))}
+          onRowClick={(row) => setRowId(row.resourceId)}
           highlightedRowId={rowId}
-          getRowId={(row) => row.houseId}
+          getRowId={(row) => row.resourceId}
           initialSorting={{ id: "houseName", desc: false }}
         />
       </div>

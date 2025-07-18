@@ -3,19 +3,25 @@ import { Hero } from "./hero";
 
 import NavbarDemo from "@/components/shared/navbar";
 import { Services } from "./services";
-import InfiniteCardCarousel from "./inifite-cards";
 import { Footer } from "@/components/shared";
+import { Faq } from "./faq";
+import { HowIt } from "./how-it";
 
 const Home = () => {
   return (
     <div className=" h-full w-full">
       <NavbarDemo>
         <Hero />
-        <InfiniteCardCarousel />
+        {/* <InfiniteCardCarousel /> */}
 
         <Services />
+        <Faq />
+
+       
+        <HowIt />
         <CallToAction />
         <Footer />
+   
       </NavbarDemo>
     </div>
   );

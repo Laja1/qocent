@@ -2,7 +2,6 @@
 import { useState } from "react";
 import { useFormik, type FormikProps } from "formik";
 import { Button, SelectField } from "../shared";
-import { useLazyGetSitesQuery } from "@/service/siteApi";
 // import { useGetSitesQuery } from "@/service/siteApi";
 
 const resourceSelect1 = [
@@ -32,7 +31,7 @@ const optionsMap: Record<string, { label: string; value: string }[]> = {
   resourceSelect2,
   resourceSelect3,
 };
-
+console.log(optionsMap)
 type ResourceSelectFieldProps = {
   name: string;
   label?: string;
@@ -52,19 +51,19 @@ export const ResourceSelectField = ({
     []
   );
   const [isLoading, setIsLoading] = useState(false);
-  const [triggerGetSites] = useLazyGetSitesQuery();
 
   const handleFetchOptions = async (provider: string) => {
+    console.log(provider)
     setIsLoading(true);
     try {
-      const res = await triggerGetSites({ provider }).unwrap();
+      // const res = await triggerGetSites().unwrap();
 
-      const mappedOptions = res.data?.map((site: any) => ({
-        label: site.siteName,
-        value: site.siteCode,
-      })) ?? [];
+      // const mappedOptions = res.data?.map((site: any) => ({
+      //   label: site.siteName,
+      //   value: site.siteCode,
+      // })) ?? [];
 
-      setOptions(mappedOptions);
+       setOptions([]);
     } catch (error) {
       console.error("Error fetching options:", error);
     } finally {

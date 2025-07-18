@@ -6,17 +6,18 @@ export const resourceTypeOptions = [
   { label: "Cache", value: "cache" },
   { label: "Security", value: "security" },
   { label: "Monitoring", value: "monitoring" },
-  { label: "Server House", value: "server-house" },
+  { label: "Server Room", value: "serverRoom" },
+  { label: "Server House", value: "serverHouse" },
+  { label: "Server Site", value: "serverSite" },
 ];
 
 export const resourceSiteCodeOptions = [
-    { label: "Rubies Production Site A", value: "rubies-site-a" },
-    { label: "Rubies Production Site B", value: "rubies-site-b" },
-    { label: "Rubies Production Site C", value: "rubies-site-c" },
-  ];
+  { label: "Rubies Production Site A", value: "rubies-site-a" },
+  { label: "Rubies Production Site B", value: "rubies-site-b" },
+  { label: "Rubies Production Site C", value: "rubies-site-c" },
+];
 
-  export const providerOptions = [
-    { label: `AWS`, value: "aws" },
-    { label: "Huawei", value: "huawei" },
-  ];
-  
+export const providerOptions = [
+  { label: `AWS`, value: "aws" },
+  { label: "Huawei", value: "huawei" },
+];

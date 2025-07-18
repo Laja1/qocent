@@ -1,6 +1,7 @@
 export enum ApiEnums {
-    Site = "site",
-    House = "house",
-    Room= "room"
+    Site = "serverSite",
+    House = "serverHouse",
+    Room= "serverRoom",
+    Resource= "resource"
   }
   

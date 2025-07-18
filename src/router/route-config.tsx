@@ -5,6 +5,7 @@ import { dashboardRoute } from "./route/dashboardRoute";
 import { publicRoute } from "./route/publicRoute";
 import { ProtectedRoute } from "./route/protectedRoute";
 import { DashboardLayoutRouter } from "@/components/layouts/DashboardLayoutRouter";
+import NotFound from "@/pages/not-found-page";
 
 const publicRoutesMapped = publicRoute.map(route => ({
   path: route.path,
@@ -27,20 +28,12 @@ export const routeConfig = [
     element: <Outlet />,
     children: [
       {
-        path: "/",
+        path: "",
         element: <Home />,
       },
+      ...publicRoutesMapped,
+      ...authRoutesMapped,
     ],
-  },
-  {
-    path: "/",
-    element: <Outlet />,
-    children:publicRoutesMapped
-  },
-  {
-    path: "/",
-    element: <Outlet />,
-    children:authRoutesMapped
   },
   {
     path: "/",
@@ -51,10 +44,9 @@ export const routeConfig = [
     ),
     children: dashboardRoutesMapped,
   },
-  
-  // {
-  //   path: "",
-  //   element: <DashboardLayoutWithoutSidebar />,
-  //   children: [...dashboardRoutesWithoutSidebar],
-  // },
+  {
+    path: "*",
+    element: <NotFound />,
+  },
 ];
+

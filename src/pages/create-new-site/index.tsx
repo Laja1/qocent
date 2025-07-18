@@ -1,83 +1,125 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Header, RenderField } from "@/components/shared";
-import { useModal } from "@/components/shared/modal";
-import { ArrowRight, Info } from "lucide-react";
-import { siteCreateJson } from "./json";
-import { useFormik } from "formik";
-import type { ParameterData } from "./type";
-import { IconMichelinStar } from "@tabler/icons-react";
-import { useCreateServerSiteMutation } from "@/service/siteApi";
-import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { showCustomToast } from "@/components/shared/toast";
-import type { createSiteRequest } from "@/models/request/siteRequest";
-import { RouteConstant } from "@/router/routes";
-import { useNavigate } from "react-router-dom";
-import { createSiteSchema } from "@/utilities/schema/resourceSchema";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store";
-import { useState } from "react";
-import { SiteDeployModal } from "@/components/not-shared/site-modal";
+import  { useState, useEffect } from 'react';
+import { useFormik } from 'formik';
+import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { ArrowRight, Info } from 'lucide-react';
+import { IconMichelinStar } from '@tabler/icons-react';
+import { Button, Header, RenderField } from '@/components/shared';
+import { useModal } from '@/components/shared/modal';
+import { showCustomToast } from '@/components/shared/toast';
+import { SiteDeployModal } from '@/components/not-shared/site-modal';
+import { RouteConstant } from '@/router/routes';
+import { ErrorHandler } from '@/service/httpClient/errorHandler';
+import {
+  useCreateServerSiteMutation,
+  useGetSiteParameterQuery,
+} from '@/service/siteApi';
+import { generateDynamicSchema } from '@/utilities/schema/resourceSchema';
+import type { RootState } from '@/store';
+import type { ParameterData } from './type';
 
 export const CreateNewSite = () => {
   const navigate = useNavigate();
   const [createSite, { isLoading }] = useCreateServerSiteMutation();
+  const { data: serverSiteParameterData, isError, isLoading: isParamsLoading } = useGetSiteParameterQuery();
   const { openModal, closeModal } = useModal();
   const user = useSelector((state: RootState) => state.auth);
   const [progress, setProgress] = useState(0);
-const dashboard = useSelector((state:RootState)=>state.dashboard)
-console.log(dashboard)
+  const dashboard = useSelector((state: RootState) => state.dashboard);
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
 
-  const handleSubmit = async (
-    values: Omit<createSiteRequest, "siteUserId">
-  ) => {
+  // Initialize form with empty values
+  const initialValues = serverSiteParameterData?.data?.reduce(
+    (acc: Record<string, string>, item: ParameterData) => ({
+      ...acc,
+      [item.parameterName]: '',
+    }),
+    {}
+  ) || {};
+
+  // Form submission handler
+  const handleSubmit = async (values:  any) => {
     try {
-      const payload: createSiteRequest = {
+      const payload = {
         ...values,
-        siteUserId: user.userId,
+        siteUserId: user.userId||'',
       };
+
+      // Simulate deployment progress
       for (let i = 0; i <= 100; i += 10) {
         setProgress(i);
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
       const res = await createSite(payload).unwrap();
-
-      // Simulate deployment progress
-     
       showCustomToast(res.responseMessage, {
-        toastOptions: {
-          type: "success",
-          autoClose: 5000,
-        },
+        toastOptions: { type: 'success', autoClose: 5000 },
       });
+
       setProgress(0);
       setIsDeployModalOpen(false);
       navigate(RouteConstant.dashboard.serverSite.path);
     } catch (error: any) {
-      console.log(error);
       const message = ErrorHandler.extractMessage(error);
       showCustomToast(message, {
-        toastOptions: {
-          type: "error",
-          autoClose: 5000,
-        },
+        toastOptions: { type: 'error', autoClose: 5000 },
       });
+      setProgress(0);
     }
-  }
+  };
 
+  // Initialize Formik
+  const formik = useFormik({
+    initialValues,
+    onSubmit: handleSubmit,
+    validationSchema: () => generateDynamicSchema(serverSiteParameterData?.data),
+    validateOnMount: true,
+    enableReinitialize: true,
+  });
+
+  console.log(formik?.errors, formik?.values)
+  useEffect(() => {
+    if (serverSiteParameterData?.data) {
+      const newValues = serverSiteParameterData.data.reduce(
+        (acc: Record<string, string>, item: ParameterData) => ({
+          ...acc,
+          [item.parameterName]: '',
+        }),
+        {}
+      );
+      formik.setValues(newValues);
+    }
+  }, [serverSiteParameterData?.data]);
+
+  // Region options based on provider
+  const providerRegions: Record<string, { label: string; value: string }[]> = {
+    aws: [{ label: 'US East (N. Virginia)', value: 'af-south-1' }],
+    huawei: [{ label: 'CN North-Beijing4', value: 'cn-north-4' }],
+    gcp: [
+      { label: 'Iowa (us-central1)', value: 'us-central1' },
+      { label: 'Belgium (europe-west1)', value: 'europe-west1' },
+    ],
+    azure: [
+      { label: 'East US', value: 'eastus' },
+      { label: 'West Europe', value: 'westeurope' },
+    ],
+  };
+
+  const providerKey = dashboard?.provider?.toLowerCase();
+  const regionOptions = providerKey ? providerRegions[providerKey] || [] : [];
+
+  // Modal for parameter descriptions
   const descriptionModal = (row: ParameterData) => {
     openModal({
-      id: "info-modal",
+      id: 'info-modal',
       content: () => (
         <div className="flex max-w-xs flex-col gap-4 p-4">
-          <h2 className="text-lg uppercase border-b pb-2">
-            {row.ParameterLabel}
-          </h2>
+          <h2 className="text-lg uppercase border-b pb-2">{row.parameterLabel}</h2>
           <div className="text-sm text-gray-600 space-y-2">
-            {row.ParameterInfo1 && <p>{row.ParameterInfo1}</p>}
-            {row.ParameterInfo2 && <p>{row.ParameterInfo2}</p>}
-            {row.ParameterInfo3 && <p>{row.ParameterInfo3}</p>}
+            {row.parameterInfo1 && <p>{row.parameterInfo1}</p>}
+            {row.parameterInfo2 && <p>{row.parameterInfo2}</p>}
+            {row.parameterInfo3 && <p>{row.parameterInfo3}</p>}
           </div>
           <div className="flex justify-end">
             <Button label="Close" onClick={closeModal} />
@@ -87,62 +129,31 @@ console.log(dashboard)
     });
   };
 
-  const providerRegions: Record<string, { label: string; value: string }[]> = {
-    aws: [
-      { label: "US East (N. Virginia)", value: "af-south-1" },
-      // { label: "US West (Oregon)", value: "us-west-2" },
-      // { label: "EU (Ireland)", value: "eu-west-1" },
-    ],
-    huawei: [
-      { label: "CN North-Beijing4", value: "cn-north-4" },
-      // { label: "AF Johannesburg", value: "af-south-1" },
-      // { label: "AP Singapore", value: "ap-southeast-3" },
-    ],
-    gcp: [
-      { label: "Iowa (us-central1)", value: "us-central1" },
-      { label: "Belgium (europe-west1)", value: "europe-west1" },
-    ],
-    azure: [
-      { label: "East US", value: "eastus" },
-      { label: "West Europe", value: "westeurope" },
-    ],
-  };
-  const createSiteInit = {
-    siteCode: "",
-    siteDescription: "",
-    siteEOLAction: "",
-    siteExpiryDate: "",
-    siteName: "",
-    siteProvider: dashboard?.provider,
-    siteRegion: "",
-  };
+  // Loading state
+  if (isParamsLoading) {
+    return (
+      <div className="">
+        <Header
+          title="Create Server Site"
+          description="A server can have one or more server houses. A server house is provided by a provider."
+        />
+        <div className="animate-pulse space-y-4 mx-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-12 bg-gray-200 rounded"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
-  const formik = useFormik({
-    initialValues: createSiteInit,
-    onSubmit: handleSubmit,
-    validationSchema: createSiteSchema,
-    validateOnMount: true,
-  });
-
-  const regionOptions = dashboard?.provider && providerRegions[dashboard.provider]
-  ? providerRegions[dashboard.provider]
-  : [];
-
-console.log(regionOptions,dashboard?.provider,)
-  const handleProceed = () => {
-    setIsDeployModalOpen(true);
-  };
-
-  const handleCloseDeployModal = () => {
-    if (!isLoading) {
-      setIsDeployModalOpen(false);
-      setProgress(0);
-    }
-  };
-
-  const handleDeploy = () => {
-    formik.handleSubmit();
-  };
+  // Error state
+  if (isError || !serverSiteParameterData?.data) {
+    return (
+      <div className="p-4 text-red-500">
+        Failed to load site parameters. Please try again later.
+      </div>
+    );
+  }
 
   return (
     <>
@@ -155,51 +166,40 @@ console.log(regionOptions,dashboard?.provider,)
         <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
           <div className="bg-gradient-to-r flex justify-between from-black to-green-800 rounded-t-md px-3 sm:px-5 py-5">
             <div>
-              <p className="text-base sm:text-lg text-white">
-                Create Server Site
-              </p>
+              <p className="text-base sm:text-lg text-white">Create Server Site</p>
               <p className="text-xs text-gray-400 leading-tight">
-                A server can have one or more server houses. A server house is
-                provided by a provider.
+                A server can have one or more server houses. A server house is provided by a provider.
               </p>
             </div>
             <IconMichelinStar color="white" size={40} />
           </div>
 
           <div className="flex mt-5 flex-col">
-            {siteCreateJson.map((item) => (
+            {serverSiteParameterData.data.map((item) => (
               <div
                 className="flex items-center w-full py-[1px] border-b"
-                key={item.ParameterSerial}
+                key={item.parameterSerial}
               >
                 <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-                  {item.ParameterMandatory === "Yes" && (
-                    <span className="text-red-500 ml-1">*</span>
-                  )}{" "}
-                  {item.ParameterLabel}
+                  {item.parameterMandatory && <span className="text-red-500 ml-1">*</span>}
+                  {item.parameterLabel}
                 </p>
                 <div className="lg:w-2/5 w-full pr-3 flex gap-1">
                   <RenderField
-                    name={item.ParameterName}
+                    name={item.parameterName}
                     formik={formik}
-                    placeholder={`Enter your ${item.ParameterLabel}`}
-                    type={item.ParameterInputType}
-                    options={
-                      item.ParameterName === "siteRegion"
-                        ? regionOptions
-                        : item.ParameterDropdown || []
-                    }
+                    placeholder={`Enter your ${item.parameterLabel}`}
+                    type={item.parameterInputType || 'text'}
+                    options={item.parameterName === 'siteRegion' ? regionOptions : []}
                     autoComplete="off"
                   />
-                  <div className="flex justify-center">
-                    <button
-                      onClick={() => descriptionModal(item)}
-                      className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                      title="View more info"
-                    >
-                      <Info size={16} />
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => descriptionModal(item)}
+                    className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                    title="View more info"
+                  >
+                    <Info size={16} />
+                  </button>
                 </div>
               </div>
             ))}
@@ -208,23 +208,22 @@ console.log(regionOptions,dashboard?.provider,)
           <div className="flex m-3 sm:m-5 justify-end">
             <Button
               label="Proceed"
-              disabled={!formik.isValid}
-              onClick={handleProceed}
+              disabled={!formik.isValid || isLoading}
+              onClick={() => setIsDeployModalOpen(true)}
               surfixIcon={<ArrowRight className="size-3" />}
             />
           </div>
         </div>
       </div>
 
-      {/* Deploy Modal */}
       <SiteDeployModal
         isOpen={isDeployModalOpen}
-        onClose={handleCloseDeployModal}
+        onClose={() => !isLoading && setIsDeployModalOpen(false)}
         formik={formik}
-        json={siteCreateJson}
+        json={serverSiteParameterData}
         isLoading={isLoading}
         progress={progress}
-        onDeploy={handleDeploy}
+        onDeploy={formik.handleSubmit}
       />
     </>
   );

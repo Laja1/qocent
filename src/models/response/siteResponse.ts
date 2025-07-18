@@ -3,26 +3,32 @@ export type genericResponse = {
     responseMessage: string
 }
   
-export type SiteData = {
-  siteAccountId: string;
-  siteCode: string;
-  siteCreatedAt: string;
-  siteCurrency: string | null;
-  siteDescription: string;
-  siteEOLAction: string;
-  siteExpiryDate: string | null;
-  siteId: number;
-  siteName: string;
-  sitePaymentType: string | null;
-  siteProvider: string;
-  siteRegion: string;
-  siteStatus: string;
-  siteUpdatedAt: string;
-  siteUserId: number;
+
+
+export type Parameter = {
+  parameterId: number;
+  parameterProvider: string;
+  parameterObject: string;
+  parameterSerial: string;
+  parameterName: string;
+  parameterField: string;
+  parameterDataType: string;
+  parameterInputType: string;
+  parameterLookup: string;
+  parameterMandatory: string;
+  parameterLabel: string;
+  parameterInput: string;
+  parameterLength: number;
+  parameterValidation: string;
+  parameterSource: string;
+  parameterInfo1: string;
+  parameterInfo2: string;
+  parameterInfo3: string;
 };
 
-export type GetSiteListResponse = {
-  responseCode: string; // typically "00"
-  responseMessage: string;
-  data: SiteData[];
+export type ParameterResponse = {
+  success: boolean;
+  message: string;
+  data: Parameter[];
+  error: string;
 };

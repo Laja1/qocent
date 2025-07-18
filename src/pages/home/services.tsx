@@ -40,7 +40,7 @@ const projects = [
 
 export function Services() {
   return (
-    <div className="max-w-5xl mx-auto px-8 mt-5">
+    <div className="max-w-5xl mx-auto px-8 mt-10 lg:mt-20">
       <p className="text-black md:text-3xl text-xl lg:text-5xl leading-[56px] font-bold">
         Everything you need to scale
       </p>

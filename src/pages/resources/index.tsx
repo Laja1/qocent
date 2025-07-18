@@ -156,9 +156,12 @@ export const Resources = () => {
       id: `deploy`,
       content: () => (
         <DeployResources
-          closeModal={closeModal}
-          onProceed={() => navigate("/create-new-resource")}
-        />
+        closeModal={closeModal}
+        onProceed={() => navigate("/create-new-resource")}
+        onNavigate={(path, state) => {
+          navigate(path, { state });
+        }}
+      />
       ),
     });
   };
@@ -209,7 +212,7 @@ export const Resources = () => {
       >
         <Button
           intent="tertiary"
-          label="Create New resource"
+          label="Create New Resource"
           prefixIcon={<PlusIcon className="size-4" />}
           size="small"
           onClick={handleOpenDeployModal}

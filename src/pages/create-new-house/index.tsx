@@ -1,96 +1,53 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect } from "react";
+import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ArrowRight, Info } from "lucide-react";
+import { IconMichelinStar } from "@tabler/icons-react";
 import { Button, Header, RenderField } from "@/components/shared";
 import { useModal } from "@/components/shared/modal";
-import { ArrowRight, Info } from "lucide-react";
-import { houseCreateData } from "./data";
-import { useFormik } from "formik";
-import type { HouseParameterItem } from "./type";
-import { useGetSitesQuery } from "@/service/siteApi";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store";
-import { SiteDeployModal } from "@/components/not-shared/site-modal";
-import { useState } from "react";
-import type { createHouseRequest } from "@/models/request/houseRequest";
-import { useCreateServerHouseMutation } from "@/service/houseApi";
 import { showCustomToast } from "@/components/shared/toast";
+import { SiteDeployModal } from "@/components/not-shared/site-modal";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useNavigate } from "react-router-dom";
-import { houseSchema } from "@/utilities/schema/resourceSchema";
-
-// Provider regions configuration
-const PROVIDER_REGIONS: Record<string, { label: string; value: string }[]> = {
-  aws: [
-    { label: "US East (N. Virginia)", value: "af-south-1" },
-    // { label: "US West (Oregon)", value: "us-west-2" },
-    // { label: "EU (Ireland)", value: "eu-west-1" },
-  ],
-  huawei: [
-    { label: "CN North-Beijing4", value: "af-north-1" },
-    // { label: "AF Johannesburg", value: "af-south-1" },
-    // { label: "AP Singapore", value: "ap-southeast-3" },
-  ],
-  gcp: [
-    { label: "Iowa (us-central1)", value: "us-central1" },
-    { label: "Belgium (europe-west1)", value: "europe-west1" },
-  ],
-  azure: [
-    { label: "East US", value: "eastus" },
-    { label: "West Europe", value: "westeurope" },
-  ],
-};
+import { useCreateServerSiteMutation } from "@/service/siteApi";
+import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
+import type { RootState } from "@/store";
+import { useGetResourceTemplateQuery } from "@/service/resourceApi";
+import type { ParameterData } from "../create-new-site/type";
 
 export const CreateNewHouse = () => {
   const navigate = useNavigate();
+  const [createSite, { isLoading }] = useCreateServerSiteMutation();
+  const {
+    data: serverHouseTemplate,
+    isError,
+    isLoading: isParamsLoading,
+  } = useGetResourceTemplateQuery({ resource: "serverHouse" });
   const { openModal, closeModal } = useModal();
-  const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
+  const user = useSelector((state: RootState) => state.auth);
   const [progress, setProgress] = useState(0);
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  const user = useSelector((state: RootState) => state.auth);
-  const [createHouse, { isLoading }] = useCreateServerHouseMutation();
-  const { data: sitesData } = useGetSitesQuery({
-    provider: dashboard.provider,
-  });
-  console.log(sitesData);
-  const siteOptions =
-    sitesData?.data?.map((item) => ({
-      label: item.siteName,
-      value: String(item.siteCode),
-    })) ?? [];
+  const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
 
-  const regionOptions = dashboard?.provider
-    ? PROVIDER_REGIONS[dashboard.provider]
-    : [];
+  // Initialize form with empty values
+  const initialValues =
+    serverHouseTemplate?.data?.reduce(
+      (acc: Record<string, string>, item: ParameterData) => ({
+        ...acc,
+        [item.parameterName]: "",
+      }),
+      {}
+    ) || {};
 
-  // Form initial values
-  const initialValues = houseCreateData.reduce((acc, item) => {
-    acc[item.ParameterName] = "";
-    return acc;
-  }, {} as Record<string, any>) as HouseParameterItem;
-
-  // Form configuration
-  const formik = useFormik({
-    initialValues,
-    onSubmit: handleSubmit,
-    validationSchema: houseSchema,
-    validateOnMount: true,
-  });
-
-  // Get selected site details
-  const houseSite = sitesData?.data?.find(
-    (item) => item.siteCode === (formik.values as any)["houseSiteCode"]
-  );
-
-  // Event handlers
-  async function handleSubmit(values: any) {
+  // Form submission handler
+  const handleSubmit = async (values: any) => {
     try {
-      const payload: createHouseRequest = {
+      const payload = {
         ...values,
-        siteUserId: user?.userId,
-        houseSiteId: houseSite?.siteId,
+        siteUserId: user.userId || "",
       };
-
-      const res = await createHouse(payload).unwrap();
 
       // Simulate deployment progress
       for (let i = 0; i <= 100; i += 10) {
@@ -98,121 +55,157 @@ export const CreateNewHouse = () => {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
+      const res = await createSite(payload).unwrap();
       showCustomToast(res.responseMessage, {
-        toastOptions: {
-          type: "success",
-          autoClose: 5000,
-        },
+        toastOptions: { type: "success", autoClose: 5000 },
       });
 
       setProgress(0);
       setIsDeployModalOpen(false);
-      navigate(RouteConstant.dashboard.serverHouses.path);
+      navigate(RouteConstant.dashboard.serverSite.path);
     } catch (error: any) {
-      console.error("Error creating house:", error);
       const message = ErrorHandler.extractMessage(error);
       showCustomToast(message, {
-        toastOptions: {
-          type: "error",
-          autoClose: 5000,
-        },
+        toastOptions: { type: "error", autoClose: 5000 },
       });
-    }
-  }
-
-  const handleCloseDeployModal = () => {
-    if (!isLoading) {
-      setIsDeployModalOpen(false);
       setProgress(0);
     }
   };
 
-  const handleDeploy = () => {
-    formik.handleSubmit();
+  // Initialize Formik
+  const formik = useFormik({
+    initialValues,
+    onSubmit: handleSubmit,
+    validationSchema: () => generateDynamicSchema(serverHouseTemplate?.data),
+    validateOnMount: true,
+    enableReinitialize: true,
+  });
+
+  console.log(formik?.errors, formik?.values);
+  useEffect(() => {
+    if (serverHouseTemplate?.data) {
+      const newValues = serverHouseTemplate.data.reduce(
+        (acc: Record<string, string>, item: ParameterData) => ({
+          ...acc,
+          [item.parameterName]: "",
+        }),
+        {}
+      );
+      formik.setValues(newValues);
+    }
+  }, [serverHouseTemplate?.data]);
+
+  // Region options based on provider
+  const providerRegions: Record<string, { label: string; value: string }[]> = {
+    aws: [{ label: "US East (N. Virginia)", value: "af-south-1" }],
+    huawei: [{ label: "CN North-Beijing4", value: "cn-north-4" }],
+    gcp: [
+      { label: "Iowa (us-central1)", value: "us-central1" },
+      { label: "Belgium (europe-west1)", value: "europe-west1" },
+    ],
+    azure: [
+      { label: "East US", value: "eastus" },
+      { label: "West Europe", value: "westeurope" },
+    ],
   };
 
-  const handleProceed = () => {
-    setIsDeployModalOpen(true);
-  };
+  const providerKey = dashboard?.provider?.toLowerCase();
+  const regionOptions = providerKey ? providerRegions[providerKey] || [] : [];
 
-  const descriptionModal = (row: HouseParameterItem) => {
+  // Modal for parameter descriptions
+  const descriptionModal = (row: ParameterData) => {
     openModal({
       id: "info-modal",
       content: () => (
         <div className="flex max-w-xs flex-col gap-4 p-4">
           <h2 className="text-lg uppercase border-b pb-2">
-            {row.ParameterLabel}
+            {row.parameterLabel}
           </h2>
           <div className="text-sm text-gray-600 space-y-2">
-            {row.ParameterInfo1 && <p>{row.ParameterInfo1}</p>}
-            {row.ParameterInfo2 && <p>{row.ParameterInfo2}</p>}
-            {row.ParameterInfo3 && <p>{row.ParameterInfo3}</p>}
+            {row.parameterInfo1 && <p>{row.parameterInfo1}</p>}
+            {row.parameterInfo2 && <p>{row.parameterInfo2}</p>}
+            {row.parameterInfo3 && <p>{row.parameterInfo3}</p>}
           </div>
-          <div className="flex items-right justify-end">
-            <Button label="Close" onClick={() => closeModal()} />
+          <div className="flex justify-end">
+            <Button label="Close" onClick={closeModal} />
           </div>
         </div>
       ),
     });
   };
 
-  const getFieldOptions = (parameterName: string) => {
-    switch (parameterName) {
-      case "houseSiteCode":
-        return siteOptions;
-      case "houseRegion":
-        return regionOptions;
-      default:
-        return [];
-    }
-  };
+  // Loading state
+  if (isParamsLoading) {
+    return (
+      <div className="">
+        <Header
+          title="Create Server House"
+          description="A server can have one or more server houses. A server house is provided by a provider."
+        />
+        <div className="animate-pulse space-y-4 mx-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-12 bg-gray-200 rounded"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
-  console.log(formik.values);
+  // Error state
+  if (isError || !serverHouseTemplate?.data) {
+    return (
+      <div className="p-4 text-red-500">
+        Failed to load house parameters. Please try again later.
+      </div>
+    );
+  }
 
   return (
-    <div className="flex flex-col">
-      <Header
-        title="Create Server House"
-        description="A server can have one or more server houses. A server house is provided by a provider."
-      />
+    <>
+      <div className="flex flex-col">
+        <Header
+          title="Create Server House"
+          description="A server can have one or more server houses. A server house is provided by a provider."
+        />
 
-      <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
-        {/* Header Section */}
-        <div className="bg-gradient-to-r from-black to-green-800 rounded-t-md pl-3 sm:pl-5 py-5">
-          <p className="text-base sm:text-lg text-white">Create Server House</p>
-          <p className="text-xs text-gray-400 leading-tight">
-            A server can have one or more server houses. A server house is
-            provided by a provider.
-          </p>
-        </div>
-
-        {/* Form Fields */}
-        <div className="flex mt-5 flex-col">
-          {houseCreateData.map((item) => (
-            <div
-              className="flex items-center w-full py-[1px] border-b"
-              key={item.ParameterSerial}
-            >
-              <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-                {item.ParameterMandatory === "Yes" && (
-                  <span className="text-red-500 ml-1">*</span>
-                )}
-                {item.ParameterLabel}
+        <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
+          <div className="bg-gradient-to-r flex justify-between from-black to-green-800 rounded-t-md px-3 sm:px-5 py-5">
+            <div>
+              <p className="text-base sm:text-lg text-white">
+                Create Server House
               </p>
+              <p className="text-xs text-gray-400 leading-tight">
+                A server can have one or more server houses. A server house is
+                provided by a provider.
+              </p>
+            </div>
+            <IconMichelinStar color="white" size={40} />
+          </div>
 
-              <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-                <RenderField
-                  name={item.ParameterName}
-                  formik={formik}
-                  type={item.ParameterInputType}
-                  placeholder={`Enter your ${item.ParameterLabel}`}
-                  autoComplete="off"
-                  options={getFieldOptions(item.ParameterName)}
-                />
-
-                <div className="flex justify-center">
+          <div className="flex mt-5 flex-col">
+            {serverHouseTemplate.data.map((item) => (
+              <div
+                className="flex items-center w-full py-[1px] border-b"
+                key={item.parameterSerial}
+              >
+                <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
+                  {item.parameterMandatory && (
+                    <span className="text-red-500 ml-1">*</span>
+                  )}
+                  {item.parameterLabel}
+                </p>
+                <div className="lg:w-2/5 w-full pr-3 flex gap-1">
+                  <RenderField
+                    name={item.parameterName}
+                    formik={formik}
+                    placeholder={`Enter your ${item.parameterLabel}`}
+                    type={item.parameterInputType || "text"}
+                    options={
+                      item.parameterName === "siteRegion" ? regionOptions : []
+                    }
+                    autoComplete="off"
+                  />
                   <button
-                    type="button"
                     onClick={() => descriptionModal(item)}
                     className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
                     title="View more info"
@@ -221,31 +214,29 @@ export const CreateNewHouse = () => {
                   </button>
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
 
-        {/* Action Button */}
-        <div className="flex m-3 sm:m-5 justify-end">
-          <Button
-            label="Proceed"
-            onClick={handleProceed}
-            surfixIcon={<ArrowRight className="size-3" />}
-            disabled={!formik.isValid || isLoading}
-          />
+          <div className="flex m-3 sm:m-5 justify-end">
+            <Button
+              label="Proceed"
+              disabled={!formik.isValid || isLoading}
+              onClick={() => setIsDeployModalOpen(true)}
+              surfixIcon={<ArrowRight className="size-3" />}
+            />
+          </div>
         </div>
       </div>
 
-      {/* Deploy Modal */}
       <SiteDeployModal
         isOpen={isDeployModalOpen}
-        onClose={handleCloseDeployModal}
+        onClose={() => !isLoading && setIsDeployModalOpen(false)}
         formik={formik}
-        json={houseCreateData}
+        json={serverHouseTemplate}
         isLoading={isLoading}
         progress={progress}
-        onDeploy={handleDeploy}
+        onDeploy={formik.handleSubmit}
       />
-    </div>
+    </>
   );
 };

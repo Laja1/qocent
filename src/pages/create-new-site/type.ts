@@ -1,18 +1,20 @@
 export type ParameterData = {
-    ParameterProvider: string;
-    ParameterParent: string;
-    ParameterSerial: string;
-    ParameterName: string;
-    ParameterDataType: string;
-    ParameterInputType: string;
-    ParameterMandatory: string;
-    ParameterLabel: string;
-    ParameterLength: string;
-    ParameterValidation: string;
-    ParameterSource: string;
-    ParameterInfo1: string;
-    ParameterInfo2: string;
-    ParameterInfo3: string;
-    // Add a field for the actual user input value
-    UserValue?: string;
+  parameterId: number;
+  parameterProvider: string;
+  parameterObject: string;
+  parameterSerial: string;
+  parameterName: string;
+  parameterField: string;
+  parameterDataType: string;
+  parameterInputType: string;
+  parameterLookup: string;
+  parameterMandatory: string;
+  parameterLabel: string;
+  parameterInput: string;
+  parameterLength: number;
+  parameterValidation: string;
+  parameterSource: string;
+  parameterInfo1: string;
+  parameterInfo2: string;
+  parameterInfo3: string;
   };

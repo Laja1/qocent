@@ -1111,48 +1111,20 @@ extraResources:{
 
 
 export const dataFlowData = [
-  {
-    id: "server-1",
-    resourceType: "Server Rooms",
-    connectedTo: ["proxy-1"],
-  },
-  {
-    id: "proxy-1",
-    resourceType: "Proxy",
-    connectedTo: ["s3-1"],
-  },
-  {
-    id: "s3-1",
-    resourceType: "S3",
-  },
-  {
-    id: "igw-1",
-    resourceType: "IGW",
-    connectedTo: ["s3-1"],
-  },
-  {
-    id: "api-1",
-    resourceType: "API",
-    connectedTo: ["s3-1"],
-  },
-  {
-    id: "r53-1",
-    resourceType: "API",
-    connectedTo: ["s3-1"],
-  },
-  {
-    id: "r53-2",
-    resourceType: "API",
-    connectedTo: ["s3-1"],
-  },
-  {
-    id: "r53-3",
-    resourceType: "API",
-    connectedTo: ["s3-1"],
-  },
-  {
-    id: "r53-3",
-    resourceType: "API",
-    connectedTo: ["s3-1"],
-  },
+  { id: "server-1", resourceType: "Server Rooms", connectedTo: ["proxy-1"] },
+  { id: "proxy-1", resourceType: "Proxy", connectedTo: ["s3-1"] },
+  { id: "s3-1", resourceType: "S3" },
+  { id: "igw-1", resourceType: "IGW", connectedTo: ["s3-1"] },
+  { id: "api-1", resourceType: "API", connectedTo: ["s3-1"] },
+  { id: "r53-1", resourceType: "API", connectedTo: ["s3-1"] },
+  { id: "r53-2", resourceType: "API", connectedTo: ["s3-1"] },
+  { id: "r53-9", resourceType: "API", connectedTo: ["s3-1"] },
+  { id: "r53-10", resourceType: "API", connectedTo: ["s3-1"] },
+
+  { id: "r53-3", resourceType: "API", connectedTo: ["s3-1"] },
+  { id: "r53-4", resourceType: "API", connectedTo: ["s3-1"] }, 
+   { id: "r53-5", resourceType: "API", connectedTo: ["r53-1"] },
+   { id: "r53-6", resourceType: "IGW", connectedTo: ["r53-3"] },
+
 ];
+

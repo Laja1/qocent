@@ -3,7 +3,7 @@ import { imgLinks } from "@/assets/assetLink";
 import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Badge } from "@/components/ui/badge";
-import { sitesData, type ServerRoomType } from "@/utilities/constants/config";
+import { sitesData } from "@/utilities/constants/config";
 import { Edit, Eye, Trash2, PlusIcon, Plus } from "lucide-react";
 import { useState } from "react";
 import { ServerSitesTable2 } from "./server-sites-table";
@@ -17,29 +17,28 @@ import { DeployResources } from "@/components/not-shared/deploy-resources";
 import { useModal } from "@/components/shared/modal";
 import { useNavigate } from "react-router-dom";
 import { CostTable } from "./cost";
-import { useGetSitesQuery } from "@/service/siteApi";
 import { formatDate } from "@/utilities/helper";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
-import { RouteConstant } from "@/router/routes";
-import { MultiResourceForm } from "@/components/not-shared/resource-selectfield";
+import { useGetResourceByProviderQuery } from "@/service/resourceApi";
+import type { resourceType } from "@/models/response/resourceResponse";
+import { ApiEnums } from "@/utilities/enums";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  const user = useSelector((state: RootState) => state.auth);
-  const [tabShow, setTabShow] = useState(false);
-  const { data, isLoading } = useGetSitesQuery({
-    provider: dashboard.provider,
-    userId: user?.userId || 0,
-  });
-  console.log(dashboard);
-  console.log(data);
+  const [tabShow, setTabShow] = useState(true);
+  const { data: siteData, isLoading: isSiteLoading } =
+    useGetResourceByProviderQuery({
+      provider: dashboard.provider,
+      resource: ApiEnums.Site,
+    });
+  console.log(siteData);
   const { openModal, closeModal } = useModal();
   const [rowId, setRowId] = useState(100004);
   const [showAlert, setShowAlert] = useState(true);
 
-  const serverRoomColumns: ColumnDef<ServerRoomType>[] = [
+  const serverRoomColumns: ColumnDef<resourceType>[] = [
     // {
     //   id: "favourite",
     //   header: "",
@@ -54,27 +53,29 @@ export const ServerSites = () => {
     {
       id: "id",
       header: "ID",
-      accessorKey: "siteId",
-      cell: (row) => <span className="">{row.siteId}</span>,
+      accessorKey: "resourceId",
+      cell: (row) => <span className="">{row.resourceId}</span>,
       sortable: true,
     },
     {
-      id: "siteName",
+      id: "resourceName",
       header: "SITE NAME",
-      accessorKey: "siteName",
+      accessorKey: "resourceName",
       cell: (row) => (
         <span className="line-clamp-1 font-brfirma-bold  text-xs">
-          {row.siteName}
+          {row.resourceName}
         </span>
       ),
       sortable: true,
     },
     {
-      id: "siteCode",
+      id: "resourceCode",
       header: "SITE CODE",
-      accessorKey: "siteCode",
+      accessorKey: "resourceCode",
       cell: (row) => (
-        <span className="hover:text-red-500 line-clamp-1">{row.siteCode}</span>
+        <span className="hover:text-red-500 line-clamp-1">
+          {row.resourceCode}
+        </span>
       ),
       sortable: true,
 
@@ -113,14 +114,14 @@ export const ServerSites = () => {
     //   ),
     // },
     {
-      id: "siteProvider",
+      id: "resourceProvider",
       header: "PROVIDER",
-      accessorKey: "siteProvider",
+      accessorKey: "resourceProvider",
       headerClassName: "text-center ",
       sortable: true,
       cell: (row) => (
         <span className="text-center justify-center items-left  flex">
-          {row.siteProvider === "aws" ? (
+          {row.resourceProvider === "aws" ? (
             <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
           ) : (
             <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
@@ -129,20 +130,20 @@ export const ServerSites = () => {
       ),
     },
     {
-      id: "siteStatus",
+      id: "resourceStatus",
       header: "STATUS",
-      accessorKey: "siteStatus",
+      accessorKey: "resourceStatus",
       cell: (row) => (
         <div className="">
           <Badge
             variant="outline"
             className={
-              row.siteStatus === "ACTIVE"
+              row.resourceStatus === "ACTIVE"
                 ? "bg-green-50 text-green-800 border-green-500 text-[10px] "
                 : "bg-red-50 text-red-800 border-red-500 text-[10px]"
             }
           >
-            {row.siteStatus}
+            {row.resourceStatus}
           </Badge>
         </div>
       ),
@@ -154,29 +155,31 @@ export const ServerSites = () => {
       ],
     },
     {
-      id: "siteCreatedAt",
+      id: "resourceCreatedAt",
       header: "DATE CREATED",
       headerClassName: "text-right",
-      accessorKey: "siteCreatedAt",
+      accessorKey: "resourceCreatedAt",
       sortable: true,
       cell: (row) => (
         <span className="text-right block">
-          {formatDate(row.siteCreatedAt)}
+          {formatDate(row.resourceCreatedAt)}
         </span>
       ),
     },
-    // {
-    //   id: "bill",
-    //   header: "BILL (USD)",
-    //   accessorKey: "bill",
-    //   headerClassName: "text-right",
-    //   cell: (row) => (
-    //     <span className="block text-green-700 text-right">
-    //       {row.bill.toLocaleString("en-US", { minimumFractionDigits: 2 })}
-    //     </span>
-    //   ),
-    //   sortable: true,
-    // },
+    {
+      id: "resourceBill",
+      header: "BILL (USD)",
+      accessorKey: "resourceBill",
+      headerClassName: "text-right",
+      cell: (row) => (
+        <span className="block text-green-700 text-right">
+          {row.resourceBill.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+          })}
+        </span>
+      ),
+      sortable: true,
+    },
     // {
     //   id: "balance",
     //   header: "BALANCE (USD)",
@@ -191,34 +194,34 @@ export const ServerSites = () => {
     // },
   ];
 
-  const row = data?.data.find((item: any) => item.siteId === rowId);
+  const row = siteData?.data.find((item: any) => item.resourceId === rowId);
 
   const actions = [
     {
       label: "View",
       icon: Eye,
-      onClick: (row: ServerRoomType) => {
-        console.log("View server room:", row.siteId);
+      onClick: (row: resourceType) => {
+        console.log("View server room:", row.resourceId);
         // TODO: Implement view functionality
       },
     },
     {
       label: "Edit",
       icon: Edit,
-      onClick: (row: ServerRoomType) => {
-        console.log("Edit server room:", row.siteId);
+      onClick: (row: resourceType) => {
+        console.log("Edit server room:", row.resourceId);
         // TODO: Implement edit functionality
       },
     },
     {
       label: "Deploy Resource",
       icon: Plus,
-      onClick: (row: ServerRoomType) => {
+      onClick: (row: resourceType) => {
         openModal({
-          id: `deploy-${row.siteId}`,
+          id: `deploy-${row.resourceId}`,
           content: () => (
             <DeployResources
-              siteCodeId={row.siteId}
+              siteCodeId={row.resourceId}
               closeModal={closeModal}
               onProceed={() => navigate("/create-new-resource")}
             />
@@ -229,17 +232,17 @@ export const ServerSites = () => {
     {
       label: "Delete",
       icon: Trash2,
-      onClick: (row: ServerRoomType) => {
-        console.log("Delete server room:", row.siteId);
+      onClick: (row: resourceType) => {
+        console.log("Delete server room:", row.resourceId);
         // TODO: Implement delete confirmation
       },
       variant: "destructive" as const,
     },
   ];
 
-  const handleRowClick = (row: ServerRoomType) => {
+  const handleRowClick = (row: resourceType) => {
     setTabShow(true);
-    setRowId(row.siteId);
+    setRowId(row.resourceId);
   };
 
   const tabData = [
@@ -247,9 +250,9 @@ export const ServerSites = () => {
       id: 1,
       text: "Summary",
       component: (
-        <div className="flex">
-          <div className="w-1/4 mr-5 flex">
-            <div className=" flex flex-col w-full">
+        <div className="flex lg:flex-row flex-col">
+          <div className=" lg:w-1/4 lg:mr-5 flex">
+            <div className=" flex flex-col w-full ">
               {row && <SummaryTable />}
               <Button
                 label="Add Resource"
@@ -264,6 +267,9 @@ export const ServerSites = () => {
                       <DeployResources
                         closeModal={closeModal}
                         onProceed={() => navigate("/create-new-resource")}
+                        onNavigate={(path, state) => {
+                          navigate(path, { state });
+                        }}
                       />
                     ),
                   })
@@ -271,7 +277,7 @@ export const ServerSites = () => {
               />
             </div>
           </div>
-          <div className="w-3/4">
+          <div className="w-full lg:w-3/4">
             <Resource />
           </div>
         </div>
@@ -309,8 +315,8 @@ export const ServerSites = () => {
         <Button
           intent="tertiary"
           label="Create New Site"
-          onClick={() => navigate(RouteConstant.dashboard.createnewsite.path)}
           prefixIcon={<PlusIcon className="size-4" />}
+          onClick={() => navigate("/create-new-site")}
           size="small"
         />
       </Header>
@@ -318,15 +324,15 @@ export const ServerSites = () => {
       <div className="flex gap-4  flex-col overflow-y-hidden h-full">
         <Card className="mx-5 px-5 rounded-sm">
           <DataTable
-            data={data?.data || []}
+            data={siteData?.data || []}
             columns={serverRoomColumns}
             searchPlaceholder="Search server rooms by name, ID, or region..."
             pageSize={5}
-            isLoading={isLoading}
+            isLoading={isSiteLoading}
             actions={actions}
-            skeletonRows={data?.data.length}
+            skeletonRows={siteData?.data.length}
             onRowClick={handleRowClick}
-            getRowId={(row) => row.siteId}
+            getRowId={(row) => row.resourceId}
             highlightedRowId={rowId}
             initialSorting={{ id: "siteName", desc: false }}
           />
@@ -349,9 +355,9 @@ export const ServerSites = () => {
           )}
         </div>
       </div>
-      <div className="ml-3 w-full">
-        {/* <MultiResourceForm /> */}
-      </div>
+      {/* <div className="ml-3 w-full">
+        <MultiResourceForm />
+      </div> */}
     </div>
   );
 };

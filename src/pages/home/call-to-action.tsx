@@ -6,8 +6,8 @@ export const CallToAction = () => {
   const navigate = useNavigate();
   return (
     <div>
-      <div className="lg:px-20 w-full mx-auto pt-10 flex">
-        <div className="bg-neutral-200 items-center flex flex-col space-y-5 text-center w-full rounded-xl p-5 lg:p-20">
+      <div className="lg:px-10 w-full mx-auto pt-10 flex">
+        <div className="bg-neutral-200 items-center flex flex-col space-y-5 text-center w-full rounded-sm p-5 lg:p-20">
           <p className="bg-gradient-to-r text-xl lg:text-3xl font-poppins from-yellow-800 inline-block text-transparent to-[#750505] bg-clip-text">
             Boost Your Productivity
           </p>

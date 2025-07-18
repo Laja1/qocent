@@ -5,16 +5,18 @@ import { authStore } from "@/store/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { dashboardStore } from "@/store/dashboardSlice";
-import { useGetSitesQuery } from "@/service/siteApi";
+import { useGetResourceByProviderQuery } from "@/service/resourceApi";
 
 export const ConsoleLeft = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { data: huaweiData } = useGetSitesQuery({
+  const { data: huaweiData } = useGetResourceByProviderQuery({
     provider: "huawei",
+    resource: "serverSite",
   });
-  const { data: awsData } = useGetSitesQuery({
+  const { data: awsData } = useGetResourceByProviderQuery({
     provider: "aws",
+    resource: "serverSite",
   });
   const handleLogout = () => {
     dispatch(authStore.action.logout());
