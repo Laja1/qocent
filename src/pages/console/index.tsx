@@ -88,7 +88,7 @@ export const Console = () => {
   return (
     <div className="relative h-screen w-full overflow-hidden">
       {/* Top Header */}
-      <header className="bg-stone-900 w-full text-white px-2 py-2 fixed top-0 z-20">
+      <header className="bg-gray-900 w-full text-white px-2 py-2 fixed top-0 z-20">
         <div className="flex justify-between">
           <div className="flex items-center">
             <IconLayoutDashboard className="size-4" /> Dashboard
@@ -118,16 +118,16 @@ export const Console = () => {
 
       {/* Layout */}
       <div className="flex lg:flex-row flex-col mt-12 h-[calc(100vh-3rem)]">
-        <aside className="w-full lg:w-1/7 bg-white border-r z-10 relative">
+        <aside className="w-full  lg:w-1/6 bg-white border-r z-10 relative">
           <ConsoleLeft />
         </aside>
 
-        <main className="w-full lg:w-6/7 h-full scrollbar-hide overflow-y-auto px-4 pb-20">
+        <main className="w-full lg:w-5/6 h-full scrollbar-hide overflow-y-auto px-4 pb-20">
           <div className="my-2">
             <TopBanner />
           </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[3.5fr_1fr] gap-4 lg:gap-10">
+          <div className="grid grid-cols-1 lg:grid-cols-[3.5fr_1fr] gap-4 lg:gap-5">
             <div className="space-y-3 flex flex-col">
               <AdsOverviewContainer />
               <ConsoleBot />

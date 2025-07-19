@@ -60,10 +60,10 @@ export const SiteDeployModal: React.FC<DeployModalProps> = ({
                     <div key={index} className="  my-2">
                       {" "}
                       <p className="text-sm font-brfirma-bold">
-                        {item?.ParameterLabel}
+                        {item?.parameterLabel}
                       </p>
                       <p className="text-xs ">
-                        {formik.values[item?.ParameterName]}
+                        {formik.values[item?.parameterName]}
                       </p>
                     </div>
                   ))}

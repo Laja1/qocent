@@ -155,7 +155,7 @@ export const CreateNewHouse = () => {
         />
 
         <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
-          <div className="bg-gradient-to-r flex justify-between from-black to-green-800 rounded-t-md px-3 sm:px-5 py-5">
+          <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 rounded-t-md px-3 sm:px-5 py-5">
             <div>
               <p className="text-base sm:text-lg text-white">
                 Create Server House

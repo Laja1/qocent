@@ -13,6 +13,7 @@ interface ResourceDataProps {
 }
 
 export const Resource = () => {
+  
 
   const serverColumns = [
     { id: "webServer" as const, label: "Web Server" },
@@ -26,11 +27,11 @@ export const Resource = () => {
       header: "Resource Parameters",
       accessorKey: "label",
       cell: (row: ResourceDataProps) => (
-        <span className="text-green-800 font-brfirma-bold font-medium line-clamp-1">
+        <span className="text-amber-700  font-medium line-clamp-1">
           {row.label}
         </span>
       ),
-      sortable: false,
+      sortable: false,  
     },
     ...serverColumns.map((server) => ({
       id: server.id,
@@ -83,6 +84,7 @@ export const Resource = () => {
           onRowClick={(row) => console.log("Row Clicked:", row.id)}
           initialSorting={{ id: "label", desc: false }}
         />
+        
       </div>
   
   );

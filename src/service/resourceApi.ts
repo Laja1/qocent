@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQuery } from "./httpClient/baseQuery";
-import type { genericResponse } from "@/models/response";
 import { ApiEnums } from "@/utilities/enums";
 import type { ParameterResponse } from "@/models/response/siteResponse";
 import { createResourceProviderTags } from "@/utilities/tagHelpers";
 import type { formResponse, resourceResponse } from "@/models/response/resourceResponse";
+import type { createResourceRequest } from "@/models/request/resourceRequest";
 
 
 export const resourceApi = createApi({
@@ -13,9 +13,9 @@ export const resourceApi = createApi({
   baseQuery: baseQuery,
   tagTypes: [ApiEnums.Resource],
   endpoints: (build) => ({
-    createResource: build.mutation<genericResponse, void>({
+    createResource: build.mutation<ParameterResponse, createResourceRequest>({
       query: (body) => ({
-        url: "/house/create",
+        url: "/resource/create-resource",
         method: "POST",
         body,
       }),

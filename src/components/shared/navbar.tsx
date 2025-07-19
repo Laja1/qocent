@@ -20,38 +20,42 @@ export default function NavbarDemo({
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+
+  const handleHomeClick = () => {
+    setIsMobileMenuOpen(false);
+    navigate("/");
+  };
+
   return (
     <div className="relative w-full">
       <Navbar>
         {/* Desktop Nav */}
         <NavBody>
-          <p
-            onClick={() => navigate("/")}
-            className="text-xl hover:cursor-pointer font-bold"
-          >
+          <Link to="/" className="text-xl font-bold hover:opacity-80 transition-opacity">
             QOCENT
-          </p>
+          </Link>
 
           <NavItems items={navRoutes} />
+          
           <div className="flex items-center gap-4">
             <Link to={RouteConstant.auth.signin.path}>
               <NavbarButton variant="secondary" className="text-red-600">
                 Login
               </NavbarButton>
             </Link>
-            {/* <NavbarButton href="/book" variant="primary">Book a call</NavbarButton> */}
           </div>
         </NavBody>
 
         {/* Mobile Nav */}
         <MobileNav>
           <MobileNavHeader>
-            <p
-              onClick={() => navigate("/")}
-              className="text-xl hover:cursor-pointer font-bold"
+            <button
+              onClick={handleHomeClick}
+              className="text-xl font-bold hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
+              aria-label="Go to homepage"
             >
               QOCENT
-            </p>
+            </button>
 
             <MobileNavToggle
               isOpen={isMobileMenuOpen}
@@ -64,39 +68,41 @@ export default function NavbarDemo({
             onClose={() => setIsMobileMenuOpen(false)}
           >
             {navRoutes.map((item, idx) => (
-              <a
+              <Link
                 key={`mobile-link-${idx}`}
-                href={item.link}
+                to={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-600 dark:text-neutral-300"
+                className="relative text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-colors"
               >
                 <span className="block">{item.name}</span>
-              </a>
+              </Link>
             ))}
             <div className="flex w-full flex-col gap-4">
-              <NavbarButton
-                href={RouteConstant.auth.signin.path}
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full text-red-800"
-              >
-                Login
-              </NavbarButton>
-              <NavbarButton
-                href={RouteConstant.auth.signup.path}
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Sign Up
-              </NavbarButton>
+              <Link to={RouteConstant.auth.signin.path}>
+                <NavbarButton
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  variant="primary"
+                  className="w-full text-red-800"
+                >
+                  Login
+                </NavbarButton>
+              </Link>
+              <Link to={RouteConstant.auth.signup.path}>
+                <NavbarButton
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  variant="primary"
+                  className="w-full"
+                >
+                  Sign Up
+                </NavbarButton>
+              </Link>
             </div>
           </MobileNavMenu>
         </MobileNav>
       </Navbar>
 
-      {/* Dummy content */}
-      <div className=" p-4 text-center">{children}</div>
+      {/* Content */}
+      <div className="p-4 text-center">{children}</div>
     </div>
   );
 }

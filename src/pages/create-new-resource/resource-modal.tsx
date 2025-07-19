@@ -1,0 +1,128 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useFormik } from "formik";
+import { resourceModalSchema } from "@/utilities/schema/resourceSchema";
+import { motion } from "framer-motion";
+import { RouteConstant } from "@/router/routes";
+import {
+  resourceSiteCodeOptions,
+  resourceTypeOptions,
+} from "@/components/not-shared/deploy-config";
+import { AnimatePresence } from "motion/react";
+import { Dialog } from "@headlessui/react";
+import { Button, ComboBoxField, SelectField } from "@/components/shared";
+import { useEffect } from "react";
+
+interface ResourceModalProps {
+  id?: string;
+  siteCodeId?: number;
+  closeModal: () => void;
+  onProceed?: () => void;
+  onNavigate?: (path: string, state?: any) => void;
+  isOpen: boolean; // <-- add this
+  onClose: () => void; // <-- add this
+}
+
+export const ResourceModal: React.FC<ResourceModalProps> = ({
+  id,
+  onProceed,
+  closeModal,
+  onNavigate,
+  isOpen,
+  onClose,
+}) => {
+  // const serverSite = serverRooms.find((item) => item.siteId === siteCodeId);
+
+  const presetTypeOptions = id
+    ? [{ label: id, value: id.toLowerCase() }]
+    : resourceTypeOptions;
+
+  const formik = useFormik({
+    initialValues: {
+      resourceType: id?.toLowerCase() || "",
+      resourceSiteCode: "",
+    },
+    validationSchema: resourceModalSchema,
+    enableReinitialize:true,
+    onSubmit: (values) => {
+      closeModal();
+      onProceed?.();
+      onNavigate?.(
+        RouteConstant.dashboard.createResources.path,
+        {
+          resourceType: values.resourceType,
+          resourceSiteCode: values.resourceSiteCode,
+        }
+      );
+      
+    },
+  });
+
+ 
+
+  useEffect(() => {
+    formik.validateForm();
+  }, []);
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <Dialog
+          static
+          open={isOpen}
+          onClose={onClose}
+          className="relative z-50"
+        >
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50"
+          />
+
+          <div className="fixed inset-0 flex items-center justify-center p-4">
+            <div className="bg-white p-6 rounded-md w-full max-w-md shadow-lg">
+              <div className="border-b mb-5">
+                <p className="text-base uppercase font-semibold text-gray-800">
+                  Deploy Resources
+                </p>
+                <p className="text-sm mt-1 text-green-900">
+                  Select the resource you want to deploy and target site.
+                </p>
+              </div>
+              <form onSubmit={formik.handleSubmit} className="gap-3  flex flex-col">
+                <ComboBoxField
+                  name="resourceType"
+                  label="Resource Type"
+                  placeholder="Select a resource type"
+                  formik={formik}
+                  options={presetTypeOptions}
+                />
+                <SelectField
+                  name="resourceSiteCode"
+                   label="Site Code"
+                  placeholder="Select a site code"
+                  formik={formik}
+                  options={resourceSiteCodeOptions}
+                />
+
+                <div className="flex justify-end gap-3 pt-4 border-t mt-6">
+                  <Button
+                    label="Cancel"
+                    type="button"
+                    intent="secondary"
+                    onClick={closeModal}
+                  />
+                  <Button
+                    label="Proceed"
+                    type="submit"
+                    intent="primary"
+                    disabled={!formik.isValid}
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        </Dialog>
+      )}
+    </AnimatePresence>
+  );
+};

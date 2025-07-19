@@ -7,9 +7,8 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "motion/react";
-
+import { Link } from "react-router-dom";
 import React, { useRef, useState } from "react";
-
 
 interface NavbarProps {
   children: React.ReactNode;
@@ -125,12 +124,12 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
       )}
     >
       {items.map((item, idx) => (
-        <a
+        <Link
+          key={`link-${idx}`}
+          to={item.link}
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
-          key={`link-${idx}`}
-          href={item.link}
+          className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-colors"
         >
           {hovered === idx && (
             <motion.div
@@ -139,7 +138,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
             />
           )}
           <span className="relative z-20">{item.name}</span>
-        </a>
+        </Link>
       ))}
     </motion.div>
   );
@@ -222,18 +221,26 @@ export const MobileNavToggle = ({
   isOpen: boolean;
   onClick: () => void;
 }) => {
-  return isOpen ? (
-    <IconX className="text-black dark:text-white" onClick={onClick} />
-  ) : (
-    <IconMenu2 className="text-black dark:text-white" onClick={onClick} />
+  return (
+    <button
+      onClick={onClick}
+      className="p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+      aria-label={isOpen ? "Close menu" : "Open menu"}
+    >
+      {isOpen ? (
+        <IconX className="text-black dark:text-white" />
+      ) : (
+        <IconMenu2 className="text-black dark:text-white" />
+      )}
+    </button>
   );
 };
 
 export const NavbarLogo = () => {
   return (
-    <a
-      href="#"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
+    <Link
+      to="/"
+      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black hover:opacity-80 transition-opacity"
     >
       <img
         src="https://assets.aceternity.com/logo-dark.png"
@@ -242,27 +249,24 @@ export const NavbarLogo = () => {
         height={30}
       />
       <span className="font-medium text-black dark:text-white">Startup</span>
-    </a>
+    </Link>
   );
 };
 
-export const NavbarButton = ({
-  as: Tag = "a",
-  children,
-  className,
-  variant = "primary",
-  ...props
-}: {
-  as?: React.ElementType;
-  children: React.ReactNode;
-  className?: string;
-  variant?: "primary" | "secondary" | "dark" | "gradient";
-} & (
-  | React.ComponentPropsWithoutRef<"a">
-  | React.ComponentPropsWithoutRef<"button">
-)) => {
+export const NavbarButton = React.forwardRef<
+  HTMLElement,
+  {
+    as?: React.ElementType;
+    children: React.ReactNode;
+    className?: string;
+    variant?: "primary" | "secondary" | "dark" | "gradient";
+  } & (
+    | React.ComponentPropsWithoutRef<"a">
+    | React.ComponentPropsWithoutRef<"button">
+  )
+>(({ as: Tag = "button", children, className, variant = "primary", ...props }, ref) => {
   const baseStyles =
-    "px-4 py-2 rounded-sm bg-white button bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
+    "px-4 py-2 rounded-sm bg-white text-black text-sm font-bold relative cursor-pointer hover:-translate-y-0.5 transition duration-200 inline-block text-center";
 
   const variantStyles = {
     primary:
@@ -275,10 +279,11 @@ export const NavbarButton = ({
 
   return (
     <Tag
+      ref={ref}
       className={cn(baseStyles, variantStyles[variant], className)}
       {...props}
     >
       {children}
     </Tag>
   );
-};
+});

@@ -29,6 +29,7 @@ import { IconCloudComputing } from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { authStore } from "@/store/authSlice";
 import type { RootState } from "@/store";
+import { imgLinks } from "@/assets/assetLink";
 
 export interface SidebarItem {
   title: string;
@@ -130,20 +131,34 @@ export const SidebarLayout = () => {
   };
 
   const user = useSelector((state: RootState) => state.auth);
+  const dashboard = useSelector((state:RootState)=>state.dashboard)
   const initials = `${user?.userFirstName?.[0] ?? ""}${
     user?.userLastName?.[0] ?? ""
   }`.toUpperCase();
+
+const Icon = ()=>{
+  switch(dashboard.provider){
+    case('aws'):
+    return <img src={imgLinks.awsLogo} className="size-8" />
+    case('huawei'):
+    return <img src={imgLinks.huaweiLight} className="size-10" />
+  }
+}
+
   return (
     <Sidebar className="font-brfirma">
-      <SidebarHeader className="bg-green-950   text-white  border-gray-200  p-[8px]">
-        <div className="flex items-center space-x-2">
-          <Cloud className="h-6 w-6" color="white" />
-          <div>
-            <h2 className="font-bold text-base">Qocent</h2>
-            <p className="text-xs line-clamp-1 text-gray-400 leading-tight">
-              {user?.userEmail}
-            </p>
+      <SidebarHeader className="bg-gray-950   text-white  border-gray-200  p-[8px]">
+        <div className="flex items-center space-x-2 justify-between ">
+          <div className="flex space-x-2">
+            <Cloud className="h-6 w-6" color="white" />
+            <div className="">
+              <h2 className="font-bold text-base">Qocent</h2>
+              <p className="text-xs line-clamp-1 text-gray-400 leading-tight">
+                {user?.userEmail}
+              </p>
+            </div>
           </div>
+         {Icon()}
         </div>
       </SidebarHeader>
       <SidebarContent className="bg-[#fff] ">

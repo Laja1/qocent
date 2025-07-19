@@ -6,13 +6,11 @@ import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import type { resourceType } from "./type";
 import { resourceData } from "./config";
 import { useNavigate } from "react-router-dom";
-import { DeployResources } from "@/components/not-shared/deploy-resources";
-import { useModal } from "@/components/shared/modal";
 import { useState } from "react";
 import { SecurityTable } from "../server-sites/security-table";
 import { CostTable } from "../server-sites/cost";
 import { ResourceDetails } from "./resource-details";
-
+import { ResourceModal } from "../create-new-resource/resource-modal";
 
 export const resourcesColumns: ColumnDef<resourceType>[] = [
   {
@@ -146,25 +144,13 @@ const actions = [
 
 export const Resources = () => {
   const [rowId, setRowId] = useState<string>("1001");
-  const { openModal, closeModal } = useModal();
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
 
-
-
   const handleOpenDeployModal = () => {
-    openModal({
-      id: `deploy`,
-      content: () => (
-        <DeployResources
-        closeModal={closeModal}
-        onProceed={() => navigate("/create-new-resource")}
-        onNavigate={(path, state) => {
-          navigate(path, { state });
-        }}
-      />
-      ),
-    });
+    setIsOpen(true);
   };
+  
 
   const handleRowClick = (row: resourceType) => {
     setRowId(row.resourceId);
@@ -184,7 +170,6 @@ export const Resources = () => {
               resourceData={resourceData}
               selectedResourceId={rowId}
             />
-            
           </div>
           {/* <div className="w-3/4">
             <Resource />
@@ -238,6 +223,15 @@ export const Resources = () => {
           <Tabs tabs={tabData} />
         </div>
       )}
+      <ResourceModal
+        isOpen={isOpen}
+        closeModal={() => setIsOpen(false)}
+        onProceed={() => navigate("/create-new-resource")}
+        onNavigate={(path, state) => navigate(path, { state })}
+        onClose={() => setIsOpen(false)}
+        id="" // optional, or pass based on your logic
+        siteCodeId={undefined} // optional, or pass relevant id
+      />
     </div>
   );
 };

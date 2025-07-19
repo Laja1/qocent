@@ -20,7 +20,7 @@ export const Header = ({
 
   return (
     <header
-      className={`fixed top-0 z-10 bg-green-950 text-white font-brfirma px-6 py-2 transition-all duration-300 ease-in-out left-0 right-0 ${
+      className={`fixed top-0 z-10 bg-gray-950 text-white font-brfirma px-6 py-2 transition-all duration-300 ease-in-out left-0 right-0 ${
         state === "expanded" ? "md:left-60" : "md:left-0"
       }`}
     >

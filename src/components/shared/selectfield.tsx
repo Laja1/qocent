@@ -32,7 +32,7 @@ export const SelectField = ({
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={name} className="text-sm text-tetiary-lighter">
+        <label htmlFor={name} className="text-sm text-gray-600">
           {label}
         </label>
       )}
