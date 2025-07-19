@@ -19,7 +19,7 @@ export const SelectField = ({
   className,
 }: SelectProps) => {
   const selectfieldClasses = clsx(
-    "block w-full placeholder:text-[#000] bg-white font-normal items-center border border-gray-300   placeholder:font-light  px-3 placeholder:text-[8px] inset-ring-green-800 ring-2 ring-green-800 text-xs border-0 shadow-sm  leading-6 disabled:text-gray-400 disabled:cursor-not-allowed focus:ring-[1px] focus:ring-primary rounded-xs",
+    "block w-full placeholder:text-[#000] bg-white font-normal items-center border border-gray-300   placeholder:font-light  px-3 placeholder:text-[8px] inset-ring-green-800 ring-1 ring-green-800 text-xs border-0 shadow-sm  leading-6 disabled:text-gray-400 disabled:cursor-not-allowed focus:ring-[1px] focus:ring-primary rounded-xs",
     className
   );
 

@@ -24,3 +24,13 @@ export type resourceResponse = {
   data: resourceType[];
   error: string;
 };
+
+export type formResponse = {
+  success: boolean;
+  message: string;
+  data: {
+    label: string;
+    value: string;
+  }[];
+  error: string;
+};

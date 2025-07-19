@@ -30,7 +30,7 @@ export const CreateNewRoom = () => {
   const [progress, setProgress] = useState(0);
   const dashboard = useSelector((state: RootState) => state.dashboard);
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
-
+  console.log(dashboard);
   // Initialize form with empty values
   const initialValues =
     serverRoomTemplate?.data?.reduce(
@@ -94,23 +94,6 @@ export const CreateNewRoom = () => {
       formik.setValues(newValues);
     }
   }, [serverRoomTemplate?.data]);
-
-  // Region options based on provider
-  const providerRegions: Record<string, { label: string; value: string }[]> = {
-    aws: [{ label: "US East (N. Virginia)", value: "af-south-1" }],
-    huawei: [{ label: "CN North-Beijing4", value: "cn-north-4" }],
-    gcp: [
-      { label: "Iowa (us-central1)", value: "us-central1" },
-      { label: "Belgium (europe-west1)", value: "europe-west1" },
-    ],
-    azure: [
-      { label: "East US", value: "eastus" },
-      { label: "West Europe", value: "westeurope" },
-    ],
-  };
-
-  const providerKey = dashboard?.provider?.toLowerCase();
-  const regionOptions = providerKey ? providerRegions[providerKey] || [] : [];
 
   // Modal for parameter descriptions
   const descriptionModal = (row: ParameterData) => {
@@ -200,9 +183,6 @@ export const CreateNewRoom = () => {
                     formik={formik}
                     placeholder={`Enter your ${item.parameterLabel}`}
                     type={item.parameterInputType || "text"}
-                    options={
-                      item.parameterName === "siteRegion" ? regionOptions : []
-                    }
                     autoComplete="off"
                   />
                   <button

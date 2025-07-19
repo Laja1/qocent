@@ -4,14 +4,14 @@ export const HowIt = () => {
   return (
     <div className="justify-center flex  w-full">
       {" "}
-      <section className="w-full py-10 md:py-10 bg-muted/30 relative overflow-hidden">
+      <section className="w-full py-10 md:py-10 bg-gray-50 relative overflow-hidden">
         <div className=" px-4 w-full relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="flex flex-col items-center justify-center space-y-4 text-center mb-16"
+            className="flex flex-col items-center text-black justify-center space-y-4 text-center mb-16"
           >
             <Badge
               className="rounded-full px-4 py-1.5 text-sm font-medium"

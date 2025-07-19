@@ -1,15 +1,16 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { SelectField2, TextArea, Textfield2 } from "@/components/shared";
+import { TextArea, Textfield2 } from "@/components/shared";
 import { DatePickerWithFormik } from "@/components/shared/date-picker";
 import type { FormikProps } from "formik";
+import { ResourceSelectField } from "../not-shared/resource-selectfield";
 
 type RenderFieldProps = {
   type: string;
   name: string;
   label?: string;
   formik: FormikProps<any>;
-  options: { label: string; value: string }[];
   placeholder?: string;
+  parameterLookup?:string
   autoComplete?: string; // Add this line
 };
 
@@ -19,7 +20,7 @@ export const RenderField = ({
   placeholder,
   label,
   formik,
-  options,
+  parameterLookup,
   autoComplete = "off", // Default to "off"
   ...rest
 }: RenderFieldProps) => {
@@ -52,17 +53,14 @@ export const RenderField = ({
         />
       )}
       {type === "ListBox" && (
-        <SelectField2
+        <ResourceSelectField
           name={name}
-          label={label}
-          options={options}
-          placeholder={placeholder}
+          parameterLookup={parameterLookup || ''}
           formik={formik}
-          error={error as string}
-          className="w-full"
-          // autoComplete={autoComplete}/
+          placeholder="Select resource..."
           {...rest}
         />
+        
       )}
       {type === "DateBox" && (
         <DatePickerWithFormik
@@ -74,7 +72,7 @@ export const RenderField = ({
           dateFormat="MMM dd, yyyy"
           outputFormat="yyyy-MM-dd"
           error={error as string}
-          // autoComplete={autoComplete} 
+          // autoComplete={autoComplete}
           {...rest}
         />
       )}

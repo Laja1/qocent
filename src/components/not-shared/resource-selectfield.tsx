@@ -1,43 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState } from "react";
-import { useFormik, type FormikProps } from "formik";
-import { Button, SelectField } from "../shared";
-// import { useGetSitesQuery } from "@/service/siteApi";
+import { useState, useCallback } from "react";
+import { type FormikProps } from "formik";
+import { SelectField } from "../shared";
+import { useGetFormOptionsMutation } from "@/service/resourceApi";
 
-const resourceSelect1 = [
-  { label: "Resource A", value: "resource_a" },
-  { label: "Resource B", value: "resource_b" },
-  { label: "Resource C", value: "resource_c" },
-  { label: "Resource D", value: "resource_d" },
-];
-
-const resourceSelect2 = [
-  { label: "Service X", value: "service_x" },
-  { label: "Service Y", value: "service_y" },
-  { label: "Service Z", value: "service_z" },
-  { label: "Service W", value: "service_w" },
-];
-
-const resourceSelect3 = [
-  { label: "Item Alpha", value: "item_alpha" },
-  { label: "Item Beta", value: "item_beta" },
-  { label: "Item Gamma", value: "item_gamma" },
-  { label: "Item Delta", value: "item_delta" },
-];
-
-// Map field names to their corresponding options
-const optionsMap: Record<string, { label: string; value: string }[]> = {
-  resourceSelect1,
-  resourceSelect2,
-  resourceSelect3,
-};
-console.log(optionsMap)
 type ResourceSelectFieldProps = {
   name: string;
   label?: string;
   formik: FormikProps<any>;
   placeholder?: string;
-  parameterLookup:string
+  parameterLookup: string; // the key that maps to optionsMap
 };
 
 export const ResourceSelectField = ({
@@ -47,124 +19,143 @@ export const ResourceSelectField = ({
   placeholder,
   parameterLookup,
 }: ResourceSelectFieldProps) => {
+  const [getFormOptions, { isLoading }] = useGetFormOptionsMutation();
   const [options, setOptions] = useState<{ label: string; value: string }[]>(
     []
   );
-  const [isLoading, setIsLoading] = useState(false);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
-  const handleFetchOptions = async (provider: string) => {
-    console.log(provider)
-    setIsLoading(true);
+  // Function to replace placeholders in parameterLookup with actual form values
+  const processParameterLookup = useCallback((lookup: string, formValues: any) => {
+    // Handle array format: [qcs_eolAction, actionCode, actionProvider=@siteProvider]
+    if (lookup.startsWith('[') && lookup.endsWith(']')) {
+      // Remove brackets and split by comma
+      const cleanLookup = lookup.slice(1, -1);
+      const parts = cleanLookup.split(',').map(part => part.trim());
+      
+      // Process each part to replace placeholders
+      const processedParts = parts.map(part => {
+        if (part.includes('=@')) {
+          // Extract the key and placeholder: actionProvider=@siteProvider
+          const [key, placeholder] = part.split('=');
+          const fieldName = placeholder.replace('@', ''); // Remove @ symbol
+          const formValue = formValues[fieldName];
+          
+          if (formValue) {
+            return `${key.trim()}='${formValue}'`;
+          } else {
+            // If the referenced field has no value, keep the placeholder
+            return part;
+          }
+        }
+        return part;
+      });
+      
+      return `[${processedParts.join(', ')}]`;
+    }
+    
+    // Handle simple string format with placeholders
+    return lookup.replace(/@(\w+)/g, (match, fieldName) => {
+      return formValues[fieldName] || match;
+    });
+  }, []);
+
+  // Check if all required dependencies are available
+  const checkDependencies = useCallback((lookup: string, formValues: any) => {
+    const placeholderMatches = lookup.match(/@(\w+)/g);
+    if (!placeholderMatches) return { ready: true, missing: [] };
+    
+    const missingFields = placeholderMatches
+      .map(match => match.replace('@', ''))
+      .filter(fieldName => !formValues[fieldName]);
+    
+    return {
+      ready: missingFields.length === 0,
+      missing: missingFields
+    };
+  }, []);
+
+  const handleFetchOptions = useCallback(async () => {
     try {
-      // const res = await triggerGetSites().unwrap();
+      setFetchError(null);
+      
+      const dependencies = checkDependencies(parameterLookup, formik.values);
+      
+      if (!dependencies.ready) {
+        setFetchError(`Please select: ${dependencies.missing.join(', ')} first`);
+        setOptions([]);
+        return;
+      }
+      
+      const processedLookup = processParameterLookup(parameterLookup, formik.values);
+      console.log('Original lookup:', parameterLookup);
+      console.log('Processed lookup:', processedLookup);
+      console.log('Current form values:', formik.values);
+      
+      const res = await getFormOptions({ query: processedLookup });
 
-      // const mappedOptions = res.data?.map((site: any) => ({
-      //   label: site.siteName,
-      //   value: site.siteCode,
-      // })) ?? [];
-
-       setOptions([]);
+      if (res?.data?.success && Array.isArray(res.data.data)) {
+        setOptions(res.data.data);
+      } else {
+        setFetchError(res?.data?.message || "Failed to fetch options");
+        setOptions([]);
+      }
     } catch (error) {
       console.error("Error fetching options:", error);
-    } finally {
-      setIsLoading(false);
+      setFetchError("Failed to load options. Please try again.");
+      setOptions([]);
     }
-  };
+  }, [getFormOptions, parameterLookup, formik.values, processParameterLookup, checkDependencies]);
 
   const error =
     formik.touched[name] && formik.errors[name]
       ? (formik.errors[name] as string)
       : undefined;
 
-  return (
-    <div className="flex gap-2 w-full">
-      <SelectField
-        name={name}
-        label={label}
-        options={options}
-        placeholder={
-          options.length === 0
-            ? placeholder || "Click 'Fetch options' to load..."
-            : "Choose a resource..."
-        }
-        formik={formik}
-        error={error}
-        disabled={options.length === 0}
-        className="w-full"
-      />
-
-      <Button
-        label={isLoading ? "Loading..." : "Fetch options"}
-        className="mx-3 border py-0 text-xs disabled:opacity-50"
-        onClick={() => handleFetchOptions(parameterLookup)}
-        disabled={isLoading}
-      />
-    </div>
-  );
-};
-
-
-export const roomCreateData=[
-  {"ParameterProvider":"aws","ParameterObject":"ServerRoom","ParameterSerial":"1","ParameterName":"houseCode","ParameterField":"houseCode","ParameterDataType":"Text","ParameterInputType":"ListBox","ParameterMandatory":"Yes","ParameterLabel":"House Code","ParameterInput":"Yes","ParameterLength":"20","ParameterValidation":"","ParameterSource":"","ParameterInfo1":"Select from the list of sites that you have created.","ParameterInfo2":"If you do not have a site, create one first. A srever house needs a server site.","ParameterInfo3":"Basically, a server house needs to be deployed in a server site."},
-  {"ParameterProvider":"aws","ParameterObject":"ServerRoom","ParameterSerial":"4","ParameterName":"Name","ParameterField":"resourceName","ParameterDataType":"Text","ParameterInputType":"Textbox","ParameterMandatory":"Yes","ParameterLabel":"Room Name","ParameterInput":"Yes","ParameterLength":"20","ParameterValidation":"","ParameterSource":"","ParameterInfo1":"Provide the room name","ParameterInfo2":"","ParameterInfo3":""},
-  {"ParameterProvider":"aws","ParameterObject":"ServerRoom","ParameterSerial":"2","ParameterName":"roomCode","ParameterField":"roomCode","ParameterDataType":"Text","ParameterInputType":"Textbox","ParameterMandatory":"Yes","ParameterLabel":"Room Code","ParameterInput":"Yes","ParameterLength":"20","ParameterValidation":"","ParameterSource":"","ParameterInfo1":"A simple unique code that you can remember.","ParameterInfo2":"The code appears on most screeens, so please choose a code that is self-descrptive and can be remembered easily.","ParameterInfo3":""},
-]
-export const MultiResourceForm = () => {
-  const formik = useFormik({
-    initialValues: {
-      resourceSelect1: "",
-      resourceSelect2: "",
-      resourceSelect3: "",
-    },
-    onSubmit: (values) => {
-      console.log("Form submitted with values:", values);
-    },
-  });
-
-  const handleGetValues = () => {
-    console.log("Current form values:", formik.values);
+  const getPlaceholderText = () => {
+    if (isLoading) return "Loading options...";
+    if (fetchError) return "Error loading options";
+    if (options.length === 0) {
+      const dependencies = checkDependencies(parameterLookup, formik.values);
+      if (!dependencies.ready) {
+        return `Select ${dependencies.missing.join(', ')} first`;
+      }
+      return placeholder || "Click 'Fetch options' to load...";
+    }
+    return "Choose a resource...";
   };
 
+  const dependencies = checkDependencies(parameterLookup, formik.values);
+  const isDisabled = options.length === 0 || isLoading || !dependencies.ready;
+
   return (
-    <div className="space-y-4 p-4">
-      <h2 className="text-lg font-semibold">Multi Resource Selection Form</h2>
-
-      <div className="space-y-3">
-      
-
-        {roomCreateData.map((item)=>
-        <ResourceSelectField
-        name={item.ParameterName}
-        parameterLookup={formik.values.resourceSelect1}
-        formik={formik}
-        placeholder="Select resource..."
-      />
+    <div className="flex items-center gap-2 w-full">
+      <div className="flex-1">
+        <SelectField
+          name={name}
+          label={label}
+          options={options}
+          placeholder={getPlaceholderText()}
+          formik={formik}
+          error={error}
+          disabled={isDisabled}
+          className="w-full"
+        />
+        {fetchError && (
+          <p className="text-red-500 text-xs mt-1">{fetchError}</p>
         )}
       </div>
 
-      <div className="flex gap-2">
-        <button
-          className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-          onClick={handleGetValues}
-        >
-          Get Values
-        </button>
-
-        <button
-          className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
-          onClick={() => formik.handleSubmit()}
-        >
-          Submit Form
-        </button>
-      </div>
-
-      {/* Display current values */}
-      <div className="mt-4 p-3 bg-gray-100 rounded">
-        <h3 className="font-medium">Current Values:</h3>
-        <pre className="text-sm mt-1">
-          {JSON.stringify(formik.values, null, 2)}
-        </pre>
-      </div>
+      <button
+        type="button"
+        onClick={handleFetchOptions}
+        disabled={isLoading || !dependencies.ready}
+        className="px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed rounded border transition-colors duration-200 min-w-[50px]"
+        aria-label="Fetch options"
+        title={!dependencies.ready ? `Select ${dependencies.missing.join(', ')} first` : 'Fetch options'}
+      >
+        {isLoading ? "Loading..." : "Fetch"}
+      </button>
     </div>
   );
 };

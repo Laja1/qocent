@@ -11,6 +11,7 @@ export const HoverEffect = ({
     title: string;
     description: string;
     link: string;
+    icon: React.ReactNode;
   }[];
   className?: string;
 }) => {
@@ -19,7 +20,7 @@ export const HoverEffect = ({
   return (
     <div
       className={cn(
-        "grid grid-cols-1 md:grid-cols-2 text-left  lg:grid-cols-3  py-5",
+        "grid grid-cols-1 md:grid-cols-2 text-left  lg:grid-cols-4  py-5",
         className
       )}
     >
@@ -34,7 +35,7 @@ export const HoverEffect = ({
           <AnimatePresence>
             {hoveredIndex === idx && (
               <motion.span
-                className="absolute  inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block  rounded-md"
+                className="absolute  inset-0 h-full w-full bg-neutral-200 dark:bg-slate-800/[0.8] block  rounded-2xl"
                 layoutId="hoverBackground"
                 initial={{ opacity: 0 }}
                 animate={{
@@ -49,9 +50,12 @@ export const HoverEffect = ({
             )}
           </AnimatePresence>
           <Card>
-            <CardTitle>{item.title}</CardTitle>
-            <CardDescription>{item.description}</CardDescription>
-          </Card>
+            <div className="">
+              {item.icon && <div className="text-left">{item.icon}</div>}
+              <CardTitle>{item.title}</CardTitle>
+              <CardDescription className="text-xs">{item.description}</CardDescription>
+            </div>
+          </Card> 
         </a>
       ))}
     </div>
@@ -68,7 +72,7 @@ export const Card = ({
   return (
     <div
       className={cn(
-        "rounded-sm h-full w-full  p-4 overflow-hidden bg-white border border-gray-50 dark:border-white/[0.2] group-hover:border-slate-300 relative z-20",
+        "rounded-xl h-full w-full  p-4 overflow-hidden bg-white border border-gray-50 dark:border-white/[0.2] group-hover:border-slate-300 relative z-20",
         className
       )}
     >

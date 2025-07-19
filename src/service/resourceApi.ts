@@ -5,7 +5,8 @@ import type { genericResponse } from "@/models/response";
 import { ApiEnums } from "@/utilities/enums";
 import type { ParameterResponse } from "@/models/response/siteResponse";
 import { createResourceProviderTags } from "@/utilities/tagHelpers";
-import type { resourceResponse } from "@/models/response/resourceResponse";
+import type { formResponse, resourceResponse } from "@/models/response/resourceResponse";
+
 
 export const resourceApi = createApi({
   reducerPath: "resourceApi",
@@ -27,11 +28,20 @@ export const resourceApi = createApi({
       query: ({ provider,resource }) => `/resource/${provider}/${resource}`, 
       providesTags: (result) => createResourceProviderTags(result,  "resourceId"),
     }),
+    getFormOptions: build.mutation<formResponse, {query: string}>({
+      query: (body) => ({
+        url: "/form/options",
+        method: "POST",
+        body,
+      }),
+     
+    }),
   }),
 });
 
 export const {
   useCreateResourceMutation,
   useGetResourceByProviderQuery,
-  useGetResourceTemplateQuery
+  useGetResourceTemplateQuery,
+  useGetFormOptionsMutation
 } = resourceApi;

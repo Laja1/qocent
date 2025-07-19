@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/resizable-navbar";
 import { navRoutes, RouteConstant } from "@/router/routes";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function NavbarDemo({
   children,
@@ -19,18 +19,25 @@ export default function NavbarDemo({
   children: React.ReactNode;
 }) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+  const navigate = useNavigate();
   return (
     <div className="relative w-full">
       <Navbar>
         {/* Desktop Nav */}
         <NavBody>
-          <p className="text-xl font-bold">QOCENT</p>
+          <p
+            onClick={() => navigate("/")}
+            className="text-xl hover:cursor-pointer font-bold"
+          >
+            QOCENT
+          </p>
 
           <NavItems items={navRoutes} />
           <div className="flex items-center gap-4">
             <Link to={RouteConstant.auth.signin.path}>
-              <NavbarButton variant="secondary">Login</NavbarButton>
+              <NavbarButton variant="secondary" className="text-red-600">
+                Login
+              </NavbarButton>
             </Link>
             {/* <NavbarButton href="/book" variant="primary">Book a call</NavbarButton> */}
           </div>
@@ -39,7 +46,12 @@ export default function NavbarDemo({
         {/* Mobile Nav */}
         <MobileNav>
           <MobileNavHeader>
-            <p className="text-xl font-bold">QOCENT</p>
+            <p
+              onClick={() => navigate("/")}
+              className="text-xl hover:cursor-pointer font-bold"
+            >
+              QOCENT
+            </p>
 
             <MobileNavToggle
               isOpen={isMobileMenuOpen}
@@ -66,7 +78,7 @@ export default function NavbarDemo({
                 href={RouteConstant.auth.signin.path}
                 onClick={() => setIsMobileMenuOpen(false)}
                 variant="primary"
-                className="w-full"
+                className="w-full text-red-800"
               >
                 Login
               </NavbarButton>

@@ -7,9 +7,20 @@ import type { roomType } from "./type";
 import { roomData } from "./config";
 import { useNavigate } from "react-router-dom";
 import { formatDate } from "@/utilities/helper";
+import { useGetResourceByProviderQuery } from "@/service/resourceApi";
+import { ApiEnums } from "@/utilities/enums";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 export const ServerRooms = () => {
   const navigate = useNavigate();
+  const dashboard = useSelector((state:RootState)=>state.dashboard)
+  const { data, isLoading } = useGetResourceByProviderQuery({
+    provider: dashboard.provider,
+    resource: ApiEnums.Room,
+  });
+
+  console.log(data,isLoading)
   // const [rowId, setRowId] = useState("R-0001");
 
   const serverRoomColumns: ColumnDef<roomType>[] = [

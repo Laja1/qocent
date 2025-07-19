@@ -4,11 +4,11 @@ export const navRoutes = [
     name: "Explore Services",
   },
 
-  {
-    id: "projects",
-    link: "/projects",
-    name: "Projects",
-  },
+  // {
+  //   id: "projects",
+  //   link: "/projects",
+  //   name: "Projects",
+  // },
 
   {
     id: "docs",
@@ -16,9 +16,9 @@ export const navRoutes = [
     name: "Documentation",
   },
   {
-    id: "dashboard",
-    link: "/dashboard",
-    name: "Dashboard",
+    id: "pricing",
+    link: "/pricing",
+    name: "Pricing",
   },
 ];
 
@@ -28,9 +28,13 @@ export const RouteConstant = {
       path: "/",
       name: "home",
     },
-    landing: {
-      path: "/landing",
-      name: "Landing",
+    explore: {
+      path: "/explore",
+      name: "explore",
+    },
+    documentation: {
+      path: "/docs",
+      name: "documentation",
     },
   },
   auth: {

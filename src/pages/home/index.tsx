@@ -15,13 +15,14 @@ const Home = () => {
         {/* <InfiniteCardCarousel /> */}
 
         <Services />
+        <HowIt />
+
         <Faq />
 
-       
-        <HowIt />
+        
+
         <CallToAction />
         <Footer />
-   
       </NavbarDemo>
     </div>
   );

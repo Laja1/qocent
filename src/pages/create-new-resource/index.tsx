@@ -133,7 +133,6 @@ export const CreateNewResource = () => {
                   formik={formik}
                   placeholder={`Enter your ${item.parameterLabel}`}
                   type={item.parameterInputType || "text"}
-                  options={[]}
                   autoComplete="off"
                 />
                 <button

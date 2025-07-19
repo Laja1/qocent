@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { svgLinks } from "@/assets/assetLink";
+import { Badge } from "@/components/ui/badge";
 
 type CardProps = {
   icon: React.ReactNode;
@@ -40,9 +41,15 @@ const HowItWorksCard = ({
   </motion.div>
 );
 
-export const HowItWorks = () => {
+export const EverythingYouNeed = () => {
   return (
     <div id="solutions" className=" flex flex-col items-center justify-center">
+      <Badge
+        className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium"
+        variant="secondary"
+      >
+        Our Services
+      </Badge>
       <p className="text-black md:text-3xl text-xl lg:text-5xl leading-[56px] font-bold">
         Everything you need to scale
       </p>

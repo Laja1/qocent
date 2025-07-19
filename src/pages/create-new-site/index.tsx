@@ -1,49 +1,53 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import  { useState, useEffect } from 'react';
-import { useFormik } from 'formik';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { ArrowRight, Info } from 'lucide-react';
-import { IconMichelinStar } from '@tabler/icons-react';
-import { Button, Header, RenderField } from '@/components/shared';
-import { useModal } from '@/components/shared/modal';
-import { showCustomToast } from '@/components/shared/toast';
-import { SiteDeployModal } from '@/components/not-shared/site-modal';
-import { RouteConstant } from '@/router/routes';
-import { ErrorHandler } from '@/service/httpClient/errorHandler';
+import { useState, useEffect } from "react";
+import { useFormik } from "formik";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { ArrowRight, Info } from "lucide-react";
+import { IconMichelinStar } from "@tabler/icons-react";
+import { Button, Header, RenderField } from "@/components/shared";
+import { useModal } from "@/components/shared/modal";
+import { showCustomToast } from "@/components/shared/toast";
+import { SiteDeployModal } from "@/components/not-shared/site-modal";
+import { RouteConstant } from "@/router/routes";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import {
   useCreateServerSiteMutation,
   useGetSiteParameterQuery,
-} from '@/service/siteApi';
-import { generateDynamicSchema } from '@/utilities/schema/resourceSchema';
-import type { RootState } from '@/store';
-import type { ParameterData } from './type';
+} from "@/service/siteApi";
+import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
+import type { RootState } from "@/store";
+import type { ParameterData } from "./type";
 
 export const CreateNewSite = () => {
   const navigate = useNavigate();
   const [createSite, { isLoading }] = useCreateServerSiteMutation();
-  const { data: serverSiteParameterData, isError, isLoading: isParamsLoading } = useGetSiteParameterQuery();
+  const {
+    data: serverSiteParameterData,
+    isError,
+    isLoading: isParamsLoading,
+  } = useGetSiteParameterQuery();
   const { openModal, closeModal } = useModal();
   const user = useSelector((state: RootState) => state.auth);
   const [progress, setProgress] = useState(0);
-  const dashboard = useSelector((state: RootState) => state.dashboard);
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
 
   // Initialize form with empty values
-  const initialValues = serverSiteParameterData?.data?.reduce(
-    (acc: Record<string, string>, item: ParameterData) => ({
-      ...acc,
-      [item.parameterName]: '',
-    }),
-    {}
-  ) || {};
+  const initialValues =
+    serverSiteParameterData?.data?.reduce(
+      (acc: Record<string, string>, item: ParameterData) => ({
+        ...acc,
+        [item.parameterName]: "",
+      }),
+      {}
+    ) || {};
 
   // Form submission handler
-  const handleSubmit = async (values:  any) => {
+  const handleSubmit = async (values: any) => {
     try {
       const payload = {
         ...values,
-        siteUserId: user.userId||'',
+        siteUserId: user.userId || "",
       };
 
       // Simulate deployment progress
@@ -54,7 +58,7 @@ export const CreateNewSite = () => {
 
       const res = await createSite(payload).unwrap();
       showCustomToast(res.responseMessage, {
-        toastOptions: { type: 'success', autoClose: 5000 },
+        toastOptions: { type: "success", autoClose: 5000 },
       });
 
       setProgress(0);
@@ -63,7 +67,7 @@ export const CreateNewSite = () => {
     } catch (error: any) {
       const message = ErrorHandler.extractMessage(error);
       showCustomToast(message, {
-        toastOptions: { type: 'error', autoClose: 5000 },
+        toastOptions: { type: "error", autoClose: 5000 },
       });
       setProgress(0);
     }
@@ -73,18 +77,19 @@ export const CreateNewSite = () => {
   const formik = useFormik({
     initialValues,
     onSubmit: handleSubmit,
-    validationSchema: () => generateDynamicSchema(serverSiteParameterData?.data),
+    validationSchema: () =>
+      generateDynamicSchema(serverSiteParameterData?.data),
     validateOnMount: true,
     enableReinitialize: true,
   });
 
-  console.log(formik?.errors, formik?.values)
+  console.log(formik?.errors, formik?.values);
   useEffect(() => {
     if (serverSiteParameterData?.data) {
       const newValues = serverSiteParameterData.data.reduce(
         (acc: Record<string, string>, item: ParameterData) => ({
           ...acc,
-          [item.parameterName]: '',
+          [item.parameterName]: "",
         }),
         {}
       );
@@ -92,30 +97,18 @@ export const CreateNewSite = () => {
     }
   }, [serverSiteParameterData?.data]);
 
-  // Region options based on provider
-  const providerRegions: Record<string, { label: string; value: string }[]> = {
-    aws: [{ label: 'US East (N. Virginia)', value: 'af-south-1' }],
-    huawei: [{ label: 'CN North-Beijing4', value: 'cn-north-4' }],
-    gcp: [
-      { label: 'Iowa (us-central1)', value: 'us-central1' },
-      { label: 'Belgium (europe-west1)', value: 'europe-west1' },
-    ],
-    azure: [
-      { label: 'East US', value: 'eastus' },
-      { label: 'West Europe', value: 'westeurope' },
-    ],
-  };
 
-  const providerKey = dashboard?.provider?.toLowerCase();
-  const regionOptions = providerKey ? providerRegions[providerKey] || [] : [];
+  
 
   // Modal for parameter descriptions
   const descriptionModal = (row: ParameterData) => {
     openModal({
-      id: 'info-modal',
+      id: "info-modal",
       content: () => (
         <div className="flex max-w-xs flex-col gap-4 p-4">
-          <h2 className="text-lg uppercase border-b pb-2">{row.parameterLabel}</h2>
+          <h2 className="text-lg uppercase border-b pb-2">
+            {row.parameterLabel}
+          </h2>
           <div className="text-sm text-gray-600 space-y-2">
             {row.parameterInfo1 && <p>{row.parameterInfo1}</p>}
             {row.parameterInfo2 && <p>{row.parameterInfo2}</p>}
@@ -166,9 +159,12 @@ export const CreateNewSite = () => {
         <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
           <div className="bg-gradient-to-r flex justify-between from-black to-green-800 rounded-t-md px-3 sm:px-5 py-5">
             <div>
-              <p className="text-base sm:text-lg text-white">Create Server Site</p>
+              <p className="text-base sm:text-lg text-white">
+                Create Server Site
+              </p>
               <p className="text-xs text-gray-400 leading-tight">
-                A server can have one or more server houses. A server house is provided by a provider.
+                A server can have one or more server houses. A server house is
+                provided by a provider.
               </p>
             </div>
             <IconMichelinStar color="white" size={40} />
@@ -181,7 +177,9 @@ export const CreateNewSite = () => {
                 key={item.parameterSerial}
               >
                 <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-                  {item.parameterMandatory && <span className="text-red-500 ml-1">*</span>}
+                  {item.parameterMandatory && (
+                    <span className="text-red-500 ml-1">*</span>
+                  )}
                   {item.parameterLabel}
                 </p>
                 <div className="lg:w-2/5 w-full pr-3 flex gap-1">
@@ -189,8 +187,11 @@ export const CreateNewSite = () => {
                     name={item.parameterName}
                     formik={formik}
                     placeholder={`Enter your ${item.parameterLabel}`}
-                    type={item.parameterInputType || 'text'}
-                    options={item.parameterName === 'siteRegion' ? regionOptions : []}
+                    parameterLookup={item.parameterLookup}
+                    type={item.parameterInputType || "text"}
+                    // options={
+                    //   item.parameterName === "siteRegion" ? regionOptions : []
+                    // }
                     autoComplete="off"
                   />
                   <button
@@ -204,6 +205,7 @@ export const CreateNewSite = () => {
               </div>
             ))}
           </div>
+   
 
           <div className="flex m-3 sm:m-5 justify-end">
             <Button

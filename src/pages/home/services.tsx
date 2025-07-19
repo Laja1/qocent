@@ -1,46 +1,85 @@
+import { Badge } from "@/components/ui/badge";
 import { HoverEffect } from "@/components/ui/card-hover-effect";
+import { IconWaveSawTool } from "@tabler/icons-react";
+import {
+  CloudUpload,
+  ServerCog,
+  Activity,
+  Settings2,
+  Share2,
+  Database,
+  ShieldCheck,
+} from "lucide-react";
+
 const projects = [
   {
     title: "Quick Deployment",
     description:
-      "Launch cloud resources like virtual machines, containers, and serverless functions within minutes using automated provisioning tools.",
+      "Instantly launch virtual machines, containers, or serverless functions with one-click provisioning.",
     link: "https://aws.amazon.com/quickstart/",
+    icon: <CloudUpload className="text-green-500 w-6 h-6" />,
   },
   {
     title: "Auto Scaling",
     description:
-      "Automatically adjusts compute capacity based on traffic load to ensure optimal performance and cost-efficiency.",
+      "Seamlessly handle demand spikes by dynamically adjusting compute resources for cost and performance.",
     link: "https://docs.aws.amazon.com/autoscaling/",
+    icon: <Activity className="text-blue-500 w-6 h-6" />,
+  },
+  {
+    title: "Intelligent Monitoring",
+    description:
+      "Track resource usage, uptime, and alerts in real-time with smart dashboards and insights.",
+    link: "https://aws.amazon.com/cloudwatch/",
+    icon: <Settings2 className="text-indigo-500 w-6 h-6" />,
   },
   {
     title: "Serverless Functions",
     description:
-      "Run backend code without managing servers using services like AWS Lambda, Azure Functions, or Google Cloud Functions.",
+      "Run backend logic without provisioning or managing servers using tools like AWS Lambda.",
     link: "https://aws.amazon.com/lambda/",
+    icon: <IconWaveSawTool className="text-yellow-500 w-6 h-6" />,
   },
   {
     title: "Load Balancing",
     description:
-      "Distribute incoming traffic across multiple instances to maintain high availability and fault tolerance.",
+      "Distribute incoming traffic efficiently across servers to optimize responsiveness and uptime.",
     link: "https://cloud.google.com/load-balancing",
+    icon: <Share2 className="text-purple-500 w-6 h-6" />,
   },
   {
     title: "Cloud Storage",
     description:
-      "Secure, scalable object and block storage options for backups, media files, application data, and more.",
+      "Store and retrieve any amount of data securely with scalable object and block storage.",
     link: "https://azure.microsoft.com/en-us/products/storage/",
+    icon: <Database className="text-pink-500 w-6 h-6" />,
   },
   {
-    title: "Identity & Access Management (IAM)",
+    title: "Identity & Access Management",
     description:
-      "Control access to resources using role-based permissions, policies, and secure authentication protocols.",
+      "Define user roles and securely manage access to cloud resources using IAM policies.",
     link: "https://docs.aws.amazon.com/IAM/latest/UserGuide/introduction.html",
+    icon: <ShieldCheck className="text-emerald-500 w-6 h-6" />,
+  },
+  {
+    title: "Managed Infrastructure",
+    description:
+      "Let cloud providers manage scaling, patching, and recovery while you focus on innovation.",
+    link: "https://aws.amazon.com/managed-services/",
+    icon: <ServerCog className="text-sky-500 w-6 h-6" />,
   },
 ];
 
+
 export function Services() {
   return (
-    <div className="max-w-5xl mx-auto px-8 mt-10 lg:mt-20">
+    <div className="  max-w-6xl mx-auto px-8 py-10 lg:mt-20">
+      <Badge
+        className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium"
+        variant="secondary"
+      >
+        Our Services
+      </Badge>
       <p className="text-black md:text-3xl text-xl lg:text-5xl leading-[56px] font-bold">
         Everything you need to scale
       </p>
