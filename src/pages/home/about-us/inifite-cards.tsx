@@ -1,46 +1,46 @@
+import { Badge } from "@/components/ui/badge";
 import { useState, useEffect, useCallback } from "react";
 
 const cards = [
   {
     id: 1,
-    type: "Developer Hub",
+    type: "Multi-Cloud Flexibility",
     title:
-      "Kickstart your cloud journey with SDKs, APIs, and starter kits built for modern app development.",
+      "Deploy and manage across AWS, Azure, GCP, Huawei, and more — all from one console. No lock-ins. No silos. Just cloud freedom.",
     theme: "dark",
-    bgColor: "bg-slate-900",
+    bgColor: "bg-black",
   },
   {
     id: 2,
-    type: "Event",
+    type: "Simplicity",
     title:
-      "Join our Cloud Next keynote livestream to explore breakthroughs in GenAI, multi-cloud, and edge computing.",
-    location: "SAN FRANCISCO",
+      "Designed for clarity and speed, Qocent’s platform gets out of your way so you can get things done faster with zero guesswork.",
     theme: "blue",
-    bgColor: "bg-gradient-to-br from-blue-600 via-blue-500 to-blue-400",
+    bgColor: "bg-black",
   },
   {
     id: 3,
-    type: "Learning Track",
+    type: "Transparent Pricing",
     title:
-      "Level up your skills with interactive labs on Kubernetes, CI/CD pipelines, and infrastructure as code.",
+      "Straightforward, predictable billing with no surprises. What you see and use is what you pay.",
     theme: "green",
-    bgColor: "bg-gradient-to-br from-emerald-600 via-teal-500 to-cyan-400",
+    bgColor: "bg-black",
   },
   {
     id: 4,
-    type: "Certification Prep",
+    type: "Global Reach",
     title:
-      "Become a certified cloud practitioner or solutions architect with expert-designed courses and mock exams.",
+      "Qocent is registered in the U.S. and built to serve organizations worldwide. We’re expanding rapidly across key markets.",
     theme: "purple",
-    bgColor: "bg-gradient-to-br from-purple-600 via-indigo-500 to-blue-500",
+    bgColor: "bg-black",
   },
   {
     id: 5,
-    type: "Hands-on Lab",
+    type: "Developer-Centric",
     title:
-      "Build and deploy a full-stack serverless app using Lambda, DynamoDB, and API Gateway — no servers required.",
+      "Built with modern teams in mind — API-first, CLI-ready, and fully documented for speed, scale, and control.",
     theme: "orange",
-    bgColor: "bg-gradient-to-br from-orange-600 via-red-500 to-pink-500",
+    bgColor: "bg-black",
   },
 ];
 
@@ -282,7 +282,15 @@ export default function InfiniteCardCarousel() {
   return (
     <div className="  py-12">
       <div className="w-full mx-auto px-4">
-        <h1 className="text-3xl font-bold text-center mb-12">Learn About Us</h1>
+        <Badge
+          className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium"
+          variant="secondary"
+        >
+          Our Core Value Propositions
+        </Badge>
+        <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-6">
+          What sets Qocent apart and empowers your cloud journey.
+        </h1>
 
         {/* Infinite Carousel Container */}
         <div className="relative overflow-hidden">

@@ -6,6 +6,8 @@ import { Services } from "./services";
 import { Footer } from "@/components/shared";
 import { Faq } from "./faq";
 import { HowIt } from "./how-it";
+import { HyperScalers } from "./hyperscalers";
+import { Video } from "./video";
 
 const Home = () => {
   return (
@@ -15,11 +17,10 @@ const Home = () => {
         {/* <InfiniteCardCarousel /> */}
 
         <Services />
+        <HyperScalers />
         <HowIt />
-
+        <Video />
         <Faq />
-
-        
 
         <CallToAction />
         <Footer />

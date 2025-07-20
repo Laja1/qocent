@@ -11,7 +11,7 @@ const buttonVariants = cva("button", {
         "text-white",
         "text-xs",
         "border-transparent",
-        "hover:bg-neutral-900"
+        "hover:bg-neutral-900",
         // "hover:bg-gray-800",
       ],
       secondary: [
@@ -19,7 +19,7 @@ const buttonVariants = cva("button", {
         "text-[#161C2D]",
         "border-[1px]",
         "border-[#DFDFE5]",
-        "hover:bg-black",
+        "hover:bg-gray-900",
         "hover:text-white",
       ],
       tertiary: [

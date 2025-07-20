@@ -114,14 +114,14 @@ export const ServerSites = () => {
     //   ),
     // },
     {
-      id: "resourceProvider",
+      id: "resourceMaker",
       header: "PROVIDER",
-      accessorKey: "resourceProvider",
+      accessorKey: "resourceMaker",
       headerClassName: "text-center ",
       sortable: true,
       cell: (row) => (
         <span className="text-center justify-center items-left  flex">
-          {row.resourceProvider === "aws" ? (
+          {row.resourceMaker === "aws" ? (
             <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
           ) : (
             <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
@@ -155,31 +155,31 @@ export const ServerSites = () => {
       ],
     },
     {
-      id: "resourceCreatedAt",
+      id: "resourceDate",
       header: "DATE CREATED",
       headerClassName: "text-right",
-      accessorKey: "resourceCreatedAt",
+      accessorKey: "resourceDate",
       sortable: true,
       cell: (row) => (
         <span className="text-right block">
-          {formatDate(row.resourceCreatedAt)}
+          {formatDate(row.resourceDate)}
         </span>
       ),
     },
-    {
-      id: "resourceBill",
-      header: "BILL (USD)",
-      accessorKey: "resourceBill",
-      headerClassName: "text-right",
-      cell: (row) => (
-        <span className="block text-green-700 text-right">
-          {row.resourceBill.toLocaleString("en-US", {
-            minimumFractionDigits: 2,
-          })}
-        </span>
-      ),
-      sortable: true,
-    },
+    // {
+    //   id: "resourceBill",
+    //   header: "BILL (USD)",
+    //   accessorKey: "resourceBill",
+    //   headerClassName: "text-right",
+    //   cell: (row) => (
+    //     <span className="block text-green-700 text-right">
+    //       {row.resourceBill.toLocaleString("en-US", {
+    //         minimumFractionDigits: 2,
+    //       })}
+    //     </span>
+    //   ),
+    //   sortable: true,
+    // },
     // {
     //   id: "balance",
     //   header: "BALANCE (USD)",

@@ -19,7 +19,7 @@ export const CallToAction = () => {
           </p>
 
           <Button
-            label="Try Qocent Now!"
+            label="Join waitlist Now!"
             intent="secondary"
             onClick={() => navigate(RouteConstant.auth.signin.path)}
             className="inline-block"

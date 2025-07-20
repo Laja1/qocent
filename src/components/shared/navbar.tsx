@@ -31,12 +31,15 @@ export default function NavbarDemo({
       <Navbar>
         {/* Desktop Nav */}
         <NavBody>
-          <Link to="/" className="text-xl font-bold hover:opacity-80 transition-opacity">
+          <p
+            onClick={() => handleHomeClick()}
+            className="text-xl  cursor-pointer font-bold hover:opacity-80 transition-opacity"
+          >
             QOCENT
-          </Link>
+          </p>
 
           <NavItems items={navRoutes} />
-          
+
           <div className="flex items-center gap-4">
             <Link to={RouteConstant.auth.signin.path}>
               <NavbarButton variant="secondary" className="text-red-600">

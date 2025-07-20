@@ -2,13 +2,18 @@ import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-w
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import JoinEmailField from "./join-waitlist-textfield";
 
 export function Hero() {
-  const navigate = useNavigate();
+  const [clicked, setClicked] = useState<boolean>(false);
+  const handleIsClicked = () => {
+    setClicked(true);
+    // setTimeout(() => setClicked(false), 6000);
+  };
   return (
     <div className="h-full">
-      <BackgroundBeamsWithCollision className="h-[80vh] lg:h-screen bg-black items-center px-5 justify-center  bg-gradient-to-br from-black to-gray-800  drop-shadow-stone-800 drop-shadow-2xl rounded-sm">
+      <BackgroundBeamsWithCollision className="min-h-[80vh] py-10 lg:min-h-screen bg-black items-center px-5 justify-center  bg-gradient-to-br from-black to-gray-800  drop-shadow-stone-800 drop-shadow-2xl rounded-sm">
         <div className="z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -33,17 +38,18 @@ export function Hero() {
               The power of three clouds in one.
             </p>
             <div className="flex flex-col text-white  sm:flex-row gap-4 items-center justify-center">
-              <div className="flex gap-1 items-center border border-white text-xs">
+            <JoinEmailField clicked={clicked} handleIsClicked={handleIsClicked}/>
+              {/* <div className="flex gap-1 items-center border border-white text-xs">
                 <p
                   onClick={() => navigate("/sigin")}
-                  className="hover:cursor-pointer p-1"
+                  className="hover:cursor-pointer p-2"
                 >
                   Get Started
                 </p>
-                <div className="border border-white bg-white text-black text-xs flex p-1 ">
+                <div className="border border-white bg-white text-black text-xs flex p-2 ">
                   View a demo
                 </div>
-              </div>
+              </div> */}
             </div>
             <div className="flex items-center justify-center gap-4 mt-6 text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
@@ -60,13 +66,13 @@ export function Hero() {
               </div>
             </div>
           </motion.div>
-          {/* <motion.div
+         {/* <motion.div
           initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative mx-auto max-w-5xl"
+          className="relative mx-auto bg-white rounded-xl p-2  max-w-7xl"
         >
-          <div className="rounded-xl overflow-hidden shadow-2xl ">
+          <div className="rounded-lg overflow-hidden shadow-2xl ">
             <div className="w-full aspect-video">
               <iframe
                 src="https://www.youtube.com/embed/7T7SyMZihwo?rel=0"
@@ -77,8 +83,8 @@ export function Hero() {
               ></iframe>
             </div>
           </div>
-        </motion.div>
-         */}
+        </motion.div> */}
+         
         </div>
       </BackgroundBeamsWithCollision>
     </div>

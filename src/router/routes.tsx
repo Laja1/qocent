@@ -16,9 +16,9 @@ export const navRoutes = [
     name: "Documentation",
   },
   {
-    id: "pricing",
-    link: "/pricing",
-    name: "Pricing",
+    id: "about-us",
+    link: "/about-us",
+    name: "About Us",
   },
 ];
 
@@ -35,6 +35,10 @@ export const RouteConstant = {
     documentation: {
       path: "/docs",
       name: "documentation",
+    },
+    aboutUs:{
+      path: "/about-us",
+      name: "About Us",
     },
   },
   auth: {

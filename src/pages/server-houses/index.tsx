@@ -30,6 +30,7 @@ export const ServerHouses = () => {
     provider: dashboard.provider,
     resource: ApiEnums.House,
   });
+  console.log(data)
   const serverHouseColumn: ColumnDef<resourceType>[] = [
     {
       id: "resourceId",
@@ -57,16 +58,16 @@ export const ServerHouses = () => {
       sortable: true,
       filterType: "select",
     },
-    {
-      id: "resourceSiteCode",
-      header: "SITE CODE",
-      accessorKey: "resourceSiteCode",
-      cell: (row) => (
-        <span className=" line-clamp-1">{row.resourceSiteCode}</span>
-      ),
-      sortable: true,
-      filterType: "select",
-    },
+    // {
+    //   id: "resourceSiteCode",
+    //   header: "SITE CODE",
+    //   accessorKey: "resourceSiteCode",
+    //   cell: (row) => (
+    //     <span className=" line-clamp-1">{row.resourceSiteCode}</span>
+    //   ),
+    //   sortable: true,
+    //   filterType: "select",
+    // },
     // {
     //   id: "alerts",
     //   header: "ALERTS",
@@ -94,13 +95,13 @@ export const ServerHouses = () => {
     //   ),
     // },
     {
-      id: "resourceProviderId",
+      id: "resourceMaker",
       header: "PROVIDER",
-      accessorKey: "resourceProviderId",
+      accessorKey: "resourceMaker",
       sortable: true,
       cell: (row) => (
         <span className="text-center justify-center flex line-clamp-1">
-          {row.resourceProviderId === "1" ? (
+          {row.resourceMaker === "1" ? (
             <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
           ) : (
             <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
@@ -109,27 +110,27 @@ export const ServerHouses = () => {
       ),
     },
     {
-      id: "resourceCreatedAt",
+      id: "resourceDate",
       header: "DATE CREATED",
       headerClassName: "text-right",
-      accessorKey: "resourceCreatedAt",
+      accessorKey: "resourceDate",
       sortable: true,
       cell: (row) => (
         <span className="text-right block ">
-          {formatDate(row.resourceCreatedAt)}
+          {formatDate(row.resourceDate)}
         </span>
       ),
     },
-    {
-      id: "resourceIP",
-      header: "IP RANGE",
-      headerClassName: "text-right",
-      accessorKey: "resourceIP",
-      sortable: true,
-      cell: (row) => (
-        <span className="text-right block line-clamp-1">{row.resourceIP}</span>
-      ),
-    },
+    // {
+    //   id: "resourceIP",
+    //   header: "IP RANGE",
+    //   headerClassName: "text-right",
+    //   accessorKey: "resourceIP",
+    //   sortable: true,
+    //   cell: (row) => (
+    //     <span className="text-right block line-clamp-1">{row.resourceIP}</span>
+    //   ),
+    // },
   ];
 
   const actions = [
