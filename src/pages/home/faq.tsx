@@ -40,35 +40,35 @@ export const Faq = () => {
               <Accordion type="single" collapsible className="w-full">
                 {[
                   {
-                    question: "How does the 14-day free trial work?",
+                    question: "What makes Qocent different from other cloud providers?",
                     answer:
-                      "Our 14-day free trial gives you full access to all features of your selected plan. No credit card is required to sign up, and you can cancel at any time during the trial period with no obligation.",
+                      `Qocent is "one window to every cloud" Our multi-cloud platform integrates AWS, Azure, GCP, Huawei, and more into a single intuitive console, so you can deploy, manage, and scale across clouds without switching dashboards or facing vendor lock‑in.`,
                   },
                   {
-                    question: "Can I change plans later?",
+                    question: "How does Qocent pricing work?",
                     answer:
-                      "Yes, you can upgrade or downgrade your plan at any time. If you upgrade, the new pricing will be prorated for the remainder of your billing cycle. If you downgrade, the new pricing will take effect at the start of your next billing cycle.",
+                      "We offer transparent, pay-as-you-go pricing with no hidden fees. You only pay for what you actually use across any cloud you deploy to. Qocent also offers reserved pricing discounts to help reduce long-term spend.",
                   },
                   {
-                    question: "Is there a limit to how many users I can add?",
+                    question: "Can I migrate existing applications onto Qocent?",
                     answer:
                       "The number of users depends on your plan. The Starter plan allows up to 5 team members, the Professional plan allows up to 20, and the Enterprise plan has no limit on team members.",
                   },
                   {
                     question:
-                      "Do you offer discounts for nonprofits or educational institutions?",
+                      "How do you support multi-cloud deployment?",
                     answer:
-                      "Yes, we offer special pricing for nonprofits, educational institutions, and open-source projects. Please contact our sales team for more information.",
+                      "Qocent supports workloads across multiple providers; including AWS, Huawei, Azure, and GCP. You choose where to deploy, and we handle orchestration, networking, and unified billing through a single interface.",
                   },
                   {
-                    question: "How secure is my data?",
+                    question: "What are your optimization services?",
                     answer:
-                      "We take security very seriously. All data is encrypted both in transit and at rest. We use industry-standard security practices and regularly undergo security audits. Our platform is compliant with GDPR, CCPA, and other relevant regulations.",
+                      "With Qocent, you get ongoing Cost Optimization and Modernization support. We analyze usage, size resources efficiently, recommend reserved plans, and help modernize legacy systems using containers, CI/CD, and DevOps practices.",
                   },
                   {
-                    question: "What kind of support do you offer?",
+                    question: "What support options are available?",
                     answer:
-                      "Support varies by plan. All plans include email support, with the Professional plan offering priority email support. The Enterprise plan includes 24/7 phone and email support. We also have an extensive knowledge base and community forum available to all users.",
+                      "Our global team offers 24/7 support via email or phone. We also provide dedicated cloud specialists for Migration, Modernization, Optimization, and Enterprise onboarding.",
                   },
                 ].map((faq, i) => (
                   <motion.div

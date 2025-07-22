@@ -8,6 +8,8 @@ export const resourceTypeOptions = [
   { label: "Monitoring", value: "monitoring" },
   { label: "Server Room", value: "serverRoom" },
   { label: "Server House", value: "serverHouse" },
+  { label: "Server Site", value: "serverSite" },
+
 ];
 
 export const resourceSiteCodeOptions = [

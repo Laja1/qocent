@@ -110,8 +110,8 @@ export default function InfiniteCardCarousel() {
             isActive
               ? "scale-100 opacity-100 z-10"
               : distance === 1
-              ? "scale-95 opacity-70 hover:opacity-85"
-              : "scale-90 opacity-40"
+              ? "scale-95 opacity-60 hover:opacity-85"
+              : "scale-90 opacity-60"
           }
         `}
         onClick={() => goToCard(arrayIndex)}

@@ -89,8 +89,8 @@ const JoinEmailField: React.FC<EmailProps> = ({ clicked, handleIsClicked }) => {
             onChange={handleChange}
             required
             value={email}
-            placeholder="Your best email"
-            className="border-1 placeholder-gray-500 placeholder:font-bold border-[#ffffff8c] text-primaryRegular pl-4 pr-12 placeholder:text-sm bg-black w-[350px] lg:w-[600px] rounded-lg py-1"
+            placeholder="Join waitlist"
+            className="border-1 placeholder-gray-500 placeholder:font-bold border-gray-300 text-primaryRegular pl-4 pr-12 b placeholder:text-xs text-xs bg-white w-[350px] lg:w-[400px] rounded-md py-2"
             disabled={isSubmitting}
           />
           <div
@@ -98,13 +98,13 @@ const JoinEmailField: React.FC<EmailProps> = ({ clicked, handleIsClicked }) => {
             onClick={handleButtonClick}
           >
             <div
-              className={`text-black p-1 rounded-full border transform transition-transform duration-300 ease-in-out scale-100 hover:scale-105 ${
+            className={`text-black p-1 rounded-full border border-gray-400 transform transition-transform duration-300 ease-in-out scale-100 hover:scale-105 ${
                 isSubmitting
                   ? "opacity-50 cursor-not-allowed"
                   : "cursor-pointer"
               }`}
             >
-              <ArrowRight className="text-white size-4" />
+              <ArrowRight className="text-gray-400 size-4" />
             </div>
           </div>
         </div>

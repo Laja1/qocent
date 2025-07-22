@@ -36,7 +36,7 @@ export const HowIt = () => {
                 step: "01",
                 title: "Create Account",
                 description:
-                  "Sign up in seconds with just your email. No credit card required to get started.",
+                  "Sign up and create your Qocent account - your Server Site.",
               },
               {
                 step: "02",

@@ -32,3 +32,29 @@ export type ParameterResponse = {
   data: Parameter[];
   error: string;
 };
+
+
+export interface SiteData {
+  siteId: number;
+  siteStatus: string;
+  siteCreatedAt: string;
+  siteUpdatedAt: string;
+  siteAccountId: string;
+  siteCode: string;
+  siteCurrency: string;
+  siteDescription: string;
+  siteEOLAction: string;
+  siteExpiryDate: string | null;
+  siteName: string;
+  sitePaymentType: string | null;
+  siteProvider: string;
+  siteRegion: string;
+  siteUserId: number;
+}
+
+export interface siteResponse {
+  success: boolean;
+  data: SiteData[];
+  message:string
+  error:string
+}

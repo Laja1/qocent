@@ -4,8 +4,8 @@ import { baseQuery } from "./httpClient/baseQuery";
 import { ApiEnums } from "@/utilities/enums";
 import type { ParameterResponse } from "@/models/response/siteResponse";
 import { createResourceProviderTags } from "@/utilities/tagHelpers";
-import type { formResponse, resourceResponse } from "@/models/response/resourceResponse";
-import type { createResourceRequest } from "@/models/request/resourceRequest";
+import type { createResourceResponse, formResponse, getResourceConfigResponse, resourceResponse, serviceResponse } from "@/models/response/resourceResponse";
+import type { createResourceRequest, } from "@/models/request/resourceRequest";
 
 
 export const resourceApi = createApi({
@@ -13,7 +13,8 @@ export const resourceApi = createApi({
   baseQuery: baseQuery,
   tagTypes: [ApiEnums.Resource],
   endpoints: (build) => ({
-    createResource: build.mutation<ParameterResponse, createResourceRequest>({
+    createResource: build.mutation<createResourceResponse
+    , createResourceRequest>({
       query: (body) => ({
         url: "/resource/create-resource",
         method: "POST",
@@ -33,9 +34,16 @@ export const resourceApi = createApi({
         url: "/form/options",
         method: "POST",
         body,
-      }),
-     
     }),
+    
+    }),
+    getConfig: build.query<getResourceConfigResponse, { serviceId: string,configProvider:string }>({
+      query: ({serviceId,configProvider}) => `/resource/config/${serviceId}/${configProvider}`,    
+    }),
+    
+  getServices:build.query<serviceResponse, void>({
+    query: () => `/resource/get-serviceList`,    
+}),
   }),
 });
 
@@ -43,5 +51,7 @@ export const {
   useCreateResourceMutation,
   useGetResourceByProviderQuery,
   useGetResourceTemplateQuery,
-  useGetFormOptionsMutation
+  useGetFormOptionsMutation,
+  useGetServicesQuery,
+  useGetConfigQuery
 } = resourceApi;

@@ -7,16 +7,20 @@ import { IconMichelinStar } from "@tabler/icons-react";
 import type { ParameterData } from "../create-new-site/type";
 import {
   useCreateResourceMutation,
+  useGetConfigQuery,
   useGetResourceTemplateQuery,
 } from "@/service/resourceApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import { SiteDeployModal } from "@/components/not-shared/site-modal";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { showCustomToast } from "@/components/shared/toast";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import type { createResourceRequest } from "@/models/request/resourceRequest";
+import type { getResourceConfigResponse } from "@/models/response/resourceResponse";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 export const CreateNewResource = () => {
   const navigate = useNavigate();
@@ -25,83 +29,59 @@ export const CreateNewResource = () => {
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
   const location = useLocation();
   const [progress, setProgress] = useState(0);
-  console.log(location.state);
-  const { data: resourceTemplate, isLoading } = useGetResourceTemplateQuery({
-    resource: location.state.resourceType,
-  });
 
-  const handleSubmit = async (values: any) => {
-    const getResourceName = (values: Record<string, any>): string => {
-      const nameRegex = /name/i;
-      const nameKey = Object.keys(values).find((key) => nameRegex.test(key));
-      return nameKey && values[nameKey] ? values[nameKey] : "";
-    };
-  
-    // Generate a resource code based on resource name
-    const generateResourceCode = (name: string): string => {
-      return name.toLowerCase().replace(/[^a-z0-9]/g, '-') || 'resource-code';
-    };
-  
+  const dashboard = useSelector((state: RootState) => state.dashboard);
+  const locationState = location.state as { resourceType?: string } | null;
+  const { data: configData, isLoading: isConfigLoading } = useGetConfigQuery({
+    serviceId: locationState?.resourceType || "",
+    configProvider: dashboard?.provider || "",
+  });
+  console.log(configData);
+
+  useEffect(() => {
+    if (!locationState || !locationState.resourceType) {
+      showCustomToast("Please select a resource type first.", {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
+      navigate(RouteConstant.dashboard.resources.path);
+    }
+  }, [locationState, navigate]);
+
+  const shouldFetchData = !!locationState?.resourceType;
+
+  const { data: resourceTemplate, isLoading } = useGetResourceTemplateQuery(
+    {
+      resource: locationState?.resourceType || "",
+    },
+    {
+      skip: !shouldFetchData,
+    }
+  );
+
+  const handleSubmit = async () => {
     try {
-      const resourceName = getResourceName(values);
-      
-      const payload: createResourceRequest = {
-        resource: {
-          resourceId: 0, // ✅ REQUIRED - was missing
-          resourceSite: location?.state?.resourceSiteCode || "string",
-          resourceType: location?.state?.resourceType || "string",
-          resourceName: resourceName || "string",
-          resourceCode: generateResourceCode(resourceName) || "string",
-          resourceContainerType: "string",
-          resourceContainerCode: "string",
-          resourceStatus: "string",
-          resourceDate: new Date().toISOString(), 
-          resourceConfig: "string",
-          resourceMaker: "string",
-          resourceMakerId: "string",
-          resourceUserId: 0,
-          resourceCheckerId: "string",
-          resourceRef: "string",
-          resourceClass: "string", 
-          resourceLocation: "string",
-          resourceTag: "string",
-          resourceInfo: "string",
-        },
-        resourceTemplate: {
-          service: "string",
-          version: "string",
-          region: "string",
-          clientClass: "string",
-          requestClass: "string", 
-          operation: "string",
-          authType: "BASIC",
-          requestBody: { ...values },
-          customHeaders: {
-            "additionalProp1": "string",
-            "additionalProp2": "string",
-            "additionalProp3": "string"
-          },
-          async: true,
-          timeout: 0,
-          customEndpoint: "string",
-          debugMode: true,
-        }
-      };
-      
-      console.log("Sending payload:", JSON.stringify(payload, null, 2));
-      
+      if (!newJsonConfig) {
+        throw new Error("Configuration data is not available");
+      }
+
+      const payload: createResourceRequest =
+        "data" in newJsonConfig
+          ? (newJsonConfig.data as createResourceRequest)
+          : (newJsonConfig as createResourceRequest);
+
       const res = await createResource(payload).unwrap();
-  
+      console.log(res, "creating");
+
       // Simulate deployment progress
       for (let i = 0; i <= 100; i += 10) {
         setProgress(i);
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
-  
+
       showCustomToast(res.message, {
         toastOptions: { type: "success", autoClose: 5000 },
       });
-  
+
       setProgress(0);
       setIsDeployModalOpen(false);
       navigate(RouteConstant.dashboard.resources.path);
@@ -152,7 +132,56 @@ export const CreateNewResource = () => {
     validateOnMount: true,
     enableReinitialize: true,
   });
-  console.log(formik.values);
+
+  const replaceConfigPlaceholders = (
+    obj: unknown,
+    formikValues: { [x: string]: any }
+  ): unknown => {
+    if (Array.isArray(obj)) {
+      return obj.map((item) => replaceConfigPlaceholders(item, formikValues));
+    } else if (obj !== null && typeof obj === "object") {
+      const newObj: { [key: string]: unknown } = {};
+      for (const [key, value] of Object.entries(
+        obj as Record<string, unknown>
+      )) {
+        newObj[key] = replaceConfigPlaceholders(value, formikValues);
+      }
+      return newObj;
+    } else if (typeof obj === "string" && obj.startsWith("@")) {
+      // Remove @ and get the corresponding formik value
+      const fieldName = obj.substring(1);
+      return formikValues[fieldName] || obj; // Return original if not found
+    }
+    return obj;
+  };
+
+  const newJsonConfig = configData
+    ? (replaceConfigPlaceholders(
+        configData,
+        formik.values
+      ) as getResourceConfigResponse)
+    : null;
+
+  console.log("Original config:", configData);
+  console.log("Dynamic config with formik values:", newJsonConfig);
+  console.log("Current formik values:", formik.values);
+  console.log(newJsonConfig, "newJsonConfig");
+
+  // Show loading state while redirecting or if no valid state
+  if (!locationState || !locationState.resourceType) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <p>Redirecting...</p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleProceedClick = async () => {
+    setIsDeployModalOpen(true);
+  };
+
   return (
     <div className="flex flex-col">
       <Header
@@ -175,6 +204,75 @@ export const CreateNewResource = () => {
         </div>
 
         <div className=" flex mt-5   flex-col">
+          <div className="flex items-center w-full py-[1px] border-b">
+            <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
+              <span className="text-red-500 ml-1">*</span>
+              Server Site
+            </p>
+            <div className="lg:w-2/5 w-full pr-3 flex gap-1">
+              <RenderField
+                name="serverSite"
+                formik={formik}
+                placeholder={`Select your Server Site`}
+                parameterLookup={"serverSite"}
+                type={"ListBox"}
+                autoComplete="off"
+              />
+              <button
+                // onClick={() => descriptionModal(item)}
+                className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                title="View more info"
+              >
+                <Info size={16} />
+              </button>
+            </div>
+          </div>
+          <div className="flex items-center w-full py-[1px] border-b">
+            <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
+              <span className="text-red-500 ml-1">*</span>
+              Server House
+            </p>
+            <div className="lg:w-2/5 w-full pr-3 flex gap-1">
+              <RenderField
+                name="serverHouse"
+                formik={formik}
+                placeholder={`Select your Server House`}
+                parameterLookup={"serverHouse"}
+                type={"ListBox"}
+                autoComplete="off"
+              />
+              <button
+                // onClick={() => descriptionModal(item)}
+                className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                title="View more info"
+              >
+                <Info size={16} />
+              </button>
+            </div>
+          </div>
+          <div className="flex items-center w-full py-[1px] border-b">
+            <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
+              <span className="text-red-500 ml-1">*</span>
+              Server Room
+            </p>
+            <div className="lg:w-2/5 w-full pr-3 flex gap-1">
+              <RenderField
+                name="serverRoom"
+                formik={formik}
+                placeholder={`Select your server Room`}
+                parameterLookup={"serverRoom"}
+                type={"ListBox"}
+                autoComplete="off"
+              />
+              <button
+                // onClick={() => descriptionModal(item)}
+                className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                title="View more info"
+              >
+                <Info size={16} />
+              </button>
+            </div>
+          </div>
           {resourceTemplate?.data?.map((item) => (
             <div
               className="flex items-center w-full py-[1px] border-b"
@@ -210,8 +308,8 @@ export const CreateNewResource = () => {
         <div className="flex m-3 sm:m-5 justify-end">
           <Button
             label="Proceed"
-            disabled={!formik.isValid || isLoading}
-            onClick={() => setIsDeployModalOpen(true)}
+            disabled={!formik.isValid || isLoading || isConfigLoading}
+            onClick={handleProceedClick}
             surfixIcon={<ArrowRight className="size-3" />}
           />
         </div>

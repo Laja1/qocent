@@ -57,7 +57,7 @@ export const RenderField = ({
           name={name}
           parameterLookup={parameterLookup || ''}
           formik={formik}
-          placeholder="Select resource..."
+          placeholder={placeholder}
           {...rest}
         />
         

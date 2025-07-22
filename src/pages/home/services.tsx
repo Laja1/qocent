@@ -70,7 +70,6 @@ const projects = [
   },
 ];
 
-
 export function Services() {
   return (
     <div className="  max-w-6xl mx-auto px-8 py-10 lg:mt-20">
@@ -81,10 +80,11 @@ export function Services() {
         Our Services
       </Badge>
       <p className="text-black md:text-3xl text-xl lg:text-5xl leading-[56px] font-bold">
-        Everything you need to scale
+        Everything you need to build, scale, and thrive.
       </p>
       <p className="md:text-base text-sm lg:text-lg leading-[28px] text-neutral-400">
-        Every AI is the choice of all the fortune 500 companies.
+        From startups to enterprises, Qocent delivers the power, speed, and
+        flexibility you need to run your business across any cloud—seamlessly.
       </p>
       <HoverEffect items={projects} />
     </div>

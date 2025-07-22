@@ -1,29 +1,27 @@
-import { Button } from "@/components/shared";
-import { RouteConstant } from "@/router/routes";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import JoinEmailField from "./join-waitlist-textfield";
 
 export const CallToAction = () => {
-  const navigate = useNavigate();
+  const [clicked, setClicked] = useState<boolean>(false);
+  const handleIsClicked = () => {
+    setClicked(true);
+    // setTimeout(() => setClicked(false), 6000);
+  };
   return (
     <div>
       <div className="lg:px-10 w-full mx-auto pt-10 flex">
         <div className="bg-neutral-200 items-center flex flex-col space-y-5 text-center w-full rounded-sm p-5 lg:p-20">
           <p className="bg-gradient-to-r text-xl lg:text-3xl font-poppins from-yellow-800 inline-block text-transparent to-[#750505] bg-clip-text">
-            Boost Your Productivity
+            Everything You Need, Nothing You Don’t
           </p>
           <p className="text-black text-xs lg:text-sm leading-loose  max-w-3xl">
-            Deploy faster. Scale without stress. With QCS, everything from setup
-            to ship is made simpler. Built on trusted infrastructure, we take
-            care of the heavy lifting so you can stay focused on building what
-            matters.
+            Qocent puts the power of every major cloud in one place, so you can
+            deploy, manage, and scale without limits. With unmatched multicloud
+            flexibility, simplified operations, and unbeatable value, we help
+            you build faster, smarter, and with complete control.
           </p>
 
-          <Button
-            label="Join waitlist Now!"
-            intent="secondary"
-            onClick={() => navigate(RouteConstant.auth.signin.path)}
-            className="inline-block"
-          />
+          <JoinEmailField clicked={clicked} handleIsClicked={handleIsClicked} />
         </div>
       </div>
     </div>
