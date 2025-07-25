@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQuery } from "./httpClient/baseQuery";
+import { baseQuery } from "../httpClient/baseQuery";
 import { ApiEnums } from "@/utilities/enums";
 import type { ParameterResponse } from "@/models/response/siteResponse";
 import { createResourceProviderTags } from "@/utilities/tagHelpers";
@@ -22,8 +22,8 @@ export const resourceApi = createApi({
       }),
       invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" }],
     }),
-    getResourceTemplate: build.query<ParameterResponse, {resource:string}>({
-        query: ({resource}) => `/resource/template/${resource}`,    
+    getResourceTemplate: build.query<ParameterResponse, {resource:string,provider:string}>({
+        query: ({resource,provider}) => `/resource/template/${provider}/${resource}`,    
     }),
     getResourceByProvider: build.query<resourceResponse, { provider: string | null,resource:string }>({
       query: ({ provider,resource }) => `/resource/${provider}/${resource}`, 
@@ -41,8 +41,8 @@ export const resourceApi = createApi({
       query: ({serviceId,configProvider}) => `/resource/config/${serviceId}/${configProvider}`,    
     }),
     
-  getServices:build.query<serviceResponse, void>({
-    query: () => `/resource/get-serviceList`,    
+  getServices:build.query<serviceResponse, {provider:string}>({
+    query: ({provider}) => `/resource/${provider}/get-serviceList`,    
 }),
   }),
 });

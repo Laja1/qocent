@@ -9,7 +9,7 @@ import {
   useCreateResourceMutation,
   useGetConfigQuery,
   useGetResourceTemplateQuery,
-} from "@/service/resourceApi";
+} from "@/service/typescript/resourceApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import { SiteDeployModal } from "@/components/not-shared/site-modal";
@@ -25,7 +25,8 @@ import type { RootState } from "@/store";
 export const CreateNewResource = () => {
   const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
-  const [createResource] = useCreateResourceMutation();
+  const [createResource, { isLoading: isCreatingLoading }] =
+    useCreateResourceMutation();
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
   const location = useLocation();
   const [progress, setProgress] = useState(0);
@@ -36,7 +37,6 @@ export const CreateNewResource = () => {
     serviceId: locationState?.resourceType || "",
     configProvider: dashboard?.provider || "",
   });
-  console.log(configData);
 
   useEffect(() => {
     if (!locationState || !locationState.resourceType) {
@@ -52,6 +52,7 @@ export const CreateNewResource = () => {
   const { data: resourceTemplate, isLoading } = useGetResourceTemplateQuery(
     {
       resource: locationState?.resourceType || "",
+      provider:dashboard.provider
     },
     {
       skip: !shouldFetchData,
@@ -78,7 +79,7 @@ export const CreateNewResource = () => {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
-      showCustomToast(res.message, {
+      showCustomToast(`${locationState?.resourceType} successfully created`, {
         toastOptions: { type: "success", autoClose: 5000 },
       });
 
@@ -120,7 +121,7 @@ export const CreateNewResource = () => {
     resourceTemplate?.data?.reduce(
       (acc: Record<string, string>, item: ParameterData) => ({
         ...acc,
-        [item.parameterName]: "",
+        [item.parameterField]: "",
       }),
       {}
     ) || {};
@@ -164,8 +165,6 @@ export const CreateNewResource = () => {
 
   console.log("Original config:", configData);
   console.log("Dynamic config with formik values:", newJsonConfig);
-  console.log("Current formik values:", formik.values);
-  console.log(newJsonConfig, "newJsonConfig");
 
   // Show loading state while redirecting or if no valid state
   if (!locationState || !locationState.resourceType) {
@@ -181,6 +180,21 @@ export const CreateNewResource = () => {
   const handleProceedClick = async () => {
     setIsDeployModalOpen(true);
   };
+  if (isLoading) {
+    return (
+      <div className="">
+        <Header
+          title="Create Server Site"
+          description="A server can have one or more server houses. A server house is provided by a provider."
+        />
+        <div className="animate-pulse space-y-4 mx-4">
+          {[...Array(5)].map((_, i) => (
+            <div key={i} className="h-12 bg-gray-200 rounded"></div>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col">
@@ -204,75 +218,6 @@ export const CreateNewResource = () => {
         </div>
 
         <div className=" flex mt-5   flex-col">
-          <div className="flex items-center w-full py-[1px] border-b">
-            <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-              <span className="text-red-500 ml-1">*</span>
-              Server Site
-            </p>
-            <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-              <RenderField
-                name="serverSite"
-                formik={formik}
-                placeholder={`Select your Server Site`}
-                parameterLookup={"serverSite"}
-                type={"ListBox"}
-                autoComplete="off"
-              />
-              <button
-                // onClick={() => descriptionModal(item)}
-                className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                title="View more info"
-              >
-                <Info size={16} />
-              </button>
-            </div>
-          </div>
-          <div className="flex items-center w-full py-[1px] border-b">
-            <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-              <span className="text-red-500 ml-1">*</span>
-              Server House
-            </p>
-            <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-              <RenderField
-                name="serverHouse"
-                formik={formik}
-                placeholder={`Select your Server House`}
-                parameterLookup={"serverHouse"}
-                type={"ListBox"}
-                autoComplete="off"
-              />
-              <button
-                // onClick={() => descriptionModal(item)}
-                className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                title="View more info"
-              >
-                <Info size={16} />
-              </button>
-            </div>
-          </div>
-          <div className="flex items-center w-full py-[1px] border-b">
-            <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-              <span className="text-red-500 ml-1">*</span>
-              Server Room
-            </p>
-            <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-              <RenderField
-                name="serverRoom"
-                formik={formik}
-                placeholder={`Select your server Room`}
-                parameterLookup={"serverRoom"}
-                type={"ListBox"}
-                autoComplete="off"
-              />
-              <button
-                // onClick={() => descriptionModal(item)}
-                className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                title="View more info"
-              >
-                <Info size={16} />
-              </button>
-            </div>
-          </div>
           {resourceTemplate?.data?.map((item) => (
             <div
               className="flex items-center w-full py-[1px] border-b"
@@ -286,7 +231,7 @@ export const CreateNewResource = () => {
               </p>
               <div className="lg:w-2/5 w-full pr-3 flex gap-1">
                 <RenderField
-                  name={item.parameterName}
+                  name={item.parameterField}
                   formik={formik}
                   placeholder={`Enter your ${item.parameterLabel}`}
                   parameterLookup={item.parameterLookup}
@@ -319,7 +264,7 @@ export const CreateNewResource = () => {
         onClose={() => !isLoading && setIsDeployModalOpen(false)}
         formik={formik}
         json={resourceTemplate?.data || []}
-        isLoading={isLoading}
+        isLoading={isLoading || isCreatingLoading}
         progress={progress}
         onDeploy={formik.handleSubmit}
       />

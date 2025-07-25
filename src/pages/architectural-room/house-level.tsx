@@ -1,53 +1,8 @@
 import { Cloud, User2Icon } from "lucide-react";
-import { AwsLogo, HuaweiLogo, RESOURCE_MAP } from "@/utilities/constants/icons";
 import { HouseVpcLevel } from "./house-vpc-level";
-export type Resource = {
-  id: number;
-  name: string;
-  instanceType: string;
-  status: string;
-};
+import type { ServerHouse } from "@/models/response/siteResponse";
 
-export type Subnet = {
-  id: number;
-  subnet: "Public" | "Private";
-  availabilityZone: string;
-  resourcesDeployed: Resource[];
-  routeTable: string;
-  securityGroups: string[];
-};
-
-export type VPC = {
-  vpcId: string;
-  houseName: string;
-  cidrBlock: string;
-  subnet: Subnet[];
-};
-
-export type ExtraResource = {
-  id: number;
-  name: string;
-  type: string;
-  status: string;
-  createdAt: string;
-  owner: string;
-};
-
-export type HouseArchitectureData = {
-  whereDeployed: string;
-  parentId: string;
-  parent: string;
-  vpcDeployed: VPC;
-  extraResources: {
-    resources: ExtraResource[];
-  };
-};
-
-export const HouseLevel = ({
-  houseData,
-}: {
-  houseData: HouseArchitectureData;
-}) => {
+export const HouseLevel = ({ houseData }: { houseData: ServerHouse }) => {
   // const openArchitecture = () => {
   //   openModal({
   //     id: `architecture`,
@@ -78,22 +33,22 @@ export const HouseLevel = ({
       <div className="w-5/6 flex relative border border-dashed border-purple-800   bg-green-50">
         <div className="w-1/7 flex pb-2">
           <p className="text-black text-start text-base pl-2 mb-2   pt-2 font-bold">
-            {houseData?.whereDeployed === "AWS" && <AwsLogo />}
-            {houseData?.whereDeployed === "Huawei" && <HuaweiLogo />}
+            {/* {houseData?.whereDeployed === "AWS" && <AwsLogo />}
+            {houseData?.whereDeployed === "Huawei" && <HuaweiLogo />} */}
           </p>
           <div className="grid grid-cols-3 items-end gap-3  mt-10">
-            {houseData.extraResources.resources.map((item) => (
+            {/* {houseData.extraResources.resources.map((item) => (
               <div key={item.id}>
                 {RESOURCE_MAP[item.name as keyof typeof RESOURCE_MAP] ?? (
                   <span className="text-red-500">?</span>
                 )}
               </div>
-            ))}
+            ))} */}
           </div>
         </div>
         <div className="w-6/7 flex ">
           <div className="mt-6 w-full pb-5">
-            <HouseVpcLevel currentVPC={houseData?.vpcDeployed} />
+            <HouseVpcLevel vpcDeployed={houseData} />
           </div>
         </div>
 

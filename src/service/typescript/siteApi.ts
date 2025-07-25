@@ -1,7 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQuery } from "./httpClient/baseQuery";
+import { baseQuery } from "../httpClient/baseQuery";
 import type { genericResponse } from "@/models/response";
-import type {  ParameterResponse, siteResponse } from "@/models/response/siteResponse";
+import type {  ParameterResponse } from "@/models/response/siteResponse";
 import { ApiEnums } from "@/utilities/enums";
 
 export const siteApi = createApi({
@@ -17,14 +17,11 @@ export const siteApi = createApi({
       }),
       invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" }],
     }),
-    getSite: build.query<siteResponse, void>({
-      query: () => `/api/site`,    
-    }),
     getSiteParameter: build.query<ParameterResponse, void>({
       query: () => `/resource/template/serverSite`,    
-     
   }),
   }),
 });
+
 
 export const { useCreateServerSiteMutation,useGetSiteParameterQuery } = siteApi;

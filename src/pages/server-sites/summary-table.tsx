@@ -1,33 +1,41 @@
 import { DataTable, type ColumnDef } from "@/components/shared/datatable";
-import type { summaryType } from "./type";
 import { Plus } from "lucide-react";
 import { ICON_MAP } from "@/utilities/constants/icons";
-import { summaryData } from "./config";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RouteConstant } from "@/router/routes";
+import type { ResourceSummary } from "@/models/response/siteResponse";
 
-export const SummaryTable = () => {
+interface SummaryTableProps {
+  summaryData: ResourceSummary[];
+  isLoading: boolean;
+}
+
+export const SummaryTable = ({ summaryData, isLoading }: SummaryTableProps) => {
   const navigate = useNavigate();
-  const [resourceType, setResourceType] = useState("");
-  const summaryColums: ColumnDef<summaryType>[] = [
+  // If you want to highlight by resource type instead:
+  const [selectedResourceType, setSelectedResourceType] = useState("");
+
+  const summaryColums: ColumnDef<ResourceSummary>[] = [
     {
-      id: "resourceIcon",
+      id: "icon",
       header: "",
-      accessorKey: "resourceType",
+      accessorKey: "groupedResourceType",
       cell: (row) => (
         <span className="hover:cursor-pointer">
-          {ICON_MAP[row.resourceType as keyof typeof ICON_MAP]}
+          {ICON_MAP[row.groupedResourceType as keyof typeof ICON_MAP]}
         </span>
       ),
       sortable: false,
     },
     {
-      id: "resourceTypeText",
+      id: "resourceTypeLabel",
       header: "Resource Type",
-      accessorKey: "resourceType",
+      accessorKey: "groupedResourceType",
       cell: (row) => (
-        <span className="line-clamp-1 text-xs py-1">{row.resourceType}</span>
+        <span className="line-clamp-1 text-xs py-1">
+          {row.groupedResourceType}
+        </span>
       ),
       sortable: false,
     },
@@ -44,36 +52,31 @@ export const SummaryTable = () => {
     {
       label: `Add resource`,
       icon: Plus,
-      onClick: (row: summaryType) => {
-        setResourceType(row.resourceType);
-        navigate(RouteConstant.dashboard.createResources.path, {});
-        // openModal({
-        //   id: `deploy-${row.id}`,
-        //   content: () => (
-        //     <DeployResources
-        //       id={row.resourceType}
-        //       siteCodeId={Number(rowData?.siteId)}
-        //       closeModal={closeModal}
-        //       onProceed={() => navigate("/create-new-resource")}
-        //     />
-        //   ),
-        // });
+      onClick: (row: ResourceSummary) => {
+        // Navigate with the resource type information if needed
+        navigate(RouteConstant.dashboard.createResources.path, {
+          state: {
+            resourceType: row.resourceType,
+            groupedResourceType: row.groupedResourceType,
+            sitecode: row.siteCode,
+          },
+        });
       },
     },
   ];
 
   return (
-    <div className=" w-full">
+    <div className="w-full">
       <DataTable
         data={summaryData}
         columns={summaryColums}
         actions={actions}
-        highlightedRowId={resourceType}
-        onRowClick={(row) => setResourceType(row.id)}
+        isLoading={isLoading}
+        highlightedRowId={selectedResourceType}
+        onRowClick={(row) => setSelectedResourceType(row.resourceType)}
         showDownload={false}
         showSearch={false}
-        getRowId={(row) => row.id}
-        // initialSorting={{ id: "resourceType", }}
+        getRowId={(row) => row.resourceType} // Changed to resourcetype for consistency
       />
     </div>
   );

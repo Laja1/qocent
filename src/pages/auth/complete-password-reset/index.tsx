@@ -10,7 +10,7 @@ import { RouteConstant } from "@/router/routes";
 import {
   useCompletePasswordResetMutation,
   useResendOtpMutation,
-} from "@/service/authApi";
+} from "@/service/typescript/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { resetPasswordSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";

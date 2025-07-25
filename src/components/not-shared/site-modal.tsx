@@ -63,7 +63,7 @@ export const SiteDeployModal: React.FC<DeployModalProps> = ({
                         {item?.parameterLabel}
                       </p>
                       <p className="text-xs ">
-                        {formik.values[item?.parameterName]}
+                        {formik.values[item?.parameterField]}
                       </p>
                     </div>
                   ))}

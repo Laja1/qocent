@@ -5,7 +5,7 @@ import { authStore } from "@/store/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { dashboardStore } from "@/store/dashboardSlice";
-import { useGetResourceByProviderQuery } from "@/service/resourceApi";
+import { useGetResourceByProviderQuery } from "@/service/typescript/resourceApi";
 
 export const ConsoleLeft = () => {
   const navigate = useNavigate();
@@ -107,7 +107,7 @@ export const ConsoleLeft = () => {
               {/* Text content */}
               <div className="lg:flex-1 text-center lg:text-left">
                 <p
-                  className="text-xs sm:text-sm font-medium text-gray-900 
+                  className="text-xs sm:text-sm line-clamp-1 font-medium text-gray-900 
                              lg:block  lg:truncate"
                 >
                   {workspace.name}

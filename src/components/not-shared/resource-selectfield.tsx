@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { type FormikProps } from "formik";
 import { SelectField } from "../shared";
-import { useGetFormOptionsMutation } from "@/service/resourceApi";
+import { useGetFormOptionsMutation } from "@/service/typescript/resourceApi";
 import { IconRefresh } from "@tabler/icons-react";
 
 type ResourceSelectFieldProps = {
@@ -10,7 +10,7 @@ type ResourceSelectFieldProps = {
   label?: string;
   formik: FormikProps<any>;
   placeholder?: string;
-  parameterLookup: string; // the key that maps to optionsMap
+  parameterLookup: string;
 };
 
 export const ResourceSelectField = ({

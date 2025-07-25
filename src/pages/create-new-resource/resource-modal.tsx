@@ -7,7 +7,9 @@ import { AnimatePresence } from "motion/react";
 import { Dialog } from "@headlessui/react";
 import { Button, ComboBoxField } from "@/components/shared";
 import { useEffect } from "react";
-import { useGetServicesQuery } from "@/service/resourceApi";
+import { useGetServicesQuery } from "@/service/typescript/resourceApi";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 interface ResourceModalProps {
   id?: string;
@@ -27,15 +29,18 @@ export const ResourceModal: React.FC<ResourceModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const { data: getServicesData } = useGetServicesQuery();
+  const dashboard = useSelector((state:RootState)=>state.dashboard)
+  const { data: getServicesData } = useGetServicesQuery({
+    provider:dashboard.provider
+  });
   console.log(getServicesData);
-  
+
   // Transform the API data to match the expected format
   const presetTypeOptions = id
     ? [{ label: id, value: id.toLowerCase() }]
     : getServicesData?.data?.map((service: any) => ({
         label: service.label,
-        value: service.value
+        value: service.value,
       })) || [];
 
   const formik = useFormik({
@@ -53,7 +58,7 @@ export const ResourceModal: React.FC<ResourceModalProps> = ({
 
       closeModal();
       onProceed?.();
-      
+
       // Pass the state properly - ensure it's always an object
       onNavigate?.(RouteConstant.dashboard.createResources.path, {
         resourceType: values.resourceType,

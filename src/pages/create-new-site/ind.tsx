@@ -93,7 +93,6 @@ export const CreateNewSite = () => {
           </div>
 
           <div className="flex w-full lg:w-1/2 px-3 lg:p-5 flex-col gap-">
-            {/* Site Name */}
             <div className="items-center lg:pl-10 w-full flex lg:flex-row flex-col gap-0 lg:gap-3">
               <p className="text-sm text-start lg:text-right w-full lg:w-1/5">
                 Site Name

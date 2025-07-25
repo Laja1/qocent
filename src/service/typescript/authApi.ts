@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQuery } from "./httpClient/baseQuery";
+import { baseQuery } from "../httpClient/baseQuery";
 import type {
   completeEnrollmentRequest,
   completePasswordResetRequest,

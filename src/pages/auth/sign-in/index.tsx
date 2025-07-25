@@ -3,7 +3,7 @@ import { Button, Textfield } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
 import { signInInit, type signInRequest } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
-import { useSignInMutation } from "@/service/authApi";
+import { useSignInMutation } from "@/service/typescript/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { authStore } from "@/store/authSlice";
 import { loginFormValidationSchema } from "@/utilities/schema/authSchema";
@@ -21,7 +21,7 @@ const SignIn = () => {
     try {
       const res = await signIn(values).unwrap();
       console.log(res);
-      
+
       dispatch(
         authStore.action.setCredentials({
           token: res.data.accessToken.replace("Bearer ", ""),

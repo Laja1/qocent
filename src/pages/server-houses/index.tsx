@@ -11,15 +11,15 @@ import { ServerSitesTable2 } from "../server-sites/server-sites-table";
 import { SecurityTable } from "../server-sites/security-table";
 import { useState } from "react";
 import { useModal } from "@/components/shared/modal";
-import { houseArchitectureData } from "@/utilities/constants/config";
-import { HouseLevel } from "../architectural-room/house-level";
+// import { houseArchitectureData } from "@/utilities/constants/config";
+// import { HouseLevel } from "../architectural-room/house-level";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { formatDate } from "@/utilities/helper";
-import { DataFlow } from "@/components/not-shared/data-flow";
-import { useGetResourceByProviderQuery } from "@/service/resourceApi";
+import { useGetResourceByProviderQuery } from "@/service/typescript/resourceApi";
 import type { resourceType } from "@/models/response/resourceResponse";
 import { ApiEnums } from "@/utilities/enums";
+import GridLayout from "@/components/not-shared/data-flow/flow";
 
 export const ServerHouses = () => {
   const navigate = useNavigate();
@@ -30,7 +30,7 @@ export const ServerHouses = () => {
     provider: dashboard.provider,
     resource: ApiEnums.House,
   });
-  console.log(data)
+  console.log(data);
   const serverHouseColumn: ColumnDef<resourceType>[] = [
     {
       id: "resourceId",
@@ -170,7 +170,10 @@ export const ServerHouses = () => {
         <div className="flex lg:flex-row flex-col">
           <div className=" lg:w-1/4 lg:mr-5 flex">
             <div className=" flex flex-col w-full ">
-              {row && <SummaryTable />}
+              {row && <SummaryTable
+                summaryData={ []}
+                isLoading={false}
+              />}
               <Button
                 label="Add Resource"
                 prefixIcon={<PlusIcon className="size-4" />}
@@ -214,9 +217,11 @@ export const ServerHouses = () => {
       text: "Architecture",
       component: (
         <div>
-          <HouseLevel houseData={houseArchitectureData} />
+          {/* <HouseLevel houseData={houseArchitectureData} /> */}
           <div className="my-10">
-            <DataFlow />
+            {/* <DataFlow /> */}
+            <GridLayout />
+
           </div>
         </div>
       ),

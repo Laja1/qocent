@@ -11,10 +11,10 @@ import { showCustomToast } from "@/components/shared/toast";
 import { SiteDeployModal } from "@/components/not-shared/site-modal";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useCreateServerSiteMutation } from "@/service/siteApi";
+import { useCreateServerSiteMutation } from "@/service/typescript/siteApi";
 import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import type { RootState } from "@/store";
-import { useGetResourceTemplateQuery } from "@/service/resourceApi";
+import { useGetResourceTemplateQuery } from "@/service/typescript/resourceApi";
 import type { ParameterData } from "../create-new-site/type";
 
 export const CreateNewRoom = () => {
@@ -38,7 +38,10 @@ export const CreateNewRoom = () => {
         ...acc,
         [item.parameterName]: "",
       }),
-      {}
+      {
+        serverSite: "",
+        serverHouse: "",
+      }
     ) || {};
 
   // Form submission handler
@@ -134,7 +137,6 @@ export const CreateNewRoom = () => {
     );
   }
 
-  // Error state
   if (isError || !serverRoomTemplate?.data) {
     return (
       <div className="p-4 text-red-500">
@@ -166,6 +168,52 @@ export const CreateNewRoom = () => {
           </div>
 
           <div className="flex mt-5 flex-col">
+            <div className="flex items-center w-full py-[1px] border-b">
+              <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
+                <span className="text-red-500 ml-1">*</span>
+                Server Site
+              </p>
+              <div className="lg:w-2/5 w-full pr-3 flex gap-1">
+                <RenderField
+                  name="serverSite"
+                  formik={formik}
+                  placeholder={`Select your Server Site`}
+                  parameterLookup={"serverSite"}
+                  type={"ListBox"}
+                  autoComplete="off"
+                />
+                <button
+                  // onClick={() => descriptionModal(item)}
+                  className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                  title="View more info"
+                >
+                  <Info size={16} />
+                </button>
+              </div>
+            </div>
+            <div className="flex items-center w-full py-[1px] border-b">
+              <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
+                <span className="text-red-500 ml-1">*</span>
+                Server House
+              </p>
+              <div className="lg:w-2/5 w-full pr-3 flex gap-1">
+                <RenderField
+                  name="serverHouse"
+                  formik={formik}
+                  placeholder={`Select your Server House`}
+                  parameterLookup={"serverHouse"}
+                  type={"ListBox"}
+                  autoComplete="off"
+                />
+                <button
+                  // onClick={() => descriptionModal(item)}
+                  className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                  title="View more info"
+                >
+                  <Info size={16} />
+                </button>
+              </div>
+            </div>
             {serverRoomTemplate.data.map((item) => (
               <div
                 className="flex items-center w-full py-[1px] border-b"

@@ -11,10 +11,10 @@ import { showCustomToast } from "@/components/shared/toast";
 import { SiteDeployModal } from "@/components/not-shared/site-modal";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useCreateServerSiteMutation } from "@/service/siteApi";
+import { useCreateServerSiteMutation } from "@/service/typescript/siteApi";
 import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import type { RootState } from "@/store";
-import { useGetResourceTemplateQuery } from "@/service/resourceApi";
+import { useGetResourceTemplateQuery } from "@/service/typescript/resourceApi";
 import type { ParameterData } from "../create-new-site/type";
 
 export const CreateNewHouse = () => {
@@ -29,7 +29,7 @@ export const CreateNewHouse = () => {
   const user = useSelector((state: RootState) => state.auth);
   const [progress, setProgress] = useState(0);
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  console.log(dashboard)
+  console.log(dashboard);
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
 
   // Initialize form with empty values
@@ -95,8 +95,6 @@ export const CreateNewHouse = () => {
       formik.setValues(newValues);
     }
   }, [serverHouseTemplate?.data]);
-
- 
 
   // Modal for parameter descriptions
   const descriptionModal = (row: ParameterData) => {
@@ -169,6 +167,29 @@ export const CreateNewHouse = () => {
           </div>
 
           <div className="flex mt-5 flex-col">
+            <div className="flex items-center w-full py-[1px] border-b">
+              <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
+                <span className="text-red-500 ml-1">*</span>
+                Server Site
+              </p>
+              <div className="lg:w-2/5 w-full pr-3 flex gap-1">
+                <RenderField
+                  name="serverSite"
+                  formik={formik}
+                  placeholder={`Select your Server Site`}
+                  parameterLookup={"serverSite"}
+                  type={"ListBox"}
+                  autoComplete="off"
+                />
+                <button
+                  // onClick={() => descriptionModal(item)}
+                  className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                  title="View more info"
+                >
+                  <Info size={16} />
+                </button>
+              </div>
+            </div>
             {serverHouseTemplate.data.map((item) => (
               <div
                 className="flex items-center w-full py-[1px] border-b"
@@ -186,7 +207,6 @@ export const CreateNewHouse = () => {
                     formik={formik}
                     placeholder={`Enter your ${item.parameterLabel}`}
                     type={item.parameterInputType || "text"}
-                    
                     autoComplete="off"
                   />
                   <button

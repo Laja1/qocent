@@ -42,7 +42,7 @@ export const generateDynamicSchema = (params?: ParameterData[]) => {
   const shape: Record<string, Yup.AnySchema> = {};
 
   params.forEach((param) => {
-    if (!param.parameterName || !param.parameterLabel) return;
+    if (!param.parameterField || !param.parameterLabel) return;
 
     let validator: Yup.AnySchema;
     // Fix: parameterMandatory is a string "Yes"/"No", not boolean
@@ -102,7 +102,7 @@ export const generateDynamicSchema = (params?: ParameterData[]) => {
     }
 
     // Add parameter to schema shape
-    shape[param.parameterName] = validator;
+    shape[param.parameterField] = validator;
   });
 
   return Yup.object().shape(shape);

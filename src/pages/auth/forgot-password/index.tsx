@@ -6,7 +6,7 @@ import {
   type forgotPasswordpRequest,
 } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
-import { useForgotPasswordMutation } from "@/service/authApi";
+import { useForgotPasswordMutation } from "@/service/typescript/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { forgotPasswordFormValidationSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";

@@ -10,7 +10,7 @@ import { RouteConstant } from "@/router/routes";
 import {
   useCompleteEnrollmentMutation,
   useResendOtpMutation,
-} from "@/service/authApi";
+} from "@/service/typescript/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { confirmAccountSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";

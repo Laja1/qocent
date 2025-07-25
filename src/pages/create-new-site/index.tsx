@@ -14,7 +14,7 @@ import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import {
   useCreateServerSiteMutation,
   useGetSiteParameterQuery,
-} from "@/service/siteApi";
+} from "@/service/typescript/siteApi";
 import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import type { RootState } from "@/store";
 import type { ParameterData } from "./type";
@@ -27,6 +27,8 @@ export const CreateNewSite = () => {
     isError,
     isLoading: isParamsLoading,
   } = useGetSiteParameterQuery();
+  console.log(serverSiteParameterData?.data, "sssssss");
+
   const { openModal, closeModal } = useModal();
   const user = useSelector((state: RootState) => state.auth);
   const [progress, setProgress] = useState(0);
@@ -72,7 +74,6 @@ export const CreateNewSite = () => {
       setProgress(0);
     }
   };
-
   // Initialize Formik
   const formik = useFormik({
     initialValues,
@@ -96,9 +97,6 @@ export const CreateNewSite = () => {
       formik.setValues(newValues);
     }
   }, [serverSiteParameterData?.data]);
-
-
-  
 
   // Modal for parameter descriptions
   const descriptionModal = (row: ParameterData) => {
@@ -205,7 +203,6 @@ export const CreateNewSite = () => {
               </div>
             ))}
           </div>
-   
 
           <div className="flex m-3 sm:m-5 justify-end">
             <Button

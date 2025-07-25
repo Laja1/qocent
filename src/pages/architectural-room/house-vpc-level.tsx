@@ -1,19 +1,19 @@
 import { svgLinks } from "@/assets/assetLink";
 import Xarrow from "react-xarrows";
 import { SubnetLevel } from "./subnet-level";
-import type { VPC } from "./site-level";
+import type { ServerHouse } from "@/models/response/siteResponse";
 
-export const HouseVpcLevel = ({ currentVPC }: { currentVPC: VPC }) => {
+export const HouseVpcLevel = ({ vpcDeployed }: { vpcDeployed: ServerHouse }) => {
   const layoutClass =
-    currentVPC.subnet.length > 1 ? "grid grid-cols-3" : "grid grid-cols-2";
+    vpcDeployed.serverRoom.length > 1 ? "grid grid-cols-3" : "grid grid-cols-2";
 
   return (
     <div className="w-full">
       <div className="grid grid-cols-1 gap-10 w-full">
-        <div key={currentVPC.vpcId} className="relative">
+        <div key={vpcDeployed.id} className="relative">
           <div className="border flex flex-col relative p-10 rounded-sm border-green-700 px-5 py-3 mx-3 gap-10">
             <div
-              id={`igw-${currentVPC.vpcId}`}
+              id={`igw-${vpcDeployed.id}`}
               className="absolute -top-5 left-1/2 -translate-x-1/2 flex items-center justify-center"
             >
               <div className="rounded-full px-3 h-[50px] w-fit flex flex-col items-center justify-center">
@@ -25,13 +25,13 @@ export const HouseVpcLevel = ({ currentVPC }: { currentVPC: VPC }) => {
             <div className={`${layoutClass} w-full mt-5`}>
               {/* Left Subnets */}
               <div className="flex flex-col w-full gap-2">
-                {currentVPC.subnet
+                {vpcDeployed.serverRoom
                   .filter((_, index) => index % 2 === 0)
                   .map((subnet, index) => (
                     <SubnetLevel
-                      key={`${currentVPC.vpcId}-subnet-left-${subnet.id}-${index}`}
-                      subnet={subnet}
-                      subnetId={`subnet-${currentVPC.vpcId}-left-${subnet.id}-${index}`}
+                      key={`${vpcDeployed.id}-subnet-left-${subnet.id}-${index}`}
+                      serverRoom={subnet}
+                      id={`subnet-${vpcDeployed.id}-left-${subnet.id}-${index}`}
                     />
                   ))}
               </div>
@@ -39,7 +39,7 @@ export const HouseVpcLevel = ({ currentVPC }: { currentVPC: VPC }) => {
               {/* Center DG */}
               <div className="flex flex-col items-center justify-center w-full">
                 <div
-                  id={`dg-${currentVPC.vpcId}`}
+                  id={`dg-${vpcDeployed.id}`}
                   className="justify-center flex items-center"
                 >
                   <div className="rounded-sm px-4 py-2 w-fit flex items-center justify-center">
@@ -53,25 +53,25 @@ export const HouseVpcLevel = ({ currentVPC }: { currentVPC: VPC }) => {
 
               {/* Right Subnets */}
               <div className="flex flex-col w-full gap-2">
-                {currentVPC.subnet
+                {vpcDeployed.serverRoom
                   .filter((_, index) => index % 2 === 1)
                   .map((subnet, index) => (
                     <SubnetLevel
-                      key={`${currentVPC.vpcId}-subnet-right-${subnet.id}-${index}`}
-                      subnet={subnet}
-                      subnetId={`subnet-${currentVPC.vpcId}-right-${subnet.id}-${index}`}
+                      key={`${vpcDeployed.id}-subnet-right-${subnet.id}-${index}`}
+                      serverRoom={subnet}
+                      id={`subnet-${vpcDeployed.id}-right-${subnet.id}-${index}`}
                     />
                   ))}
               </div>
             </div>
           </div>
 
-          <p className="text-center text-xs mt-2">{currentVPC.houseName}</p>
+          <p className="text-center text-xs mt-2">{vpcDeployed.houseName}</p>
 
           {/* IGW to DG Arrow */}
           <Xarrow
-            start={`igw-${currentVPC.vpcId}`}
-            end={`dg-${currentVPC.vpcId}`}
+            start={`igw-${vpcDeployed.id}`}
+            end={`dg-${vpcDeployed.id}`}
             color="green"
             strokeWidth={2}
             showHead={false}
@@ -81,13 +81,13 @@ export const HouseVpcLevel = ({ currentVPC }: { currentVPC: VPC }) => {
           />
 
           {/* Left Subnets to DG Arrows */}
-          {currentVPC.subnet
+          {vpcDeployed.serverRoom
             .filter((_, index) => index % 2 === 0)
             .map((subnet, index) => (
               <Xarrow
-                key={`arrow-left-${currentVPC.vpcId}-${subnet.id}-${index}`}
-                start={`subnet-${currentVPC.vpcId}-left-${subnet.id}-${index}`}
-                end={`dg-${currentVPC.vpcId}`}
+                key={`arrow-left-${vpcDeployed.id}-${subnet.id}-${index}`}
+                start={`subnet-${vpcDeployed.id}-left-${subnet.id}-${index}`}
+                end={`dg-${vpcDeployed.id}`}
                 color="purple"
                 strokeWidth={1.5}
                 showHead={false}
@@ -98,13 +98,13 @@ export const HouseVpcLevel = ({ currentVPC }: { currentVPC: VPC }) => {
             ))}
 
           {/* Right Subnets to DG Arrows */}
-          {currentVPC.subnet
+          {vpcDeployed.serverRoom
             .filter((_, index) => index % 2 === 1)
             .map((subnet, index) => (
               <Xarrow
-                key={`arrow-right-${currentVPC.vpcId}-${subnet.id}-${index}`}
-                start={`subnet-${currentVPC.vpcId}-right-${subnet.id}-${index}`}
-                end={`dg-${currentVPC.vpcId}`}
+                key={`arrow-right-${vpcDeployed.id}-${subnet.id}-${index}`}
+                start={`subnet-${vpcDeployed.id}-right-${subnet.id}-${index}`}
+                end={`dg-${vpcDeployed.id}`}
                 color="purple"
                 strokeWidth={1.5}
                 showHead={false}

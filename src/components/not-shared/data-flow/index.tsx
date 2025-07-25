@@ -1,5 +1,5 @@
 import React, { useState, useEffect, type JSX } from "react";
-import {  Globe, Database,  Code, Shield, User } from "lucide-react";
+import { Globe, Database, Code, Shield, User } from "lucide-react";
 
 // Type definitions
 interface DataFlowItem {
@@ -35,17 +35,23 @@ const dataFlowData: DataFlowItem[] = [
   { id: "r53-6", resourceType: "IGW", connectedTo: ["s3-1"] },
 ];
 
+
+
 // Icon mapping with proper typing
 const ICON_MAP: Record<ResourceType, JSX.Element> = {
-  "User": <User className="w-5 h-5" />,
-  "Proxy": <Shield className="w-5 h-5" />,
-  "S3": <Database className="w-5 h-5" />,
-  "IGW": <Globe className="w-5 h-5" />,
-  "API": <Code className="w-5 h-5" />,
+  User: <User className="w-5 h-5" />,
+  Proxy: <Shield className="w-5 h-5" />,
+  S3: <Database className="w-5 h-5" />,
+  IGW: <Globe className="w-5 h-5" />,
+  API: <Code className="w-5 h-5" />,
 };
 
 // Simple arrow component using CSS
-const SimpleArrow: React.FC<SimpleArrowProps> = ({ start, end, containerRef }) => {
+const SimpleArrow: React.FC<SimpleArrowProps> = ({
+  start,
+  end,
+  containerRef,
+}) => {
   const [arrowStyle, setArrowStyle] = useState<React.CSSProperties>({});
 
   useEffect(() => {
@@ -151,7 +157,7 @@ export const DataFlow: React.FC = () => {
         `}
         >
           {/* Render items */}
-          {dataFlowData.map((item, ) => {
+          {dataFlowData.map((item) => {
             const id = `box-${item.id}`;
 
             return (

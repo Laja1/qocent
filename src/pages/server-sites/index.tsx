@@ -3,7 +3,6 @@ import { imgLinks } from "@/assets/assetLink";
 import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Badge } from "@/components/ui/badge";
-import { sitesData } from "@/utilities/constants/config";
 import { Edit, Eye, Trash2, PlusIcon, Plus } from "lucide-react";
 import { useState } from "react";
 import { ServerSitesTable2 } from "./server-sites-table";
@@ -17,28 +16,36 @@ import { DeployResources } from "@/components/not-shared/deploy-resources";
 import { useModal } from "@/components/shared/modal";
 import { useNavigate } from "react-router-dom";
 import { CostTable } from "./cost";
-import { formatDate } from "@/utilities/helper";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store";
-import { useGetResourceByProviderQuery } from "@/service/resourceApi";
-import type { resourceType } from "@/models/response/resourceResponse";
-import { ApiEnums } from "@/utilities/enums";
+import type { SiteData } from "@/models/response/siteResponse";
+import {
+  useGetAllSitesQuery,
+  useGetResourceTypeCountQuery,
+  useGetSiteArchitectureQuery,
+} from "@/service/kotlin/siteApi";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalConstant } from "@/components/shared/modal/register";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
-  const dashboard = useSelector((state: RootState) => state.dashboard);
-  const [tabShow, setTabShow] = useState(true);
-  const { data: siteData, isLoading: isSiteLoading } =
-    useGetResourceByProviderQuery({
-      provider: dashboard.provider,
-      resource: ApiEnums.Site,
+  const [tabShow, setTabShow] = useState(false);
+  const [selectedRowId, setSelectedRowId] = useState(""); // For row highlighting
+  const [selectedSiteCode, setSelectedSiteCode] = useState(""); // For API calls
+
+  const { data: siteData, isLoading: isSiteLoading } = useGetAllSitesQuery();
+  const { data: summaryData, isLoading: isSiteSummaryLoading } =
+    useGetResourceTypeCountQuery({
+      siteCode: selectedSiteCode, // Use the separate state
     });
-  console.log(siteData);
+  const { data: architectureData } = useGetSiteArchitectureQuery({
+    siteCode: selectedSiteCode, // Use the separate state
+  });
+
+  console.log(siteData, "ddddsiteData");
   const { openModal, closeModal } = useModal();
-  const [rowId, setRowId] = useState(100004);
+
   const [showAlert, setShowAlert] = useState(true);
 
-  const serverRoomColumns: ColumnDef<resourceType>[] = [
+  const serverRoomColumns: ColumnDef<SiteData>[] = [
     // {
     //   id: "favourite",
     //   header: "",
@@ -51,31 +58,29 @@ export const ServerSites = () => {
     //   sortable: true,
     // },
     {
-      id: "id",
+      id: "siteId",
       header: "ID",
-      accessorKey: "resourceId",
-      cell: (row) => <span className="">{row.resourceId}</span>,
+      accessorKey: "siteId",
+      cell: (row) => <span className="">{row.siteId}</span>,
       sortable: true,
     },
     {
-      id: "resourceName",
+      id: "siteName",
       header: "SITE NAME",
-      accessorKey: "resourceName",
+      accessorKey: "siteName",
       cell: (row) => (
         <span className="line-clamp-1 font-brfirma-bold  text-xs">
-          {row.resourceName}
+          {row.siteName}
         </span>
       ),
       sortable: true,
     },
     {
-      id: "resourceCode",
+      id: "siteCode",
       header: "SITE CODE",
-      accessorKey: "resourceCode",
+      accessorKey: "siteCode",
       cell: (row) => (
-        <span className="hover:text-red-500 line-clamp-1">
-          {row.resourceCode}
-        </span>
+        <span className="hover:text-red-500 line-clamp-1">{row.siteCode}</span>
       ),
       sortable: true,
 
@@ -86,6 +91,14 @@ export const ServerSites = () => {
       //   { label: "Germany", value: "Germany" },
       //   { label: "South Africa", value: "South Africa" },
       // ],
+    },
+    {
+      id: "siteRegion",
+      header: "Site Region",
+      headerClassName: "text-right",
+      accessorKey: "siteRegion",
+      sortable: true,
+      cell: (row) => <span className="text-right block">{row.siteRegion}</span>,
     },
     // {
     //   id: "alerts",
@@ -114,14 +127,14 @@ export const ServerSites = () => {
     //   ),
     // },
     {
-      id: "resourceMaker",
+      id: "siteProvider",
       header: "PROVIDER",
-      accessorKey: "resourceMaker",
+      accessorKey: "siteProvider",
       headerClassName: "text-center ",
       sortable: true,
       cell: (row) => (
         <span className="text-center justify-center items-left  flex">
-          {row.resourceMaker === "aws" ? (
+          {row.siteProvider === "aws" ? (
             <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
           ) : (
             <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
@@ -130,20 +143,20 @@ export const ServerSites = () => {
       ),
     },
     {
-      id: "resourceStatus",
+      id: "siteStatus",
       header: "STATUS",
-      accessorKey: "resourceStatus",
+      accessorKey: "siteStatus",
       cell: (row) => (
         <div className="">
           <Badge
             variant="outline"
             className={
-              row.resourceStatus === "ACTIVE"
+              row.siteStatus === "ACTIVE"
                 ? "bg-green-50 text-green-800 border-green-500 text-[10px] "
                 : "bg-red-50 text-red-800 border-red-500 text-[10px]"
             }
           >
-            {row.resourceStatus}
+            {row.siteStatus}
           </Badge>
         </div>
       ),
@@ -155,15 +168,13 @@ export const ServerSites = () => {
       ],
     },
     {
-      id: "resourceDate",
-      header: "DATE CREATED",
+      id: "siteExpiryDate",
+      header: "Site Expiry Date",
       headerClassName: "text-right",
-      accessorKey: "resourceDate",
+      accessorKey: "siteExpiryDate",
       sortable: true,
       cell: (row) => (
-        <span className="text-right block">
-          {formatDate(row.resourceDate)}
-        </span>
+        <span className="text-right block">{row.siteExpiryDate}</span>
       ),
     },
     // {
@@ -194,34 +205,34 @@ export const ServerSites = () => {
     // },
   ];
 
-  const row = siteData?.data.find((item: any) => item.resourceId === rowId);
+  // const row = siteData?.data.find((item: any) => item.resourceId === rowId);
 
   const actions = [
     {
       label: "View",
       icon: Eye,
-      onClick: (row: resourceType) => {
-        console.log("View server room:", row.resourceId);
-        // TODO: Implement view functionality
+      onClick: (row: SiteData) => {
+        console.log("View server room:", row.siteId);
+        NiceModal.show(ModalConstant.DrawerModal, row);
       },
     },
     {
       label: "Edit",
       icon: Edit,
-      onClick: (row: resourceType) => {
-        console.log("Edit server room:", row.resourceId);
+      onClick: (row: SiteData) => {
+        console.log("Edit server room:", row.siteId);
         // TODO: Implement edit functionality
       },
     },
     {
       label: "Deploy Resource",
       icon: Plus,
-      onClick: (row: resourceType) => {
+      onClick: (row: SiteData) => {
         openModal({
-          id: `deploy-${row.resourceId}`,
+          id: `deploy-${row.siteId}`,
           content: () => (
             <DeployResources
-              siteCodeId={row.resourceId}
+              // sitecodeId={Number(row.siteId)}
               closeModal={closeModal}
               onProceed={() => navigate("/create-new-resource")}
             />
@@ -232,17 +243,18 @@ export const ServerSites = () => {
     {
       label: "Delete",
       icon: Trash2,
-      onClick: (row: resourceType) => {
-        console.log("Delete server room:", row.resourceId);
+      onClick: (row: SiteData) => {
+        console.log("Delete server room:", row.siteId);
         // TODO: Implement delete confirmation
       },
       variant: "destructive" as const,
     },
   ];
 
-  const handleRowClick = (row: resourceType) => {
+  const handleRowClick = (row: SiteData) => {
     setTabShow(true);
-    setRowId(row.resourceId);
+    setSelectedRowId(row.siteId.toString()); // For highlighting (convert to string if using siteId)
+    setSelectedSiteCode(row.siteCode); // For API calls
   };
 
   const tabData = [
@@ -253,7 +265,11 @@ export const ServerSites = () => {
         <div className="flex lg:flex-row flex-col">
           <div className=" lg:w-1/4 lg:mr-5 flex">
             <div className=" flex flex-col w-full ">
-              {row && <SummaryTable />}
+              {/* {row && <SummaryTable />} */}
+              <SummaryTable
+                summaryData={summaryData?.data || []}
+                isLoading={isSiteSummaryLoading}
+              />
               <Button
                 label="Add Resource"
                 prefixIcon={<PlusIcon className="size-4" />}
@@ -262,7 +278,7 @@ export const ServerSites = () => {
                 intent="secondary"
                 onClick={() =>
                   openModal({
-                    id: `deploy-${rowId}`,
+                    id: `deploy-${selectedSiteCode}`,
                     content: () => (
                       <DeployResources
                         closeModal={closeModal}
@@ -288,14 +304,18 @@ export const ServerSites = () => {
       text: "Resources",
       component: (
         <div className="">
-          <ServerSitesTable2 rowId={rowId} />
+          <ServerSitesTable2 rowId={Number(selectedRowId)} />
         </div>
       ),
     },
     {
       id: 3,
       text: "Architecture",
-      component: <SiteLevel sitesData={sitesData} />,
+      component: architectureData?.data ? (
+        <SiteLevel sitesData={architectureData.data} />
+      ) : (
+        <></>
+      ),
     },
     {
       id: 4,
@@ -332,9 +352,9 @@ export const ServerSites = () => {
             actions={actions}
             skeletonRows={siteData?.data.length}
             onRowClick={handleRowClick}
-            getRowId={(row) => row.resourceId}
-            highlightedRowId={rowId}
-            initialSorting={{ id: "siteName", desc: false }}
+            getRowId={(row) => row.siteId.toString()} // Convert to string for consistency
+            highlightedRowId={selectedRowId} // Use the separate state
+            initialSorting={{ id: "siteId", desc: false }}
           />
         </Card>
 

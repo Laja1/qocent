@@ -1,51 +1,9 @@
 import { Cloud, User2Icon } from "lucide-react";
 import { VpcLevel } from "./vpc-level";
 import { AwsLogo, HuaweiLogo, RESOURCE_MAP } from "@/utilities/constants/icons";
-export type Resource = {
-  id: number;
-  name: string;
-  instanceType: string;
-  status: string;
-};
+import type { SiteArchitecture } from "@/models/response/siteResponse";
 
-export type Subnet = {
-  id: number;
-  subnet: string;
-  availabilityZone: string;
-  resourcesDeployed: Resource[];
-  routeTable: string;
-  securityGroups: string[];
-};
-
-export type VPC = {
-  vpcId: string;
-  houseName: string;
-  cidrBlock: string;
-  id?: number;
-  subnet: Subnet[];
-};
-
-export type ExtraResource = {
-  id: number;
-  name: string;
-  type: string;
-  status: string;
-  createdAt: string;
-  owner: string;
-};
-
-export type SitesDataProps = {
-  noOfVPCDeployed: number;
-  whereDeployed: string;
-  parentId: string;
-  parent: string;
-  vpcDeployed: VPC[];
-  extraResources: {
-    resources: ExtraResource[];
-  };
-};
-
-export const SiteLevel = ({ sitesData }: { sitesData: SitesDataProps }) => {
+export const SiteLevel = ({ sitesData }: { sitesData: SiteArchitecture }) => {
   // const openArchitecture = () => {
   //   openModal({
   //     id: `architecture`,
@@ -76,8 +34,8 @@ export const SiteLevel = ({ sitesData }: { sitesData: SitesDataProps }) => {
       <div className="w-5/6 flex relative border border-dashed border-purple-800 w-full  bg-green-50">
         <div className="w-1/7 flex pb-2">
           <p className="text-black text-start text-base pl-2 mb-2   pt-2 font-bold">
-            {sitesData?.whereDeployed === "AWS" && <AwsLogo />}
-            {sitesData?.whereDeployed === "Huawei" && <HuaweiLogo />}
+            {sitesData?.siteProvider === "AWS" && <AwsLogo />}
+            {sitesData?.siteProvider === "Huawei" && <HuaweiLogo />}
           </p>
           <div className="grid grid-cols-3 items-end gap-3  mt-10">
             {sitesData.extraResources.resources.map((item) => (
@@ -91,7 +49,7 @@ export const SiteLevel = ({ sitesData }: { sitesData: SitesDataProps }) => {
         </div>
         <div className="w-6/7 flex ">
           <div className="mt-6 w-full pb-5">
-            <VpcLevel vpcDeployed={sitesData.vpcDeployed} />
+            <VpcLevel vpcDeployed={sitesData.serverHouse} />
           </div>
         </div>
 
