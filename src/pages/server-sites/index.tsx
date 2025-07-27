@@ -19,28 +19,47 @@ import { CostTable } from "./cost";
 import type { SiteData } from "@/models/response/siteResponse";
 import {
   useGetAllSitesQuery,
+  useGetResourcesInSiteQuery,
   useGetResourceTypeCountQuery,
   useGetSiteArchitectureQuery,
+  useGetSiteDataFlowQuery,
 } from "@/service/kotlin/siteApi";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
+import { FlowGrid } from "@/components/not-shared/data-flow/flow";
+import { DataFlowLoader } from "../server-houses";
+import { getStatusClassName } from "@/utilities/helper";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
   const [tabShow, setTabShow] = useState(false);
-  const [selectedRowId, setSelectedRowId] = useState(""); // For row highlighting
-  const [selectedSiteCode, setSelectedSiteCode] = useState(""); // For API calls
+  const [selectedRowId, setSelectedRowId] = useState("");
+  const [selectedSiteCode, setSelectedSiteCode] = useState("");
+  const [isArtificialLoading, setIsArtificialLoading] = useState(false);
+  const [loadingTimeout, setLoadingTimeout] = useState<NodeJS.Timeout | null>(
+    null
+  );
 
   const { data: siteData, isLoading: isSiteLoading } = useGetAllSitesQuery();
   const { data: summaryData, isLoading: isSiteSummaryLoading } =
     useGetResourceTypeCountQuery({
-      siteCode: selectedSiteCode, // Use the separate state
+      siteCode: selectedSiteCode,
     });
+
   const { data: architectureData } = useGetSiteArchitectureQuery({
-    siteCode: selectedSiteCode, // Use the separate state
+    siteCode: selectedSiteCode,
+  });
+  const { data: resourcesInSiteData } = useGetResourcesInSiteQuery({
+    siteCode: selectedSiteCode,
+  });
+  const {
+    data: dataFlow,
+    isLoading: dataFlowLoading,
+    refetch: refetchDataFlow,
+  } = useGetSiteDataFlowQuery({
+    siteCode: selectedSiteCode,
   });
 
-  console.log(siteData, "ddddsiteData");
   const { openModal, closeModal } = useModal();
 
   const [showAlert, setShowAlert] = useState(true);
@@ -150,11 +169,7 @@ export const ServerSites = () => {
         <div className="">
           <Badge
             variant="outline"
-            className={
-              row.siteStatus === "ACTIVE"
-                ? "bg-green-50 text-green-800 border-green-500 text-[10px] "
-                : "bg-red-50 text-red-800 border-red-500 text-[10px]"
-            }
+            className={getStatusClassName(row.siteStatus)}
           >
             {row.siteStatus}
           </Badge>
@@ -177,6 +192,16 @@ export const ServerSites = () => {
         <span className="text-right block">{row.siteExpiryDate}</span>
       ),
     },
+    // {
+    //   id: "siteEOLAction",
+    //   header: "Site Expiry Date",
+    //   headerClassName: "text-right",
+    //   accessorKey: "siteEOLAction",
+    //   sortable: true,
+    //   cell: (row) => (
+    //     <span className="text-right block">{row.siteEOLAction}</span>
+    //   ),
+    // },
     // {
     //   id: "resourceBill",
     //   header: "BILL (USD)",
@@ -250,16 +275,85 @@ export const ServerSites = () => {
       variant: "destructive" as const,
     },
   ];
-
-  const handleRowClick = (row: SiteData) => {
+  const isDataFlowLoading = dataFlowLoading || isArtificialLoading;
+  const handleRowClick = async (row: SiteData) => {
     setTabShow(true);
-    setSelectedRowId(row.siteId.toString()); // For highlighting (convert to string if using siteId)
+    setSelectedRowId(row.siteId.toString()); 
     setSelectedSiteCode(row.siteCode); // For API calls
+    if (loadingTimeout) {
+      clearTimeout(loadingTimeout);
+    }
+
+    setTabShow(true);
+    setSelectedRowId(row.siteId.toString());
+    setSelectedSiteCode(row.siteCode);
+
+    setIsArtificialLoading(true);
+
+    const timeout = setTimeout(() => {
+      setIsArtificialLoading(false);
+    }, 1500); // 1.5 seconds
+
+    setLoadingTimeout(timeout);
+
+    await refetchDataFlow();
   };
 
   const tabData = [
     {
       id: 1,
+      text: "Visual Site",
+      component: (
+        <div>
+          {isDataFlowLoading ? (
+            <DataFlowLoader />
+          ) : (
+            <div className="">
+              {/* <p className="my-3">Data Flow Diagram</p> */}
+              <FlowGrid
+                data={{ data: dataFlow?.data || [] }}
+                connections={{ connections: dataFlow?.connections || [] }}
+              />
+            </div>
+          )}
+        </div>
+      ),
+    },
+
+    {
+      id: 2,
+      text: "Resources",
+      component: (
+        <div className="">
+          <ServerSitesTable2
+            resourcesInSiteData={resourcesInSiteData?.data || []}
+          />
+        </div>
+      ),
+    },
+    {
+      id: 3,
+      text: "Architecture",
+      component: architectureData?.data ? (
+        <div>
+          <SiteLevel sitesData={architectureData.data} />
+        </div>
+      ) : (
+        <></>
+      ),
+    },
+    {
+      id: 4,
+      text: "Notifications",
+      component: <SecurityTable />,
+    },
+    {
+      id: 5,
+      text: "Cost",
+      component: <CostTable />,
+    },
+    {
+      id: 6,
       text: "Summary",
       component: (
         <div className="flex lg:flex-row flex-col">
@@ -298,34 +392,6 @@ export const ServerSites = () => {
           </div>
         </div>
       ),
-    },
-    {
-      id: 2,
-      text: "Resources",
-      component: (
-        <div className="">
-          <ServerSitesTable2 rowId={Number(selectedRowId)} />
-        </div>
-      ),
-    },
-    {
-      id: 3,
-      text: "Architecture",
-      component: architectureData?.data ? (
-        <SiteLevel sitesData={architectureData.data} />
-      ) : (
-        <></>
-      ),
-    },
-    {
-      id: 4,
-      text: "Security",
-      component: <SecurityTable />,
-    },
-    {
-      id: 5,
-      text: "Cost",
-      component: <CostTable />,
     },
   ];
 

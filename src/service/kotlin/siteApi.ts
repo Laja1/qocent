@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import type { genericResponse } from "@/models/response";
-import type {  getResourceSummaryResponse, getSiteAllResponse, getSiteArchitectureResponse,  } from "@/models/response/siteResponse";
+import type {  getResourcesInSiteResponse, getResourceSummaryResponse, getSiteAllResponse, getSiteArchitectureResponse, resourceDataFlowResponse,  } from "@/models/response/siteResponse";
 import { ApiEnums } from "@/utilities/enums";
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 
@@ -26,12 +26,19 @@ export const kotlinSiteApi = createApi({
     getResourceTypeCount: build.query<getResourceSummaryResponse, {siteCode:string}>({
       query: ({siteCode}) => `/dashboard/read-resource-type-count/${siteCode}`,    
   }),
+  getSiteDataFlow:build.query<resourceDataFlowResponse, {siteCode:string}>({
+    query: ({siteCode}) => `/dashboard/site-data-flow/${siteCode}`,    
+}),
     getAllSites: build.query<getSiteAllResponse, void>({
         query: () => `/dashboard/sites`,    
     }),
+    getResourcesInSite: build.query<getResourcesInSiteResponse, {siteCode:string}>({
+      query: ({siteCode}) => `/dashboard/resource-list/${siteCode}`,    
+  }),
+    
   }),
 });
 
 
-export const { useCreateServerSiteMutation,useGetResourceTypeCountQuery,useGetSiteArchitectureQuery,useGetAllSitesQuery
+export const { useCreateServerSiteMutation,useGetResourcesInSiteQuery, useGetSiteDataFlowQuery,useGetResourceTypeCountQuery,useGetSiteArchitectureQuery,useGetAllSitesQuery
  } = kotlinSiteApi;

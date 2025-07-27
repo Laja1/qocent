@@ -133,3 +133,61 @@ export interface ResourceSummary {
   resourceType: string;
   groupedResourceType: string;
 }
+
+
+export type resourceDataFlowResponse = {
+  connections: {
+    x: string;
+    y: string;
+    serial:string
+  }[];
+  data: {
+    col: number;
+    row: number;
+    resourceCode: string;
+    resourceName: string;
+    resourceSiteCode: string;
+    resourceType: string;
+    errors:number
+  }[];
+  responseCode: string;
+  responseMessage: string;
+};
+
+export type resourceProp = {
+   resourceUpdatedAt: string;
+   resourceBill: number;
+   resourceRoomCode: string;
+   resourceConfig: string;
+   resourceRef: string;
+   resourceMakerId: string;
+   resourceContainerType: string;
+   resourceVpcId: string;
+   resourceCreateChannel: string;
+   resourceContainerCode: string;
+   resourceProviderId: string;
+   resourceCheckerId: string;
+   resourceDate: string;
+   resourceId: number;
+   resourceTagId: string;
+   resourceCode: string;
+   resourceSiteCode: string;
+   resourceSiteId: string;
+   resourceType: string;
+   resourceStatus: string;
+   resourceSite: string;
+   resourceCreatedAt: string;
+   resourceProvider: string;
+   resourceSubnetId: string;
+   resourceName: string;
+   resourceIp: string;
+   resourceUserId: string;
+  
+}
+
+export type getResourcesInSiteResponse = {
+  responseCode: string;
+  responseMessage: string;
+  data: resourceProp[];
+};
+

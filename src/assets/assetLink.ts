@@ -8,6 +8,7 @@ export const imgLinks = {
     rubies:'/images/rubies.png',
     image:'/images/image.png',
     gcp:'/images/gcp.webp',
+    switch:'/images/switch.png',
 
 }
 

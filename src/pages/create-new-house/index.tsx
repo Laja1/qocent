@@ -20,16 +20,19 @@ import type { ParameterData } from "../create-new-site/type";
 export const CreateNewHouse = () => {
   const navigate = useNavigate();
   const [createSite, { isLoading }] = useCreateServerSiteMutation();
-  const {
-    data: serverHouseTemplate,
-    isError,
-    isLoading: isParamsLoading,
-  } = useGetResourceTemplateQuery({ resource: "serverHouse" });
+
   const { openModal, closeModal } = useModal();
   const user = useSelector((state: RootState) => state.auth);
   const [progress, setProgress] = useState(0);
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  console.log(dashboard);
+  const {
+    data: serverHouseTemplate,
+    isError,
+    isLoading: isParamsLoading,
+  } = useGetResourceTemplateQuery({
+    resource: "serverHouse",
+    provider: dashboard.provider,
+  });
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
 
   // Initialize form with empty values
@@ -167,7 +170,7 @@ export const CreateNewHouse = () => {
           </div>
 
           <div className="flex mt-5 flex-col">
-            <div className="flex items-center w-full py-[1px] border-b">
+            {/* <div className="flex items-center w-full py-[1px] border-b">
               <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
                 <span className="text-red-500 ml-1">*</span>
                 Server Site
@@ -189,7 +192,7 @@ export const CreateNewHouse = () => {
                   <Info size={16} />
                 </button>
               </div>
-            </div>
+            </div> */}
             {serverHouseTemplate.data.map((item) => (
               <div
                 className="flex items-center w-full py-[1px] border-b"

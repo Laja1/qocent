@@ -2,6 +2,7 @@ import {createSlice, type PayloadAction} from '@reduxjs/toolkit';
 
 interface AuthState {
   token: string | null;
+  refreshToken: string | null;
   isAuthenticated: boolean;
   userEmail: string | null;
   userFirstName: string | null;
@@ -9,16 +10,15 @@ interface AuthState {
   userId: number | null;
 }
 
-
 const initialState: AuthState = {
   token: null,
+  refreshToken: null,
   isAuthenticated: false,
   userEmail: null,
   userFirstName: null,
   userLastName: null,
   userId: null,
 };
-
 
 const authSlice = createSlice({
   name: 'auth',
@@ -27,6 +27,7 @@ const authSlice = createSlice({
     setCredentials: (state, action: PayloadAction<Partial<AuthState>>) => {
       console.log('Received payload:', action.payload); // Debug log
       state.token = action.payload.token || null;
+      state.refreshToken = action.payload.refreshToken || null;
       state.isAuthenticated = !!action.payload.token; // Only set true if token exists
       state.userEmail = action.payload.userEmail || null;
       state.userFirstName = action.payload.userFirstName || null;

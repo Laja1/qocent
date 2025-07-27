@@ -2,7 +2,6 @@ import {
   Cloud,
   LogOut,
   Settings,
-  Warehouse,
   Users,
   Bot,
   LayoutList,
@@ -24,7 +23,12 @@ import {
 } from "@/components/ui/sidebar";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { RouteConstant } from "@/router/routes";
-import { IconCloudComputing } from "@tabler/icons-react";
+import {
+  IconBrowser,
+  IconCarouselVertical,
+  IconCloudComputing,
+  IconHome,
+} from "@tabler/icons-react";
 import { useDispatch, useSelector } from "react-redux";
 import { authStore } from "@/store/authSlice";
 import type { RootState } from "@/store";
@@ -63,24 +67,29 @@ const sidebarItems: SidebarItem[] = [
 const data = {
   serverSite: [
     {
-      title: "Server Site",
-      url: RouteConstant.dashboard.serverSite.path,
-      icon: <IconCloudComputing className="text-green-700 size-5" />,
+      title: "Resources Console",
+      url: "#",
+      icon: <IconCloudComputing className="text-red-500 size-5" />,
       color: "#e51a21",
       isActive: false,
       items: [
         {
-          title: "Server House",
-          icon: <Warehouse className="text-blue-700 size-4" />,
+          title: "Server Sites",
+          icon: <IconHome className="text-purple-500 size-4" />,
+          url: RouteConstant.dashboard.serverSite.path,
+        },
+        {
+          title: "Server Houses",
+          icon: <IconCarouselVertical className="text-teal-500 size-4" />,
           url: RouteConstant.dashboard.serverHouses.path,
         },
         {
           title: "Server Rooms",
-          icon: <Warehouse className="text-purple-700 size-4" />,
+          icon: <IconBrowser className="text-black size-4" />,
           url: RouteConstant.dashboard.serverRooms.path,
         },
         {
-          title: "Resources (Category)",
+          title: "Resources ",
           icon: <Webhook className="text-red-700 size-4" />,
           url: RouteConstant.dashboard.resources.path,
         },
@@ -90,15 +99,17 @@ const data = {
   others: [
     {
       title: "Others",
-      url: RouteConstant.dashboard.serverSite.path,
-      icon: <AlignHorizontalDistributeCenter />,
+      url: "#",
+      icon: (
+        <AlignHorizontalDistributeCenter className="text-green-500 size-5" />
+      ),
       color: "#e51a21",
       isActive: false,
       items: [
         {
           title: "Access Management",
-          icon: <RotateCcw className="size-4" />,
-          url: RouteConstant.dashboard.serverRooms.path,
+          icon: <RotateCcw className="size-4 text-red-500" />,
+          url: RouteConstant.dashboard.access.path,
         },
         {
           title: "Billing & Statements",
@@ -163,7 +174,7 @@ export const SidebarLayout = () => {
       </SidebarHeader>
 
       <SidebarContent className="bg-white">
-        <NavMain title="Server Site" items={data.serverSite} />
+        <NavMain title="Menu" items={data.serverSite} />
         <NavMain title="Others" items={data.others} />
 
         <SidebarGroup>

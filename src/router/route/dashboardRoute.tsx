@@ -13,6 +13,7 @@ import { Settings } from "@/pages/settings";
 import { Organizations } from "@/pages/organization";
 import { Billings } from "@/pages/billings";
 import { Console } from "@/pages/console";
+import { Access } from "@/pages/access";
 
 export const dashboardRoute: RouteType[] = [
   {
@@ -87,6 +88,12 @@ export const dashboardRoute: RouteType[] = [
     path: RouteConstant.dashboard.organizations.path,
     name: RouteConstant.dashboard.organizations.name,
     component: <Organizations />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.access.path,
+    name: RouteConstant.dashboard.access.name,
+    component: <Access />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
   {

@@ -11,23 +11,24 @@ import { showCustomToast } from "@/components/shared/toast";
 import { SiteDeployModal } from "@/components/not-shared/site-modal";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import {
-  useCreateServerSiteMutation,
-  useGetSiteParameterQuery,
-} from "@/service/typescript/siteApi";
+import { useCreateServerSiteMutation } from "@/service/typescript/siteApi";
 import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import type { RootState } from "@/store";
 import type { ParameterData } from "./type";
+import { useGetResourceTemplateQuery } from "@/service/typescript/resourceApi";
 
 export const CreateNewSite = () => {
   const navigate = useNavigate();
   const [createSite, { isLoading }] = useCreateServerSiteMutation();
+  const dashboard = useSelector((state: RootState) => state.dashboard);
   const {
     data: serverSiteParameterData,
     isError,
     isLoading: isParamsLoading,
-  } = useGetSiteParameterQuery();
-  console.log(serverSiteParameterData?.data, "sssssss");
+  } = useGetResourceTemplateQuery({
+    resource: "serverHouse",
+    provider: dashboard.provider,
+  });
 
   const { openModal, closeModal } = useModal();
   const user = useSelector((state: RootState) => state.auth);

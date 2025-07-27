@@ -25,6 +25,7 @@ const SignIn = () => {
       dispatch(
         authStore.action.setCredentials({
           token: res.data.accessToken.replace("Bearer ", ""),
+          refreshToken: res.data.refreshToken,
           userEmail: res?.data?.user?.userEmail,
           userFirstName: res?.data?.user?.userFirstName,
           userLastName: res?.data?.user?.userLastName,

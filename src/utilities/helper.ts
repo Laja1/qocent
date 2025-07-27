@@ -31,6 +31,23 @@ export const logOut = () => {
   window.location.href = '/';
 };
 
+export const getStatusClassName = (status: string) => {
+  switch (status.toUpperCase()) {
+    case "ACTIVE":
+      return "bg-green-50 text-green-800 border-green-500 text-[10px]";
+    case "PENDING":
+      return "bg-yellow-50 text-yellow-800 border-yellow-500 text-[10px]";
+    case "DEPLOYED":
+      return "bg-purple-50 text-purple-800 border-purple-500 text-[10px]";
+    case "SUSPENDED":
+      return "bg-orange-50 text-orange-800 border-orange-500 text-[10px]";
+    case "DELETED":
+      return "bg-red-50 text-red-800 border-red-500 text-[10px]";
+    default:
+      return "bg-gray-50 text-gray-800 border-gray-300 text-[10px]";
+  }
+};
+
 
 
 

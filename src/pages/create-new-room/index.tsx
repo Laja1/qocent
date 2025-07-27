@@ -20,17 +20,20 @@ import type { ParameterData } from "../create-new-site/type";
 export const CreateNewRoom = () => {
   const navigate = useNavigate();
   const [createSite, { isLoading }] = useCreateServerSiteMutation();
-  const {
-    data: serverRoomTemplate,
-    isError,
-    isLoading: isParamsLoading,
-  } = useGetResourceTemplateQuery({ resource: "serverRoom" });
+
   const { openModal, closeModal } = useModal();
   const user = useSelector((state: RootState) => state.auth);
   const [progress, setProgress] = useState(0);
   const dashboard = useSelector((state: RootState) => state.dashboard);
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
-  console.log(dashboard);
+  const {
+    data: serverRoomTemplate,
+    isError,
+    isLoading: isParamsLoading,
+  } = useGetResourceTemplateQuery({
+    resource: "serverRoom",
+    provider: dashboard.provider,
+  });
   // Initialize form with empty values
   const initialValues =
     serverRoomTemplate?.data?.reduce(
@@ -168,7 +171,7 @@ export const CreateNewRoom = () => {
           </div>
 
           <div className="flex mt-5 flex-col">
-            <div className="flex items-center w-full py-[1px] border-b">
+            {/* <div className="flex items-center w-full py-[1px] border-b">
               <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
                 <span className="text-red-500 ml-1">*</span>
                 Server Site
@@ -213,7 +216,7 @@ export const CreateNewRoom = () => {
                   <Info size={16} />
                 </button>
               </div>
-            </div>
+            </div> */}
             {serverRoomTemplate.data.map((item) => (
               <div
                 className="flex items-center w-full py-[1px] border-b"

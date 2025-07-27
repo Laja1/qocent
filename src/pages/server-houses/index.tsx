@@ -7,7 +7,6 @@ import { useNavigate } from "react-router-dom";
 import { SummaryTable } from "../server-sites/summary-table";
 import { DeployResources } from "@/components/not-shared/deploy-resources";
 import { Resource } from "../resource";
-import { ServerSitesTable2 } from "../server-sites/server-sites-table";
 import { SecurityTable } from "../server-sites/security-table";
 import { useState } from "react";
 import { useModal } from "@/components/shared/modal";
@@ -19,7 +18,78 @@ import { formatDate } from "@/utilities/helper";
 import { useGetResourceByProviderQuery } from "@/service/typescript/resourceApi";
 import type { resourceType } from "@/models/response/resourceResponse";
 import { ApiEnums } from "@/utilities/enums";
-import GridLayout from "@/components/not-shared/data-flow/flow";
+import { FlowGrid } from "@/components/not-shared/data-flow/flow";
+import { useGetSiteDataFlowQuery } from "@/service/kotlin/siteApi";
+
+// Cute Data Flow Loader Component
+export const DataFlowLoader = () => {
+  return (
+    <div className="flex flex-col items-center justify-center min-h-[400px]  rounded-lg p-8">
+      {/* Main loader container */}
+      <div className="relative">
+        {/* Animated circles representing data flow */}
+        <div className="flex items-center space-x-4 mb-6">
+          {/* Server node */}
+          <div className="relative">
+            <div className="w-12 h-12 bg-black rounded-xs flex items-center justify-center shadow-lg animate-pulse">
+              <div className="w-6 h-6 bg-white rounded-xs opacity-80"></div>
+            </div>
+            <div className="absolute -top-1 -right-1 w-3 h-3 bg-black rounded-full animate-ping"></div>
+          </div>
+
+          {/* Flowing data dots */}
+          <div className="flex space-x-1">
+            {[0, 1, 2].map((index) => (
+              <div
+                key={index}
+                className="w-2 h-2 bg-purple-400 rounded-full animate-bounce"
+                style={{
+                  animationDelay: `${index * 0.2}s`,
+                  animationDuration: "1s",
+                }}
+              ></div>
+            ))}
+          </div>
+
+          {/* Database node */}
+          <div className="relative">
+            <div className="w-12 h-12 bg-black rounded-xs flex items-center justify-center shadow-lg animate-pulse">
+              <div className="w-6 h-4 bg-white rounded-sm opacity-80"></div>
+            </div>
+          </div>
+
+          {/* More flowing data dots */}
+          <div className="flex space-x-1">
+            {[0, 1, 2].map((index) => (
+              <div
+                key={index}
+                className="w-2 h-2 bg-black rounded-full animate-bounce"
+                style={{
+                  animationDelay: `${index * 0.2 + 0.5}s`,
+                  animationDuration: "1s",
+                }}
+              ></div>
+            ))}
+          </div>
+
+          {/* Cloud node */}
+          <div className="relative">
+            <div className="w-12 h-12 bg-black rounded-xl flex items-center justify-center shadow-lg animate-pulse">
+              <div className="w-6 h-3 bg-white rounded-xs opacity-80"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Cute loading message */}
+        <div className="text-center">
+          <div className="inline-flex items-center space-x-2 mb-2">
+            <div className="w-8 h-8 border-3 border-  -200 border-t-  -500 rounded-xs animate-spin"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export const ServerHouses = () => {
   const navigate = useNavigate();
@@ -30,7 +100,13 @@ export const ServerHouses = () => {
     provider: dashboard.provider,
     resource: ApiEnums.House,
   });
-  console.log(data);
+
+  const { data: dataFlow, isLoading: dataFlowLoading } =
+    useGetSiteDataFlowQuery({
+      siteCode: "sample-site-000",
+    });
+  console.log(dataFlow);
+
   const serverHouseColumn: ColumnDef<resourceType>[] = [
     {
       id: "resourceId",
@@ -58,42 +134,6 @@ export const ServerHouses = () => {
       sortable: true,
       filterType: "select",
     },
-    // {
-    //   id: "resourceSiteCode",
-    //   header: "SITE CODE",
-    //   accessorKey: "resourceSiteCode",
-    //   cell: (row) => (
-    //     <span className=" line-clamp-1">{row.resourceSiteCode}</span>
-    //   ),
-    //   sortable: true,
-    //   filterType: "select",
-    // },
-    // {
-    //   id: "alerts",
-    //   header: "ALERTS",
-    //   accessorKey: "alerts",
-    //   sortable: true,
-    //   cell: (row) => (
-    //     <div
-    //       className={`flex items-center justify-center w-5 text-[10px] h-5 rounded-full ${
-    //         row.alerts > 0
-    //           ? "bg-red-50 text-red-800 border border-red-500"
-    //           : "bg-green-50 text-green-800 border border-green-500"
-    //       }`}
-    //     >
-    //       {row.alerts}
-    //     </div>
-    //   ),
-    // },
-    // {
-    //   id: "rooms",
-    //   header: "ROOMS",
-    //   accessorKey: "rooms",
-    //   sortable: true,
-    //   cell: (row) => (
-    //     <span className="text-center justify-center flex">{row.rooms}</span>
-    //   ),
-    // },
     {
       id: "resourceMaker",
       header: "PROVIDER",
@@ -121,16 +161,6 @@ export const ServerHouses = () => {
         </span>
       ),
     },
-    // {
-    //   id: "resourceIP",
-    //   header: "IP RANGE",
-    //   headerClassName: "text-right",
-    //   accessorKey: "resourceIP",
-    //   sortable: true,
-    //   cell: (row) => (
-    //     <span className="text-right block line-clamp-1">{row.resourceIP}</span>
-    //   ),
-    // },
   ];
 
   const actions = [
@@ -170,10 +200,7 @@ export const ServerHouses = () => {
         <div className="flex lg:flex-row flex-col">
           <div className=" lg:w-1/4 lg:mr-5 flex">
             <div className=" flex flex-col w-full ">
-              {row && <SummaryTable
-                summaryData={ []}
-                isLoading={false}
-              />}
+              {row && <SummaryTable summaryData={[]} isLoading={false} />}
               <Button
                 label="Add Resource"
                 prefixIcon={<PlusIcon className="size-4" />}
@@ -207,9 +234,7 @@ export const ServerHouses = () => {
       id: 2,
       text: "Resources",
       component: (
-        <div className="">
-          <ServerSitesTable2 rowId={rowId} />
-        </div>
+        <div className="">{/* <ServerSitesTable2 rowId={rowId} /> */}</div>
       ),
     },
     {
@@ -217,12 +242,17 @@ export const ServerHouses = () => {
       text: "Architecture",
       component: (
         <div>
-          {/* <HouseLevel houseData={houseArchitectureData} /> */}
-          <div className="my-10">
-            {/* <DataFlow /> */}
-            <GridLayout />
-
-          </div>
+          {/* Show cute loader while data is loading */}
+          {dataFlowLoading ? (
+            <DataFlowLoader />
+          ) : (
+            <div className="my-10">
+              <FlowGrid
+                data={{ data: dataFlow?.data || [] }}
+                connections={{ connections: dataFlow?.connections || [] }}
+              />
+            </div>
+          )}
         </div>
       ),
     },
@@ -232,6 +262,7 @@ export const ServerHouses = () => {
       component: <SecurityTable />,
     },
   ];
+
   return (
     <div className="bg-white h-full">
       <Header title="Server Houses" description="Manage your server house">

@@ -132,6 +132,10 @@ export const RouteConstant = {
       path: "/organizations",
       name: "organizations",
     },
+    access: {
+      path: "/access",
+      name: "access",
+    },
     billings: {
       path: "/billings",
       name: "billings",
