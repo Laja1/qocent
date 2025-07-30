@@ -10,7 +10,7 @@ type RenderFieldProps = {
   label?: string;
   formik: FormikProps<any>;
   placeholder?: string;
-  parameterLookup?:string
+  parameterLookup?: string;
   autoComplete?: string; // Add this line
 };
 
@@ -40,6 +40,18 @@ export const RenderField = ({
           {...rest}
         />
       )}
+      {type === "CidrBlock" && (
+        <Textfield2
+          name={name}
+          label={label}
+          placeholder={placeholder}
+          formik={formik}
+          error={error as string}
+          className="w-full"
+          autoComplete={autoComplete} // Pass it down
+          {...rest}
+        />
+      )}
       {type === "CommentBox" && (
         <TextArea
           name={name}
@@ -55,12 +67,11 @@ export const RenderField = ({
       {type === "ListBox" && (
         <ResourceSelectField
           name={name}
-          parameterLookup={parameterLookup || ''}
+          parameterLookup={parameterLookup || ""}
           formik={formik}
           placeholder={placeholder}
           {...rest}
         />
-        
       )}
       {type === "DateBox" && (
         <DatePickerWithFormik

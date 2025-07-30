@@ -7,9 +7,9 @@ import { AnimatePresence } from "motion/react";
 import { Dialog } from "@headlessui/react";
 import { Button, ComboBoxField } from "@/components/shared";
 import { useEffect } from "react";
-import { useGetServicesQuery } from "@/service/typescript/resourceApi";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
+import { useGetServicesQuery } from "@/service/kotlin/resourceApi";
 
 interface ResourceModalProps {
   id?: string;
@@ -29,9 +29,9 @@ export const ResourceModal: React.FC<ResourceModalProps> = ({
   isOpen,
   onClose,
 }) => {
-  const dashboard = useSelector((state:RootState)=>state.dashboard)
+  const dashboard = useSelector((state: RootState) => state.dashboard);
   const { data: getServicesData } = useGetServicesQuery({
-    provider:dashboard.provider
+    provider: dashboard.provider,
   });
   console.log(getServicesData);
 
@@ -39,8 +39,8 @@ export const ResourceModal: React.FC<ResourceModalProps> = ({
   const presetTypeOptions = id
     ? [{ label: id, value: id.toLowerCase() }]
     : getServicesData?.data?.map((service: any) => ({
-        label: service.label,
-        value: service.value,
+        label: service.serviceName,
+        value: service.serviceName,
       })) || [];
 
   const formik = useFormik({
@@ -62,10 +62,14 @@ export const ResourceModal: React.FC<ResourceModalProps> = ({
       // Pass the state properly - ensure it's always an object
       onNavigate?.(RouteConstant.dashboard.createResources.path, {
         resourceType: values.resourceType,
+        selectedField,
       });
     },
   });
-
+  const selectedField = getServicesData?.data.find(
+    (item) => item.serviceName === formik.values.resourceType
+  );
+  console.log(selectedField, "getServicesData");
   useEffect(() => {
     formik.validateForm();
   }, []); // Empty dependency array - only run once on mount

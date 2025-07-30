@@ -11,20 +11,30 @@ import { showCustomToast } from "@/components/shared/toast";
 import { SiteDeployModal } from "@/components/not-shared/site-modal";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useCreateServerSiteMutation } from "@/service/typescript/siteApi";
 import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import type { RootState } from "@/store";
-import { useGetResourceTemplateQuery } from "@/service/typescript/resourceApi";
 import type { ParameterData } from "../create-new-site/type";
+import {
+  useCreateResourceMutation,
+  useGetConfigQuery,
+  useGetResourceTemplateQuery,
+} from "@/service/kotlin/resourceApi";
+import type { createResourceRequest } from "@/models/request/resourceRequest";
+import { replaceConfigPlaceholders } from "@/utilities/helper";
+import type { getResourceConfigResponse } from "@/models/response/resourceResponse";
 
 export const CreateNewRoom = () => {
   const navigate = useNavigate();
-  const [createSite, { isLoading }] = useCreateServerSiteMutation();
-
-  const { openModal, closeModal } = useModal();
-  const user = useSelector((state: RootState) => state.auth);
-  const [progress, setProgress] = useState(0);
   const dashboard = useSelector((state: RootState) => state.dashboard);
+  const [createResource, { isLoading: isCreatingLoading }] =
+    useCreateResourceMutation();
+  const { data: configData } = useGetConfigQuery({
+    serviceId: "ServerRoom",
+    configProvider: dashboard?.provider || "",
+  });
+  const { openModal, closeModal } = useModal();
+
+  const [progress, setProgress] = useState(0);
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
   const {
     data: serverRoomTemplate,
@@ -41,19 +51,26 @@ export const CreateNewRoom = () => {
         ...acc,
         [item.parameterName]: "",
       }),
-      {
-        serverSite: "",
-        serverHouse: "",
-      }
+      {}
     ) || {};
 
   // Form submission handler
-  const handleSubmit = async (values: any) => {
+  const handleSubmit = async () => {
     try {
-      const payload = {
-        ...values,
-        siteUserId: user.userId || "",
-      };
+      if (!newJsonConfig) {
+        throw new Error("Configuration data is not available");
+      }
+      console.log(
+        newJsonConfig.data,
+        '"config" is an excess property and therefore is not allowed'
+      );
+      const payload: createResourceRequest =
+        "data" in newJsonConfig
+          ? (newJsonConfig.data as createResourceRequest)
+          : (newJsonConfig as createResourceRequest);
+
+      const res = await createResource(payload).unwrap();
+      console.log(res, "creating");
 
       // Simulate deployment progress
       for (let i = 0; i <= 100; i += 10) {
@@ -61,15 +78,15 @@ export const CreateNewRoom = () => {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
-      const res = await createSite(payload).unwrap();
-      showCustomToast(res.responseMessage, {
+      showCustomToast(`Server house successfully created`, {
         toastOptions: { type: "success", autoClose: 5000 },
       });
 
       setProgress(0);
       setIsDeployModalOpen(false);
-      navigate(RouteConstant.dashboard.serverSite.path);
+      navigate(RouteConstant.dashboard.resources.path);
     } catch (error: any) {
+      console.error("Create Resource Error:", error);
       const message = ErrorHandler.extractMessage(error);
       showCustomToast(message, {
         toastOptions: { type: "error", autoClose: 5000 },
@@ -86,6 +103,14 @@ export const CreateNewRoom = () => {
     validateOnMount: true,
     enableReinitialize: true,
   });
+
+  const newJsonConfig = configData
+    ? (replaceConfigPlaceholders(configData, {
+        ...formik.values,
+        resourceProvider: dashboard.provider,
+        resourceType: "ServerRoom",
+      }) as getResourceConfigResponse<any>)
+    : null;
 
   console.log(formik?.errors, formik?.values);
   useEffect(() => {
@@ -251,7 +276,7 @@ export const CreateNewRoom = () => {
           <div className="flex m-3 sm:m-5 justify-end">
             <Button
               label="Proceed"
-              disabled={!formik.isValid || isLoading}
+              disabled={!formik.isValid || isCreatingLoading}
               onClick={() => setIsDeployModalOpen(true)}
               surfixIcon={<ArrowRight className="size-3" />}
             />
@@ -261,10 +286,10 @@ export const CreateNewRoom = () => {
 
       <SiteDeployModal
         isOpen={isDeployModalOpen}
-        onClose={() => !isLoading && setIsDeployModalOpen(false)}
+        onClose={() => !isCreatingLoading && setIsDeployModalOpen(false)}
         formik={formik}
         json={serverRoomTemplate}
-        isLoading={isLoading}
+        isLoading={isCreatingLoading}
         progress={progress}
         onDeploy={formik.handleSubmit}
       />

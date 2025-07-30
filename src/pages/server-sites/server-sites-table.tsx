@@ -42,7 +42,7 @@ export const ServerSitesTable2 = ({
     },
   ];
 
-  const serverSiteTable2: ColumnDef<resourceProp>[] = [
+ const serverSiteTable2: ColumnDef<resourceProp>[] = [
     {
       id: "resourceId",
       header: "ID",

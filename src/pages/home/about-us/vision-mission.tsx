@@ -22,9 +22,9 @@ export const Vision = () => {
         </div>
         <div className="container px-4 md:px-6 max-w-4xl mx-auto grid gap-12 md:grid-cols-2">
           <div className="shadow-sm border rounded-md">
-            <CardHeader className="flex text-gray-200 m-5 rounded-md bg-gradient-to-r from-black to-gray-900 drop-shadow-amber-100 drop-shadow-2xl flex-row items-center  py-1 justify-center">
+            <CardHeader className="flex text-gray-200 m-5 rounded-md bg-gradient-to-r from-black to-gray-900  flex-row items-center  py-1 justify-center">
               <EyeIcon className="h-8 w-8  text-gray-200" />
-              <CardTitle className="text-lg font-bold">Vision</CardTitle>
+              <CardTitle className="text-sm font-bold">Vision</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm p-5 text-muted-foreground leading-relaxed">
@@ -37,9 +37,9 @@ export const Vision = () => {
           </div>
 
           <div className="shadow-sm border rounded-md">
-            <CardHeader className="flex text-gray-200 m-5 rounded-md bg-gradient-to-r from-black to-gray-900 flex-row items-center drop-shadow-teal-100 drop-shadow-2xl  py-1 justify-center">
+            <CardHeader className="flex text-gray-200 m-5 rounded-md bg-gradient-to-r from-black to-gray-900 flex-row items-center  py-1 justify-center">
               <TargetIcon className="h-8 w-8  text-gray-200" />
-              <CardTitle className="text-lg font-bold">Mission</CardTitle>
+              <CardTitle className="text-sm font-bold">Mission</CardTitle>
             </CardHeader>
             <CardContent>
               <p className="text-sm px-5 pb-3 text-muted-foreground leading-relaxed">

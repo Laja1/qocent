@@ -1,3 +1,4 @@
+import {  svgLinks } from "@/assets/assetLink";
 import { RouteConstant } from "@/router/routes";
 import { Link, useLocation } from "react-router-dom";
 type AuthLayoutProps = {
@@ -47,7 +48,9 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
         }
       >
         <div>
-          <h1 className="text-4xl text-gray-700 font-alumni">QOCENT</h1>
+          <div className="text-4xl text-gray-700 font-alumni">
+            <img src={svgLinks.logo} className="size-40" />
+          </div>
         </div>
         <div className="flex  rounded-sm  justify-center items-center w-full lg:max-w-sm">
           <div className="bg-[#FFFFFF0D]      mx-5 rounded-xl py-5  px-3 w-full ">

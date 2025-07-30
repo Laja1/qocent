@@ -36,9 +36,13 @@ export const RouteConstant = {
       path: "/docs",
       name: "documentation",
     },
-    aboutUs:{
+    aboutUs: {
       path: "/about-us",
       name: "About Us",
+    },
+    partners: {
+      path: "/our-partners",
+      name: "Our Partners",
     },
   },
   auth: {

@@ -4,6 +4,7 @@ import type { RouteType } from "./type";
 import ExploreServices from "@/pages/home/explore-services";
 import Documentation from "@/pages/home/documentation";
 import AboutUs from "@/pages/home/about-us";
+import Partners from "@/pages/home/our-partners";
 
 export const publicRoute: RouteType[] = [
   {
@@ -28,6 +29,12 @@ export const publicRoute: RouteType[] = [
     path: RouteConstant.public.aboutUs.path,
     name: RouteConstant.public.aboutUs.name,
     component: <AboutUs />,
+    metadata: { isAuthenticated: false },
+  },
+  {
+    path: RouteConstant.public.partners.path,
+    name: RouteConstant.public.partners.name,
+    component: <Partners />,
     metadata: { isAuthenticated: false },
   },
 ];

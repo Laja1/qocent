@@ -1,6 +1,8 @@
 import { Header, Tabs } from "@/components/shared";
 import { Profile } from "./profile";
 import { Integrations } from "./integrations";
+import { Security } from "./secuirty";
+import { Payment } from "./payment";
 
 export const Settings = () => {
   const tabData = [
@@ -16,12 +18,17 @@ export const Settings = () => {
     {
       id: 2,
       text: "Security",
-      component: <div className=""></div>,
+      component: <div className=""><Security /></div>,
     },
     {
       id: 3,
       text: "Integrations",
       component: <Integrations />,
+    },
+    {
+      id:4,
+      text: "Payment Method",
+      component: <Payment />,
     },
   ];
 

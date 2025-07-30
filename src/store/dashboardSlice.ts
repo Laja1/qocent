@@ -1,21 +1,15 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 
-type ProviderType = 'aws' | 'huawei';
+type ProviderType = 'aws' | 'huawei' |'azure'|'gcp';
 
 interface DashboardState {
   provider: ProviderType | '';
-  providerId: number;
 }
 
 const initialState: DashboardState = {
   provider: '',
-  providerId: 0,
 };
 
-const providerIdMap: Record<ProviderType, number> = {
-  aws: 0,
-  huawei: 0,
-};
 
 const dashboardSlice = createSlice({
   name: 'dashboard',
@@ -23,7 +17,6 @@ const dashboardSlice = createSlice({
   reducers: {
     setProvider: (state, action: PayloadAction<ProviderType>) => {
       state.provider = action.payload;
-      state.providerId = providerIdMap[action.payload];
     },
   },
 });

@@ -14,7 +14,7 @@ export const HowIt = () => {
             className="flex flex-col items-center text-black justify-center space-y-4 text-center mb-16"
           >
             <Badge
-              className="rounded-full px-4 py-1.5 text-sm font-medium"
+              className="rounded-full px-4 py-1.5 text-sm font-medium text-red-500"
               variant="secondary"
             >
               How It Works

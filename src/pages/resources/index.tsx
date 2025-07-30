@@ -150,7 +150,6 @@ export const Resources = () => {
   const handleOpenDeployModal = () => {
     setIsOpen(true);
   };
-  
 
   const handleRowClick = (row: resourceType) => {
     setRowId(row.resourceId);
@@ -227,7 +226,10 @@ export const Resources = () => {
         isOpen={isOpen}
         closeModal={() => setIsOpen(false)}
         onProceed={() => navigate("/create-new-resource")}
-        onNavigate={(path, state) => navigate(path, { state })}
+        onNavigate={(path, state) => {
+          navigate(path, { state });
+          setIsOpen(false);
+        }}
         onClose={() => setIsOpen(false)}
         id="" // optional, or pass based on your logic
         siteCodeId={undefined} // optional, or pass relevant id

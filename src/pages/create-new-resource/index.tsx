@@ -5,11 +5,6 @@ import { ArrowRight, Info } from "lucide-react";
 import { useFormik } from "formik";
 import { IconMichelinStar } from "@tabler/icons-react";
 import type { ParameterData } from "../create-new-site/type";
-import {
-  useCreateResourceMutation,
-  useGetConfigQuery,
-  useGetResourceTemplateQuery,
-} from "@/service/typescript/resourceApi";
 import { useLocation, useNavigate } from "react-router-dom";
 import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import { SiteDeployModal } from "@/components/not-shared/site-modal";
@@ -21,6 +16,12 @@ import type { createResourceRequest } from "@/models/request/resourceRequest";
 import type { getResourceConfigResponse } from "@/models/response/resourceResponse";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
+import {
+  useCreateResourceMutation,
+  useGetConfigQuery,
+  useGetResourceTemplateQuery,
+} from "@/service/kotlin/resourceApi";
+import { replaceConfigPlaceholders } from "@/utilities/helper";
 
 export const CreateNewResource = () => {
   const navigate = useNavigate();
@@ -32,12 +33,45 @@ export const CreateNewResource = () => {
   const [progress, setProgress] = useState(0);
 
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  const locationState = location.state as { resourceType?: string } | null;
+  const locationState = location.state as any;
+
+  // ALL HOOKS MUST BE CALLED BEFORE ANY EARLY RETURNS
   const { data: configData, isLoading: isConfigLoading } = useGetConfigQuery({
     serviceId: locationState?.resourceType || "",
     configProvider: dashboard?.provider || "",
   });
 
+  const { data: resourceTemplate, isLoading } = useGetResourceTemplateQuery(
+    {
+      resource: locationState?.resourceType || "",
+      provider: dashboard?.provider || "",
+    },
+    {
+      skip: !locationState?.resourceType || !dashboard?.provider,
+    }
+  );
+
+  // Initialize form values
+  const initialValues =
+    resourceTemplate?.data?.reduce(
+      (acc: Record<string, string>, item: ParameterData) => ({
+        ...acc,
+        [item.parameterField]: "",
+      }),
+      {}
+    ) || {};
+
+  const formik = useFormik({
+    initialValues,
+    onSubmit: async () => {
+      await handleSubmit();
+    },
+    validationSchema: () => generateDynamicSchema(resourceTemplate?.data),
+    validateOnMount: true,
+    enableReinitialize: true,
+  });
+
+  // Handle redirect for invalid state
   useEffect(() => {
     if (!locationState || !locationState.resourceType) {
       showCustomToast("Please select a resource type first.", {
@@ -47,24 +81,34 @@ export const CreateNewResource = () => {
     }
   }, [locationState, navigate]);
 
-  const shouldFetchData = !!locationState?.resourceType;
+  // NOW it's safe to do early returns after all hooks are called
+  if (!locationState || !locationState.resourceType) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <p>Redirecting...</p>
+        </div>
+      </div>
+    );
+  }
 
-  const { data: resourceTemplate, isLoading } = useGetResourceTemplateQuery(
-    {
-      resource: locationState?.resourceType || "",
-      provider:dashboard.provider
-    },
-    {
-      skip: !shouldFetchData,
-    }
-  );
+  const newJsonConfig = configData
+    ? (replaceConfigPlaceholders(configData, {
+        ...formik.values,
+        resourceProvider: dashboard.provider,
+        resourceType: locationState.resourceType,
+      }) as getResourceConfigResponse<any>)
+    : null;
 
   const handleSubmit = async () => {
     try {
       if (!newJsonConfig) {
         throw new Error("Configuration data is not available");
       }
-
+      console.log(
+        newJsonConfig.data,
+        '"config" is an excess property and therefore is not allowed'
+      );
       const payload: createResourceRequest =
         "data" in newJsonConfig
           ? (newJsonConfig.data as createResourceRequest)
@@ -79,7 +123,7 @@ export const CreateNewResource = () => {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
-      showCustomToast(`${locationState?.resourceType} successfully created`, {
+      showCustomToast(`${locationState.resourceType} successfully created`, {
         toastOptions: { type: "success", autoClose: 5000 },
       });
 
@@ -117,74 +161,18 @@ export const CreateNewResource = () => {
     });
   };
 
-  const initialValues =
-    resourceTemplate?.data?.reduce(
-      (acc: Record<string, string>, item: ParameterData) => ({
-        ...acc,
-        [item.parameterField]: "",
-      }),
-      {}
-    ) || {};
-
-  const formik = useFormik({
-    initialValues,
-    onSubmit: handleSubmit,
-    validationSchema: () => generateDynamicSchema(resourceTemplate?.data),
-    validateOnMount: true,
-    enableReinitialize: true,
-  });
-
-  const replaceConfigPlaceholders = (
-    obj: unknown,
-    formikValues: { [x: string]: any }
-  ): unknown => {
-    if (Array.isArray(obj)) {
-      return obj.map((item) => replaceConfigPlaceholders(item, formikValues));
-    } else if (obj !== null && typeof obj === "object") {
-      const newObj: { [key: string]: unknown } = {};
-      for (const [key, value] of Object.entries(
-        obj as Record<string, unknown>
-      )) {
-        newObj[key] = replaceConfigPlaceholders(value, formikValues);
-      }
-      return newObj;
-    } else if (typeof obj === "string" && obj.startsWith("@")) {
-      // Remove @ and get the corresponding formik value
-      const fieldName = obj.substring(1);
-      return formikValues[fieldName] || obj; // Return original if not found
-    }
-    return obj;
+  const handleProceedClick = () => {
+    setIsDeployModalOpen(true);
   };
-
-  const newJsonConfig = configData
-    ? (replaceConfigPlaceholders(
-        configData,
-        formik.values
-      ) as getResourceConfigResponse)
-    : null;
 
   console.log("Original config:", configData);
   console.log("Dynamic config with formik values:", newJsonConfig);
 
-  // Show loading state while redirecting or if no valid state
-  if (!locationState || !locationState.resourceType) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="text-center">
-          <p>Redirecting...</p>
-        </div>
-      </div>
-    );
-  }
-
-  const handleProceedClick = async () => {
-    setIsDeployModalOpen(true);
-  };
   if (isLoading) {
     return (
       <div className="">
         <Header
-          title="Create Server Site"
+          title="Create New Resource"
           description="A server can have one or more server houses. A server house is provided by a provider."
         />
         <div className="animate-pulse space-y-4 mx-4">
@@ -203,13 +191,14 @@ export const CreateNewResource = () => {
         description="A server can have one or more server houses. A server house is provided by a provider."
       />
 
-      <div className="flex flex-col  mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
+      <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
         <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 rounded-t-md px-3 sm:px-5 py-5">
           <div>
-            <p className="text-base sm:text-lg text-white">EC2</p>
+            <p className="text-base sm:text-lg text-white">
+              {locationState.resourceType}
+            </p>
             <p className="text-xs text-gray-400 leading-tight">
-              A server can have one or more server houses. A server house is
-              provided by a provider.
+              {locationState?.selectedField?.serviceDescription}
             </p>
           </div>
           <div>
@@ -217,7 +206,7 @@ export const CreateNewResource = () => {
           </div>
         </div>
 
-        <div className=" flex mt-5   flex-col">
+        <div className="flex mt-5 flex-col">
           {resourceTemplate?.data?.map((item) => (
             <div
               className="flex items-center w-full py-[1px] border-b"

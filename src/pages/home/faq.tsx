@@ -15,7 +15,7 @@ export const Faq = () => {
       >
         <div className="absolute inset-0 -z-10 h-full w-full bg-white dark:bg-black bg-[linear-gradient(to_right,#f0f0f0_1px,transparent_1px),linear-gradient(to_bottom,#f0f0f0_1px,transparent_1px)] dark:bg-[linear-gradient(to_right,#1f1f1f_1px,transparent_1px),linear-gradient(to_bottom,#1f1f1f_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000_40%,transparent_100%)]"></div>
         <Badge
-          className="rounded-full px-4 py-1.5 text-sm font-medium"
+          className="rounded-full px-4 py-1.5 text-sm font-medium text-red-500"
           variant="secondary"
         >
           FAQ
@@ -40,9 +40,9 @@ export const Faq = () => {
               <Accordion type="single" collapsible className="w-full">
                 {[
                   {
-                    question: "What makes Qocent different from other cloud providers?",
-                    answer:
-                      `Qocent is "one window to every cloud" Our multi-cloud platform integrates AWS, Azure, GCP, Huawei, and more into a single intuitive console, so you can deploy, manage, and scale across clouds without switching dashboards or facing vendor lock‑in.`,
+                    question:
+                      "What makes Qocent different from other cloud providers?",
+                    answer: `Qocent is "one window to every cloud" Our multi-cloud platform integrates AWS, Azure, GCP, Huawei, and more into a single intuitive console, so you can deploy, manage, and scale across clouds without switching dashboards or facing vendor lock‑in.`,
                   },
                   {
                     question: "How does Qocent pricing work?",
@@ -50,13 +50,13 @@ export const Faq = () => {
                       "We offer transparent, pay-as-you-go pricing with no hidden fees. You only pay for what you actually use across any cloud you deploy to. Qocent also offers reserved pricing discounts to help reduce long-term spend.",
                   },
                   {
-                    question: "Can I migrate existing applications onto Qocent?",
+                    question:
+                      "Can I migrate existing applications onto Qocent?",
                     answer:
                       "The number of users depends on your plan. The Starter plan allows up to 5 team members, the Professional plan allows up to 20, and the Enterprise plan has no limit on team members.",
                   },
                   {
-                    question:
-                      "How do you support multi-cloud deployment?",
+                    question: "How do you support multi-cloud deployment?",
                     answer:
                       "Qocent supports workloads across multiple providers; including AWS, Huawei, Azure, and GCP. You choose where to deploy, and we handle orchestration, networking, and unified billing through a single interface.",
                   },

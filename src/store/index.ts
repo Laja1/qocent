@@ -3,25 +3,26 @@ import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 import { authApi } from "@/service/typescript/authApi";
-import { siteApi } from "@/service/typescript/siteApi";
 import { authStore } from "./authSlice";
 import { dashboardStore } from "./dashboardSlice";
 import { roomApi } from "@/service/typescript/roomApi";
 import { houseApi } from "@/service/typescript/houseApi";
 import { resourceApi } from "@/service/typescript/resourceApi";
-import { kotlinSiteApi } from "@/service/kotlin/siteApi";
+import { resourceListStore } from "./resourceListSlice";
+import { kotlinResourceApi } from "@/service/kotlin/resourceApi";
+import { siteApi } from "@/service/kotlin/siteApi";
 
 // Combine all your reducers
 const rootReducer = combineReducers({
   auth: authStore.reducer,
   dashboard:dashboardStore.reducer,
+  resourceList:resourceListStore.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [siteApi.reducerPath]: siteApi.reducer,
   [roomApi.reducerPath]:roomApi.reducer,
   [houseApi.reducerPath]:houseApi.reducer,
   [resourceApi.reducerPath]:resourceApi.reducer,
-  [kotlinSiteApi.reducerPath]:kotlinSiteApi.reducer,
-  
+  [kotlinResourceApi.reducerPath]:kotlinResourceApi.reducer
 });
 
 // Persist config for redux-persist
@@ -29,7 +30,7 @@ const persistConfig = {
   key: "root",
   storage,
   
-  whitelist: ["auth","dashboard"], // Only persist the 'auth' slice
+  whitelist: ["auth","dashboard",'resourceList'], 
   // stateReconciler: false,
 };
 
@@ -51,7 +52,7 @@ export const store = configureStore({
           "persist/REGISTER",
         ],
       },
-    }).concat(authApi.middleware, siteApi.middleware,houseApi.middleware,roomApi.middleware,resourceApi.middleware,kotlinSiteApi.middleware),
+    }).concat(authApi.middleware, siteApi.middleware,houseApi.middleware,roomApi.middleware,resourceApi.middleware,kotlinResourceApi.middleware),
 });
 
 // Persistor instance

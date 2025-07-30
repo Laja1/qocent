@@ -88,7 +88,7 @@ interface ButtonProps
 export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
-      label = "Button",
+      label = "",
       onClick,
       className,
       isLoading,

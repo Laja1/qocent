@@ -46,53 +46,31 @@ export type formResponse = {
 };
 
 
-export type serviceResponse = {
-  success: boolean;
-  message: string;
-  data: {
-    label: string;
-    value: string;
-  }[];
-  error: string;
-};
+
+
+export interface Service {
+  serviceId: number;
+  serviceName: string;
+  serviceAlias: string;
+  serviceCategory: string;
+  serviceUrl: string;
+  serviceCode: string;
+  serviceDescription: string;
+  serviceNotice: string;
+  serviceProvider: string; // e.g., "aws", "huawei", etc.
+}
+
+export interface serviceResponse {
+  responseCode: string; // e.g., "00"
+  responseMessage: string; // e.g., "Completed successfully"
+  data: Service[];
+}
 
 
 
-export type getResourceConfigResponse = {
-  success: boolean;
-  data: {
-    resourceId: number;
-    resourceSite: string;
-    resourceType: string;
-    resourceName: string;
-    resourceProvider: string;
-    resourceCode: string;
-    resourceContainerType: string;
-    resourceContainerCode: string;
-    resourceStatus: string;
-    resourceDate: string; // ISO date string
-    resourceMakerId: string;
-    resourceCheckerId: string;
-    resourceRef: string;
-    resourceTagId: string;
-    resourceConfig: {
-      service: string;
-      region: string;
-      clientClass: string;
-      requestClass: string;
-      operation: string;
-      authType: string;
-      async: boolean;
-      timeout: number;
-      customEndpoint: string;
-      debugMode: boolean;
-      requestBody: {
-        vpc: {
-          name: string;
-          cidr: string;
-          description: string;
-        };
-      };
-    };
-  };
+
+export type getResourceConfigResponse<T> = {
+  data: T;
+  responseCode: string;
+  responseMessage: string;
 };

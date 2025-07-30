@@ -28,10 +28,12 @@ import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
 import { FlowGrid } from "@/components/not-shared/data-flow/flow";
 import { DataFlowLoader } from "../server-houses";
-import { getStatusClassName } from "@/utilities/helper";
+import { formatDate, getStatusClassName } from "@/utilities/helper";
+import { ResourceModal } from "../create-new-resource/resource-modal";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
+  const [isOpen, setIsOpen] = useState(false);
   const [tabShow, setTabShow] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState("");
   const [selectedSiteCode, setSelectedSiteCode] = useState("");
@@ -83,6 +85,7 @@ export const ServerSites = () => {
       cell: (row) => <span className="">{row.siteId}</span>,
       sortable: true,
     },
+
     {
       id: "siteName",
       header: "SITE NAME",
@@ -189,33 +192,35 @@ export const ServerSites = () => {
       accessorKey: "siteExpiryDate",
       sortable: true,
       cell: (row) => (
-        <span className="text-right block">{row.siteExpiryDate}</span>
+        <span className="text-right block">
+          {formatDate(row.siteExpiryDate)}
+        </span>
       ),
     },
-    // {
-    //   id: "siteEOLAction",
-    //   header: "Site Expiry Date",
-    //   headerClassName: "text-right",
-    //   accessorKey: "siteEOLAction",
-    //   sortable: true,
-    //   cell: (row) => (
-    //     <span className="text-right block">{row.siteEOLAction}</span>
-    //   ),
-    // },
-    // {
-    //   id: "resourceBill",
-    //   header: "BILL (USD)",
-    //   accessorKey: "resourceBill",
-    //   headerClassName: "text-right",
-    //   cell: (row) => (
-    //     <span className="block text-green-700 text-right">
-    //       {row.resourceBill.toLocaleString("en-US", {
-    //         minimumFractionDigits: 2,
-    //       })}
-    //     </span>
-    //   ),
-    //   sortable: true,
-    // },
+    {
+      id: "siteEOLAction",
+      header: "Site EOL Action",
+      headerClassName: "text-right",
+      accessorKey: "siteEOLAction",
+      sortable: true,
+      cell: (row) => (
+        <span className="text-right block">{row.siteEOLAction}</span>
+      ),
+    },
+    {
+      id: "siteBill",
+      header: "BILL (USD)",
+      accessorKey: "siteBill",
+      headerClassName: "text-right",
+      cell: (row) => (
+        <span className="block text-green-700 text-right">
+          {row.siteBill.toLocaleString("en-US", {
+            minimumFractionDigits: 2,
+          })}
+        </span>
+      ),
+      sortable: true,
+    },
     // {
     //   id: "balance",
     //   header: "BALANCE (USD)",
@@ -252,17 +257,8 @@ export const ServerSites = () => {
     {
       label: "Deploy Resource",
       icon: Plus,
-      onClick: (row: SiteData) => {
-        openModal({
-          id: `deploy-${row.siteId}`,
-          content: () => (
-            <DeployResources
-              // sitecodeId={Number(row.siteId)}
-              closeModal={closeModal}
-              onProceed={() => navigate("/create-new-resource")}
-            />
-          ),
-        });
+      onClick: () => {
+        setIsOpen(true);
       },
     },
     {
@@ -278,7 +274,7 @@ export const ServerSites = () => {
   const isDataFlowLoading = dataFlowLoading || isArtificialLoading;
   const handleRowClick = async (row: SiteData) => {
     setTabShow(true);
-    setSelectedRowId(row.siteId.toString()); 
+    setSelectedRowId(row.siteId.toString());
     setSelectedSiteCode(row.siteCode); // For API calls
     if (loadingTimeout) {
       clearTimeout(loadingTimeout);
@@ -415,6 +411,10 @@ export const ServerSites = () => {
             searchPlaceholder="Search server rooms by name, ID, or region..."
             pageSize={5}
             isLoading={isSiteLoading}
+            exportOptions={{
+              filename: "server_sites_export",
+              includeHeaders: true,
+            }}
             actions={actions}
             skeletonRows={siteData?.data.length}
             onRowClick={handleRowClick}
@@ -441,9 +441,15 @@ export const ServerSites = () => {
           )}
         </div>
       </div>
-      {/* <div className="ml-3 w-full">
-        <MultiResourceForm />
-      </div> */}
+      <ResourceModal
+        isOpen={isOpen}
+        closeModal={() => setIsOpen(false)}
+        onProceed={() => navigate("/create-new-resource")}
+        onNavigate={(path, state) => navigate(path, { state })}
+        onClose={() => setIsOpen(false)}
+        id="" // optional, or pass based on your logic
+        siteCodeId={undefined} // optional, or pass relevant id
+      />
     </div>
   );
 };

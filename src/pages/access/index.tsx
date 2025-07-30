@@ -2,19 +2,28 @@ import { Button, Header, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Badge } from "@/components/ui/badge";
 import { CardContent } from "@/components/ui/card";
-import { AlertTriangle, CheckCircle, Crown, Shield, UserPlus, Users } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle,
+  Crown,
+  Edit,
+  Shield,
+  Trash2,
+  UserPlus,
+  Users,
+} from "lucide-react";
 
 export const Access = () => {
   interface TeamMember {
-    id: string
-    name: string
-    email: string
-    role: "Owner" | "Admin" | "Developer" | "Viewer"
-    status: "Active" | "Pending" | "Suspended"
-    lastActive: string
-    joinedDate: string
-    avatar?: string
-    permissions: string[]
+    id: string;
+    name: string;
+    email: string;
+    role: "Owner" | "Admin" | "Developer" | "Viewer";
+    status: "Active" | "Pending" | "Suspended";
+    lastActive: string;
+    joinedDate: string;
+    avatar?: string;
+    permissions: string[];
   }
 
   const teamMembers: TeamMember[] = [
@@ -69,7 +78,7 @@ export const Access = () => {
       joinedDate: "2023-11-05",
       permissions: ["view_projects"],
     },
-  ]
+  ];
   const memberColumns: ColumnDef<TeamMember>[] = [
     {
       id: "user",
@@ -77,7 +86,6 @@ export const Access = () => {
       accessorKey: "name",
       cell: (row) => (
         <div className="flex items-center space-x-3">
-          
           <div>
             <p className="text-xs text-gray-900  my-1">{row.name}</p>
           </div>
@@ -91,7 +99,6 @@ export const Access = () => {
       accessorKey: "email",
       cell: (row) => (
         <div className="flex items-center space-x-3">
-          
           <div>
             <p className="text-xs">{row.email}</p>
           </div>
@@ -110,10 +117,10 @@ export const Access = () => {
             row.role === "Owner"
               ? "bg-purple-50 text-purple-700 border-purple-200"
               : row.role === "Admin"
-                ? "bg-blue-50 text-blue-700 border-blue-200"
-                : row.role === "Developer"
-                  ? "bg-green-50 text-green-700 border-green-200"
-                  : "bg-gray-50 text-gray-700 border-gray-200"
+              ? "bg-blue-50 text-blue-700 border-blue-200"
+              : row.role === "Developer"
+              ? "bg-green-50 text-green-700 border-green-200"
+              : "bg-gray-50 text-gray-700 border-gray-200"
           }
         >
           {row.role === "Owner" && <Crown className="h-3 w-3 mr-1" />}
@@ -141,12 +148,14 @@ export const Access = () => {
             row.status === "Active"
               ? "bg-green-50 text-green-700 border-green-200"
               : row.status === "Pending"
-                ? "bg-yellow-50 text-yellow-700 border-yellow-200"
-                : "bg-red-50 text-red-700 border-red-200"
+              ? "bg-yellow-50 text-yellow-700 border-yellow-200"
+              : "bg-red-50 text-red-700 border-red-200"
           }
         >
           {row.status === "Active" && <CheckCircle className="h-3 w-3 mr-1" />}
-          {row.status === "Suspended" && <AlertTriangle className="h-3 w-3 mr-1" />}
+          {row.status === "Suspended" && (
+            <AlertTriangle className="h-3 w-3 mr-1" />
+          )}
           {row.status}
         </Badge>
       ),
@@ -162,7 +171,10 @@ export const Access = () => {
       id: "lastActive",
       header: "Last Active",
       accessorKey: "lastActive",
-      cell: (row) => (row.lastActive ? new Date(row.lastActive).toLocaleDateString() : "Never"),
+      cell: (row) =>
+        row.lastActive
+          ? new Date(row.lastActive).toLocaleDateString()
+          : "Never",
       sortable: true,
     },
     {
@@ -172,15 +184,26 @@ export const Access = () => {
       cell: (row) => new Date(row.joinedDate).toLocaleDateString(),
       sortable: true,
     },
-  ]
+  ];
   return (
     <div>
-    
       <Header
         title="Access"
         description="Manage team members, roles, and access"
       />
-      <div className="m-5 lg:m-10 flex lg:flex-row flex-col gap-5">
+      <div className="m-5 lg:my-5 flex lg:flex-row flex-col gap-5">
+        <div className="border border-gray-100 lg:min-w-xs  justify-center  flex items-center ">
+          <CardContent className="p-6 flex items-center justify-between w-full space-x-5">
+            <div className="space-y-2">
+              <h4 className="text-xs ">Pending Invites</h4>
+              <p className="text-5xl ">00</p>
+              <p className="text-xs ">awaiting response</p>
+            </div>
+            <div className="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center">
+              <UserPlus className="h-6 w-6 text-red-600" />
+            </div>
+          </CardContent>
+        </div>
         <div className="border border-gray-100 max-w-sm">
           <CardContent className="px-6 py-3">
             <div className="flex items-center space-x-3 mb-2">
@@ -199,25 +222,28 @@ export const Access = () => {
             <Button label="Invite Members" className=" text-white" />
           </CardContent>
         </div>
-        <div className="border border-gray-100 lg:min-w-xs  justify-center  flex items-center ">
-          <CardContent className="p-6 flex items-center justify-between w-full space-x-5">
-            <div className="space-y-2">
-              <h4 className="text-xs ">Pending Invites</h4>
-              <p className="text-5xl ">00</p>
-              <p className="text-xs ">awaiting response</p>
-            </div>
-            <div className="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center">
-              <UserPlus className="h-6 w-6 text-red-600" />
-            </div>
-          </CardContent>
-        </div>
       </div>
       <div className="px-5 flex flex-col">
         <DataTable
           data={teamMembers}
           columns={memberColumns}
-          searchPlaceholder="Search server resources by name, ID, or region..."
+          searchPlaceholder="Search member"
+          showDownload={false}
+          showSearch={false}
           pageSize={5}
+          actions={[
+            {
+              label: "Edit Role",
+              icon: Edit,
+              onClick: (row) => console.log("Edit role", row.name),
+            },
+            {
+              label: "Remove Member",
+              icon: Trash2,
+              onClick: (row) => console.log("Remove member", row.name),
+              variant: "destructive",
+            },
+          ]}
           // actions={actions}
           // highlightedRowId={rowId}
           // onRowClick={handleRowClick}

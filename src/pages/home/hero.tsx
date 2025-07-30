@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
 export function Hero() {
- const navigate = useNavigate()
+  const navigate = useNavigate();
   return (
     <div className="h-full">
       <BackgroundBeamsWithCollision className="min-h-[80vh] py-10 lg:min-h-screen bg-black items-center px-5 justify-center  bg-gradient-to-br from-black to-gray-800  drop-shadow-stone-800 drop-shadow-2xl rounded-sm">
@@ -33,11 +33,10 @@ export function Hero() {
               more, from a single, powerful console. Speed, savings, and
               simplicity without compromise.
             </p>
-            <p className="text-xs  md:text-xl text-yellow-600 mb-4 max-w-2xl mx-auto">
+            <p className="text-xs  md:text-xl text-red-600 mb-4 max-w-2xl mx-auto">
               The power of three clouds in one.
             </p>
             <div className="flex flex-col text-white  sm:flex-row gap-4 items-center justify-center">
-              
               <div className="flex gap-1 items-center border border-white text-xs">
                 <p
                   onClick={() => navigate("/sigin")}
@@ -46,7 +45,7 @@ export function Hero() {
                   Get Started
                 </p>
                 <div className="border border-white bg-white text-black text-xs flex p-2 ">
-                  View a demo
+                  Book a demo
                 </div>
               </div>
             </div>

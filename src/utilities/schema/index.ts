@@ -1,4 +1,5 @@
 import { string } from "yup";
+import CIDR from 'ip-cidr';
 import { cidrBlockRegex, houseCodeRegex, houseNameRegex, siteCodeRegex } from "../helper";
 
 
@@ -56,46 +57,155 @@ export const passwordValidation = (label = "Password") =>
 
 
 
-  // Enhanced CIDR validation
-  export const  cidrValidation = (fieldName: string) =>
-    string()
-.required(`${fieldName} is required`)
-.trim()
-.matches(cidrBlockRegex, {
-  message: `${fieldName} must be a valid CIDR block (e.g., 192.168.1.0/24)`,
-})
-.test('valid-cidr-range', `${fieldName} must have a valid network range`, (value) => {
-  if (!value) return false;
-  
-  const [ip, prefix] = value.split('/');
-  const prefixNum = parseInt(prefix, 10);
-  
-  // Check if prefix is reasonable (not too small for most use cases)
-  if (prefixNum < 8 || prefixNum > 30) {
-    return false;
-  }
-  
-  // Validate IP address parts
-  const ipParts = ip.split('.').map(Number);
-  return ipParts.every(part => part >= 0 && part <= 255);
-})
-.test('private-ip-range', `${fieldName} should use private IP ranges`, (value) => {
-  if (!value) return false;
-  
-  const [ip] = value.split('/');
-  const ipParts = ip.split('.').map(Number);
-  const [first, second] = ipParts;
-  
-  // Check for private IP ranges
-  // 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
-  const isPrivate = 
-    first === 10 ||
-    (first === 172 && second >= 16 && second <= 31) ||
-    (first === 192 && second === 168);
-  
-  return isPrivate;
-});
-  
+        export const libraryCidrValidation = (fieldName: string, options?: {
+          requirePrivate?: boolean;
+          allowLoopback?: boolean;
+        }) => {
+          const { requirePrivate = true, allowLoopback = false } = options || {};
+        
+          return string()
+            .required(`${fieldName} is required`)
+            .trim()
+            .test('valid-cidr', `${fieldName} must be a valid CIDR block`, (value) => {
+              if (!value) return false;
+              
+              try {
+                // The constructor will throw if invalid, so if we get here it's valid
+                // const cidr = new CIDR(value);
+                return true;
+              } catch {
+                return false;
+              }
+            })
+            .test('ip-range-validation', 
+              requirePrivate 
+                ? `${fieldName} must use private IP ranges` 
+                : `${fieldName} contains invalid IP range`, 
+              (value) => {
+                if (!value) return false;
+                
+                try {
+                  const cidr = new CIDR(value);
+                  const startIP = cidr.addressStart.address;
+                  
+                  // Parse IP parts
+                  const ipParts = startIP.split('.').map(Number);
+                  const [first, second] = ipParts;
+                  
+                  // Check for loopback
+                  if (first === 127) {
+                    return allowLoopback;
+                  }
+                  
+                  if (requirePrivate) {
+                    // Check private ranges
+                    const isPrivate = 
+                      first === 10 ||
+                      (first === 172 && second >= 16 && second <= 31) ||
+                      (first === 192 && second === 168);
+                    
+                    return isPrivate;
+                  }
+                  
+                  // Basic validation for non-private requirement
+                  return first > 0 && first < 224;
+                } catch {
+                  return false;
+                }
+              }
+            );
+        };
+
+
+        // Helper function to check if IP is a valid network address
+        const isValidNetworkAddress = (ip: string, prefix: number): boolean => {
+          const ipParts = ip.split('.').map(Number);
+          const ipNum = (ipParts[0] << 24) + (ipParts[1] << 16) + (ipParts[2] << 8) + ipParts[3];
+          
+          const hostBits = 32 - prefix;
+          const networkMask = (0xFFFFFFFF << hostBits) >>> 0;
+          const networkAddress = (ipNum & networkMask) >>> 0;
+          
+          return ipNum === networkAddress;
+        };
+        
+        export const improvedCidrValidation = (fieldName: string, options?: {
+          requirePrivate?: boolean;
+          allowLoopback?: boolean;
+          minPrefix?: number;
+          maxPrefix?: number;
+        }) => {
+          const {
+            requirePrivate = true,
+            allowLoopback = false,
+            minPrefix = 1,
+            maxPrefix = 32
+          } = options || {};
+        
+          return string()
+            .required(`${fieldName} is required`)
+            .trim()
+            .matches(cidrBlockRegex, {
+              message: `${fieldName} must be a valid CIDR block (e.g., 192.168.1.0/24)`,
+            })
+            .test('valid-ip-parts', `${fieldName} must have valid IP address`, (value) => {
+              if (!value) return false;
+              
+              const [ip] = value.split('/');
+              const ipParts = ip.split('.').map(Number);
+              
+              return ipParts.length === 4 && 
+                     ipParts.every(part => part >= 0 && part <= 255 && !isNaN(part));
+            })
+            .test('valid-prefix-range', `${fieldName} prefix must be between ${minPrefix} and ${maxPrefix}`, (value) => {
+              if (!value) return false;
+              
+              const [, prefix] = value.split('/');
+              const prefixNum = parseInt(prefix, 10);
+              
+              return prefixNum >= minPrefix && prefixNum <= maxPrefix;
+            })
+            .test('valid-network-address', `${fieldName} must be a valid network address`, (value) => {
+              if (!value) return false;
+              
+              const [ip, prefix] = value.split('/');
+              const prefixNum = parseInt(prefix, 10);
+              
+              return isValidNetworkAddress(ip, prefixNum);
+            })
+            .test('ip-range-validation', 
+              requirePrivate 
+                ? `${fieldName} must use private IP ranges` 
+                : `${fieldName} contains invalid IP range`, 
+              (value) => {
+                if (!value) return false;
+                
+                const [ip] = value.split('/');
+                const ipParts = ip.split('.').map(Number);
+                const [first, second] = ipParts;
+                
+                // Check for loopback (127.x.x.x)
+                if (first === 127) {
+                  return allowLoopback;
+                }
+                
+                // Check for private IP ranges if required
+                if (requirePrivate) {
+                  // 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16
+                  const isPrivate = 
+                    first === 10 ||
+                    (first === 172 && second >= 16 && second <= 31) ||
+                    (first === 192 && second === 168);
+                  
+                  return isPrivate;
+                }
+                
+                // If not requiring private, just check it's not reserved
+                // Exclude: 0.x.x.x, 224-255.x.x.x (multicast/reserved)
+                return first > 0 && first < 224;
+              }
+            );
+        };
   // Site code validation
   export  const siteCodeValidation = (fieldName: string) =>
     string()

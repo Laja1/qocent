@@ -1,17 +1,17 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import type { genericResponse } from "@/models/response";
-import type {  getResourcesInSiteResponse, getResourceSummaryResponse, getSiteAllResponse, getSiteArchitectureResponse, resourceDataFlowResponse,  } from "@/models/response/siteResponse";
+import type {  getResourcesInSiteResponse, getResourceSummaryResponse, getSiteAllResponse, getSiteArchitectureResponse, resourceDataFlowResponse, SiteResponse,  } from "@/models/response/siteResponse";
 import { ApiEnums } from "@/utilities/enums";
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
+import type { createSiteRequest } from "@/models/request/siteRequest";
 
-export const kotlinSiteApi = createApi({
-  reducerPath: "kotlinSiteApi",
+export const siteApi = createApi({
+  reducerPath: "siteApi",
   baseQuery: kotlinBaseQueryWithResponseCodeHandling,
   tagTypes: [ApiEnums.Site],
   endpoints: (build) => ({
-    createServerSite: build.mutation<genericResponse, void>({
+    createServerSite: build.mutation<SiteResponse, createSiteRequest>({
       query: (body) => ({
-        url: "/site/create",
+        url: "/resource/create-site",
         method: "POST",
         body,
       }),
@@ -41,4 +41,4 @@ export const kotlinSiteApi = createApi({
 
 
 export const { useCreateServerSiteMutation,useGetResourcesInSiteQuery, useGetSiteDataFlowQuery,useGetResourceTypeCountQuery,useGetSiteArchitectureQuery,useGetAllSitesQuery
- } = kotlinSiteApi;
+ } = siteApi;

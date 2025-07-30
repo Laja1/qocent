@@ -11,11 +11,11 @@ import { showCustomToast } from "@/components/shared/toast";
 import { SiteDeployModal } from "@/components/not-shared/site-modal";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useCreateServerSiteMutation } from "@/service/typescript/siteApi";
 import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import type { RootState } from "@/store";
 import type { ParameterData } from "./type";
-import { useGetResourceTemplateQuery } from "@/service/typescript/resourceApi";
+import { useGetResourceTemplateQuery } from "@/service/kotlin/resourceApi";
+import { useCreateServerSiteMutation } from "@/service/kotlin/siteApi";
 
 export const CreateNewSite = () => {
   const navigate = useNavigate();
@@ -60,7 +60,7 @@ export const CreateNewSite = () => {
       }
 
       const res = await createSite(payload).unwrap();
-      showCustomToast(res.responseMessage, {
+      showCustomToast(res.message, {
         toastOptions: { type: "success", autoClose: 5000 },
       });
 
@@ -85,7 +85,6 @@ export const CreateNewSite = () => {
     enableReinitialize: true,
   });
 
-  console.log(formik?.errors, formik?.values);
   useEffect(() => {
     if (serverSiteParameterData?.data) {
       const newValues = serverSiteParameterData.data.reduce(

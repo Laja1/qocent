@@ -9,7 +9,8 @@ export const imgLinks = {
     image:'/images/image.png',
     gcp:'/images/gcp.webp',
     switch:'/images/switch.png',
-
+    azure:'/images/azure.png',
+    logo:'/images/qocent-logo.png',
 }
 
 export const svgLinks = {
@@ -24,5 +25,7 @@ export const svgLinks = {
     threed2:'/svg/3d2.svg',
     threed3:'/svg/3d3.svg',
     threed4:'/svg/3d4.svg',
+    logo:'/svg/qocentlogo.svg',
+    logoWhite:'/svg/qocent-white.svg',
 
 }

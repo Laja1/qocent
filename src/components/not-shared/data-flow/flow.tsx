@@ -19,9 +19,111 @@ import { Button } from "@/components/shared";
 
 const cellSize = 40;
 const gridSize = 20;
-const totalCells = gridSize * gridSize;
 
-// Memoized resource icon map to prevent recreation on each render
+type CellBorder = {
+  row: number;
+  col: number;
+  // CSS Style approach
+  borderTop?: string;
+  borderRight?: string;
+  borderBottom?: string;
+  borderLeft?: string;
+};
+
+type CellBorderData = {
+  borders: CellBorder[];
+};
+
+type ResourceNode = {
+  col: number;
+  row: number;
+  resourceCode: string;
+  resourceName: string;
+  resourceSiteCode: string;
+  resourceType: string;
+  connection?: boolean;
+  errors: number;
+  message?: string;
+};
+
+type Connection = {
+  x: string;
+  y: string;
+  serial: string;
+};
+
+type FlowGridData = {
+  data: ResourceNode[];
+};
+
+type FlowGridConnections = {
+  connections: Connection[];
+};
+
+type FlowGridProps = {
+  data?: FlowGridData;
+  connections?: FlowGridConnections;
+  cellBorderData?: CellBorderData;
+};
+
+type ResourceConfig = {
+  icon: React.ReactNode;
+  color: string;
+  bgColor: string;
+};
+
+// Cell border styling data structure with both CSS and Tailwind examples
+const cellBorderStyles: CellBorderData = {
+  borders: [
+    // // CSS Style approach - Create a square border
+    // { row: 10, col: 8, borderTop: "2px solid black" },
+    //  { row: 1, col: 1, borderTop: "2px solid black" },
+    //  { row: 1, col: 1, borderLeft: "2px solid black" },
+    //  { row: 1, col: 1, borderBottom: "2px solid red" },
+
+    // { row: 12, col: 11, borderTop: "2px solid black" },
+    // { row: 11, col: 8, borderBottom: "2px solid black" },
+    // { row: 11, col: 9, borderBottom: "2px solid black" },
+    // { row: 10, col: 8, borderLeft: "2px solid black" },
+    // { row: 11, col: 8, borderLeft: "2px solid black" },
+    // { row: 10, col: 9, borderRight: "2px solid black" },
+    // { row: 11, col: 9, borderRight: "2px solid black" },
+
+    // // Mixed approach - L-shape with different methods
+    // { row: 7, col: 3, borderTop: "2px solid green" },
+    // { row: 7, col: 4, borderTop: "2px solid green" },
+    // { row: 7, col: 5, borderTop: "2px solid green" },
+  ],
+};
+
+// Helper function to get border styles and classes for a specific cell
+const getCellBorderStyleAndClasses = (
+  row: number,
+  col: number,
+  cellBorderData?: CellBorderData
+) => {
+  if (!cellBorderData || !cellBorderData.borders)
+    return { style: {}, classes: [] };
+
+  const cellBorders = cellBorderData.borders.filter(
+    (border) => border.row === row && border.col === col
+  );
+
+  const style: React.CSSProperties = {};
+  const classes: string[] = [];
+
+  cellBorders.forEach((border) => {
+    // Handle CSS styles
+    if (border.borderTop) style.borderTop = border.borderTop;
+    if (border.borderRight) style.borderRight = border.borderRight;
+    if (border.borderBottom) style.borderBottom = border.borderBottom;
+    if (border.borderLeft) style.borderLeft = border.borderLeft;
+  });
+
+  return { style, classes };
+};
+
+// Memoized resource icon map
 const RESOURCE_ICON_MAP = {
   User: {
     icon: <User className="size-5" />,
@@ -70,101 +172,90 @@ const RESOURCE_ICON_MAP = {
   },
 };
 
-const defaultConfig = {
+const defaultConfig: ResourceConfig = {
   icon: null,
   color: "text-gray-600",
   bgColor: "bg-gray-100",
 };
 
-type ResourceNode = {
-  col: number;
-  row: number;
-  resourceCode: string;
-  resourceName: string;
-  resourceSiteCode: string;
-  resourceType: string;
-  connection?: boolean;
-  errors: number;
-  message?: string;
-};
+// Memoized ResourceNode component
+const ResourceNodeComponent = memo<{
+  resource: ResourceNode;
+  config: ResourceConfig;
+  onInfoClick: (resource: ResourceNode) => void;
+}>(({ resource, config, onInfoClick }) => {
+  const handleClick = useCallback(() => {
+    onInfoClick(resource);
+  }, [resource, onInfoClick]);
 
-type Connection = {
-  x: string;
-  y: string;
-  serial: string;
-};
-
-type FlowGridProps = {
-  data: { data: ResourceNode[] };
-  connections: { connections: Connection[] };
-};
-
-// Memoized ResourceNode component to prevent unnecessary re-renders
-const ResourceNodeComponent = memo(
-  ({
-    resource,
-    config,
-    onInfoClick,
-  }: {
-    resource: ResourceNode;
-    config: any;
-    onInfoClick: (resource: ResourceNode) => void;
-  }) => {
-    const handleClick = useCallback(() => {
-      onInfoClick(resource);
-    }, [resource, onInfoClick]);
-
-    return (
-      <div
-        id={`node-${resource.resourceCode}`}
-        className={`absolute flex flex-col items-center justify-center text-[10px] border border-white rounded-sm p-1 ${config.bgColor} ${config.color}`}
-        style={{
-          top: (resource.row - 1) * cellSize,
-          left: (resource.col - 1) * cellSize,
-          width: cellSize,
-          height: cellSize,
-        }}
+  return (
+    <div
+      id={`node-${resource.resourceCode}`}
+      className={`absolute flex flex-col items-center justify-center text-[10px] border border-white rounded-sm p-1 ${config.bgColor} ${config.color}`}
+      style={{
+        top: (resource.row - 1) * cellSize,
+        left: (resource.col - 1) * cellSize,
+        width: cellSize,
+        height: cellSize,
+      }}
+    >
+      <button
+        className="absolute -top-1 -right-2 px-1 text-[9px] font-semibold rounded-full"
+        onClick={handleClick}
       >
-        <button
-          className="absolute -top-1 -right-2 px-1 text-[9px] font-semibold rounded-full"
-          onClick={handleClick}
-        >
-          {resource.errors > 0 ? (
-            <CircleX className="size-4 text-red-600" />
-          ) : (
-            <Info className="size-4 text-black" />
-          )}
-        </button>
-        {config.icon}
-      </div>
-    );
-  }
-);
+        {resource.errors > 0 ? (
+          <CircleX className="size-4 text-red-600" />
+        ) : (
+          <Info className="size-4 text-black" />
+        )}
+      </button>
+      {config.icon}
+    </div>
+  );
+});
 
 ResourceNodeComponent.displayName = "ResourceNodeComponent";
 
-// Memoized grid cells component
-const GridCells = memo(() => {
-  const cells = useMemo(
-    () =>
-      Array.from({ length: totalCells }).map((_, i) => (
-        <div
-          key={i}
-          className="border border-gray-100"
-          style={{ width: cellSize, height: cellSize }}
-        />
-      )),
-    []
-  );
+// Modified grid cells component with both CSS and Tailwind border styling
+const GridCells = memo<{ cellBorderData?: CellBorderData }>(
+  ({ cellBorderData }) => {
+    const cells = useMemo(() => {
+      const cellArray: React.ReactElement[] = [];
 
-  return <>{cells}</>;
-});
+      for (let row = 1; row <= gridSize; row++) {
+        for (let col = 1; col <= gridSize; col++) {
+          const index = (row - 1) * gridSize + (col - 1);
+
+          // Get custom border styles and classes for this cell
+          const { style: customBorderStyle, classes: tailwindClasses } =
+            getCellBorderStyleAndClasses(row, col, cellBorderData);
+
+          cellArray.push(
+            <div
+              key={index}
+              className={`border border-gray-100 ${tailwindClasses.join(" ")}`}
+              style={{
+                width: cellSize,
+                height: cellSize,
+                ...customBorderStyle, // Apply custom CSS border styles
+              }}
+            />
+          );
+        }
+      }
+
+      return cellArray;
+    }, [cellBorderData]);
+
+    return <>{cells}</>;
+  }
+);
 
 GridCells.displayName = "GridCells";
 
 // Memoized arrows component
-const ArrowsComponent = memo(
-  ({ connections }: { connections: Connection[] }) => {
+const ArrowsComponent = memo<{ connections: Connection[] }>(
+  ({ connections }) => {
     return (
       <>
         {connections.map((link, index) => (
@@ -186,15 +277,18 @@ const ArrowsComponent = memo(
 
 ArrowsComponent.displayName = "ArrowsComponent";
 
-export const FlowGrid = ({ data, connections }: FlowGridProps) => {
+export const FlowGrid = ({
+  data,
+  connections,
+  cellBorderData = cellBorderStyles,
+}: FlowGridProps) => {
   const { openModal } = useModal();
-  const resources = data.data;
-  const allConnections = connections.connections;
+  const resources = data?.data || [];
+  const allConnections = connections?.connections || [];
 
   const [visibleConnections, setVisibleConnections] =
     useState<Connection[]>(allConnections);
 
-  // Clear connections when data is empty
   useEffect(() => {
     if (resources.length === 0) {
       setVisibleConnections([]);
@@ -210,7 +304,7 @@ export const FlowGrid = ({ data, connections }: FlowGridProps) => {
   );
 
   const gridStyle = useMemo(
-    () => ({
+    (): React.CSSProperties => ({
       width: `${gridSize * cellSize}px`,
       height: `${gridSize * cellSize}px`,
       display: "grid",
@@ -222,33 +316,26 @@ export const FlowGrid = ({ data, connections }: FlowGridProps) => {
   );
 
   const animateConnections = useCallback(() => {
-    // Don't animate if there's no data
     if (resources.length === 0) return;
 
-    setVisibleConnections([]); // Clear existing arrows first
+    setVisibleConnections([]);
 
     let i = 0;
 
-    // Add a small delay before starting
     setTimeout(() => {
       const interval = setInterval(() => {
         if (i < sortedConnections.length) {
           const connectionToAdd = sortedConnections[i];
 
-          setVisibleConnections((prev) => {
-            const newConnections = [...prev, connectionToAdd];
-            return newConnections;
-          });
-
+          setVisibleConnections((prev) => [...prev, connectionToAdd]);
           i++;
         } else {
           clearInterval(interval);
         }
       }, 1000);
-    }, 100); // 100ms delay before starting
+    }, 100);
   }, [sortedConnections, resources.length]);
 
-  // Memoize modal content creation function
   const handleInfoClick = useCallback(
     (resource: ResourceNode) => {
       openModal({
@@ -296,7 +383,6 @@ export const FlowGrid = ({ data, connections }: FlowGridProps) => {
     [openModal]
   );
 
-  // Memoize resource nodes to prevent unnecessary re-renders
   const resourceNodes = useMemo(
     () =>
       resources.map((resource) => {
@@ -319,23 +405,16 @@ export const FlowGrid = ({ data, connections }: FlowGridProps) => {
 
   return (
     <div className="w-full">
-      {/* Container with horizontal scroll for mobile */}
       <div className="overflow-x-auto overflow-y-hidden">
         <div className="relative min-w-fit" style={gridStyle}>
-          {/* Grid cells */}
-          <GridCells />
-
-          {/* Nodes - only render if data exists */}
+          <GridCells cellBorderData={cellBorderData} />
           {resources.length > 0 && resourceNodes}
-
-          {/* Arrows - only render if data exists */}
           {resources.length > 0 && (
             <ArrowsComponent connections={visibleConnections} />
           )}
         </div>
       </div>
 
-      {/* Animate Button - only show if there's data */}
       {resources.length > 0 && (
         <div className="mt-4 text-center">
           <Button

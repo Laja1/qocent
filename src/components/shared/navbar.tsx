@@ -1,4 +1,5 @@
 "use client";
+import { svgLinks } from "@/assets/assetLink";
 import {
   Navbar,
   NavBody,
@@ -31,12 +32,12 @@ export default function NavbarDemo({
       <Navbar>
         {/* Desktop Nav */}
         <NavBody>
-          <p
+          <div
             onClick={() => handleHomeClick()}
             className="text-xl  cursor-pointer font-bold hover:opacity-80 transition-opacity"
           >
-            QOCENT
-          </p>
+             <img src={svgLinks.logo} className="h-10" />
+          </div>
 
           <NavItems items={navRoutes} />
 

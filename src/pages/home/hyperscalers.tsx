@@ -5,7 +5,7 @@ export function HyperScalers() {
   return (
     <div className="  max-w-6xl mx-auto px-8 mb-10 lg:mb-20 ">
       <Badge
-        className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium"
+        className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium text-red-600"
         variant="secondary"
       >
         Global Infrastructure

@@ -283,7 +283,7 @@ export default function InfiniteCardCarousel() {
     <div className="  py-12">
       <div className="w-full mx-auto px-4">
         <Badge
-          className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium"
+          className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium text-red-600"
           variant="secondary"
         >
           Our Core Value Propositions

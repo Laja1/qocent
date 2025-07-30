@@ -1,5 +1,5 @@
 import {  object } from 'yup';
-import { cidrValidation, defaultValidation,  } from '.';
+import {defaultValidation, improvedCidrValidation,   } from '.';
 import * as Yup from "yup";
 
 export const deployModalSchema = object().shape({
@@ -21,7 +21,7 @@ export type ParameterData = {
   parameterDataType: string;
   parameterInputType: string;
   parameterLookup: string;
-  parameterMandatory: string; // Note: This is a string "Yes"/"No", not boolean
+  parameterMandatory: string; 
   parameterLabel: string;
   parameterInput: string;
   parameterLength: number;
@@ -91,7 +91,19 @@ export const generateDynamicSchema = (params?: ParameterData[]) => {
         validator = Yup.string()
           .min(8, `${param.parameterLabel} must be at least 8 characters`);
         break;
-      
+        case 'CidrBlock': {
+          // Parse any additional validation options from parameterValidation field
+          const validationOptions = param.parameterValidation ? 
+            JSON.parse(param.parameterValidation) : {};
+        
+        validator = improvedCidrValidation(param.parameterLabel, {
+          requirePrivate: validationOptions.requirePrivate ?? true,
+          allowLoopback: validationOptions.allowLoopback ?? false,
+          minPrefix: validationOptions.minPrefix ?? 8,
+          maxPrefix: validationOptions.maxPrefix ?? 30,
+        });
+        break;
+      }
       default:
         validator = Yup.string(); // Default to string validation
     }
@@ -109,17 +121,6 @@ export const generateDynamicSchema = (params?: ParameterData[]) => {
 };
 
 
-
-
-export const houseSchema = object().shape({
-  houseSiteCode: defaultValidation("Site code"),
-  houseCode: defaultValidation("House code"),
-  houseName: defaultValidation("House name"),
- 
-
-  houseRegion: defaultValidation("House region"),
-  houseCidr:cidrValidation('house cidr block')
-});
 
 
 

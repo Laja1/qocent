@@ -36,21 +36,22 @@ export type ParameterResponse = {
 
 
 export interface SiteData {
-  siteStatus: string;
-  siteDescription: string;
-  noOfServerHouse: number;
-  pendingResourceCount: number;
-  siteRegion: string;
-  siteExpiryDate: string | null;
-  databaseCount: number;
-  siteCode: string;
-  serverCount: number;
-  totalServerRooms: number;
-  siteName: string;
-  resourceCount: number;
-  activeResourceCount: number;
   siteId: number;
-  siteProvider: string;
+  siteAccountId: string;
+  siteBill: number;
+  siteCode: string;
+  siteCreatedAt: string;
+  siteCurrency: string;
+  siteDescription: string;
+  siteEOLAction: "Suspend" | string; 
+  siteExpiryDate: string;
+  siteName: string;
+  sitePaymentType: "Account" | string;
+  siteProvider: "HUAWEI" | "AWS" | string; 
+  siteRegion: string;
+  siteStatus: "ACTIVE" | "INACTIVE" | string;
+  siteUpdatedAt: string;
+  siteUserId: string;
 }
 
 
@@ -115,6 +116,22 @@ export interface ExtraResource {
   resourceProvider: string;
 }
 
+export type SiteResponse = {
+  data: {
+    siteAccountId: string;
+    siteCode: string;
+    siteCurrency: string;
+    siteDescription: string;
+    siteExpiryDate: string;
+    siteName: string;
+    siteProvider: string;
+    siteRegion: string;
+    siteUserId: number;
+  };
+  error: string;
+  message: string;
+  success: boolean;
+};
 
 
 

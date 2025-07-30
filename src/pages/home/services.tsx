@@ -74,7 +74,7 @@ export function Services() {
   return (
     <div className="  max-w-6xl mx-auto px-8 py-10 lg:mt-20">
       <Badge
-        className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium"
+        className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium text-red-600"
         variant="secondary"
       >
         Our Services

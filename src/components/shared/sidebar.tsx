@@ -1,5 +1,4 @@
 import {
-  Cloud,
   LogOut,
   Settings,
   Users,
@@ -32,7 +31,7 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { authStore } from "@/store/authSlice";
 import type { RootState } from "@/store";
-import { imgLinks } from "@/assets/assetLink";
+import { imgLinks, svgLinks } from "@/assets/assetLink";
 import { NavMain } from "../ui/nav-main";
 import type { ReactElement } from "react";
 
@@ -46,19 +45,19 @@ export interface SidebarItem {
 const sidebarItems: SidebarItem[] = [
   {
     title: "Build with Qoonity AI",
-    icon: <Bot className="text-emerald-700" />,
+    icon: <Bot className="text-black" />,
     href: "/identity-center",
     isActive: false,
   },
   {
     title: "Switch workspace",
-    icon: <LayoutList className="text-zinc-700" />,
+    icon: <LayoutList className="text-black" />,
     href: "/console",
     isActive: false,
   },
   {
     title: "Settings",
-    icon: <Settings className="text-red-700" />,
+    icon: <Settings className="text-black" />,
     href: "/settings",
     isActive: false,
   },
@@ -69,28 +68,28 @@ const data = {
     {
       title: "Resources Console",
       url: "#",
-      icon: <IconCloudComputing className="text-red-500 size-5" />,
+      icon: <IconCloudComputing className="text-black-500 size-5" />,
       color: "#e51a21",
       isActive: false,
       items: [
         {
           title: "Server Sites",
-          icon: <IconHome className="text-purple-500 size-4" />,
+          icon: <IconHome className="text-gray-800 size-5" />,
           url: RouteConstant.dashboard.serverSite.path,
         },
         {
           title: "Server Houses",
-          icon: <IconCarouselVertical className="text-teal-500 size-4" />,
+          icon: <IconCarouselVertical className="text-gray-800 size-5" />,
           url: RouteConstant.dashboard.serverHouses.path,
         },
         {
           title: "Server Rooms",
-          icon: <IconBrowser className="text-black size-4" />,
+          icon: <IconBrowser className="text-gray-800 size-5" />,
           url: RouteConstant.dashboard.serverRooms.path,
         },
         {
           title: "Resources ",
-          icon: <Webhook className="text-red-700 size-4" />,
+          icon: <Webhook className="text-gray-800 size-5" />,
           url: RouteConstant.dashboard.resources.path,
         },
       ],
@@ -100,25 +99,23 @@ const data = {
     {
       title: "Others",
       url: "#",
-      icon: (
-        <AlignHorizontalDistributeCenter className="text-green-500 size-5" />
-      ),
+      icon: <AlignHorizontalDistributeCenter className="text-black size-5" />,
       color: "#e51a21",
       isActive: false,
       items: [
         {
           title: "Access Management",
-          icon: <RotateCcw className="size-4 text-red-500" />,
+          icon: <RotateCcw className="size-4 text-gray-800" />,
           url: RouteConstant.dashboard.access.path,
         },
         {
           title: "Billing & Statements",
-          icon: <Wallet className="size-4" />,
+          icon: <Wallet className="size-4 text-gray-800" />,
           url: RouteConstant.dashboard.billings.path,
         },
         {
           title: "Organization",
-          icon: <Users className="size-4" />,
+          icon: <Users className="size-4 text-gray-800" />,
           url: RouteConstant.dashboard.billings.path,
         },
       ],
@@ -142,7 +139,7 @@ export const SidebarLayout = () => {
       case "aws":
         return <img src={imgLinks.awsLogo} className="size-8" />;
       case "huawei":
-        return <img src={imgLinks.huaweiLight} className="size-10" />;
+        return <img src={imgLinks.huaweiLight} className="size-6" />;
       default:
         return null;
     }
@@ -161,12 +158,11 @@ export const SidebarLayout = () => {
       <SidebarHeader className="bg-gray-950 text-white border-gray-200 p-[8px]">
         <div className="flex items-center space-x-2 justify-between">
           <div className="flex space-x-2">
-            <Cloud className="h-6 w-6" color="white" />
+            <img src={svgLinks.logoWhite} className="h-10" />
             <div>
-              <h2 className="font-bold text-base">Qocent</h2>
-              <p className="text-xs text-gray-400 line-clamp-1">
+              {/* <p className="text-xs text-gray-400 line-clamp-1">
                 {user?.userEmail}
-              </p>
+              </p> */}
             </div>
           </div>
           {Icon()}
@@ -195,15 +191,15 @@ export const SidebarLayout = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t flex flex-row justify-between bg-white border-gray-200 px-4 py-2">
+      <SidebarFooter className="border-t flex flex-row justify-between bg-black border-gray-200 px-4 py-1">
         <div
           onClick={handleLogout}
-          className="text-xs flex items-center text-red-700 gap-2 cursor-pointer"
+          className="text-xs flex items-center text-white gap-2 cursor-pointer"
         >
           <LogOut className="size-4" />
           <p>Logout</p>
         </div>
-        <div className="w-8 h-8 rounded-full bg-gray-100 text-black flex items-center justify-center text-sm font-medium">
+        <div className="w-7 h-7  rounded-full bg-gray-100 text-black flex items-center justify-center text-xs font-medium">
           {initials}
         </div>
       </SidebarFooter>

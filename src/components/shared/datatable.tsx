@@ -33,8 +33,14 @@ import {
   MoreHorizontal,
   ChevronLeft,
   ChevronRight,
+  FileText,
+  FileSpreadsheet,
+  FileImage,
 } from "lucide-react";
 import { IconFilter2 } from "@tabler/icons-react";
+import * as XLSX from "xlsx";
+import jsPDF from "jspdf";
+import "jspdf-autotable";
 
 export type HeaderAction = {
   icon: React.ComponentType<{ className?: string }>;
@@ -52,6 +58,7 @@ export type ColumnDef<T> = {
   headerClassName?: string;
   filterOptions?: { label: string; value: string }[];
   headerAction?: HeaderAction;
+  exportable?: boolean; // New property to control if column should be included in exports
 };
 
 export type SortingState = {
@@ -73,6 +80,12 @@ export type BulkAction<T> = {
   variant?: "default" | "destructive";
 };
 
+export type ExportOptions = {
+  filename?: string;
+  includeHeaders?: boolean;
+  dateFormat?: string;
+};
+
 export type DataTableProps<T> = {
   data: T[];
   columns: ColumnDef<T>[];
@@ -92,12 +105,64 @@ export type DataTableProps<T> = {
   showDownload?: boolean;
   isLoading?: boolean;
   skeletonRows?: number;
+  exportOptions?: ExportOptions;
 };
 
 // Skeleton component
 const Skeleton = ({ className = "" }: { className?: string }) => (
   <div className={`animate-pulse bg-gray-200 rounded ${className}`} />
 );
+
+// Utility function to convert data to CSV
+const convertToCSV = <T,>(
+  data: T[],
+  columns: ColumnDef<T>[],
+  options: ExportOptions = {}
+): string => {
+  const { includeHeaders = true } = options;
+  const exportableColumns = columns.filter(
+    (col) => col.exportable !== false && col.id !== "actions"
+  );
+
+  const csvRows: string[] = [];
+
+  if (includeHeaders) {
+    const headers = exportableColumns.map((col) => `"${col.header}"`);
+    csvRows.push(headers.join(","));
+  }
+
+  data.forEach((row) => {
+    const values = exportableColumns.map((col) => {
+      const accessor =
+        typeof col.accessorKey === "function"
+          ? col.accessorKey
+          : (row: T) => row[col.accessorKey as keyof T];
+      const value = accessor(row);
+      return `"${String(value || "").replace(/"/g, '""')}"`;
+    });
+    csvRows.push(values.join(","));
+  });
+
+  return csvRows.join("\n");
+};
+
+// Utility function to download file
+const downloadFile = (
+  content: string | Blob,
+  filename: string,
+  type: string
+) => {
+  const blob =
+    content instanceof Blob ? content : new Blob([content], { type });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
 
 export function DataTable<T>({
   data,
@@ -118,6 +183,7 @@ export function DataTable<T>({
   showDownload = true,
   isLoading = false,
   skeletonRows = 10,
+  exportOptions = {},
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -221,6 +287,108 @@ export function DataTable<T>({
     }));
   };
 
+  // Export functions
+  const exportToCSV = () => {
+    const filename =
+      exportOptions.filename ||
+      `${title || "data"}_${new Date().toISOString().split("T")[0]}.csv`;
+    const csvContent = convertToCSV(processedData, columns, exportOptions);
+    downloadFile(csvContent, filename, "text/csv");
+  };
+
+  const exportToExcel = () => {
+    const filename =
+      exportOptions.filename ||
+      `${title || "data"}_${new Date().toISOString().split("T")[0]}.xlsx`;
+    const exportableColumns = columns.filter(
+      (col) => col.exportable !== false && col.id !== "actions"
+    );
+
+    const worksheetData = [
+      exportOptions.includeHeaders !== false
+        ? exportableColumns.map((col) => col.header)
+        : [],
+      ...processedData.map((row) =>
+        exportableColumns.map((col) => {
+          const accessor =
+            typeof col.accessorKey === "function"
+              ? col.accessorKey
+              : (row: T) => row[col.accessorKey as keyof T];
+          return accessor(row);
+        })
+      ),
+    ].filter((row) => row.length > 0);
+
+    const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, title || "Data");
+
+    const excelBuffer = XLSX.write(workbook, {
+      bookType: "xlsx",
+      type: "array",
+    });
+    const blob = new Blob([excelBuffer], {
+      type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    });
+    downloadFile(
+      blob,
+      filename,
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+    );
+  };
+
+  const exportToPDF = () => {
+    const filename =
+      exportOptions.filename ||
+      `${title || "data"}_${new Date().toISOString().split("T")[0]}.pdf`;
+    const exportableColumns = columns.filter(
+      (col) => col.exportable !== false && col.id !== "actions"
+    );
+
+    const doc = new jsPDF();
+
+    // Add title if provided
+    if (title) {
+      doc.setFontSize(16);
+      doc.text(title, 14, 20);
+    }
+
+    // Prepare table data
+    const tableHeaders = exportableColumns.map((col) => col.header);
+    const tableData = processedData.map((row) =>
+      exportableColumns.map((col) => {
+        const accessor =
+          typeof col.accessorKey === "function"
+            ? col.accessorKey
+            : (row: T) => row[col.accessorKey as keyof T];
+        const value = accessor(row);
+        return String(value || "");
+      })
+    );
+
+    // Add table
+    (doc as any).autoTable({
+      head: [tableHeaders],
+      body: tableData,
+      startY: title ? 30 : 20,
+      styles: {
+        fontSize: 8,
+        cellPadding: 2,
+      },
+      headStyles: {
+        fillColor: [66, 66, 66],
+        textColor: 255,
+        fontSize: 9,
+        fontStyle: "bold",
+      },
+      alternateRowStyles: {
+        fillColor: [245, 245, 245],
+      },
+    });
+
+    doc.save(filename);
+  };
+
   const filterColumns = columns.filter(
     (column) => filterableColumns.includes(column.id) && column.filterType
   );
@@ -237,6 +405,7 @@ export function DataTable<T>({
         id: "actions",
         header: "",
         accessorKey: () => "",
+        exportable: false,
         cell: (row: T) => (
           <div className="justify-center flex">
             <DropdownMenu>
@@ -354,12 +523,41 @@ export function DataTable<T>({
                     </Select>
                   ))}
                   {showDownload && (
-                    <button
-                      className="border border-sm p-2"
-                      disabled={isLoading}
-                    >
-                      <Download className="h-4 w-4" />
-                    </button>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="border border-sm p-2"
+                          disabled={isLoading}
+                        >
+                          <Download className="h-4 w-4" />
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="rounded-xs">
+                        <DropdownMenuItem
+                          onClick={exportToCSV}
+                          className="cursor-pointer text-xs"
+                        >
+                          <FileText className="h-2 w-2 mr-1" />
+                          Export as CSV
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={exportToExcel}
+                          className="cursor-pointer text-xs"
+                        >
+                          <FileSpreadsheet className="h-2 w-2 mr-1" />
+                          Export as Excel
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={exportToPDF}
+                          className="cursor-pointer text-xs"
+                        >
+                          <FileImage className="h-2 w-2 mr-1" />
+                          Export as PDF
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   )}
                 </div>
               )}

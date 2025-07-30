@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import moment from 'moment';
 
-export const cidrBlockRegex = /^([0-9]{1,3}\.){3}[0-9]{1,3}\/([0-9]|[1-2][0-9]|3[0-2])$/;
+export const cidrBlockRegex = /^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\/(?:[0-9]|[1-2][0-9]|3[0-2])$/;
 export const containsAtleastOneUpperCase = (val: string) => /(?=.*?[A-Z])/.test(val);
 
 export const containsAtleastOneLowerCase = (val: string) =>
@@ -50,7 +51,27 @@ export const getStatusClassName = (status: string) => {
 
 
 
-
+export const replaceConfigPlaceholders = (
+  obj: unknown,
+  formikValues: { [x: string]: any }
+): unknown => {
+  if (Array.isArray(obj)) {
+    return obj.map((item) => replaceConfigPlaceholders(item, formikValues));
+  } else if (obj !== null && typeof obj === "object") {
+    const newObj: { [key: string]: unknown } = {};
+    for (const [key, value] of Object.entries(
+      obj as Record<string, unknown>
+    )) {
+      newObj[key] = replaceConfigPlaceholders(value, formikValues);
+    }
+    return newObj;
+  } else if (typeof obj === "string" && obj.startsWith("@")) {
+    // Remove @ and get the corresponding formik value
+    const fieldName = obj.substring(1);
+    return formikValues[fieldName] || obj; // Return original if not found
+  }
+  return obj;
+};
 
 export const siteCodeRegex = /^[A-Z0-9]{3,10}$/; // Alphanumeric, 3-10 characters
 export const houseCodeRegex = /^[A-Z0-9]{2,20}$/; // Alphanumeric, 2-20 characters
