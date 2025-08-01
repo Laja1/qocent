@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type ReadProductFieldResponseData = {
   fieldName: string;
   fieldInputType: string;
@@ -62,13 +63,8 @@ export type createResourceRequest = {
       timeout: number;
       customEndpoint: string;
       debugMode: boolean;
-      requestBody: {
-        vpc: {
-          name: string;
-          cidr: string;
-          description: string;
-        };
-      };
+      requestBody:Record<any, any>
+      
     };
 };
 

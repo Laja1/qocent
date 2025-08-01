@@ -55,11 +55,13 @@ export interface SiteData {
 }
 
 
-export interface getSiteAllResponse {
+export interface getSiteResponse {
   responseCode: string;
   responseMessage: string;
   data: SiteData[];
 }
+
+
 
 
 export interface getSiteArchitectureResponse {

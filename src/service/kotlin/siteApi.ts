@@ -1,8 +1,10 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import type {  getResourcesInSiteResponse, getResourceSummaryResponse, getSiteAllResponse, getSiteArchitectureResponse, resourceDataFlowResponse, SiteResponse,  } from "@/models/response/siteResponse";
+import type {  getResourcesInSiteResponse, getResourceSummaryResponse, getSiteResponse, getSiteArchitectureResponse, resourceDataFlowResponse, SiteResponse,  } from "@/models/response/siteResponse";
 import { ApiEnums } from "@/utilities/enums";
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import type { createSiteRequest } from "@/models/request/siteRequest";
+import { createSiteProviderTags } from "@/utilities/tagHelpers";
+import type { genericResponse } from "@/models/response";
 
 export const siteApi = createApi({
   reducerPath: "siteApi",
@@ -11,14 +13,25 @@ export const siteApi = createApi({
   endpoints: (build) => ({
     createServerSite: build.mutation<SiteResponse, createSiteRequest>({
       query: (body) => ({
-        url: "/resource/create-site",
+        url: "/site/create-site",
         method: "POST",
         body,
       }),
       invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" }],
     }),
+    deleteSite: build.mutation<genericResponse, {siteId:number}>({
+      query: ({siteId}) => ({
+        url: `/site/delete/${siteId}`,
+        method: "POST",
+      }),
+      invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" }],
+    }),
     getSiteArchitecture: build.query<getSiteArchitectureResponse, {siteCode:string}>({
       query: ({siteCode}) => `/dashboard/site-architecture/${siteCode}`,    
+    }),
+    getSiteByProvider: build.query<getSiteResponse, {provider:string,userId:number}>({
+      query: ({provider,userId}) => `/site/${userId}/${provider}`,    
+      providesTags: (result) => createSiteProviderTags(result,  "siteId"),
     }),
     getSiteBySiteCode: build.query<getSiteArchitectureResponse, {siteCode:string}>({
         query: ({siteCode}) => `/dashboard/site-data/${siteCode}`,    
@@ -29,7 +42,7 @@ export const siteApi = createApi({
   getSiteDataFlow:build.query<resourceDataFlowResponse, {siteCode:string}>({
     query: ({siteCode}) => `/dashboard/site-data-flow/${siteCode}`,    
 }),
-    getAllSites: build.query<getSiteAllResponse, void>({
+    getAllSites: build.query<getSiteResponse, void>({
         query: () => `/dashboard/sites`,    
     }),
     getResourcesInSite: build.query<getResourcesInSiteResponse, {siteCode:string}>({
@@ -40,5 +53,5 @@ export const siteApi = createApi({
 });
 
 
-export const { useCreateServerSiteMutation,useGetResourcesInSiteQuery, useGetSiteDataFlowQuery,useGetResourceTypeCountQuery,useGetSiteArchitectureQuery,useGetAllSitesQuery
+export const { useCreateServerSiteMutation,useDeleteSiteMutation, useGetSiteByProviderQuery,useGetResourcesInSiteQuery, useGetSiteDataFlowQuery,useGetResourceTypeCountQuery,useGetSiteArchitectureQuery,useGetAllSitesQuery
  } = siteApi;

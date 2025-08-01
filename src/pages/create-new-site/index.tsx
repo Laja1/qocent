@@ -26,7 +26,7 @@ export const CreateNewSite = () => {
     isError,
     isLoading: isParamsLoading,
   } = useGetResourceTemplateQuery({
-    resource: "serverHouse",
+    resource: "ServerSite",
     provider: dashboard.provider,
   });
 
@@ -40,7 +40,7 @@ export const CreateNewSite = () => {
     serverSiteParameterData?.data?.reduce(
       (acc: Record<string, string>, item: ParameterData) => ({
         ...acc,
-        [item.parameterName]: "",
+        [item.parameterField]: "",
       }),
       {}
     ) || {};
@@ -50,6 +50,7 @@ export const CreateNewSite = () => {
     try {
       const payload = {
         ...values,
+        siteProvider: dashboard.provider,
         siteUserId: user.userId || "",
       };
 
@@ -58,7 +59,6 @@ export const CreateNewSite = () => {
         setProgress(i);
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
-
       const res = await createSite(payload).unwrap();
       showCustomToast(res.message, {
         toastOptions: { type: "success", autoClose: 5000 },
@@ -68,6 +68,7 @@ export const CreateNewSite = () => {
       setIsDeployModalOpen(false);
       navigate(RouteConstant.dashboard.serverSite.path);
     } catch (error: any) {
+      console.log(error);
       const message = ErrorHandler.extractMessage(error);
       showCustomToast(message, {
         toastOptions: { type: "error", autoClose: 5000 },
@@ -90,7 +91,7 @@ export const CreateNewSite = () => {
       const newValues = serverSiteParameterData.data.reduce(
         (acc: Record<string, string>, item: ParameterData) => ({
           ...acc,
-          [item.parameterName]: "",
+          [item.parameterField]: "",
         }),
         {}
       );
@@ -120,7 +121,6 @@ export const CreateNewSite = () => {
     });
   };
 
-  // Loading state
   if (isParamsLoading) {
     return (
       <div className="">
@@ -182,13 +182,13 @@ export const CreateNewSite = () => {
                 </p>
                 <div className="lg:w-2/5 w-full pr-3 flex gap-1">
                   <RenderField
-                    name={item.parameterName}
+                    name={item.parameterField}
                     formik={formik}
                     placeholder={`Enter your ${item.parameterLabel}`}
                     parameterLookup={item.parameterLookup}
                     type={item.parameterInputType || "text"}
                     // options={
-                    //   item.parameterName === "siteRegion" ? regionOptions : []
+                    //   item.parameterField === "siteRegion" ? regionOptions : []
                     // }
                     autoComplete="off"
                   />
@@ -219,7 +219,7 @@ export const CreateNewSite = () => {
         isOpen={isDeployModalOpen}
         onClose={() => !isLoading && setIsDeployModalOpen(false)}
         formik={formik}
-        json={serverSiteParameterData}
+        json={serverSiteParameterData?.data}
         isLoading={isLoading}
         progress={progress}
         onDeploy={formik.handleSubmit}

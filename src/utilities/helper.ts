@@ -51,6 +51,7 @@ export const getStatusClassName = (status: string) => {
 
 
 
+
 export const replaceConfigPlaceholders = (
   obj: unknown,
   formikValues: { [x: string]: any }
@@ -65,10 +66,21 @@ export const replaceConfigPlaceholders = (
       newObj[key] = replaceConfigPlaceholders(value, formikValues);
     }
     return newObj;
-  } else if (typeof obj === "string" && obj.startsWith("@")) {
-    // Remove @ and get the corresponding formik value
-    const fieldName = obj.substring(1);
-    return formikValues[fieldName] || obj; // Return original if not found
+  } else if (typeof obj === "string") {
+    // Fixed: Handle different placeholder patterns
+    if (obj === "@") {
+      // For standalone @ placeholders, we need to determine the appropriate replacement
+      // This is context-dependent, so we return a sensible default
+      return "default";
+    } else if (obj.startsWith("@") && obj.length > 1) {
+      // Handle @fieldName patterns
+      const fieldName = obj.substring(1);
+      return formikValues[fieldName] || obj;
+    }
+    // Handle template strings with ${} patterns
+    return obj.replace(/\$\{(\w+)\}/g, (match, fieldName) => {
+      return formikValues[fieldName] || match;
+    });
   }
   return obj;
 };

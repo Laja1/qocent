@@ -20,8 +20,8 @@ import {
   useGetResourceTemplateQuery,
 } from "@/service/kotlin/resourceApi";
 import type { createResourceRequest } from "@/models/request/resourceRequest";
-import type { getResourceConfigResponse } from "@/models/response/resourceResponse";
 import { replaceConfigPlaceholders } from "@/utilities/helper";
+import type { ConfigResponse } from "@/models/response/resourceResponse";
 
 export const CreateNewHouse = () => {
   const navigate = useNavigate();
@@ -49,17 +49,16 @@ export const CreateNewHouse = () => {
       if (!newJsonConfig) {
         throw new Error("Configuration data is not available");
       }
+
       console.log(
         newJsonConfig.data,
         '"config" is an excess property and therefore is not allowed'
       );
       const payload: createResourceRequest =
         "data" in newJsonConfig
-          ? (newJsonConfig.data as createResourceRequest)
+          ? (newJsonConfig.data?.configJson as unknown as createResourceRequest)
           : (newJsonConfig as createResourceRequest);
-
-      const res = await createResource(payload).unwrap();
-      console.log(res, "creating");
+      await createResource(payload).unwrap();
 
       // Simulate deployment progress
       for (let i = 0; i <= 100; i += 10) {
@@ -106,7 +105,7 @@ export const CreateNewHouse = () => {
         ...formik.values,
         resourceProvider: dashboard.provider,
         resourceType: "ServerHouse",
-      }) as getResourceConfigResponse<any>)
+      }) as ConfigResponse)
     : null;
 
   console.log(formik?.errors, formik?.values);
@@ -232,6 +231,7 @@ export const CreateNewHouse = () => {
                   <RenderField
                     name={item.parameterName}
                     formik={formik}
+                    parameterLookup={item.parameterLookup}
                     placeholder={`Enter your ${item.parameterLabel}`}
                     type={item.parameterInputType || "text"}
                     autoComplete="off"

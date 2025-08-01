@@ -11,6 +11,7 @@ import { resourceApi } from "@/service/typescript/resourceApi";
 import { resourceListStore } from "./resourceListSlice";
 import { kotlinResourceApi } from "@/service/kotlin/resourceApi";
 import { siteApi } from "@/service/kotlin/siteApi";
+import { serviceApi } from "@/service/kotlin/serviceApi";
 
 // Combine all your reducers
 const rootReducer = combineReducers({
@@ -22,7 +23,8 @@ const rootReducer = combineReducers({
   [roomApi.reducerPath]:roomApi.reducer,
   [houseApi.reducerPath]:houseApi.reducer,
   [resourceApi.reducerPath]:resourceApi.reducer,
-  [kotlinResourceApi.reducerPath]:kotlinResourceApi.reducer
+  [kotlinResourceApi.reducerPath]:kotlinResourceApi.reducer,
+  [serviceApi.reducerPath]:serviceApi.reducer
 });
 
 // Persist config for redux-persist
@@ -52,7 +54,7 @@ export const store = configureStore({
           "persist/REGISTER",
         ],
       },
-    }).concat(authApi.middleware, siteApi.middleware,houseApi.middleware,roomApi.middleware,resourceApi.middleware,kotlinResourceApi.middleware),
+    }).concat(authApi.middleware, siteApi.middleware,houseApi.middleware,roomApi.middleware,resourceApi.middleware,kotlinResourceApi.middleware,serviceApi.middleware),
 });
 
 // Persistor instance

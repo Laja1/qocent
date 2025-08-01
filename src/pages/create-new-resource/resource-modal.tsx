@@ -9,7 +9,7 @@ import { Button, ComboBoxField } from "@/components/shared";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
-import { useGetServicesQuery } from "@/service/kotlin/resourceApi";
+import { useGetServicesQuery } from "@/service/kotlin/serviceApi";
 
 interface ResourceModalProps {
   id?: string;

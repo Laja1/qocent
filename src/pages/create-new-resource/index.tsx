@@ -13,7 +13,7 @@ import { showCustomToast } from "@/components/shared/toast";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import type { createResourceRequest } from "@/models/request/resourceRequest";
-import type { getResourceConfigResponse } from "@/models/response/resourceResponse";
+import type { ConfigResponse } from "@/models/response/resourceResponse";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import {
@@ -36,10 +36,15 @@ export const CreateNewResource = () => {
   const locationState = location.state as any;
 
   // ALL HOOKS MUST BE CALLED BEFORE ANY EARLY RETURNS
-  const { data: configData, isLoading: isConfigLoading } = useGetConfigQuery({
-    serviceId: locationState?.resourceType || "",
-    configProvider: dashboard?.provider || "",
-  });
+  const { data: configData, isLoading: isConfigLoading } = useGetConfigQuery(
+    {
+      serviceId: locationState?.resourceType,
+      configProvider: dashboard?.provider,
+    },
+    {
+      skip: !locationState?.resourceType || !dashboard?.provider,
+    }
+  );
 
   const { data: resourceTemplate, isLoading } = useGetResourceTemplateQuery(
     {
@@ -97,25 +102,25 @@ export const CreateNewResource = () => {
         ...formik.values,
         resourceProvider: dashboard.provider,
         resourceType: locationState.resourceType,
-      }) as getResourceConfigResponse<any>)
+      }) as ConfigResponse)
     : null;
 
   const handleSubmit = async () => {
+
     try {
       if (!newJsonConfig) {
         throw new Error("Configuration data is not available");
       }
+
       console.log(
         newJsonConfig.data,
         '"config" is an excess property and therefore is not allowed'
       );
       const payload: createResourceRequest =
         "data" in newJsonConfig
-          ? (newJsonConfig.data as createResourceRequest)
+          ? (newJsonConfig.data?.configJson as unknown as createResourceRequest)
           : (newJsonConfig as createResourceRequest);
-
-      const res = await createResource(payload).unwrap();
-      console.log(res, "creating");
+        await createResource(payload).unwrap();
 
       // Simulate deployment progress
       for (let i = 0; i <= 100; i += 10) {
@@ -165,8 +170,7 @@ export const CreateNewResource = () => {
     setIsDeployModalOpen(true);
   };
 
-  console.log("Original config:", configData);
-  console.log("Dynamic config with formik values:", newJsonConfig);
+  console.log("Dynamic config with formik values:", newJsonConfig?.data?.configJson);
 
   if (isLoading) {
     return (

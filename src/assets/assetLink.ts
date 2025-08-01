@@ -26,6 +26,6 @@ export const svgLinks = {
     threed3:'/svg/3d3.svg',
     threed4:'/svg/3d4.svg',
     logo:'/svg/qocentlogo.svg',
-    logoWhite:'/svg/qocent-white.svg',
+    logoWhite:'/svg/qocentlogo2.svg',
 
 }

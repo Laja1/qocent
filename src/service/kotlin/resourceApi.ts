@@ -1,24 +1,24 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { ApiEnums } from "@/utilities/enums";
-import type {createResourceResponse, getResourceConfigResponse, serviceResponse } from "@/models/response/resourceResponse";
+import type {ConfigResponse, createResourceResponse, } from "@/models/response/resourceResponse";
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import type { ParameterResponse } from "@/models/response/siteResponse";
 import type { createResourceRequest } from "@/models/request/resourceRequest";
+import { createConfigTags } from "@/utilities/tagHelpers";
 
 
 export const kotlinResourceApi = createApi({
   reducerPath: "kotlinResourceApi",
   baseQuery: kotlinBaseQueryWithResponseCodeHandling,
-  tagTypes: [ApiEnums.Resource],
+  tagTypes: [ApiEnums.Resource,ApiEnums.Config],
   endpoints: (build) => ({
      
- getServices:build.query<serviceResponse, {provider:string}>({
-    query: ({provider}) => `/resource/${provider}/get-service-list`,    
-}),
-getConfig: build.query<getResourceConfigResponse<any>, { serviceId: string, configProvider: string }>({
-    query: ({ serviceId, configProvider }) => `/resource/config/${serviceId}/${configProvider}`,
-}),
+
+getConfig: build.query<ConfigResponse, { serviceId: string, configProvider: string }>({
+  query: ({ serviceId, configProvider }) => `/configs/read/${configProvider}/${serviceId}`,
+  providesTags: (result) => createConfigTags({ data: result ? [result as any] : [] }, "configId"),
+}), 
 getResourceTemplate: build.query<ParameterResponse, { resource: string, provider: string }>({
     query: ({ resource, provider }) => `/resource/template/${provider}/${resource}`,
     }),
@@ -34,7 +34,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
 });
 
 export const {
-  useGetServicesQuery,
+
   useGetConfigQuery,
   useGetResourceTemplateQuery,
   useCreateResourceMutation

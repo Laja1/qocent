@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export type resourceType = {
   resourceId: number;
   resourceSite: string;
@@ -36,13 +37,13 @@ export type createResourceResponse = {
 
 
 export type formResponse = {
-  success: boolean;
-  message: string;
+  responseCode: string,
+  responseMessage: string
   data: {
     label: string;
     value: string;
   }[];
-  error: string;
+ 
 };
 
 
@@ -60,13 +61,6 @@ export interface Service {
   serviceProvider: string; // e.g., "aws", "huawei", etc.
 }
 
-export interface serviceResponse {
-  responseCode: string; // e.g., "00"
-  responseMessage: string; // e.g., "Completed successfully"
-  data: Service[];
-}
-
-
 
 
 export type getResourceConfigResponse<T> = {
@@ -74,3 +68,42 @@ export type getResourceConfigResponse<T> = {
   responseCode: string;
   responseMessage: string;
 };
+
+
+export type ConfigResponse = {
+  data: ConfigItem;
+  responseCode: string;
+  responseMessage: string;
+};
+ 
+export type ConfigItem = {
+  configId: number;
+  configProvider: string;
+  configServiceCode: string;
+  configStatus: string;
+  configJson: {
+    resourceSite: string;
+    resourceType: string;
+    resourceName: string;
+    resourceProvider: string;
+    resourceInitially: string; // Fixed: was resourceCode, should be resourceInitially
+    resourceContainerType: string;
+    resourceContainerCode: string;
+    resourceStatus: string;
+    resourceDate: string; // ISO date string
+    resourceMakerId: string;
+    resourceCheckerId: string;
+    resourceRef: string;
+    resourceTagId: string;
+    resourceConfig: {
+      category: string;
+      resource: string;
+      action: string;
+      body: Record<string, any>; // Fixed: was requestBody, should be body
+    };
+  };
+  configCreatedAt: string;
+  configUpdatedAt: string;
+  validJson?: boolean; // Made optional since it's not in your sample response
+};
+

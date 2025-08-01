@@ -2,6 +2,8 @@ export enum ApiEnums {
     Site = "serverSite",
     House = "serverHouse",
     Room= "serverRoom",
-    Resource= "resource"
+    Resource= "resource",
+    Service='service',
+    Config='config'
   }
   

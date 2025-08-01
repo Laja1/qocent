@@ -2,7 +2,7 @@
 import { useState, useCallback } from "react";
 import { type FormikProps } from "formik";
 import { SelectField } from "../shared";
-import { useGetFormOptionsMutation } from "@/service/typescript/resourceApi";
+import { useGetFormOptionsMutation } from "@/service/kotlin/serviceApi";
 import { IconRefresh } from "@tabler/icons-react";
 
 type ResourceSelectFieldProps = {
@@ -84,7 +84,6 @@ export const ResourceSelectField = ({
       setFetchError(null);
 
       const dependencies = checkDependencies(parameterLookup, formik.values);
-
       if (!dependencies.ready) {
         setFetchError(
           `Please select: ${dependencies.missing.join(", ")} first`
@@ -99,11 +98,11 @@ export const ResourceSelectField = ({
       );
       console.log(processedLookup, "sss");
       const res = await getFormOptions({ query: processedLookup });
-
-      if (res?.data?.success && Array.isArray(res.data.data)) {
+      console.log(res);
+      if (res?.data?.responseCode === "00" && Array.isArray(res.data.data)) {
         setOptions(res.data.data);
       } else {
-        setFetchError(res?.data?.message || "Failed to fetch options");
+        setFetchError(res?.data?.responseMessage || "Failed to fetch options");
         setOptions([]);
       }
     } catch (error) {
@@ -118,7 +117,6 @@ export const ResourceSelectField = ({
     processParameterLookup,
     checkDependencies,
   ]);
-
   const error =
     formik.touched[name] && formik.errors[name]
       ? (formik.errors[name] as string)
@@ -129,6 +127,7 @@ export const ResourceSelectField = ({
     if (fetchError) return "Error loading options";
     if (options.length === 0) {
       const dependencies = checkDependencies(parameterLookup, formik.values);
+      
       if (!dependencies.ready) {
         return `Select ${dependencies.missing.join(", ")} first`;
       }

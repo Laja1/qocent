@@ -18,11 +18,12 @@ import { useNavigate } from "react-router-dom";
 import { CostTable } from "./cost";
 import type { SiteData } from "@/models/response/siteResponse";
 import {
-  useGetAllSitesQuery,
+  useGetSiteByProviderQuery,
   useGetResourcesInSiteQuery,
   useGetResourceTypeCountQuery,
   useGetSiteArchitectureQuery,
   useGetSiteDataFlowQuery,
+  useDeleteSiteMutation,
 } from "@/service/kotlin/siteApi";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
@@ -30,6 +31,10 @@ import { FlowGrid } from "@/components/not-shared/data-flow/flow";
 import { DataFlowLoader } from "../server-houses";
 import { formatDate, getStatusClassName } from "@/utilities/helper";
 import { ResourceModal } from "../create-new-resource/resource-modal";
+import type { RootState } from "@/store";
+import { useSelector } from "react-redux";
+import { showCustomToast } from "@/components/shared/toast";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
@@ -37,12 +42,24 @@ export const ServerSites = () => {
   const [tabShow, setTabShow] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState("");
   const [selectedSiteCode, setSelectedSiteCode] = useState("");
+  const dashboard = useSelector((state: RootState) => state.dashboard);
+  const user = useSelector((state: RootState) => state.auth);
   const [isArtificialLoading, setIsArtificialLoading] = useState(false);
   const [loadingTimeout, setLoadingTimeout] = useState<NodeJS.Timeout | null>(
     null
   );
 
-  const { data: siteData, isLoading: isSiteLoading } = useGetAllSitesQuery();
+  const { data: siteData, isLoading: isSiteLoading } =
+    useGetSiteByProviderQuery(
+      {
+        provider: dashboard.provider,
+        userId: user.userId || 0,
+      },
+      {
+        skip: !user.userId && !dashboard.provider,
+      }
+    );
+
   const { data: summaryData, isLoading: isSiteSummaryLoading } =
     useGetResourceTypeCountQuery({
       siteCode: selectedSiteCode,
@@ -51,6 +68,7 @@ export const ServerSites = () => {
   const { data: architectureData } = useGetSiteArchitectureQuery({
     siteCode: selectedSiteCode,
   });
+  const [deleteSite, { isLoading: isDeleteLoading }] = useDeleteSiteMutation();
   const { data: resourcesInSiteData } = useGetResourcesInSiteQuery({
     siteCode: selectedSiteCode,
   });
@@ -186,14 +204,14 @@ export const ServerSites = () => {
       ],
     },
     {
-      id: "siteExpiryDate",
-      header: "Site Expiry Date",
+      id: "siteCreatedAt",
+      header: "Site Created At",
       headerClassName: "text-right",
-      accessorKey: "siteExpiryDate",
+      accessorKey: "siteCreatedAt",
       sortable: true,
       cell: (row) => (
         <span className="text-right block">
-          {formatDate(row.siteExpiryDate)}
+          {formatDate(row.siteCreatedAt)}
         </span>
       ),
     },
@@ -213,11 +231,7 @@ export const ServerSites = () => {
       accessorKey: "siteBill",
       headerClassName: "text-right",
       cell: (row) => (
-        <span className="block text-green-700 text-right">
-          {row.siteBill.toLocaleString("en-US", {
-            minimumFractionDigits: 2,
-          })}
-        </span>
+        <span className="block text-green-700 text-right">{row.siteBill}</span>
       ),
       sortable: true,
     },
@@ -264,9 +278,19 @@ export const ServerSites = () => {
     {
       label: "Delete",
       icon: Trash2,
-      onClick: (row: SiteData) => {
-        console.log("Delete server room:", row.siteId);
-        // TODO: Implement delete confirmation
+      onClick: async (row: SiteData) => {
+        try {
+          const res = await deleteSite({ siteId: row.siteId }).unwrap();
+          showCustomToast(res.responseMessage, {
+            toastOptions: { type: "success", autoClose: 5000 },
+          });
+        } catch (error: any) {
+          console.error("Create Resource Error:", error);
+          const message = ErrorHandler.extractMessage(error);
+          showCustomToast(message, {
+            toastOptions: { type: "error", autoClose: 5000 },
+          });
+        }
       },
       variant: "destructive" as const,
     },
@@ -410,7 +434,7 @@ export const ServerSites = () => {
             columns={serverRoomColumns}
             searchPlaceholder="Search server rooms by name, ID, or region..."
             pageSize={5}
-            isLoading={isSiteLoading}
+            isLoading={isSiteLoading || isDeleteLoading}
             exportOptions={{
               filename: "server_sites_export",
               includeHeaders: true,

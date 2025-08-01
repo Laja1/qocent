@@ -31,4 +31,52 @@ export const createProviderTags = <T extends { [key: string]: any }>(
         ]
       : [{ type: ApiEnums.Resource, id: "LIST" } as const];
   };
+
+  export const createServiceProviderTags = <T extends Record<string, any>>(
+    result: { data?: T[] } | undefined,
+    
+    idField: keyof T
+  ) => {
+    return result?.data
+      ? [
+          { type: ApiEnums.Service, id: "LIST" } as const,
+          ...result.data.map((item: T) => ({
+            type: ApiEnums.Service,
+            id: item[idField],
+          } as const)),
+        ]
+      : [{ type: ApiEnums.Service, id: "LIST" } as const];
+  };
+
+
+  export const createSiteProviderTags = <T extends Record<string, any>>(
+    result: { data?: T[] } | undefined,
+    idField: keyof T
+  ) => {
+    return result?.data
+      ? [
+          { type: ApiEnums.Site, id: "LIST" } as const,
+          ...result.data.map((item: T) => ({
+            type: ApiEnums.Site,
+            id: item[idField],
+          } as const)),
+        ]
+      : [{ type: ApiEnums.Site, id: "LIST" } as const];
+  };
+  
+
+  export const createConfigTags = <T extends Record<string, any>>(
+    result: { data?: T[] } | undefined,
+    idField: keyof T
+  ) => {
+    return result?.data
+      ? [
+          { type: ApiEnums.Config, id: "LIST" } as const,
+          ...result.data.map((item: T) => ({
+            type: ApiEnums.Config,
+            id: item[idField],
+          } as const)),
+        ]
+      : [{ type: ApiEnums.Config, id: "LIST" } as const];
+  }
   
