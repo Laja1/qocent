@@ -10,7 +10,7 @@ import {
   MobileNavToggle,
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
-import { navRoutes, RouteConstant } from "@/router/routes";
+import { navRoutes } from "@/router/routes";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
@@ -36,18 +36,16 @@ export default function NavbarDemo({
             onClick={() => handleHomeClick()}
             className="text-xl  cursor-pointer font-bold hover:opacity-80 transition-opacity"
           >
-             <img src={svgLinks.logo} className="h-10" />
+            <img src={svgLinks.logo} className="h-10" />
           </div>
 
           <NavItems items={navRoutes} />
 
-          <div className="flex items-center gap-4">
-            <Link to={RouteConstant.auth.signin.path}>
-              <NavbarButton variant="secondary" className="text-red-600">
-                Login
-              </NavbarButton>
-            </Link>
-          </div>
+          <a href="#join-waitlist">
+            <NavbarButton variant="secondary" className="text-red-600">
+              Join Waitlist
+            </NavbarButton>
+          </a>
         </NavBody>
 
         {/* Mobile Nav */}
@@ -58,7 +56,7 @@ export default function NavbarDemo({
               className="text-xl font-bold hover:opacity-80 transition-opacity focus:outline-none focus:ring-2 focus:ring-blue-500 rounded"
               aria-label="Go to homepage"
             >
-              QOCENT
+              <img src={svgLinks.logo} className="h-10" />
             </button>
 
             <MobileNavToggle
@@ -82,16 +80,16 @@ export default function NavbarDemo({
               </Link>
             ))}
             <div className="flex w-full flex-col gap-4">
-              <Link to={RouteConstant.auth.signin.path}>
-                <NavbarButton
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  variant="primary"
-                  className="w-full text-red-800"
-                >
-                  Login
+              <a
+                href="#join-waitlist"
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <NavbarButton variant="primary" className="w-full text-red-800">
+                  Join Waitlist
                 </NavbarButton>
-              </Link>
-              <Link to={RouteConstant.auth.signup.path}>
+              </a>
+
+              {/* <Link to={RouteConstant.auth.signup.path}>
                 <NavbarButton
                   onClick={() => setIsMobileMenuOpen(false)}
                   variant="primary"
@@ -99,7 +97,7 @@ export default function NavbarDemo({
                 >
                   Sign Up
                 </NavbarButton>
-              </Link>
+              </Link> */}
             </div>
           </MobileNavMenu>
         </MobileNav>

@@ -13,6 +13,6 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   return isAllowed ? (
     <>{children}</>
   ) : (
-    <Navigate to={RouteConstant.auth.signin.path} replace />
+    <Navigate to={RouteConstant.public.home.path} replace />
   );
 };

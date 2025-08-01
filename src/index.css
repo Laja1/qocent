@@ -171,3 +171,9 @@ body{
     background-color: #fff;
     font-family: var(--font-brfirma);
 }
+
+
+html {
+    scroll-behavior: smooth;
+  }
+  

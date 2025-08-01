@@ -2,10 +2,26 @@ import NavbarDemo from "@/components/shared/navbar";
 import { Footer } from "@/components/shared";
 import Developers from "./docs";
 import { Hero } from "./hero";
+import Seo from "@/components/shared/seo";
 
 const Documentation = () => {
   return (
     <div className=" h-full w-full">
+      <Seo
+        title="Qocent Documentation | Build, Deploy, Scale with Confidence"
+        description="Learn how to build, deploy, and scale your applications on Qocent. Follow our step-by-step guide to get started with our powerful multi-cloud platform."
+        canonical="https://qcs-delta.vercel.app/docs"
+        image="https://qcs-delta.vercel.app/og-image.jpg"
+        schemaMarkup={{
+          "@context": "https://schema.org",
+          "@type": "TechArticle",
+          name: "Qocent Documentation",
+          description:
+            "Step-by-step technical documentation to help you get started with Qocent — from deploying across clouds to managing your infrastructure with ease.",
+          url: "https://qcs-delta.vercel.app/docs",
+        }}
+      />
+
       <NavbarDemo>
         <Hero />
         <Developers />

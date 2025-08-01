@@ -9,7 +9,7 @@ export const Video = () => {
         transition={{ duration: 0.7, delay: 0.2 }}
         className="relative mx-auto  rounded-xl p-2  w-full"
       >
-        <div className="rounded-lg overflow-hidden lg:m-20 shadow-2xl ">
+        {/* <div className="rounded-lg overflow-hidden lg:m-20 shadow-2xl ">
           <div className="w-full aspect-video">
             <iframe
               src="https://www.youtube.com/embed/7T7SyMZihwo?rel=0"
@@ -19,7 +19,7 @@ export const Video = () => {
               allowFullScreen
             ></iframe>
           </div>
-        </div>
+        </div> */}
       </motion.div>{" "}
     </div>
   );

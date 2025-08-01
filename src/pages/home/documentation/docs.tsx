@@ -154,7 +154,7 @@ const Developers = () => {
       {/* Getting Started Steps */}
       <section className="">
         <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-4 h-full gap-8 items-center">
+          <div className="grid lg:grid-cols-4 h-[300px] gap-8 items-center">
             {steps.map((step) => (
               <div
                 className={`border bg-gray-100 h-full rounded-md text-center`}

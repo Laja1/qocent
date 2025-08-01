@@ -1,7 +1,6 @@
-import { svgLinks } from "@/assets/assetLink";
+import { imgLinks } from "@/assets/assetLink";
 import {
   IconBrandFacebook,
-  IconBrandGithub,
   IconBrandLinkedin,
   IconBrandTwitter,
 } from "@tabler/icons-react";
@@ -16,12 +15,12 @@ export const Footer = () => {
           <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
             <div className="space-y-4">
               <div className="flex items-center gap-2 font-bold">
-                <img src={svgLinks.logo} className="h-10" />
+                <img src={imgLinks.footerlogo} className="h-14" />
               </div>
 
               <p className="flex items-center gap-2 text-xs">
                 <MdEmail className="text-lg" />
-                contact@qocent.com
+                info@qocent.com
               </p>
               <div className="text-xs flex flex-col lg:flex-row gap-4 lg:space-y-1 text-left lg:text-right">
                 <p>📞 +1 (800) 123-4567 (USA)</p>
@@ -30,8 +29,7 @@ export const Footer = () => {
               <div className="flex space-x-3 mt-4">
                 {[
                   { icon: IconBrandTwitter, href: "https://x.com/InfoQocent" },
-                  { icon: IconBrandGithub, href: "https://x.com/InfoQocent" },
-                  { icon: IconBrandLinkedin, href: "https://x.com/InfoQocent" },
+                  { icon: IconBrandLinkedin, href: "https://www.linkedin.com/company/qocent/?lipi=urn%3Ali%3Apage%3Ad_flagship3_search_srp_all%3Bw42MWFLBTgih9hRTA4kmmg%3D%3D" },
                   { icon: IconBrandFacebook, href: "https://x.com/InfoQocent" },
                 ].map((Icon, index) => (
                   <a

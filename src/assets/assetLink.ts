@@ -11,6 +11,7 @@ export const imgLinks = {
     switch:'/images/switch.png',
     azure:'/images/azure.png',
     logo:'/images/qocent-logo.png',
+    footerlogo:'images/qocent-footer.png'
 }
 
 export const svgLinks = {
@@ -25,6 +26,7 @@ export const svgLinks = {
     threed2:'/svg/3d2.svg',
     threed3:'/svg/3d3.svg',
     threed4:'/svg/3d4.svg',
+    hero:'/svg/hero.svg',
     logo:'/svg/qocentlogo.svg',
     logoWhite:'/svg/qocentlogo2.svg',
 

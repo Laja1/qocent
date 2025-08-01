@@ -7,33 +7,45 @@ import { ProtectedRoute } from "./route/protectedRoute";
 import { DashboardLayoutRouter } from "@/components/layouts/DashboardLayoutRouter";
 import NotFound from "@/pages/not-found-page";
 
-const publicRoutesMapped = publicRoute.map(route => ({
+const publicRoutesMapped = publicRoute.map((route) => ({
   path: route.path,
-  element: route.component, 
+  element: route.component,
 }));
 
-const authRoutesMapped = authRoute.map(route => ({
+const authRoutesMapped = authRoute.map((route) => ({
   path: route.path,
-  element: route.component, 
+  element: route.component,
 }));
 
-const dashboardRoutesMapped = dashboardRoute.map(route => ({
+const dashboardRoutesMapped = dashboardRoute.map((route) => ({
   path: route.path,
-  element: route.component, 
+  element: route.component,
 }));
 
 export const routeConfig = [
   {
     path: "/",
-    element: <Outlet />,
+    element: (
+      // <ProtectedRoute>
+      <Outlet />
+      // </ProtectedRoute>
+    ),
     children: [
       {
         path: "",
         element: <Home />,
       },
       ...publicRoutesMapped,
-      ...authRoutesMapped,
     ],
+  },
+  {
+    path: "/",
+    element: (
+      <ProtectedRoute>
+        <Outlet />
+      </ProtectedRoute>
+    ),
+    children: authRoutesMapped,
   },
   {
     path: "/",
@@ -49,4 +61,3 @@ export const routeConfig = [
     element: <NotFound />,
   },
 ];
-
