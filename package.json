@@ -7,9 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    
-     "analyze": "npx vite-bundle-visualizer"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.4",

@@ -105,7 +105,6 @@ export default defineConfig({
       output: {
         manualChunks: {
           react: ['react', 'react-dom', 'react-router-dom'],
-          vendor: ["react", "react-dom"],
           helmet: ["react-helmet"],
           // Add other chunk optimizations based on your dependencies
         },
