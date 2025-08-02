@@ -11,15 +11,15 @@ const AboutUs = () => {
       <Seo
         title="About Us | Qocent - One Window, All Cloud"
         description="Discover how Qocent empowers developers and businesses with multi-cloud flexibility, transparency, simplicity, and speed — all from one unified platform."
-        canonical="https://qcs-delta.vercel.app/about"
-        image="https://qcs-delta.vercel.app/og-image.jpg"
+        canonical="https://qocent.com/about"
+        image="https://qocent.com/og-image.jpg"
         schemaMarkup={{
           "@context": "https://schema.org",
           "@type": "WebPage",
           name: "About Us - Qocent",
           description:
             "Discover how Qocent empowers developers and businesses with multi-cloud flexibility, transparency, simplicity, and speed — all from one unified platform.",
-          url: "https://qcs-delta.vercel.app/about",
+          url: "https://qocent.com/about",
         }}
       />
 

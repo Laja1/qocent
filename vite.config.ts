@@ -1,4 +1,4 @@
-import  { resolve } from "path";
+import path from "path";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { defineConfig } from "vite";
@@ -26,7 +26,7 @@ export default defineConfig({
     // viteSSG({ includedRoutes: () => routes }),
     // Enhanced sitemap configuration
     ViteSitemap({
-      hostname: "https://qcs-delta.vercel.app",
+      hostname: "https://qocent.com",
       generateRobotsTxt: true,
       // Use dynamicRoutes instead of routes
       dynamicRoutes: [
@@ -62,8 +62,8 @@ export default defineConfig({
           description: "Deploy, manage, and optimize across AWS, GCP, Huawei, and more all from a single, powerful console that delivers speed, savings, and simplicity without compromise.",
           keywords: "cloud management, AWS, GCP, Huawei Cloud, multi-cloud, cloud console",
           author: "Qocent",
-          ogImage: "https://qcs-delta.vercel.app/og-image.jpg",
-          url: "https://qcs-delta.vercel.app",
+          ogImage: "https://qocent.com/og-image.jpg",
+          url: "https://qocent.com",
         },
       },
       template: 'index.html',
@@ -96,7 +96,7 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      "@": resolve(__dirname, "./src"),
+      "@": path.resolve(import.meta.dirname, "./src"),
     },
   },
 

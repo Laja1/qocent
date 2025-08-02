@@ -59,8 +59,8 @@ export const CreateNewSite = () => {
         setProgress(i);
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
-      const res = await createSite(payload).unwrap();
-      showCustomToast(res.message, {
+      await createSite(payload).unwrap();
+      showCustomToast("Server Site Successfully Created", {
         toastOptions: { type: "success", autoClose: 5000 },
       });
 
