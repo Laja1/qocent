@@ -16,7 +16,7 @@ const Home = () => {
       <Seo
         title="Qocent - One Window, All Cloud"
         description="Deploy, manage, and optimize across AWS, GCP, Huawei, and more all from a single, powerful console that delivers speed, savings, and simplicity without compromise."
-        canonical="https://qocent.com/"
+        canonical="https://qocent.com"
       />
 
       <NavbarDemo>

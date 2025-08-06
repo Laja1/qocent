@@ -15,11 +15,12 @@ export const SelectField = ({
   name,
   formik,
   options,
+  labelClassname,
   value,
   className,
 }: SelectProps) => {
   const selectfieldClasses = clsx(
-    "block w-full placeholder:text-[#000] bg-white font-normal items-center border border-gray-300   placeholder:font-light  px-3 placeholder:text-[8px] inset-ring-green-800 ring-1 ring-green-800 text-xs border-0 shadow-sm  leading-6 disabled:text-gray-400 disabled:cursor-not-allowed focus:ring-[1px] focus:ring-primary rounded-xs",
+    "block w-full bg-white border border-gray-300 rounded-xs py-3 px-3 text-xs focus:outline-none focus:ring-0.5 focus:ring-green-700 focus:border-green-700 ",
     className
   );
 
@@ -32,7 +33,10 @@ export const SelectField = ({
   return (
     <div className="w-full">
       {label && (
-        <label htmlFor={name} className="text-sm text-gray-600">
+        <label
+          htmlFor={name}
+          className={`text-sm text-gray-600 ${labelClassname}`}
+        >
           {label}
         </label>
       )}

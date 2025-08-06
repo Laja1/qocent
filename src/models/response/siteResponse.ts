@@ -210,3 +210,24 @@ export type getResourcesInSiteResponse = {
   data: resourceProp[];
 };
 
+
+
+export type getAccountResponse = {
+  responseCode: string;
+  responseMessage: string;
+  data: AccountData[];
+};
+
+export type AccountData = {
+  accountId: number;
+  accountCode: string;
+  accountUserCode: string | null;
+  accountName: string;
+  accountType: string;
+  accountStatus: string;
+  accountCreatedAt: string;
+  accountUpdatedAt: string | null;
+  owner:'YES'|'NO'
+};
+
+

@@ -1,17 +1,23 @@
 export type signupRequest = {
-  userAWSId?: string;
+  accountName?: string;
+  accountType: string;
+  userCountry?: string;
   userEmail: string;
   userFirstName: string;
-  userHuaweiId?: string;
   userLastName: string;
   userPassword: string;
+  userRoleId?: number;
 };
+
 
 export const signUpInit:signupRequest = {
     userFirstName: "",
     userLastName: "",
     userEmail: "",
     userPassword: "",
+    accountType:"",
+    accountName:"",
+    userRoleId:100
 }
 
 export type signInRequest = {
@@ -52,16 +58,19 @@ export type forgotPasswordpRequest = {
  export type completePasswordResetRequest = {
   otp: string,
  userEmail?: string,
- newPassword: string,
+ userPassword: string,
 }
-
-
-
-
-
 
 export const completePasswordResetInit:completePasswordResetRequest = {
   otp: "",
  userEmail: "",
- newPassword: "",
+ userPassword: "",
 }
+
+
+
+export type invitationRequest = {
+  accountCode: string;
+  inviteeEmail: string;
+  inviterUserCode: string;
+};

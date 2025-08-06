@@ -1,13 +1,36 @@
 import { imgLinks } from "@/assets/assetLink";
-import { LogOut } from "lucide-react";
+import {
+  BrainCog,
+  Command,
+  LogOut,
+  PlusCircleIcon,
+  PlusSquare,
+} from "lucide-react";
 import { RouteConstant } from "@/router/routes";
 import { authStore } from "@/store/authSlice";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { dashboardStore } from "@/store/dashboardSlice";
 import { useGetResourceByProviderQuery } from "@/service/typescript/resourceApi";
+import { CollapsibleItem, SubItem } from "@/components/shared/collapsible";
+import NiceModal from "@ebay/nice-modal-react";
+import type { RootState } from "@/store";
+import { ModalConstant } from "@/components/shared/modal/register";
+import { useGetUserAccountsQuery } from "@/service/kotlin/authApi";
+import { accountStore } from "@/store/accountSlice";
 
 export const ConsoleLeft = () => {
+  const user = useSelector((state: RootState) => state.auth);
+  const { data: workspaceData } = useGetUserAccountsQuery(
+    {
+      userCode: user.userEmail || "",
+    },
+    {
+      skip: !user.userEmail,
+    }
+  );
+  console.log(workspaceData);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -36,34 +59,36 @@ export const ConsoleLeft = () => {
 
   const handleClick = (provider: "huawei" | "aws" | "azure" | "gcp") => {
     dispatch(dashboardStore.action.setProvider(provider));
+    // Fix: setAccountDetails expects Partial<AccountState>, not AccountData[]
+
     navigate(RouteConstant.dashboard.serverSite.path);
   };
 
   const workspaces = [
     {
       provider: "aws" as const,
-      name: "AWS Workspace",
+      name: "AWS Cloud",
       icon: imgLinks.awsdark,
       alt: "AWS",
       count: awsData?.data.length ?? 0,
     },
     {
       provider: "huawei" as const,
-      name: "Huawei Workspace",
+      name: "Huawei Cloud",
       icon: imgLinks.huawei,
       alt: "Huawei",
       count: huaweiData?.data.length ?? 0,
     },
     {
       provider: "gcp" as const, // Fixed: was "huawei"
-      name: "Google Cloud Workspace",
+      name: "Google Cloud",
       icon: imgLinks.gcp,
       alt: "Google Cloud",
       count: 0, // Use gcpData?.data.length ?? 0 when available
     },
     {
       provider: "azure" as const,
-      name: "Azure Cloud Workspace",
+      name: "Azure Cloud",
       icon: imgLinks.azure,
       alt: "Azure Cloud",
       count: 0, // Use azureData?.data.length ?? 0 when available
@@ -92,97 +117,75 @@ export const ConsoleLeft = () => {
         </div>
 
         <div className="lg:space-y-1">
-          <div className="lg:hidden">
-            <div className="flex gap-3 overflow-x-auto pb-3 -mx-1 px-1 scrollbar-hide">
-              {workspaces.map((workspace, index) => (
-                <div
-                  key={index}
-                  onClick={() => handleClick(workspace.provider)}
-                  className="flex-shrink-0 w-20 sm:w-24 cursor-pointer group"
-                  role="button"
-                  tabIndex={0}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter" || e.key === " ") {
-                      handleClick(workspace.provider);
-                    }
-                  }}
-                >
-                  <div
-                    className="flex flex-col items-center text-center p-2 rounded-xs
-                                  hover:bg-gray-50 active:bg-gray-100 transition-colors duration-200"
-                  >
-                    <div
-                      className="w-10 h-10 sm:w-12 sm:h-12 rounded-xs bg-white shadow-sm
-                                    border border-gray-200 flex items-center justify-center mb-2
-                                    group-hover:shadow-md transition-shadow duration-200"
-                    >
-                      <img
-                        src={workspace.icon}
-                        alt={workspace.alt}
-                        className="w-5 h-5 sm:w-6 sm:h-6"
-                      />
-                    </div>
-                    <p className="text-xs font-medium text-gray-900 line-clamp-2 leading-tight mb-1">
-                      {workspace.name.replace(" Workspace", "")}
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {workspace.count} Sites
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
           {/* Desktop: Vertical list */}
-          <div className="hidden lg:block space-y-1">
-            {workspaces.map((workspace, index) => (
-              <div
-                key={index}
-                onClick={() => handleClick(workspace.provider)}
-                className="group flex items-center gap-3 p-2 rounded-xs cursor-pointer
-                           hover:bg-gray-50 active:bg-gray-100 transition-all duration-200
-                           border border-transparent hover:border-gray-200"
-                role="button"
-                tabIndex={0}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    handleClick(workspace.provider);
-                  }
-                }}
+          {workspaceData?.data.map((workspace) => (
+            <div className=" lg:block space-y-1">
+              <CollapsibleItem
+                title={workspace.accountName}
+                icon={BrainCog}
+                defaultOpen={false}
               >
-                {/* Hover indicator */}
-                <div
-                  className="w-1 h-8 bg-gray-950 rounded-full opacity-0 
-                               group-hover:opacity-100 transition-opacity duration-200"
-                />
+                {workspace.owner === "YES" && (
+                  <div>
+                    <div
+                      onClick={() => NiceModal.show("InviteToWorkspace", workspace)}
+                      className="text-gray-600 ml-2 px-2 border-l text-xs flex items-center py-2 gap-2 cursor-pointer"
+                    >
+                      <PlusSquare className="size-4 " />
+                      Invite to workspace
+                    </div>
+                    <div
+                      onClick={() =>
+                        NiceModal.show(
+                          ModalConstant.AccessDrawer,
+                          workspace?.accountCode
+                        )
+                      }
+                      className="text-gray-600 ml-2 px-2 border-l text-xs flex items-center py-2 gap-2 cursor-pointer"
+                    >
+                      <Command className="size-4 " />
+                      Access management
+                    </div>
+                  </div>
+                )}
+                {workspaces.map((item) => (
+                  <SubItem
+                    key={item.provider}
+                    title={item.name}
+                    // icon={History}
 
-                {/* Icon container */}
-                <div
-                  className="w-10 h-10 rounded-xs bg-white shadow-sm border border-gray-200
-                               flex items-center justify-center flex-shrink-0
-                               group-hover:shadow-md transition-shadow duration-200"
-                >
-                  <img
-                    src={workspace.icon}
-                    alt={workspace.alt}
-                    className="w-5 h-5"
+                    image={item.icon}
+                    onClick={() => {
+                      dispatch(
+                        accountStore.action.setAccountDetails({
+                          accountId: workspace.accountId,
+                          accountCode: workspace.accountCode,
+                          accountName: workspace.accountName,
+                          accountUserCode: workspace.accountUserCode || '',
+                          accountType: workspace.accountType as "INDIVIDUAL" | "ORGANIZATION" | undefined,
+                          accountStatus: workspace.accountStatus as "ACTIVE" | "INACTIVE" | undefined,
+                          owner: workspace.owner,
+                        })
+                      );
+                    
+                      handleClick(item.provider);
+                    }}
+                    
                   />
-                </div>
-
-                {/* Text content */}
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 truncate">
-                    {workspace.name}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {workspace.count} Sites
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
+                ))}
+              </CollapsibleItem>
+            </div>
+          ))}
         </div>
+        <button
+          onClick={() => NiceModal.show("WorkspaceModal")}
+          type="button"
+          className="group border px-1 hover:ml-2 py-1 rounded-sm border-gray-100 flex gap-3 items-center hover:bg-gray-50 active:bg-gray-100 transition-all duration-200 w-full"
+        >
+          <div className="w-1 h-8 bg-gray-950 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+          <PlusCircleIcon className="text-gray-700 size-5" />
+          <p className="text-xs text-gray-800">Add Workspace</p>
+        </button>
       </div>
 
       {/* Desktop Logout - hidden on mobile */}

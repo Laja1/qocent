@@ -10,7 +10,7 @@ import { RouteConstant } from "@/router/routes";
 import {
   useCompletePasswordResetMutation,
   useResendOtpMutation,
-} from "@/service/typescript/authApi";
+} from "@/service/kotlin/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { resetPasswordSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
@@ -30,12 +30,12 @@ const CompletePasswordReset = () => {
   const onSubmit = async (values: completePasswordResetRequest) => {
     const payload = {
       userEmail: state,
-      newPassword: values?.newPassword,
+      userPassword: values?.userPassword,
       otp: String(values?.otp),
     };
     try {
       const res = await completePasswordReset(payload).unwrap();
-      showCustomToast(res?.message, {
+      showCustomToast(res?.responseMessage, {
         toastOptions: {
           type: "success",
           autoClose: 5000,
@@ -109,7 +109,7 @@ const CompletePasswordReset = () => {
         />
         <Textfield
           label="New Password"
-          name="newPassword"
+          name="userPassword"
           placeholder="Enter your password"
           type={seePassword ? "text" : "password"}
           suffixIcon={
@@ -119,8 +119,8 @@ const CompletePasswordReset = () => {
           }
           formik={formik}
           error={
-            formik?.touched.newPassword && formik?.errors.newPassword
-              ? formik?.errors.newPassword
+            formik?.touched.userPassword && formik?.errors.userPassword
+              ? formik?.errors.userPassword
               : ""
           }
         />

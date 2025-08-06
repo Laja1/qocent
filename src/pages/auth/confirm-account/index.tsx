@@ -10,7 +10,7 @@ import { RouteConstant } from "@/router/routes";
 import {
   useCompleteEnrollmentMutation,
   useResendOtpMutation,
-} from "@/service/typescript/authApi";
+} from "@/service/kotlin/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { confirmAccountSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
@@ -32,7 +32,7 @@ const ConfirmAccount = () => {
     console.log(payload);
     try {
       const res = await completeEnrollment(payload).unwrap();
-      showCustomToast(res?.message, {
+      showCustomToast(res?.responseMessage, {
         toastOptions: {
           type: "success",
           autoClose: 5000,

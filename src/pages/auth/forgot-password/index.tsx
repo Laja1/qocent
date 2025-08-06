@@ -6,7 +6,7 @@ import {
   type forgotPasswordpRequest,
 } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
-import { useForgotPasswordMutation } from "@/service/typescript/authApi";
+import { useForgotPasswordMutation } from "@/service/kotlin/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { forgotPasswordFormValidationSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
@@ -21,7 +21,7 @@ const ForgotPassword = () => {
       console.log(res);
 
       // Now res.responseMessage will be available
-      showCustomToast(res?.message, {
+      showCustomToast(res?.responseMessage, {
         toastOptions: {
           type: "success",
           autoClose: 5000,

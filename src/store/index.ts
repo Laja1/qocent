@@ -2,7 +2,6 @@
 import { configureStore, combineReducers } from "@reduxjs/toolkit";
 import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
-import { authApi } from "@/service/typescript/authApi";
 import { authStore } from "./authSlice";
 import { dashboardStore } from "./dashboardSlice";
 import { roomApi } from "@/service/typescript/roomApi";
@@ -12,6 +11,8 @@ import { resourceListStore } from "./resourceListSlice";
 import { kotlinResourceApi } from "@/service/kotlin/resourceApi";
 import { siteApi } from "@/service/kotlin/siteApi";
 import { serviceApi } from "@/service/kotlin/serviceApi";
+import { authApi } from "@/service/kotlin/authApi";
+import { accountStore } from "./accountSlice";
 
 // Combine all your reducers
 const rootReducer = combineReducers({
@@ -24,7 +25,8 @@ const rootReducer = combineReducers({
   [houseApi.reducerPath]:houseApi.reducer,
   [resourceApi.reducerPath]:resourceApi.reducer,
   [kotlinResourceApi.reducerPath]:kotlinResourceApi.reducer,
-  [serviceApi.reducerPath]:serviceApi.reducer
+  [serviceApi.reducerPath]:serviceApi.reducer,
+ account:accountStore.reducer
 });
 
 // Persist config for redux-persist
@@ -32,7 +34,7 @@ const persistConfig = {
   key: "root",
   storage,
   
-  whitelist: ["auth","dashboard",'resourceList'], 
+  whitelist: ["auth","dashboard",'resourceList','account'], 
   // stateReconciler: false,
 };
 

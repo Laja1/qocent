@@ -11,8 +11,10 @@ import {
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
 import { navRoutes } from "@/router/routes";
+import NiceModal from "@ebay/nice-modal-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { ModalConstant } from "./modal/register";
 
 export default function NavbarDemo({
   children,
@@ -41,11 +43,16 @@ export default function NavbarDemo({
 
           <NavItems items={navRoutes} />
 
-          <a href="#join-waitlist">
-            <NavbarButton variant="secondary" className="text-red-600">
-              Join Waitlist
-            </NavbarButton>
-          </a>
+          {/* <a href="#join-waitlist"> */}
+          <NavbarButton
+            // onClick={() => navigate("signin")}
+            onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
+            variant="secondary"
+            className="text-red-600"
+          >
+            {/* Join Waitlist */}Book a demo
+          </NavbarButton>
+          {/* </a> */}
         </NavBody>
 
         {/* Mobile Nav */}
@@ -80,14 +87,18 @@ export default function NavbarDemo({
               </Link>
             ))}
             <div className="flex w-full flex-col gap-4">
-              <a
-                href="#join-waitlist"
+              <div
+                // href="#join-waitlist"
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <NavbarButton variant="primary" className="w-full text-red-800">
-                  Join Waitlist
+                <NavbarButton
+                  onClick={() => navigate("signin")}
+                  variant="primary"
+                  className="w-full text-red-800"
+                >
+                  {/* Join Waitlist */}Book a demo
                 </NavbarButton>
-              </a>
+              </div>
 
               {/* <Link to={RouteConstant.auth.signup.path}>
                 <NavbarButton

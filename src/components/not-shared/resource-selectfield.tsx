@@ -127,7 +127,7 @@ export const ResourceSelectField = ({
     if (fetchError) return "Error loading options";
     if (options.length === 0) {
       const dependencies = checkDependencies(parameterLookup, formik.values);
-      
+
       if (!dependencies.ready) {
         return `Select ${dependencies.missing.join(", ")} first`;
       }

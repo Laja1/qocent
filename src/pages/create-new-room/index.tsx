@@ -288,7 +288,7 @@ export const CreateNewRoom = () => {
         isOpen={isDeployModalOpen}
         onClose={() => !isCreatingLoading && setIsDeployModalOpen(false)}
         formik={formik}
-        json={serverRoomTemplate}
+        json={serverRoomTemplate?.data}
         isLoading={isCreatingLoading}
         progress={progress}
         onDeploy={formik.handleSubmit}

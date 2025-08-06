@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import type {  getResourcesInSiteResponse, getResourceSummaryResponse, getSiteResponse, getSiteArchitectureResponse, resourceDataFlowResponse, SiteResponse,  } from "@/models/response/siteResponse";
+import type {  getResourcesInSiteResponse, getResourceSummaryResponse, getSiteArchitectureResponse, getSiteResponse, resourceDataFlowResponse, SiteResponse,  } from "@/models/response/siteResponse";
 import { ApiEnums } from "@/utilities/enums";
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import type { createSiteRequest } from "@/models/request/siteRequest";
@@ -29,8 +29,8 @@ export const siteApi = createApi({
     getSiteArchitecture: build.query<getSiteArchitectureResponse, {siteCode:string}>({
       query: ({siteCode}) => `/dashboard/site-architecture/${siteCode}`,    
     }),
-    getSiteByProvider: build.query<getSiteResponse, {provider:string,userId:number}>({
-      query: ({provider,userId}) => `/site/${userId}/${provider}`,    
+    getSiteByProvider: build.query<getSiteResponse, {provider:string,siteAccountId:string}>({
+      query: ({provider,siteAccountId}) => `/site/read-by-site-account-id/${siteAccountId}/${provider}`,    
       providesTags: (result) => createSiteProviderTags(result,  "siteId"),
     }),
     getSiteBySiteCode: build.query<getSiteArchitectureResponse, {siteCode:string}>({
@@ -46,9 +46,11 @@ export const siteApi = createApi({
         query: () => `/dashboard/sites`,    
     }),
     getResourcesInSite: build.query<getResourcesInSiteResponse, {siteCode:string}>({
-      query: ({siteCode}) => `/dashboard/resource-list/${siteCode}`,    
+      query: ({siteCode}) => `/dashboard/resource-list/${siteCode}`,  
+      
   }),
     
+  
   }),
 });
 

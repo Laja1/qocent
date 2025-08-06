@@ -44,6 +44,10 @@ export const RouteConstant = {
       path: "/our-partners",
       name: "Our Partners",
     },
+    bookDemo: {
+      path: "/book-demo",
+      name: "Book A Demo",
+    },
   },
   auth: {
     signin: {
@@ -107,6 +111,10 @@ export const RouteConstant = {
     dashboard: {
       path: "/dashboard",
       name: "dashboard",
+    },
+    acceptInvite: {
+      path: "/accept-invitation/:inviteCode/:email",
+      name: "Accept Invite",
     },
     serverSite: {
       path: "/server-sites",

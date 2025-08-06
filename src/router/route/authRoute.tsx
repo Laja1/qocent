@@ -39,4 +39,5 @@ export const authRoute: RouteType[] = [
     component: <CompletePasswordReset />,
     metadata: { isAuthenticated: false },
   },
+ 
 ];

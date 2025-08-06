@@ -3,12 +3,12 @@ import { Button, Textfield } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
 import { signInInit, type signInRequest } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
-import { useSignInMutation } from "@/service/typescript/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
+import { useSignInMutation } from "@/service/kotlin/authApi";
 import { authStore } from "@/store/authSlice";
 import { loginFormValidationSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
-import { EyeClosed, EyeIcon, Mail } from "lucide-react";
+import { EyeClosed, EyeIcon, Mail, Lock } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -24,12 +24,12 @@ const SignIn = () => {
 
       dispatch(
         authStore.action.setCredentials({
-          token: res.data.accessToken.replace("Bearer ", ""),
-          refreshToken: res.data.refreshToken,
-          userEmail: res?.data?.user?.userEmail,
-          userFirstName: res?.data?.user?.userFirstName,
-          userLastName: res?.data?.user?.userLastName,
-          userId: res?.data?.user?.userId,
+          token: res.accessToken,
+          userEmail: res?.userEmail,
+          userFirstName: res?.userFirstName,
+          userLastName: res?.userLastName,
+          privileges: res?.privileges,
+          userId: res?.userId,
         })
       );
       navigate(RouteConstant.dashboard.console.path);
@@ -68,7 +68,7 @@ const SignIn = () => {
           formik={formik}
           name="userEmail"
           label="Email"
-          suffixIcon={<Mail size={16} />}
+          prefixIcon={<Mail size={16} />}
           placeholder="Enter your email"
           error={
             formik?.touched.userEmail && formik?.errors.userEmail
@@ -80,6 +80,7 @@ const SignIn = () => {
           label="Password"
           name="userPassword"
           placeholder="Enter your password"
+          prefixIcon={<Lock size={16} />}
           type={seePassword ? "text" : "password"}
           suffixIcon={
             <button onClick={() => setSeePassword((prev) => !prev)}>

@@ -1,66 +1,33 @@
-export type resendOtpResponse = {
-    responseCode: number,
-    responseMessage: string
-  }
-
-
-
-  export type forgotPasswordResponse = {
-    success: boolean;
-    message: string;
-    error: string;
-    data: string
+ export interface signInResponse {
+    accessToken: string;
+    privileges: string[];
+    responseCode: string;
+    responseMessage: string;
+    userEmail: string;
+    userFirstName: string;
+    userId: number;
+    userLastName: string;
+    userRoleId: number;
   }
   
-  
-  export type signUpResponse = {
-    success: boolean;
-    message: string;
-    data: {
-      userId: number;
-      userEmail: string;
-      message: string;
-    };
+
+  export type AccountMember = {
+    memberUserCode: string;
+    userEmail: string;
+    userFirstName: string;
+    userLastName: string;
+    memberStatus: "ACTIVE" | "INACTIVE"; // assuming possible statuses
+    memberCreatedAt: string | null;
   };
   
-
-  export type completeEnrollmentResponse = {
-    success: boolean;
-    message: string;
-    error: string;
-    data: {
-      accessToken: string;
-      refreshToken: string;
-      user: {
-        userFirstName: string;
-        userLastName: string;
-        userEmail: string;
-        userId: number;
-      };
-    };
-  
-  }
-
-  export type completePasswordResetResponse = {
-    success: boolean;
-    message: string;
-    error: string;
-    data: string
-  }
-
-  
-  export interface signInResponse {
-    success: boolean;
-    message: string;
-    error: string;
-    data: {
-      accessToken: string;
-      refreshToken: string;
-      user: {
-        userFirstName: string;
-        userLastName: string;
-        userEmail: string;
-        userId: number;
-      }}
-  }
+  export type AccountResponse = {
+    accountId: number;
+    accountCode: string;
+    accountName: string;
+    accountType: "INDIVIDUAL" | "BUSINESS"; // extend if there are other types
+    accountStatus: "ACTIVE" | "INACTIVE";   // extend as needed
+    members: AccountMember[];
+    responseCode: string;
+    responseMessage: string;
+  };
   

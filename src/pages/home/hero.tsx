@@ -1,6 +1,7 @@
-import { svgLinks } from "@/assets/assetLink";
+import { ModalConstant } from "@/components/shared/modal/register";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { Badge } from "@/components/ui/badge";
+import NiceModal from "@ebay/nice-modal-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
@@ -40,22 +41,27 @@ export function Hero() {
               </p> */}
               <div className="flex flex-col text-white  sm:flex-row gap-4 items-center justify-center">
                 <div className="flex gap-1 items-center border border-white text-xs">
-                <a href="#join-waitlist"><p
-                    onClick={() => navigate("/sigin")}
-                    className="hover:cursor-pointer p-2"
+                  <a href="#join-waitlist">
+                    <p
+                      onClick={() => navigate("/sigin")}
+                      className="hover:cursor-pointer p-2"
+                    >
+                      Get Started
+                    </p>
+                  </a>
+                  <div
+                    onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
+                    className="border border-white bg-white text-black text-xs flex p-2 "
                   >
-                    Get Started
-                  </p></a>
-                  <div className="border border-white bg-white text-black text-xs flex p-2 ">
                     Book a demo
                   </div>
                 </div>
               </div>
             </div>
             {/* <div className="py-20"/> */}
-            <div className=" w-full items-center justify-center flex lg:-mt-80 md:-mt-40">
+            {/* <div className=" w-full items-center justify-center flex lg:-mt-80 md:-mt-40">
               <img src={svgLinks.hero} />
-            </div>
+            </div> */}
             {/* <div className="flex items-center justify-center gap-4 mt-6 text-xs text-muted-foreground">
               <div className="flex items-center gap-1">
                 <Check className="size-4 text-white" />

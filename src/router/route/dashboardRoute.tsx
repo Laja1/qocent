@@ -14,6 +14,7 @@ import { Organizations } from "@/pages/organization";
 import { Billings } from "@/pages/billings";
 import { Console } from "@/pages/console";
 import { Access } from "@/pages/access";
+import AcceptInvite from "@/pages/accept-invite";
 
 export const dashboardRoute: RouteType[] = [
   {
@@ -59,7 +60,12 @@ export const dashboardRoute: RouteType[] = [
     component: <Console />,
     metadata: { isAuthenticated: true, hasSidebar: false },
   },
-
+  {
+    path: RouteConstant.dashboard.acceptInvite.path,
+    name: RouteConstant.dashboard.acceptInvite.name,
+    component: <AcceptInvite />,
+    metadata: { isAuthenticated: true, hasSidebar: false },
+  },
   {
     path: RouteConstant.dashboard.createnewsite.path,
     name: RouteConstant.dashboard.createnewsite.name,

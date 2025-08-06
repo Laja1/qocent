@@ -11,7 +11,14 @@ export const registerFormValidationSchema = object().shape({
   userLastName: defaultValidation('Last Name'),
   userEmail: emailValidation(),
   userPassword: passwordValidation(),
-
+  accountType: string()
+  .oneOf(['Individual', 'Organization'], 'Invalid account type')
+  .required('Account type is required'),
+  accountName: string().when('accountType', ([accountType], schema) => 
+    accountType === 'Organization'
+      ? defaultValidation('Account name')
+      : schema.notRequired()
+  ),
 });
 
 export const confirmAccountSchema = object().shape({
@@ -25,7 +32,7 @@ export const completePasswordSchema = object().shape({
 
 export const resetPasswordSchema = object().shape({
   otp:codeValidatiion('OTP'),
-  newPassword: passwordValidation(),
+  userPassword: passwordValidation(),
 });
 
 export const forgotPasswordFormValidationSchema = object().shape({

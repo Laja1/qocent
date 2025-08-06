@@ -7,8 +7,7 @@ import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 // Step 1: Create a baseQuery that attaches Authorization header
 export const baseQuery = fetchBaseQuery({
-//   baseUrl:  import.meta.env.VITE_APP_ENV == 'dev' ? import.meta.env.VITE_BASE_URL_DEV : import.meta.env.VITE_BASE_URL_DEV,
-baseUrl: "https://v2auxqjrv8.execute-api.us-east-1.amazonaws.com/api/dev",
+  baseUrl: import.meta.env.VITE_KOTLIN_BASE_URL,
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
     if (token) {

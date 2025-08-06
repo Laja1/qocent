@@ -1,4 +1,4 @@
-import {  svgLinks } from "@/assets/assetLink";
+import { svgLinks } from "@/assets/assetLink";
 import { RouteConstant } from "@/router/routes";
 import { Link, useLocation } from "react-router-dom";
 type AuthLayoutProps = {
@@ -44,16 +44,14 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
     <div className="h-full w-full">
       <div
         className={
-          "flex  flex-col items-center relative  justify-between min-h-screen  py-5"
+          "flex  flex-col items-center relative  justify-center space-y-5 min-h-screen  py-5"
         }
       >
-        <div>
-          <div className="text-4xl text-gray-700 font-alumni">
-            <img src={svgLinks.logo} className="size-40" />
-          </div>
-        </div>
-        <div className="flex  rounded-sm  justify-center items-center w-full lg:max-w-sm">
-          <div className="bg-[#FFFFFF0D]      mx-5 rounded-xl py-5  px-3 w-full ">
+        <div className="flex  rounded-sm  justify-center items-center w-full lg:max-w-md">
+          <div className="bg-[#FFFFFF0D]  border   mx-5 rounded-xs py-5  px-8 w-full ">
+            <div className="justify-center flex text-gray-700 font-alumni">
+              <img src={svgLinks.logo} className="size-30" />
+            </div>
             <div className="justify-center items-center flex-col mt-5 flex space-y-3">
               <p className="font-bold lg:text-3xl text-xl">{title}</p>
               <p className="font-light lg:text-sm text-center text-xs pb-3 ">
@@ -65,7 +63,7 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
           </div>
         </div>
         <div className="flex items-end  text-gray-500 bottom-0">
-          <h1 className=" ">
+          <h1 className="text-xs">
             QOCENT. All rights reserved. © {new Date().getFullYear()}
           </h1>
         </div>

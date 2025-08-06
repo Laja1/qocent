@@ -80,7 +80,6 @@ const cellBorderStyles: CellBorderData = {
     //  { row: 1, col: 1, borderTop: "2px solid black" },
     //  { row: 1, col: 1, borderLeft: "2px solid black" },
     //  { row: 1, col: 1, borderBottom: "2px solid red" },
-
     // { row: 12, col: 11, borderTop: "2px solid black" },
     // { row: 11, col: 8, borderBottom: "2px solid black" },
     // { row: 11, col: 9, borderBottom: "2px solid black" },
@@ -88,7 +87,6 @@ const cellBorderStyles: CellBorderData = {
     // { row: 11, col: 8, borderLeft: "2px solid black" },
     // { row: 10, col: 9, borderRight: "2px solid black" },
     // { row: 11, col: 9, borderRight: "2px solid black" },
-
     // // Mixed approach - L-shape with different methods
     // { row: 7, col: 3, borderTop: "2px solid green" },
     // { row: 7, col: 4, borderTop: "2px solid green" },

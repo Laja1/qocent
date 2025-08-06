@@ -26,6 +26,7 @@ import type { ConfigResponse } from "@/models/response/resourceResponse";
 export const CreateNewHouse = () => {
   const navigate = useNavigate();
   const dashboard = useSelector((state: RootState) => state.dashboard);
+
   const [createResource, { isLoading: isCreatingLoading }] =
     useCreateResourceMutation();
   const { data: configData } = useGetConfigQuery({
@@ -50,14 +51,12 @@ export const CreateNewHouse = () => {
         throw new Error("Configuration data is not available");
       }
 
-      console.log(
-        newJsonConfig.data,
-        '"config" is an excess property and therefore is not allowed'
-      );
+      
       const payload: createResourceRequest =
         "data" in newJsonConfig
           ? (newJsonConfig.data?.configJson as unknown as createResourceRequest)
           : (newJsonConfig as createResourceRequest);
+          console.log(payload)
       await createResource(payload).unwrap();
 
       // Simulate deployment progress
@@ -108,13 +107,12 @@ export const CreateNewHouse = () => {
       }) as ConfigResponse)
     : null;
 
-  console.log(formik?.errors, formik?.values);
   useEffect(() => {
     if (serverHouseTemplate?.data) {
       const newValues = serverHouseTemplate.data.reduce(
         (acc: Record<string, string>, item: ParameterData) => ({
           ...acc,
-          [item.parameterName]: "",
+          [item.parameterField]: "",
         }),
         {}
       );
@@ -160,8 +158,6 @@ export const CreateNewHouse = () => {
       </div>
     );
   }
-
-  // Error state
   if (isError || !serverHouseTemplate?.data) {
     return (
       <div className="p-4 text-red-500">
@@ -229,7 +225,7 @@ export const CreateNewHouse = () => {
                 </p>
                 <div className="lg:w-2/5 w-full pr-3 flex gap-1">
                   <RenderField
-                    name={item.parameterName}
+                    name={item.parameterField}
                     formik={formik}
                     parameterLookup={item.parameterLookup}
                     placeholder={`Enter your ${item.parameterLabel}`}
@@ -263,7 +259,7 @@ export const CreateNewHouse = () => {
         isOpen={isDeployModalOpen}
         onClose={() => !isCreatingLoading && setIsDeployModalOpen(false)}
         formik={formik}
-        json={serverHouseTemplate}
+        json={serverHouseTemplate?.data}
         isLoading={isCreatingLoading}
         progress={progress}
         onDeploy={formik.handleSubmit}

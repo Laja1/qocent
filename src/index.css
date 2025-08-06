@@ -153,7 +153,9 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome, Safari, Opera */
   }
-  
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
 
 @layer base {
     :root {
@@ -172,7 +174,16 @@ body{
     font-family: var(--font-brfirma);
 }
 
+form {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 
+  body, html {
+    overflow-x: hidden;  /* Prevent horizontal overflow */
+  }
+  
 html {
     scroll-behavior: smooth;
   }

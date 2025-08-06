@@ -37,4 +37,5 @@ export const publicRoute: RouteType[] = [
     component: <Partners />,
     metadata: { isAuthenticated: false },
   },
+ 
 ];
