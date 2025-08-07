@@ -4,7 +4,7 @@ import { baseQuery } from "../httpClient/baseQuery";
 import type { genericResponse } from "@/models/response";
 // import type { GetHouseListResponse } from "@/models/response/houseResponse"; // ✅ Ensure correct response
 import { ApiEnums } from "@/utilities/enums";
-import type { getHouseResponse } from "@/models/response/homeResponse";
+import type { getHouseResponse, houseResponse } from "@/models/response/homeResponse";
 
 export const houseApi = createApi({
   reducerPath: "houseApi",
@@ -32,6 +32,10 @@ export const houseApi = createApi({
               })),
             ]
           : [{ type: ApiEnums.House, id: "LIST" } as const],
+    }),
+    getAllHouse: build.query<houseResponse,{ accountCode: string }>({
+      query: ({accountCode}) => `/resource/read-house-by-account-code/${accountCode}`, 
+
     }),
   }),
 });
