@@ -13,6 +13,7 @@ import { siteApi } from "@/service/kotlin/siteApi";
 import { serviceApi } from "@/service/kotlin/serviceApi";
 import { authApi } from "@/service/kotlin/authApi";
 import { accountStore } from "./accountSlice";
+import { waitlistApi } from "@/service/kotlin/waitlistApi";
 
 // Combine all your reducers
 const rootReducer = combineReducers({
@@ -26,7 +27,8 @@ const rootReducer = combineReducers({
   [resourceApi.reducerPath]:resourceApi.reducer,
   [kotlinResourceApi.reducerPath]:kotlinResourceApi.reducer,
   [serviceApi.reducerPath]:serviceApi.reducer,
- account:accountStore.reducer
+  [waitlistApi.reducerPath]:waitlistApi.reducer,
+ account:accountStore.reducer,
 });
 
 // Persist config for redux-persist
@@ -56,7 +58,7 @@ export const store = configureStore({
           "persist/REGISTER",
         ],
       },
-    }).concat(authApi.middleware, siteApi.middleware,houseApi.middleware,roomApi.middleware,resourceApi.middleware,kotlinResourceApi.middleware,serviceApi.middleware),
+    }).concat(authApi.middleware, siteApi.middleware,houseApi.middleware,roomApi.middleware,resourceApi.middleware,kotlinResourceApi.middleware,serviceApi.middleware,waitlistApi.middleware),
 });
 
 // Persistor instance

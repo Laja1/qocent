@@ -51,14 +51,13 @@ export const CreateNewHouse = () => {
         throw new Error("Configuration data is not available");
       }
 
-      
       const payload: createResourceRequest =
         "data" in newJsonConfig
           ? (newJsonConfig.data?.configJson as unknown as createResourceRequest)
           : (newJsonConfig as createResourceRequest);
-          console.log(payload)
-      await createResource(payload).unwrap();
+      console.log(payload);
 
+      await createResource(payload).unwrap();
       // Simulate deployment progress
       for (let i = 0; i <= 100; i += 10) {
         setProgress(i);

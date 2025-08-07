@@ -92,7 +92,8 @@ export default function NavbarDemo({
                 onClick={() => setIsMobileMenuOpen(false)}
               >
                 <NavbarButton
-                  onClick={() => navigate("signin")}
+                  // onClick={() => navigate("signin")}
+                  onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
                   variant="primary"
                   className="w-full text-red-800"
                 >

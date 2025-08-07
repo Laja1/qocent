@@ -58,6 +58,19 @@ export const generateDynamicSchema = (params?: ParameterData[]) => {
             `${param.parameterLabel} must be at most ${param.parameterLength} characters`);
         }
         break;
+        case 'NoTrailTextField':
+          validator = Yup.string()
+            .matches(/^[^\s]+$/, `${param.parameterLabel} must not contain spaces`)
+            .trim(); // removes leading/trailing whitespace before validation
+        
+          if (param.parameterLength && param.parameterLength > 0) {
+            validator = (validator as Yup.StringSchema).max(
+              param.parameterLength,
+              `${param.parameterLabel} must be at most ${param.parameterLength} characters`
+            );
+          }
+          break;
+        
       
       case 'CommentBox':
         validator = Yup.string();

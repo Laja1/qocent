@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Sheet,
   SheetContent,
@@ -11,35 +12,65 @@ import { Textfield } from "../textfield";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { svgLinks } from "@/assets/assetLink";
 import { SelectField } from "../selectfield";
+import { waitlistInit } from "@/models/request/waitlistRequest";
+import { useCreateWaitlistMutation } from "@/service/kotlin/waitlistApi";
+import { showCustomToast } from "../toast";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
+import { waitlistSchema } from "@/utilities/schema/waitlistSchema";
 
 export const BookDemoModal = NiceModal.create(() => {
   const modal = useModal();
+  const [bookDemo, { isLoading }] = useCreateWaitlistMutation();
+
+  const handleSubmit = async (values: any, { setSubmitting }: any) => {
+    const payload = {
+      waitlistFullName: values.fullName,
+      waitlistEmail: values.email,
+      waitlistPhoneNumber: values.mobileNumber,
+      waitlistCompanyName: values.companyName,
+      waitlistCompanyEmail: values.companyEmail,
+      waitlistCompanySize: values.companySize,
+      waitlistRole: values.role,
+    };
+
+    try {
+      const res = await bookDemo(payload).unwrap();
+      showCustomToast(res.responseMessage, {
+        toastOptions: { type: "success", autoClose: 5000 },
+      });
+      modal.hide();
+    } catch (error) {
+      console.log(error);
+      const message = ErrorHandler.extractMessage(error);
+      showCustomToast(message, {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   // Updated formik with correct field names and validation
   const formik = useFormik({
-    initialValues: {
-      fullName: "",
-      email: "",
-      mobileNumber: "",
-      companyName: "",
-      companyEmail: "",
-      companySize: "",
-      role: "",
-    },
-    onSubmit: (values) => {
-      console.log("Form submitted:", values);
-      // Handle form submission logic here
-      // For example: call an API, show success message, etc.
-
-      // Close modal after successful submission
-      modal.hide();
-    },
+    initialValues: waitlistInit,
+    onSubmit: handleSubmit,
+    validationSchema: waitlistSchema,
   });
 
   // Handle cancel button
   const handleCancel = () => {
     formik.resetForm();
     modal.hide();
+  };
+
+  // Prevent form submission if there are validation errors
+  const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault(); // Prevent default form submission
+    e.stopPropagation(); // Stop event propagation
+
+    if (formik.isValid && !isLoading) {
+      formik.handleSubmit(e);
+    }
   };
 
   return (
@@ -62,7 +93,7 @@ export const BookDemoModal = NiceModal.create(() => {
           </SheetDescription>
         </SheetHeader>
 
-        <form onSubmit={formik.handleSubmit} className="space-y-6">
+        <form onSubmit={handleFormSubmit} className="space-y-6" method="post">
           <div className="space-y-6">
             <Textfield
               label="Full Name *"
@@ -142,6 +173,8 @@ export const BookDemoModal = NiceModal.create(() => {
 
             <Button
               type="submit"
+              isLoading={isLoading || formik.isSubmitting}
+              disabled={!formik.isValid || isLoading || formik.isSubmitting}
               label="Book Demo"
               className="bg-red-600 hover:bg-red-700 text-white rounded-xs"
             />

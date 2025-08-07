@@ -28,11 +28,18 @@ export const Textfield = ({
     );
   }, [searchField, prefixIcon]);
 
+  // Get the field value and error from formik
+  const fieldValue = formik?.values?.[name] ?? "";
+  const fieldError = formik?.touched?.[name] && formik?.errors?.[name];
+  const displayError = error || fieldError;
+
   // Memoize the textfield classes
   const textfieldClasses = useMemo(() => {
     const textfieldBaseClass = `block w-full bg-white border border-gray-300 rounded-xs py-2 px-3 text-xs focus:outline-none focus:ring-0.5 focus:ring-green-700 focus:border-green-700`;
-    const textfieldState = error ? "ring-red-500" : "ring-[#E8EAEB]";
-    
+    const textfieldState = displayError
+      ? "ring-red-500 border-red-500"
+      : "ring-[#E8EAEB]";
+
     return clsx(
       textfieldBaseClass,
       textfieldState,
@@ -40,17 +47,14 @@ export const Textfield = ({
       suffixIcon ? "pr-10" : "pr-3",
       className
     );
-  }, [error, computedPrefixIcon, suffixIcon, className]);
-
-  // Get the field value safely
-  const fieldValue = formik?.values?.[name] ?? "";
+  }, [displayError, computedPrefixIcon, suffixIcon, className]);
 
   return (
     <div className="w-full text-start">
-      <div className="flex justify-between"><label className={clsx("text-sm text-tetiary-lighter", labelClassName)}>
-        {label}
-      </label>
-     
+      <div className="flex justify-between">
+        <label className={clsx("text-sm text-tetiary-lighter", labelClassName)}>
+          {label}
+        </label>
       </div>
 
       <div className="mt-1 relative rounded-lg w-full">
@@ -76,13 +80,18 @@ export const Textfield = ({
           value={fieldValue}
           {...rest}
           className={textfieldClasses}
-        /> 
-        
+        />
       </div>
-      {helperLabel&& <p className="text-[10px] text-right mt-2 text-red-500">{helperLabel}</p>}
-      {error && (
+
+      {helperLabel && (
+        <p className="text-[10px] text-right mt-2 text-red-500">
+          {helperLabel}
+        </p>
+      )}
+
+      {typeof displayError === "string" && displayError && (
         <p className="text-red-500 text-xs text-left items-start mt-2">
-          {error}
+          {displayError}
         </p>
       )}
     </div>

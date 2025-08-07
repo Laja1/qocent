@@ -28,7 +28,7 @@ export const RenderField = ({
 
   return (
     <div className="w-full">
-      {(type === "Textbox" || type === "TextBox") && (
+      {(type === "Textbox" || type === "TextBox" ||type==='NoTrailTextField') && (
         <Textfield2
           name={name}
           label={label}

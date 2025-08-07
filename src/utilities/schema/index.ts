@@ -4,7 +4,7 @@ import { cidrBlockRegex, houseCodeRegex, houseNameRegex, siteCodeRegex } from ".
 
 
 export const defaultValidation = (name: string) =>
-  string().min(1,'cannot be empty').required(`${name} is required`);
+  string().min(1,'cannot be empty').required(`${name} is required`).trim();
 
 export const phoneValidation = (phoneNumber: string) =>
   string()
