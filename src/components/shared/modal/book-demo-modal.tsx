@@ -83,87 +83,100 @@ export const BookDemoModal = NiceModal.create(() => {
         }
       }}
     >
-      <SheetContent className="w-[400px] sm:w-[540px] p-4 bg-neutral-800 text-white">
-        <img src={svgLinks.logoWhite} className="size-20" alt="Logo" />
-        <SheetHeader>
-          <SheetTitle className="text-white">Book Demo</SheetTitle>
-          <SheetDescription className="text-neutral-300">
-            Fill out the form below to schedule a personalized demo of our
-            platform.
-          </SheetDescription>
-        </SheetHeader>
+      <SheetContent className="w-[400px] sm:w-[540px] bg-neutral-800 text-white flex flex-col max-h-screen">
+        {/* Header - Fixed at top */}
+        <div className="flex-shrink-0 p-4 pb-0">
+          <img src={svgLinks.logoWhite} className="size-16 mb-2" alt="Logo" />
+          <SheetHeader>
+            <SheetTitle className="text-white">Book Demo</SheetTitle>
+            <SheetDescription className="text-neutral-300">
+              Fill out the form below to schedule a personalized demo of our
+              platform.
+            </SheetDescription>
+          </SheetHeader>
+        </div>
 
-        <form onSubmit={handleFormSubmit} className="space-y-6" method="post">
-          <div className="space-y-6">
-            <Textfield
-              label="Full Name *"
-              className="text-black"
-              name="fullName"
-              formik={formik}
-              placeholder="John Doe"
-            />
+        {/* Scrollable form content */}
+        <div className="flex-1 overflow-y-auto px-4">
+          <form
+            onSubmit={handleFormSubmit}
+            className="space-y-4 pb-4"
+            method="post"
+          >
+            <div className="space-y-4">
+              <Textfield
+                label="Full Name *"
+                className="text-black"
+                name="fullName"
+                formik={formik}
+                placeholder="John Doe"
+              />
 
-            <Textfield
-              label="Email *"
-              name="email"
-              type="email"
-              className="text-black"
-              formik={formik}
-              placeholder="john.doe@example.com"
-            />
+              <Textfield
+                label="Email *"
+                name="email"
+                type="email"
+                className="text-black"
+                formik={formik}
+                placeholder="john.doe@example.com"
+              />
 
-            <Textfield
-              label="Mobile Number *"
-              className="text-black"
-              name="mobileNumber"
-              type="tel"
-              formik={formik}
-              placeholder="+1 (555) 123-4567"
-            />
+              <Textfield
+                label="Mobile Number *"
+                className="text-black"
+                name="mobileNumber"
+                type="tel"
+                formik={formik}
+                placeholder="+1 (555) 123-4567"
+              />
 
-            <Textfield
-              label="Company Name *"
-              className="text-black"
-              name="companyName"
-              formik={formik}
-              placeholder="Your Company Inc."
-            />
+              <Textfield
+                label="Company Name *"
+                className="text-black"
+                name="companyName"
+                formik={formik}
+                placeholder="Your Company Inc."
+              />
 
-            <Textfield
-              label="Company Email *"
-              className="text-black"
-              name="companyEmail"
-              type="email"
-              formik={formik}
-              placeholder="info@company.com"
-            />
+              <Textfield
+                label="Company Email *"
+                className="text-black"
+                name="companyEmail"
+                type="email"
+                formik={formik}
+                placeholder="info@company.com"
+              />
 
-            <SelectField
-              name="companySize"
-              placeholder="Select company size"
-              label="Company Size *"
-              formik={formik}
-              labelClassname="text-white"
-              className="text-black"
-              options={[
-                { label: "1-10 employees", value: "1-10" },
-                { label: "11-50 employees", value: "11-50" },
-                { label: "51-200 employees", value: "51-200" },
-                { label: "201-500 employees", value: "201-500" },
-                { label: "500+ employees", value: "500+" },
-              ]}
-            />
+              <SelectField
+                name="companySize"
+                placeholder="Select company size"
+                label="Company Size *"
+                formik={formik}
+                labelClassname="text-white"
+                className="text-black"
+                options={[
+                  { label: "1-10 employees", value: "1-10" },
+                  { label: "11-50 employees", value: "11-50" },
+                  { label: "51-200 employees", value: "51-200" },
+                  { label: "201-500 employees", value: "201-500" },
+                  { label: "500+ employees", value: "500+" },
+                ]}
+              />
 
-            <Textfield
-              label="Role *"
-              name="role"
-              className="text-black"
-              formik={formik}
-              placeholder="e.g., CTO, DevOps Engineer, IT Manager"
-            />
-          </div>
+              <Textfield
+                label="Role *"
+                name="role"
+                className="text-black"
+                formik={formik}
+                placeholder="e.g., CTO, DevOps Engineer, IT Manager"
+              />
+            </div>
+          </form>
+        </div>
 
-          <div className="flex justify-end space-x-3 pt-4">
+        {/* Footer - Fixed at bottom */}
+        <div className="flex-shrink-0 p-4 pt-2 border-t border-neutral-700 bg-neutral-800">
+          <div className="flex justify-end space-x-3">
             <Button
               label="Cancel"
               type="button"
@@ -175,11 +188,12 @@ export const BookDemoModal = NiceModal.create(() => {
               type="submit"
               isLoading={isLoading || formik.isSubmitting}
               disabled={!formik.isValid || isLoading || formik.isSubmitting}
+              onClick={() => formik.handleSubmit()}
               label="Book Demo"
               className="bg-red-600 hover:bg-red-700 text-white rounded-xs"
             />
           </div>
-        </form>
+        </div>
       </SheetContent>
     </Sheet>
   );
