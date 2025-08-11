@@ -48,6 +48,52 @@ export const createProviderTags = <T extends { [key: string]: any }>(
       : [{ type: ApiEnums.Service, id: "LIST" } as const];
   };
 
+  export const createHouseProviderTags = <T extends Record<string, any>>(
+    result: { data?: T[] } | undefined,
+    
+    idField: keyof T
+  ) => {
+    return result?.data
+      ? [
+          { type: ApiEnums.House, id: "LIST" } as const,
+          ...result.data.map((item: T) => ({
+            type: ApiEnums.House,
+            id: item[idField],
+          } as const)),
+        ]
+      : [{ type: ApiEnums.House, id: "LIST" } as const];
+  };
+  export const createRoomTags = <T extends Record<string, any>>(
+    result: { data?: T[] } | undefined,
+    
+    idField: keyof T
+  ) => {
+    return result?.data
+      ? [
+          { type: ApiEnums.Room, id: "LIST" } as const,
+          ...result.data.map((item: T) => ({
+            type: ApiEnums.Room,
+            id: item[idField],
+          } as const)),
+        ]
+      : [{ type: ApiEnums.Room, id: "LIST" } as const];
+  };
+  export const createMemberProviderTags = <T extends Record<string, any>>(
+    result: { data?: T[] } | undefined,
+    
+    idField: keyof T
+  ) => {
+    return result?.data
+      ? [
+          { type: ApiEnums.Member, id: "LIST" } as const,
+          ...result.data.map((item: T) => ({
+            type: ApiEnums.Member,
+            id: item[idField],
+          } as const)),
+        ]
+      : [{ type: ApiEnums.Member, id: "LIST" } as const];
+  };
+
 
   export const createSiteProviderTags = <T extends Record<string, any>>(
     result: { data?: T[] } | undefined,

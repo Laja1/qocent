@@ -49,7 +49,7 @@ export const CreateNewRoom = () => {
     serverRoomTemplate?.data?.reduce(
       (acc: Record<string, string>, item: ParameterData) => ({
         ...acc,
-        [item.parameterName]: "",
+        [item.parameterField]: "",
       }),
       {}
     ) || {};
@@ -66,8 +66,9 @@ export const CreateNewRoom = () => {
       );
       const payload: createResourceRequest =
         "data" in newJsonConfig
-          ? (newJsonConfig.data as createResourceRequest)
+          ? (newJsonConfig.data?.configJson as unknown as createResourceRequest)
           : (newJsonConfig as createResourceRequest);
+      console.log(payload); 
 
       const res = await createResource(payload).unwrap();
       console.log(res, "creating");
@@ -118,7 +119,7 @@ export const CreateNewRoom = () => {
       const newValues = serverRoomTemplate.data.reduce(
         (acc: Record<string, string>, item: ParameterData) => ({
           ...acc,
-          [item.parameterName]: "",
+          [item.parameterField]: "",
         }),
         {}
       );
@@ -255,8 +256,9 @@ export const CreateNewRoom = () => {
                 </p>
                 <div className="lg:w-2/5 w-full pr-3 flex gap-1">
                   <RenderField
-                    name={item.parameterName}
+                    name={item.parameterField}
                     formik={formik}
+                    parameterLookup={item.parameterLookup}
                     placeholder={`Enter your ${item.parameterLabel}`}
                     type={item.parameterInputType || "text"}
                     autoComplete="off"

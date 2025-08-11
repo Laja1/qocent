@@ -41,9 +41,9 @@ export const routeConfig = [
   {
     path: "/",
     element: (
-      <ProtectedRoute>
-        <Outlet />
-      </ProtectedRoute>
+      // <ProtectedRoute>
+      <Outlet />
+      //  </ProtectedRoute>
     ),
     children: authRoutesMapped,
   },

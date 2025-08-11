@@ -44,7 +44,7 @@ export const ServerSites = () => {
   const [selectedSiteCode, setSelectedSiteCode] = useState("");
   const dashboard = useSelector((state: RootState) => state.dashboard);
   const user = useSelector((state: RootState) => state.auth);
-  const account = useSelector((state:RootState)=>state.account)
+  const account = useSelector((state: RootState) => state.account);
   const [isArtificialLoading, setIsArtificialLoading] = useState(false);
   const [loadingTimeout, setLoadingTimeout] = useState<NodeJS.Timeout | null>(
     null
@@ -54,13 +54,13 @@ export const ServerSites = () => {
     useGetSiteByProviderQuery(
       {
         provider: dashboard.provider,
-        siteAccountId: account.accountCode || '',
+        siteAccountId: account.accountCode || "",
       },
       {
         skip: !user.userId && !dashboard.provider,
       }
     );
-console.log(siteData)
+  console.log(siteData);
   const { data: summaryData, isLoading: isSiteSummaryLoading } =
     useGetResourceTypeCountQuery({
       siteCode: selectedSiteCode,
@@ -445,7 +445,7 @@ console.log(siteData)
             onRowClick={handleRowClick}
             getRowId={(row) => row.siteId.toString()} // Convert to string for consistency
             highlightedRowId={selectedRowId} // Use the separate state
-            initialSorting={{ id: "siteId", desc: false }}
+            initialSorting={{ id: "siteCreatedAt", desc: false }}
           />
         </Card>
 

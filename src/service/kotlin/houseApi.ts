@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQuery } from "../httpClient/baseQuery";
 import type { genericResponse } from "@/models/response";
 // import type { GetHouseListResponse } from "@/models/response/houseResponse"; // ✅ Ensure correct response
 import { ApiEnums } from "@/utilities/enums";
 import type { getHouseResponse, houseResponse } from "@/models/response/houseResponse";
+import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
+import { createHouseProviderTags } from "@/utilities/tagHelpers";
 
-export const houseApi = createApi({
-  reducerPath: "houseApi",
-  baseQuery: baseQuery,
+export const kotlinHouseApi = createApi({
+  reducerPath: "kotlinHouseApi",
+  baseQuery: kotlinBaseQueryWithResponseCodeHandling,
   tagTypes: [ApiEnums.House],
   endpoints: (build) => ({
     createServerHouse: build.mutation<genericResponse, void>({
@@ -35,7 +36,7 @@ export const houseApi = createApi({
     }),
     getAllHouse: build.query<houseResponse,{ accountCode: string }>({
       query: ({accountCode}) => `/resource/read-house-by-account-code/${accountCode}`, 
-
+      providesTags: (result) => createHouseProviderTags(result,  "houseId"),
     }),
   }),
 });
@@ -44,4 +45,4 @@ export const {
   useCreateServerHouseMutation,
   useGetHousesByProviderQuery,
   useGetAllHouseQuery
-} = houseApi;
+} = kotlinHouseApi;

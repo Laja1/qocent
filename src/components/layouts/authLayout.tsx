@@ -1,6 +1,7 @@
 import { svgLinks } from "@/assets/assetLink";
 import { RouteConstant } from "@/router/routes";
 import { Link, useLocation } from "react-router-dom";
+
 type AuthLayoutProps = {
   children: React.ReactNode;
   title: string;
@@ -14,9 +15,16 @@ type AuthLayoutProps = {
   HTMLDivElement
 >;
 
-const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
+const AuthLayout = ({
+  children,
+  title,
+  subtitle,
+  mainContainerProps,
+  ...divProps
+}: AuthLayoutProps) => {
   const location = useLocation();
   const pathname = location.pathname;
+
   const renderFooterText = (pathname: string) => {
     switch (pathname) {
       case RouteConstant.auth.signin.path:
@@ -37,37 +45,44 @@ const AuthLayout = ({ children, title, subtitle }: AuthLayoutProps) => {
             </Link>
           </p>
         );
+      default:
+        return null;
     }
   };
 
   return (
-    <div className="h-full w-full">
-      <div
-        className={
-          "flex  flex-col items-center relative  justify-center space-y-5 min-h-screen  py-5"
-        }
+    <div className="h-screen w-full border flex flex-col" {...divProps}>
+      <main
+        className="flex flex-col items-center relative justify-center space-y-5 flex-1 py-5"
+        {...mainContainerProps}
       >
-        <div className="flex  rounded-sm  justify-center items-center w-full lg:max-w-md">
-          <div className="bg-[#FFFFFF0D]  border   mx-5 rounded-xs py-5  px-8 w-full ">
+        <div className="flex rounded-sm justify-center items-center w-full lg:max-w-md">
+          <div className="bg-[#FFFFFF0D] border mx-5 rounded-xs py-5 px-8 w-full">
             <div className="justify-center flex text-gray-700 font-alumni">
-              <img src={svgLinks.logo} className="size-30" />
+              <img
+                src={svgLinks.logo}
+                alt="QOCENT Logo"
+                className="h-30 w-30"
+              />
             </div>
-            <div className="justify-center items-center flex-col mt-5 flex space-y-3">
-              <p className="font-bold lg:text-3xl text-xl">{title}</p>
-              <p className="font-light lg:text-sm text-center text-xs pb-3 ">
-                {subtitle}
-              </p>
+            <div className="justify-center items-center flex-col flex space-y-3">
+              <h1 className="font-bold lg:text-3xl text-xl">{title}</h1>
+              {subtitle && (
+                <p className="font-light lg:text-sm text-center text-xs pb-3">
+                  {subtitle}
+                </p>
+              )}
             </div>
             <div>{children}</div>
-            <div className={"pt-3"}>{renderFooterText(pathname)}</div>
+            <div className="pt-3">{renderFooterText(pathname)}</div>
           </div>
         </div>
-        <div className="flex items-end  text-gray-500 bottom-0">
-          <h1 className="text-xs">
-            QOCENT. All rights reserved. © {new Date().getFullYear()}
-          </h1>
-        </div>
-      </div>
+      </main>
+      <footer className="flex justify-center text-gray-500 pb-4">
+        <p className="text-xs">
+          QOCENT. All rights reserved. © {new Date().getFullYear()}
+        </p>
+      </footer>
     </div>
   );
 };

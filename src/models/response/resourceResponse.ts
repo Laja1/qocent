@@ -1,31 +1,30 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type resourceType = {
   resourceId: number;
-  resourceSite: string;
-  resourceType: string;
-  resourceName: string;
   resourceCode: string;
-  resourceContainerType: string;
-  resourceContainerCode: string;
+  resourceName: string | null;
+  resourceType: string;
   resourceStatus: string;
-  resourceDate: string; // ISO date string
+  resourceProvider: string;
+  resourceSiteCode: string;
+  resourceRoomCode: string;
+  resourceHouseCode: string;
   resourceConfig: string;
-  resourceMaker: string;
-  resourceMakerId: string;
-  resourceUserId: number;
+  resourceRef: string | null;
+  resourceCreateChannel: string;
+  resourceUserId: string;
+  resourceIP: string;
   resourceCheckerId: string;
-  resourceRef: string;
-  resourceClass: string;
-  resourceLocation: string;
-  resourceTag: string;
-  resourceInfo: string;
+  resourceContainerCode: string;
+  resourceContainerType: string;
+  resourceCreatedAt: string; // e.g. "07/24/2025 10:12:45 AM"
+  resourceUpdatedAt: string; // e.g. "2025-07-24 10:12:45.0"
 };
 
 export type resourceResponse = {
-  success: boolean;
-  message: string;
+  responseCode: string;
+  responseMessage: string;
   data: resourceType[];
-  error: string;
 };
 
 export type createResourceResponse = {

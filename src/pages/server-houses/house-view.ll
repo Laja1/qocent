@@ -1,6 +1,6 @@
 // import { AwsLogo, HuaweiLogo } from "@/utilities/constants/icons";
 // import { Router } from "lucide-react";
-// import { roomData } from "./config";
+// import { roomData } from "../server-rooms/config";
 
 // export const HouseView = ({ id }: { id?: string }) => {
 //   const filteredData = id

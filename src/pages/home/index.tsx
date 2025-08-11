@@ -1,7 +1,6 @@
 import { CallToAction } from "./call-to-action";
 import { Hero } from "./hero";
 
-import NavbarDemo from "@/components/shared/navbar";
 import { Services } from "./services";
 import { Footer } from "@/components/shared";
 import { Faq } from "./faq";
@@ -9,6 +8,7 @@ import { HowIt } from "./how-it";
 import { HyperScalers } from "./hyperscalers";
 import { Video } from "./video";
 import Seo from "@/components/shared/seo";
+import NavbarDemo from "@/components/shared/navbar";
 
 const Home = () => {
   return (

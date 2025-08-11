@@ -26,39 +26,58 @@ export const ResourceSelectField = ({
   );
   const [fetchError, setFetchError] = useState<string | null>(null);
 
-  // Function to replace placeholders in parameterLookup with actual form values
   const processParameterLookup = useCallback(
     (lookup: string, formValues: any) => {
       // Handle array format: [qcs_eolAction, actionCode, actionProvider=@siteProvider]
       if (lookup.startsWith("[") && lookup.endsWith("]")) {
-        // Remove brackets and split by comma
+        // Remove brackets and split by semicolon
         const cleanLookup = lookup.slice(1, -1);
-        const parts = cleanLookup.split(",").map((part) => part.trim());
+        const parts = cleanLookup.split(";").map((part) => part.trim());
 
         // Process each part to replace placeholders
         const processedParts = parts.map((part) => {
+          // Check if this part contains a key-value pair with placeholder
           if (part.includes("=@")) {
-            // Extract the key and placeholder: actionProvider=@siteProvider
+            // Extract the key and placeholder: houseSite=@resourceSite
             const [key, placeholder] = part.split("=");
             const fieldName = placeholder.replace("@", ""); // Remove @ symbol
-            const formValue = formValues[fieldName];
+
+            // Handle field names with spaces by trying both formats
+            const formValue =
+              formValues[fieldName] ||
+              formValues[fieldName.replace(/([A-Z])/g, " $1").trim()];
 
             if (formValue) {
               return `${key.trim()}='${formValue}'`;
             } else {
-              // If the referenced field has no value, keep the placeholder
+              // If the referenced field has no value, keep the original placeholder
               return part;
             }
+          } else if (part.includes("@")) {
+            // Handle direct placeholder replacement (not in key=value format)
+            return part.replace(/@(\w+)/g, (match, fieldName) => {
+              const formValue =
+                formValues[fieldName] ||
+                formValues[fieldName.replace(/([A-Z])/g, " $1").trim()];
+              return formValue || match;
+            });
           }
+
+          // Return the part as-is if no placeholders found
           return part;
         });
 
-        return `[${processedParts.join(", ")}]`;
+        return `[${processedParts.join("; ")}]`;
       }
 
       // Handle simple string format with placeholders
       return lookup.replace(/@(\w+)/g, (match, fieldName) => {
-        return formValues[fieldName] || match;
+        // Handle field names with spaces by trying both formats
+        return (
+          formValues[fieldName] ||
+          formValues[fieldName.replace(/([A-Z])/g, " $1").trim()] ||
+          match
+        );
       });
     },
     []
@@ -71,7 +90,13 @@ export const ResourceSelectField = ({
 
     const missingFields = placeholderMatches
       .map((match) => match.replace("@", ""))
-      .filter((fieldName) => !formValues[fieldName]);
+      .filter((fieldName) => {
+        // Handle field names with spaces by trying both formats
+        return (
+          !formValues[fieldName] &&
+          !formValues[fieldName.replace(/([A-Z])/g, " $1").trim()]
+        );
+      });
 
     return {
       ready: missingFields.length === 0,
@@ -79,11 +104,34 @@ export const ResourceSelectField = ({
     };
   }, []);
 
+  // Function to filter and process options from API response
+  const processOptions = useCallback(
+    (rawOptions: { label: string; value: string }[]) => {
+      if (!Array.isArray(rawOptions)) {
+        return [];
+      }
+
+      return rawOptions
+        .filter((option) => {
+          // Filter out options with empty values or invalid data
+          return option.value && option.value.trim() !== "" && option.label;
+        })
+        .map((option) => ({
+          label: option.label,
+          value: option.value,
+          // Optionally, you could add a fallback value if needed:
+          // value: option.value || `option-${index}-${Date.now()}`
+        }));
+    },
+    []
+  );
+
   const handleFetchOptions = useCallback(async () => {
     try {
       setFetchError(null);
 
       const dependencies = checkDependencies(parameterLookup, formik.values);
+      console.log(formik.values, "rurur");
       if (!dependencies.ready) {
         setFetchError(
           `Please select: ${dependencies.missing.join(", ")} first`
@@ -96,11 +144,21 @@ export const ResourceSelectField = ({
         parameterLookup,
         formik.values
       );
-      console.log(processedLookup, "sss");
+      console.log(processedLookup, "ssss");
       const res = await getFormOptions({ query: processedLookup });
       console.log(res);
+
       if (res?.data?.responseCode === "00" && Array.isArray(res.data.data)) {
-        setOptions(res.data.data);
+        const processedOptions = processOptions(res.data.data);
+        setOptions(processedOptions);
+
+        // Optionally log filtered out items for debugging
+        const filteredCount = res.data.data.length - processedOptions.length;
+        if (filteredCount > 0) {
+          console.warn(
+            `Filtered out ${filteredCount} options with empty values`
+          );
+        }
       } else {
         setFetchError(res?.data?.responseMessage || "Failed to fetch options");
         setOptions([]);
@@ -116,7 +174,9 @@ export const ResourceSelectField = ({
     formik.values,
     processParameterLookup,
     checkDependencies,
+    processOptions,
   ]);
+
   const error =
     formik.touched[name] && formik.errors[name]
       ? (formik.errors[name] as string)

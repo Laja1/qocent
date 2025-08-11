@@ -1,5 +1,5 @@
 import { TopBanner } from "@/components/shared";
-import { Bot } from "lucide-react";
+import { Bot, Menu, X } from "lucide-react";
 import { useState } from "react";
 import {
   NotificationDropdown,
@@ -17,6 +17,7 @@ import { ConsoleLeft } from "./console-left";
 
 export const Console = () => {
   const user = useSelector((state: RootState) => state.auth);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const [notifications, setNotifications] = useState<Notification[]>([
     {
@@ -78,22 +79,39 @@ export const Console = () => {
   };
 
   const handleViewAll = () => {
-    // Navigate to notifications page or open modal
     console.log("View all notifications");
   };
+
   const initials = `${user?.userFirstName?.[0] ?? ""}${
     user?.userLastName?.[0] ?? ""
   }`.toUpperCase();
 
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
   return (
-    <div className="relative h-screen w-full overflow-hidden">
+    <div className="relative h-screen w-full overflow-hidden bg-gray-50">
       {/* Top Header */}
-      <header className="bg-gray-900 w-full text-white px-2 py-2 fixed top-0 z-20">
-        <div className="flex justify-between">
-          <div className="flex items-center">
-            <IconLayoutDashboard className="size-4" /> Dashboard
+      <header className="bg-gray-900 w-full text-white px-4 py-3 fixed top-0 z-50 shadow-lg">
+        <div className="flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            {/* Mobile Menu Button */}
+            <button
+              onClick={toggleSidebar}
+              className="lg:hidden p-1 hover:bg-gray-800 rounded-md transition-colors"
+              aria-label="Toggle sidebar"
+            >
+              <Menu className="size-5" />
+            </button>
+
+            <div className="flex items-center gap-2">
+              <IconLayoutDashboard className="size-5" />
+              <span className="font-semibold">Dashboard</span>
+            </div>
           </div>
-          <div className="flex items-center gap-2">
+
+          <div className="flex items-center gap-3">
             <NotificationDropdown
               notifications={notifications}
               onMarkAsRead={handleMarkAsRead}
@@ -103,49 +121,105 @@ export const Console = () => {
               onViewAll={handleViewAll}
             />
 
-            <div className="flex flex-row items-center">
-              <div className="w-8 h-8 rounded-full bg-[#f4f4f4] text-black lg:hidden flex items-center justify-center text-sm font-medium">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-white text-gray-900 flex items-center justify-center text-sm font-semibold shadow-sm">
                 {initials}
               </div>
 
-              <p className="hidden lg:flex text-xs">
-                {user?.userFirstName} {user?.userLastName}
-              </p>
+              <div className="hidden sm:block">
+                <p className="text-sm font-medium">
+                  {user?.userFirstName} {user?.userLastName}
+                </p>
+                <p className="text-xs text-gray-300">{user?.userEmail}</p>
+              </div>
             </div>
           </div>
         </div>
       </header>
 
+      {/* Mobile Sidebar Overlay */}
+      {isSidebarOpen && (
+        <div
+          className="lg:hidden fixed inset-0 bg-black bg-opacity-50 z-40 mt-16"
+          onClick={toggleSidebar}
+        />
+      )}
+
       {/* Layout */}
-      <div className="flex lg:flex-row flex-col mt-12 h-[calc(100vh-3rem)]">
-        <aside className="w-full  lg:w-1/6 bg-white border-r z-10 relative">
-          <ConsoleLeft />
+      <div className="flex pt-16 h-screen">
+        {/* Sidebar */}
+        <aside
+          className={`
+            fixed lg:relative top-16 lg:top-0 left-0 h-full w-80 lg:w-1/5 xl:w-1/6 
+            bg-white border-r border-gray-200 z-40 transform transition-transform duration-300 ease-in-out
+            ${
+              isSidebarOpen
+                ? "translate-x-0"
+                : "-translate-x-full lg:translate-x-0"
+            }
+          `}
+        >
+          {/* Mobile Close Button */}
+          <div className="lg:hidden flex justify-end p-4 border-b border-gray-200">
+            <button
+              onClick={toggleSidebar}
+              className="p-2 hover:bg-gray-100 rounded-md transition-colors"
+              aria-label="Close sidebar"
+            >
+              <X className="size-5" />
+            </button>
+          </div>
+
+          <div className="h-full">
+            <ConsoleLeft />
+          </div>
         </aside>
 
-        <main className="w-full lg:w-5/6 h-full scrollbar-hide overflow-y-auto px-4 pb-20">
-          <div className="my-2">
-            <TopBanner />
-          </div>
+        {/* Main Content */}
+        <main className="flex-1 h-full overflow-hidden">
+          <div className="h-full overflow-y-auto scrollbar-hide">
+            <div className="p-4 lg:p-6 max-w-7xl mx-auto">
+              {/* Top Banner */}
+              <div className="mb-6">
+                <TopBanner />
+              </div>
 
-          <div className="grid grid-cols-1 lg:grid-cols-[3.5fr_1fr] gap-4 lg:gap-5">
-            <div className="space-y-3 flex flex-col">
-              <AdsOverviewContainer />
-              <ConsoleBot />
-              <ConsoleChart />
-            </div>
-            <div className="space-y-4">
-              <LatestChanges />
-              <Monitoring />
-            </div>
-          </div>
+              {/* Content Grid */}
+              <div className="grid grid-cols-1 xl:grid-cols-[3fr_1fr] gap-6">
+                {/* Main Content Column */}
+                <div className="space-y-6">
+                  <AdsOverviewContainer />
+                  <ConsoleBot />
 
-          {/* Floating Bot Button */}
-          <div className="fixed bottom-10 right-5 z-30">
-            <div className="bg-green-900 inline-flex rounded-sm p-2 shadow-lg">
-              <Bot className="text-white" />
+                  {/* Chart Section - Stack on mobile */}
+                  <div className="block">
+                    <ConsoleChart />
+                  </div>
+                </div>
+
+                {/* Sidebar Content Column */}
+                <div className="space-y-6">
+                  <LatestChanges />
+                  <Monitoring />
+                </div>
+              </div>
+
+              {/* Bottom Spacing for Mobile */}
+              <div className="h-20 lg:h-8"></div>
             </div>
           </div>
         </main>
+      </div>
+
+      {/* Floating Bot Button */}
+      <div className="fixed bottom-6 right-6 z-30">
+        <button
+          className="bg-green-600 hover:bg-green-700 p-3 rounded-full shadow-lg hover:shadow-xl 
+                     transition-all duration-200 transform hover:scale-105 active:scale-95"
+          aria-label="Open AI Assistant"
+        >
+          <Bot className="text-white size-6" />
+        </button>
       </div>
     </div>
   );

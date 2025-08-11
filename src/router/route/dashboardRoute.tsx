@@ -15,6 +15,7 @@ import { Billings } from "@/pages/billings";
 import { Console } from "@/pages/console";
 import { Access } from "@/pages/access";
 import AcceptInvite from "@/pages/accept-invite";
+import { UpdateResources } from "@/pages/update-resource";
 
 export const dashboardRoute: RouteType[] = [
   {
@@ -108,4 +109,11 @@ export const dashboardRoute: RouteType[] = [
     component: <Billings />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
+   {
+    path: RouteConstant.dashboard.updateResources.path,
+    name: RouteConstant.dashboard.updateResources.name,
+    component: <UpdateResources />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  
 ];

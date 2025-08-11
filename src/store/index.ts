@@ -4,9 +4,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 import { authStore } from "./authSlice";
 import { dashboardStore } from "./dashboardSlice";
-import { roomApi } from "@/service/typescript/roomApi";
 import { houseApi } from "@/service/typescript/houseApi";
-import { resourceApi } from "@/service/typescript/resourceApi";
 import { resourceListStore } from "./resourceListSlice";
 import { kotlinResourceApi } from "@/service/kotlin/resourceApi";
 import { siteApi } from "@/service/kotlin/siteApi";
@@ -14,6 +12,8 @@ import { serviceApi } from "@/service/kotlin/serviceApi";
 import { authApi } from "@/service/kotlin/authApi";
 import { accountStore } from "./accountSlice";
 import { waitlistApi } from "@/service/kotlin/waitlistApi";
+import { kotlinHouseApi } from "@/service/kotlin/houseApi";
+import { roomApi } from "@/service/kotlin/roomApi";
 
 // Combine all your reducers
 const rootReducer = combineReducers({
@@ -22,12 +22,12 @@ const rootReducer = combineReducers({
   resourceList:resourceListStore.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [siteApi.reducerPath]: siteApi.reducer,
-  [roomApi.reducerPath]:roomApi.reducer,
+  [kotlinHouseApi.reducerPath]:kotlinHouseApi.reducer,
   [houseApi.reducerPath]:houseApi.reducer,
-  [resourceApi.reducerPath]:resourceApi.reducer,
   [kotlinResourceApi.reducerPath]:kotlinResourceApi.reducer,
   [serviceApi.reducerPath]:serviceApi.reducer,
   [waitlistApi.reducerPath]:waitlistApi.reducer,
+  [roomApi.reducerPath]:roomApi.reducer,
  account:accountStore.reducer,
 });
 
@@ -58,7 +58,7 @@ export const store = configureStore({
           "persist/REGISTER",
         ],
       },
-    }).concat(authApi.middleware, siteApi.middleware,houseApi.middleware,roomApi.middleware,resourceApi.middleware,kotlinResourceApi.middleware,serviceApi.middleware,waitlistApi.middleware),
+    }).concat(authApi.middleware,kotlinHouseApi.middleware, siteApi.middleware,houseApi.middleware,roomApi.middleware,kotlinResourceApi.middleware,serviceApi.middleware,waitlistApi.middleware),
 });
 
 // Persistor instance

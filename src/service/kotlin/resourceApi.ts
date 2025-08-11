@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { ApiEnums } from "@/utilities/enums";
-import type {ConfigResponse, createResourceResponse, } from "@/models/response/resourceResponse";
+import type {ConfigResponse, createResourceResponse, resourceResponse, } from "@/models/response/resourceResponse";
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import type { ParameterResponse } from "@/models/response/siteResponse";
 import type { createResourceRequest } from "@/models/request/resourceRequest";
@@ -11,7 +11,7 @@ import { createConfigTags } from "@/utilities/tagHelpers";
 export const kotlinResourceApi = createApi({
   reducerPath: "kotlinResourceApi",
   baseQuery: kotlinBaseQueryWithResponseCodeHandling,
-  tagTypes: [ApiEnums.Resource,ApiEnums.Config],
+  tagTypes: [ApiEnums.Resource,ApiEnums.Config,ApiEnums.House,ApiEnums.Room],
   endpoints: (build) => ({
      
 
@@ -22,13 +22,17 @@ getConfig: build.query<ConfigResponse, { serviceId: string, configProvider: stri
 getResourceTemplate: build.query<ParameterResponse, { resource: string, provider: string }>({
     query: ({ resource, provider }) => `/resource/template/${provider}/${resource}`,
     }),
-    createResource: build.mutation<createResourceResponse, createResourceRequest>({
+    getAllResources: build.query<resourceResponse, { accountCode:string }>({
+      query: ({ accountCode }) => `/resource/read-all-resources/${accountCode}`,
+      // providesTags: (result) => createResourceProviderTags(result,  "resourceId"),
+    }),
+createResource: build.mutation<createResourceResponse, createResourceRequest>({
       query: (body) => ({
         url: "/resource/create-resource",
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" }],
     }),
   }),
 });
@@ -36,6 +40,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
 export const {
 
   useGetConfigQuery,
+  useGetAllResourcesQuery,
   useGetResourceTemplateQuery,
   useCreateResourceMutation
 } = kotlinResourceApi;

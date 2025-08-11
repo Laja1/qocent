@@ -21,7 +21,7 @@ import type { getAccountResponse } from "@/models/response/siteResponse";
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: kotlinBaseQueryWithResponseCodeHandling,
-  tagTypes:[ApiEnums.Auth],
+  tagTypes:[ApiEnums.Auth,ApiEnums.Member],
   endpoints: (build) => ({
     signUp: build.mutation<genericResponse, signupRequest>({
       query: (body) => ({
@@ -92,18 +92,31 @@ export const authApi = createApi({
     getUserAccounts: build.query<getAccountResponse, {userCode:string}>({
       query: ({userCode}) => `/authentication/user-accounts/${userCode}`,    
   }),
-    getAccountMembers:build.query<AccountResponse,{accountCode:string}>({
-      query:({accountCode})=>`/authentication/account-members/${accountCode}`
-    }),
+  getAccountMembers: build.query<AccountResponse, { accountCode: string }>({
+    query: ({ accountCode }) =>
+      `/authentication/account-members/${accountCode}`,
+    providesTags: (result, _error, { accountCode }) =>
+      result
+        ? [{ type: ApiEnums.Member, id: accountCode }]
+        : [],
+  }),  
     acceptInvite:build.mutation<AccountResponse,{accountCode:string,userEmail:string}>({
       query:(body)=>({
         url: "/authentication/accept-invitation",
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.Auth, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
+      
     }),
-    
+    deleteMember:build.mutation<genericResponse,{ accountCode: string,memberUserCode: string;}>({
+      query:(body)=>({
+        url: "/authentication/remove-member",
+        method: "POST",
+        body:body,
+      }),
+      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
+    }),
   }),
 });
 
@@ -113,6 +126,7 @@ export const {
   useResendOtpMutation,
   useSignInMutation,
   useAcceptInviteMutation,
+  useDeleteMemberMutation,
   useGetAccountMembersQuery,
   useForgotPasswordMutation,
   useCompletePasswordResetMutation,

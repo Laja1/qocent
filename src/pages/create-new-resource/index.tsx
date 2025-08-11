@@ -55,7 +55,7 @@ export const CreateNewResource = () => {
       skip: !locationState?.resourceType || !dashboard?.provider,
     }
   );
-
+  console.log(resourceTemplate);
   // Initialize form values
   const initialValues =
     resourceTemplate?.data?.reduce(
@@ -106,7 +106,6 @@ export const CreateNewResource = () => {
     : null;
 
   const handleSubmit = async () => {
-
     try {
       if (!newJsonConfig) {
         throw new Error("Configuration data is not available");
@@ -120,7 +119,7 @@ export const CreateNewResource = () => {
         "data" in newJsonConfig
           ? (newJsonConfig.data?.configJson as unknown as createResourceRequest)
           : (newJsonConfig as createResourceRequest);
-        await createResource(payload).unwrap();
+      await createResource(payload).unwrap();
 
       // Simulate deployment progress
       for (let i = 0; i <= 100; i += 10) {
@@ -132,9 +131,10 @@ export const CreateNewResource = () => {
         toastOptions: { type: "success", autoClose: 5000 },
       });
 
-      setProgress(0);
-      setIsDeployModalOpen(false);
+      setProgress(0);  
       navigate(RouteConstant.dashboard.resources.path);
+      setIsDeployModalOpen(false);
+    
     } catch (error: any) {
       console.error("Create Resource Error:", error);
       const message = ErrorHandler.extractMessage(error);
@@ -170,7 +170,10 @@ export const CreateNewResource = () => {
     setIsDeployModalOpen(true);
   };
 
-  console.log("Dynamic config with formik values:", newJsonConfig?.data?.configJson);
+  console.log(
+    "Dynamic config with formik values:",
+    newJsonConfig?.data?.configJson
+  );
 
   if (isLoading) {
     return (
@@ -213,10 +216,10 @@ export const CreateNewResource = () => {
         <div className="flex mt-5 flex-col">
           {resourceTemplate?.data?.map((item) => (
             <div
-              className="flex items-center w-full py-[1px] border-b"
+              className="flex lg:flex-row flex-col lg:items-center w-full py-[1px] border-b"
               key={item.parameterSerial}
             >
-              <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
+              <p className="text-xs lg:w-1/6 w-1/2 pr-3 lg:text-right">
                 {item.parameterMandatory && (
                   <span className="text-red-500 ml-1">*</span>
                 )}

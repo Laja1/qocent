@@ -152,6 +152,10 @@ export const RouteConstant = {
       path: "/billings",
       name: "billings",
     },
+    updateResources: {
+      path: "/update-resources",
+      name: "Update Resources",
+    },
     createResources: {
       path: "/create-new-resource",
       name: "create-new-resource",

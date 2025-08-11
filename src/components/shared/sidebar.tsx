@@ -92,6 +92,11 @@ const data = {
           icon: <Webhook className="text-gray-800 size-5" />,
           url: RouteConstant.dashboard.resources.path,
         },
+        {
+          title: "Update Resource ",
+          icon: <Webhook className="text-gray-800 size-5" />,
+          url: RouteConstant.dashboard.updateResources.path,
+        },
       ],
     },
   ],

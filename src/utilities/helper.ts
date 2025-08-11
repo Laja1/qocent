@@ -49,6 +49,24 @@ export const getStatusClassName = (status: string) => {
   }
 };
 
+export const getResourceTypeClassName = (type: string) => {
+  switch (type.toUpperCase()) {
+    case "DATABASE":
+      return "border-blue-200 bg-blue-50 text-blue-700";
+    case "SERVER":
+      return "border-amber-200 bg-amber-50 text-amber-700";
+    case "NETWORK":
+      return "border-purple-200 bg-purple-50 text-purple-700";
+    case "STORAGE":
+      return "border-green-200 bg-green-50 text-green-700";
+      case "FILESTORAGE":
+        return "border-green-200 bg-green-50 text-green-700";
+    default:
+      return "border-gray-200 bg-gray-50 text-gray-700";
+  }
+};
+
+
 
 
 

@@ -69,8 +69,8 @@ export const CreateNewHouse = () => {
       });
 
       setProgress(0);
+      navigate(RouteConstant.dashboard.serverHouses.path);
       setIsDeployModalOpen(false);
-      navigate(RouteConstant.dashboard.resources.path);
     } catch (error: any) {
       console.error("Create Resource Error:", error);
       const message = ErrorHandler.extractMessage(error);

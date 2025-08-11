@@ -13,8 +13,13 @@ import { DataTable } from "../datatable";
 import type { ColumnDef } from "../table";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2 } from "lucide-react";
-import { useGetAccountMembersQuery } from "@/service/kotlin/authApi";
+import {
+  useDeleteMemberMutation,
+  useGetAccountMembersQuery,
+} from "@/service/kotlin/authApi";
 import type { AccountMember } from "@/models/response/authResponse";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
+import { showCustomToast } from "../toast";
 
 export const AccessDrawer = NiceModal.create(() => {
   const modal = useModal(ModalConstant.AccessDrawer);
@@ -24,13 +29,26 @@ export const AccessDrawer = NiceModal.create(() => {
     useGetAccountMembersQuery({
       accountCode: typeof accountCode === "string" ? accountCode : "",
     });
+  const [deleteMember] = useDeleteMemberMutation();
   console.log(accountMembersData, "accountMembersData");
   // const getDescription = () => {
   //     if (!details) return "No data available";
   //     const keys = Object.keys(details);
   //     return `Viewing object with ${keys.length} properties`;
   // };
-
+  const handleDeleteMembers = async (code: string) => {
+    try {
+      await deleteMember({
+        accountCode: typeof accountCode === "string" ? accountCode : "",
+        memberUserCode: code,
+      }).unwrap();
+      showCustomToast("Member deleted successfully", {
+        toastOptions: { type: "success", autoClose: 5000 },
+      });
+    } catch (error) {
+      ErrorHandler.extractMessage(error);
+    }
+  };
   const memberColumns: ColumnDef<AccountMember>[] = [
     {
       id: "user",
@@ -137,8 +155,7 @@ export const AccessDrawer = NiceModal.create(() => {
                   {
                     label: "Remove Member",
                     icon: Trash2,
-                    onClick: (row) =>
-                      console.log("Remove member", row.userFirstName),
+                    onClick: (row) => handleDeleteMembers(row.memberUserCode),
                     variant: "destructive",
                   },
                 ]}

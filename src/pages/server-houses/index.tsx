@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { imgLinks } from "@/assets/assetLink";
 import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
-import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
+import { Eye, PlusIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SummaryTable } from "../server-sites/summary-table";
 import { DeployResources } from "@/components/not-shared/deploy-resources";
@@ -14,12 +13,15 @@ import { useModal } from "@/components/shared/modal";
 // import { HouseLevel } from "../architectural-room/house-level";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
-import { formatDate } from "@/utilities/helper";
-import { useGetResourceByProviderQuery } from "@/service/typescript/resourceApi";
-import type { resourceType } from "@/models/response/resourceResponse";
-import { ApiEnums } from "@/utilities/enums";
+import { formatDate, getStatusClassName } from "@/utilities/helper";
 import { FlowGrid } from "@/components/not-shared/data-flow/flow";
 import { useGetSiteDataFlowQuery } from "@/service/kotlin/siteApi";
+import { useGetAllHouseQuery } from "@/service/kotlin/houseApi";
+import type { HouseItem } from "@/models/response/houseResponse";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalConstant } from "@/components/shared/modal/register";
+import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 
 // Cute Data Flow Loader Component
 export const DataFlowLoader = () => {
@@ -94,11 +96,12 @@ export const DataFlowLoader = () => {
 export const ServerHouses = () => {
   const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
-  const [rowId, setRowId] = useState(100004);
-  const dashboard = useSelector((state: RootState) => state.dashboard);
-  const { data, isLoading } = useGetResourceByProviderQuery({
-    provider: dashboard.provider,
-    resource: ApiEnums.House,
+
+  const [rowId, setRowId] = useState("");
+
+  const account = useSelector((state: RootState) => state.account);
+  const { data, isLoading } = useGetAllHouseQuery({
+    accountCode: account?.accountCode,
   });
 
   const { data: dataFlow, isLoading: dataFlowLoading } =
@@ -107,57 +110,90 @@ export const ServerHouses = () => {
     });
   console.log(dataFlow);
 
-  const serverHouseColumn: ColumnDef<resourceType>[] = [
+  const serverHouseColumn: ColumnDef<HouseItem>[] = [
     {
-      id: "resourceId",
+      id: "houseId",
       header: "HOUSE ID",
-      accessorKey: "resourceId",
-      cell: (row) => <span className="line-clamp-1">{row?.resourceId}</span>,
+      accessorKey: "houseId",
+      cell: (row) => <span className="line-clamp-1">{row?.houseId}</span>,
       sortable: true,
     },
     {
-      id: "resourceName",
+      id: "houseName",
       header: "HOUSE NAME",
-      accessorKey: "resourceName",
+      accessorKey: "houseName",
       cell: (row) => (
-        <span className="line-clamp-1 font-brfirma-bold">
-          {row.resourceName}
-        </span>
+        <span className="line-clamp-1 font-brfirma-bold">{row.houseName}</span>
       ),
       sortable: true,
     },
     {
-      id: "resourceCode",
+      id: "houseCode",
       header: "HOUSE CODE",
-      accessorKey: "resourceCode",
-      cell: (row) => <span className=" line-clamp-1">{row.resourceCode}</span>,
+      accessorKey: "houseCode",
+      cell: (row) => <span className=" line-clamp-1">{row.houseCode}</span>,
       sortable: true,
       filterType: "select",
     },
     {
-      id: "resourceMaker",
-      header: "PROVIDER",
-      accessorKey: "resourceMaker",
+      id: "houseSite",
+      header: "House Site",
+      accessorKey: "houseSite",
       sortable: true,
-      cell: (row) => (
-        <span className="text-center justify-center flex line-clamp-1">
-          {row.resourceMaker === "1" ? (
-            <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
-          ) : (
-            <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
-          )}
-        </span>
-      ),
+      cell: (row) => <span>{row.houseSite}</span>,
     },
     {
-      id: "resourceDate",
+      id: "houseStatus",
+      header: "STATUS",
+      accessorKey: "houseStatus",
+      cell: (row) => (
+        <div className="">
+          <Badge
+            variant="outline"
+            className={getStatusClassName(row.houseStatus)}
+          >
+            {row.houseStatus}
+          </Badge>
+        </div>
+      ),
+      sortable: true,
+      filterType: "select",
+      filterOptions: [
+        { label: "Active", value: "Active" },
+        { label: "Maintenance", value: "Maintenance" },
+      ],
+    },
+    // {
+    //   id: "resourceMaker",
+    //   header: "PROVIDER",
+    //   accessorKey: "resourceMaker",
+    //   sortable: true,
+    //   cell: (row) => (
+    //     <span className="text-center justify-center flex line-clamp-1">
+    //       {row. === "1" ? (
+    //         <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
+    //       ) : (
+    //         <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
+    //       )}
+    //     </span>
+    //   ),
+    // },
+    {
+      id: "houseCidr",
+      header: "House Cidr",
+      accessorKey: "houseCidr",
+      sortable: true,
+      cell: (row) => <span className=" ">{row.houseCidr}</span>,
+    },
+    {
+      id: "houseCreatedAt",
       header: "DATE CREATED",
       headerClassName: "text-right",
-      accessorKey: "resourceDate",
+      accessorKey: "houseCreatedAt",
       sortable: true,
       cell: (row) => (
         <span className="text-right block ">
-          {formatDate(row.resourceDate)}
+          {formatDate(row.houseCreatedAt)}
         </span>
       ),
     },
@@ -167,28 +203,27 @@ export const ServerHouses = () => {
     {
       label: "View",
       icon: Eye,
-      onClick: (row: resourceType) => {
-        console.log("View server room:", row.resourceId);
-        // TODO: Implement view functionality
+      onClick: (row: HouseItem) => {
+        NiceModal.show(ModalConstant.DrawerModal, row);
       },
     },
-    {
-      label: "Edit",
-      icon: Edit,
-      onClick: (row: resourceType) => {
-        console.log("Edit server room:", row.resourceType);
-        // TODO: Implement edit functionality
-      },
-    },
-    {
-      label: "Delete",
-      icon: Trash2,
-      onClick: (row: resourceType) => {
-        console.log("Delete server room:", row.resourceName);
-        // TODO: Implement delete confirmation
-      },
-      variant: "destructive" as const,
-    },
+    // {
+    //   label: "Edit",
+    //   icon: Edit,
+    //   onClick: (row: HouseItem) => {
+    //     console.log("Edit server room:", row.HouseItem);
+    //     // TODO: Implement edit functionality
+    //   },
+    // },
+    // {
+    //   label: "Delete",
+    //   icon: Trash2,
+    //   onClick: (row: HouseItem) => {
+    //     console.log("Delete server room:", row.resourceName);
+    //     // TODO: Implement delete confirmation
+    //   },
+    //   variant: "destructive" as const,
+    // },
   ];
   const row = data?.data.find((item: any) => item.siteId === rowId);
 
@@ -275,7 +310,7 @@ export const ServerHouses = () => {
         />
       </Header>
 
-      <div className="px-5 flex flex-col">
+      <Card className="mx-5 px-5 mt-5 rounded-sm">
         <DataTable
           data={data?.data ?? []}
           columns={serverHouseColumn}
@@ -283,12 +318,13 @@ export const ServerHouses = () => {
           searchPlaceholder="Search server house by name, ID, or code..."
           pageSize={5}
           actions={actions}
-          onRowClick={(row) => setRowId(row.resourceId)}
+          onRowClick={(row) => setRowId(row.houseId)}
           highlightedRowId={rowId}
-          getRowId={(row) => row.resourceId}
-          initialSorting={{ id: "houseName", desc: false }}
+          getRowId={(row) => row.houseId}
+          initialSorting={{ id: "houseCreatedAt", desc: false }}
         />
-      </div>
+        </Card>
+
 
       <div className="mx-5 mt-5 ">
         <Tabs tabs={tabData} />

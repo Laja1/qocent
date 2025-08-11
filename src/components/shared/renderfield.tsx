@@ -28,7 +28,10 @@ export const RenderField = ({
 
   return (
     <div className="w-full">
-      {(type === "Textbox" || type === "TextBox" ||type==='NoTrailTextField') && (
+      {(type === "Textbox" ||
+        type === "TextBox" ||
+        type === "NoTrailTextField" ||
+        type === "CidrBlock") && (
         <Textfield2
           name={name}
           label={label}
@@ -41,18 +44,6 @@ export const RenderField = ({
         />
       )}
 
-      {type === "CidrBlock" && (
-        <Textfield2
-          name={name}
-          label={label}
-          placeholder={placeholder}
-          formik={formik}
-          error={error as string}
-          className="w-full"
-          autoComplete={autoComplete} // Pass it down
-          {...rest}
-        />
-      )}
       {type === "CommentBox" && (
         <TextArea
           name={name}
