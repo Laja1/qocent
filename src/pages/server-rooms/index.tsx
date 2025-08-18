@@ -5,12 +5,17 @@ import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { formatDate, getStatusClassName } from "@/utilities/helper";
 import { useSelector } from "react-redux";
-import { useGetAllRoomQuery } from "@/service/kotlin/roomApi";
+import {
+  useDeleteRoomMutation,
+  useGetAllRoomQuery,
+} from "@/service/kotlin/roomApi";
 import type { RootState } from "@/store";
 import type { roomData } from "@/models/response/roomResponse";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
 import { Card } from "@/components/ui/card";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
+import { showCustomToast } from "@/components/shared/toast";
 
 export const ServerRooms = () => {
   const navigate = useNavigate();
@@ -24,8 +29,8 @@ export const ServerRooms = () => {
       skip: !account?.accountCode,
     }
   );
+  const [deleteRoom, { isLoading: isDeleting }] = useDeleteRoomMutation();
   // const [rowId, setRowId] = useState("R-0001");
-
   const serverRoomColumns: ColumnDef<roomData>[] = [
     {
       id: "roomId",
@@ -96,14 +101,16 @@ export const ServerRooms = () => {
       header: "Room Status",
       accessorKey: "roomStatus",
       sortable: true,
-      cell: (row) => <div className="">
-      <Badge
-        variant="outline"
-        className={getStatusClassName(row.roomStatus  )}
-      >
-        {row.roomStatus }
-      </Badge>
-    </div>
+      cell: (row) => (
+        <div className="">
+          <Badge
+            variant="outline"
+            className={getStatusClassName(row.roomStatus)}
+          >
+            {row.roomStatus}
+          </Badge>
+        </div>
+      ),
     },
     {
       id: "roomType",
@@ -161,17 +168,28 @@ export const ServerRooms = () => {
     {
       label: "Edit",
       icon: Edit,
-      onClick: (row: roomData) => {
+      onClick: async (row: roomData) => {
         console.log("Edit server room:", row.roomId);
-        // TODO: Implement edit functionality
+        
       },
     },
     {
       label: "Delete",
       icon: Trash2,
-      onClick: (row: roomData) => {
+      onClick: async(row: roomData) => {
         console.log("Delete server room:", row.roomId);
-        // TODO: Implement delete confirmation
+        try {
+          const res = await deleteRoom({roomId:Number(row.roomId)}).unwrap();
+          showCustomToast(res.responseMessage, {
+            toastOptions: { type: "success", autoClose: 5000 },
+          });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (error: any) {
+          const message = ErrorHandler.extractMessage(error);
+          showCustomToast(message, {
+            toastOptions: { type: "error", autoClose: 5000 },
+          });
+        }
       },
       variant: "destructive" as const,
     },
@@ -197,7 +215,7 @@ export const ServerRooms = () => {
         <DataTable
           data={data?.data || []}
           columns={serverRoomColumns}
-          isLoading={isLoading}
+          isLoading={isLoading || isDeleting}
           searchPlaceholder="Search server rooms by name, ID, or region..."
           pageSize={5}
           actions={actions}

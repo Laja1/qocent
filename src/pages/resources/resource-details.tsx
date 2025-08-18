@@ -1,11 +1,11 @@
 // ResourceDetails.tsx
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { DataTable, type ColumnDef } from "@/components/shared/datatable";
-import type { resourceType } from "./type";
+import type { resourceType } from "@/models/response/resourceResponse";
 
 interface ResourceDetailsProps {
   resourceData: resourceType[];
-  selectedResourceId: string;
+  selectedResourceId: number;
 }
 
 interface ResourceDataProps {
@@ -45,7 +45,7 @@ export const ResourceDetails = ({
     {
       id: 3,
       label: "Resource Type",
-      [selectedResourceId]: resourceHighlighted.type,
+      [selectedResourceId]: resourceHighlighted.resourceType,
     },
     {
       id: 4,
@@ -55,32 +55,32 @@ export const ResourceDetails = ({
     {
       id: 5,
       label: "Site Code",
-      [selectedResourceId]: resourceHighlighted.siteCode,
+      [selectedResourceId]: resourceHighlighted.resourceSiteCode,
     },
-    {
-      id: 6,
-      label: "House Code",
-      [selectedResourceId]: resourceHighlighted.houseCode,
-    },
-    {
-      id: 7,
-      label: "Room Code",
-      [selectedResourceId]: resourceHighlighted.roomCode,
-    },
+    // {
+    //   id: 6,
+    //   label: "House Code",
+    //   [selectedResourceId]: resourceHighlighted.houseCode,
+    // },
+    // {
+    //   id: 7,
+    //   label: "Room Code",
+    //   [selectedResourceId]: resourceHighlighted.res,
+    // },
     {
       id: 8,
       label: "Provider",
-      [selectedResourceId]: resourceHighlighted.provider,
+      [selectedResourceId]: resourceHighlighted.resourceProvider,
     },
     {
       id: 9,
       label: "Date Created",
-      [selectedResourceId]: resourceHighlighted.createdAt,
+      [selectedResourceId]: resourceHighlighted.resourceCreatedAt,
     },
     {
       id: 10,
       label: "IP Range",
-      [selectedResourceId]: resourceHighlighted.ipRange,
+      [selectedResourceId]: resourceHighlighted.resourceIP,
     },
   ];
 
@@ -97,8 +97,8 @@ export const ResourceDetails = ({
       sortable: false,
     },
     {
-      id: selectedResourceId,
-      header: `${resourceHighlighted.type} (${resourceHighlighted.resourceName})`,
+      id: "d",
+      header: `${resourceHighlighted.resourceType} (${resourceHighlighted.resourceName})`,
       accessorKey: selectedResourceId,
       cell: (row) => (
         <span className="line-clamp-1">{row[selectedResourceId]}</span>

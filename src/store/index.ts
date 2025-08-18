@@ -4,8 +4,6 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 import { authStore } from "./authSlice";
 import { dashboardStore } from "./dashboardSlice";
-import { houseApi } from "@/service/typescript/houseApi";
-import { resourceListStore } from "./resourceListSlice";
 import { kotlinResourceApi } from "@/service/kotlin/resourceApi";
 import { siteApi } from "@/service/kotlin/siteApi";
 import { serviceApi } from "@/service/kotlin/serviceApi";
@@ -19,11 +17,9 @@ import { roomApi } from "@/service/kotlin/roomApi";
 const rootReducer = combineReducers({
   auth: authStore.reducer,
   dashboard:dashboardStore.reducer,
-  resourceList:resourceListStore.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [siteApi.reducerPath]: siteApi.reducer,
   [kotlinHouseApi.reducerPath]:kotlinHouseApi.reducer,
-  [houseApi.reducerPath]:houseApi.reducer,
   [kotlinResourceApi.reducerPath]:kotlinResourceApi.reducer,
   [serviceApi.reducerPath]:serviceApi.reducer,
   [waitlistApi.reducerPath]:waitlistApi.reducer,
@@ -58,7 +54,7 @@ export const store = configureStore({
           "persist/REGISTER",
         ],
       },
-    }).concat(authApi.middleware,kotlinHouseApi.middleware, siteApi.middleware,houseApi.middleware,roomApi.middleware,kotlinResourceApi.middleware,serviceApi.middleware,waitlistApi.middleware),
+    }).concat(authApi.middleware,kotlinHouseApi.middleware, siteApi.middleware,roomApi.middleware,kotlinResourceApi.middleware,serviceApi.middleware,waitlistApi.middleware),
 });
 
 // Persistor instance

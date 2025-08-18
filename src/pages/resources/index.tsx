@@ -12,10 +12,11 @@ import type { resourceType } from "@/models/response/resourceResponse";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { imgLinks } from "@/assets/assetLink";
-import {  getResourceTypeClassName } from "@/utilities/helper";
+import { getResourceTypeClassName } from "@/utilities/helper";
 import { useGetAllResourcesQuery } from "@/service/kotlin/resourceApi";
 import moment from "moment";
 import { Card } from "@/components/ui/card";
+import { RouteConstant } from "@/router/routes";
 
 export const resourcesColumns: ColumnDef<resourceType>[] = [
   {
@@ -44,30 +45,32 @@ export const resourcesColumns: ColumnDef<resourceType>[] = [
     sortable: true,
     filterType: "select",
   },
-  // {
-  //   id: "siteCode",
-  //   header: "SITE CODE",
-  //   accessorKey: "siteCode",
-  //   cell: (row) => <span className="line-clamp-1">{row.}</span>,
-  //   sortable: true,
-  //   filterType: "select",
-  // },
-  // {
-  //   id: "houseCode",
-  //   header: "HOUSE CODE",
-  //   accessorKey: "houseCode",
-  //   cell: (row) => <span className="line-clamp-1">{row.houseCode}</span>,
-  //   sortable: true,
-  //   filterType: "select",
-  // },
-  // {
-  //   id: "roomCode",
-  //   header: "ROOM CODE",
-  //   accessorKey: "roomCode",
-  //   cell: (row) => <span className="line-clamp-1">{row.roomCode}</span>,
-  //   sortable: true,
-  //   filterType: "select",
-  // },
+  {
+    id: "resourceSiteCode",
+    header: "SITE CODE",
+    accessorKey: "resourceSiteCode",
+    cell: (row) => <span className="line-clamp-1">{row.resourceSiteCode}</span>,
+    sortable: true,
+    filterType: "select",
+  },
+  {
+    id: "resourceHouseCode",
+    header: "HOUSE CODE",
+    accessorKey: "resourceHouseCode",
+    cell: (row) => (
+      <span className="line-clamp-1">{row.resourceHouseCode}</span>
+    ),
+    sortable: true,
+    filterType: "select",
+  },
+  {
+    id: "resourceRoomCode",
+    header: "ROOM CODE",
+    accessorKey: "resourceRoomCode",
+    cell: (row) => <span className="line-clamp-1">{row.resourceRoomCode}</span>,
+    sortable: true,
+    filterType: "select",
+  },
   {
     id: "resourceType",
     header: "TYPE",
@@ -76,7 +79,9 @@ export const resourcesColumns: ColumnDef<resourceType>[] = [
     cell: (row) => (
       <Badge
         variant="outline"
-        className={`${getResourceTypeClassName(row.resourceType)} text-right justify-center flex w-full`}
+        className={`${getResourceTypeClassName(
+          row.resourceType
+        )} text-right justify-center flex w-full`}
       >
         {row.resourceType}
       </Badge>
@@ -105,39 +110,9 @@ export const resourcesColumns: ColumnDef<resourceType>[] = [
     sortable: true,
     cell: (row) => (
       <span className="text-right block">
-        {moment(row?.resourceCreatedAt, "MM/DD/YYYY").format(
-          "YYYY-MM-DD"
-        )}
+        {moment(row?.resourceCreatedAt, "MM/DD/YYYY").format("YYYY-MM-DD")}
       </span>
     ),
-  },
-];
-
-const actions = [
-  {
-    label: "View",
-    icon: Eye,
-    onClick: (row: resourceType) => {
-      console.log("View server resource:", row.resourceId);
-      // TODO: Implement view functionality
-    },
-  },
-  {
-    label: "Edit",
-    icon: Edit,
-    onClick: (row: resourceType) => {
-      console.log("Edit server resource:", row.resourceId);
-      // TODO: Implement edit functionality
-    },
-  },
-  {
-    label: "Delete",
-    icon: Trash2,
-    onClick: (row: resourceType) => {
-      console.log("Delete server resource:", row.resourceId);
-      // TODO: Implement delete confirmation
-    },
-    variant: "destructive" as const,
   },
 ];
 
@@ -151,10 +126,36 @@ export const Resources = () => {
       skip: !account?.accountCode,
     }
   );
+
   const [rowId, setRowId] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-
+  const actions = [
+    {
+      label: "View",
+      icon: Eye,
+      onClick: (row: resourceType) => {
+        console.log("View server resource:", row.resourceId);
+        // TODO: Implement view functionality
+      },
+    },
+    {
+      label: "Edit",
+      icon: Edit,
+      onClick: (row: resourceType) => {
+        navigate(RouteConstant.dashboard.updateResources.path, { state: row });
+      },
+    },
+    {
+      label: "Delete",
+      icon: Trash2,
+      onClick: (row: resourceType) => {
+        console.log("Delete server resource:", row.resourceId);
+        // TODO: Implement delete confirmation
+      },
+      variant: "destructive" as const,
+    },
+  ];
   const handleOpenDeployModal = () => {
     setIsOpen(true);
   };

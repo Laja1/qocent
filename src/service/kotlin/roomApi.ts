@@ -5,6 +5,7 @@ import type { getHouseResponse } from "@/models/response/houseResponse";
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import { createRoomTags } from "@/utilities/tagHelpers";
 import type { getAllRoomResponse } from "@/models/response/roomResponse";
+import type { genericResponse } from "@/models/response";
 
 export const roomApi = createApi({
   reducerPath: "roomApi",
@@ -30,10 +31,20 @@ export const roomApi = createApi({
       query: ({accountCode}) => `/resource/read-room-by-account-code/${accountCode}`, 
       providesTags: (result) => createRoomTags(result,  "roomId"),
     }),
+    
+    deleteRoom:build.mutation<genericResponse,{roomId:number}>({
+      query:({roomId})=>({
+        url: `/resource/delete-room/${roomId}`,
+        method: "POST",
+       
+      }),
+      invalidatesTags: [{ type: ApiEnums.Room, id: "LIST" }],
+    }),
   }),
 });
 
 export const {
   useGetHousesByProviderQuery,
-  useGetAllRoomQuery
+  useGetAllRoomQuery,
+  useDeleteRoomMutation
 } = roomApi;

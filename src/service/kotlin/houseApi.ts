@@ -38,11 +38,20 @@ export const kotlinHouseApi = createApi({
       query: ({accountCode}) => `/resource/read-house-by-account-code/${accountCode}`, 
       providesTags: (result) => createHouseProviderTags(result,  "houseId"),
     }),
+    deleteHouse:build.mutation<genericResponse,{houseId:number}>({
+      query:({houseId})=>({
+        url: `/resource/delete-house/${houseId}`,
+        method: "POST",
+       
+      }),
+      invalidatesTags: [{ type: ApiEnums.House, id: "LIST" }],
+    }),
   }),
 });
 
 export const {
   useCreateServerHouseMutation,
   useGetHousesByProviderQuery,
-  useGetAllHouseQuery
+  useGetAllHouseQuery,
+  useDeleteHouseMutation
 } = kotlinHouseApi;

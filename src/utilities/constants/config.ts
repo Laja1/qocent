@@ -14,11 +14,6 @@ export interface ServerRoomType {
 }
 
 
-
-
-
-
-
 type ResourceType = {
   servers: {
     id: string;

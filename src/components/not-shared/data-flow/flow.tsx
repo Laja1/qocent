@@ -20,21 +20,20 @@ import { Button } from "@/components/shared";
 const cellSize = 40;
 const gridSize = 20;
 
-type CellBorder = {
+// Updated interfaces to match the provided types
+interface HouseCell {
   row: number;
   col: number;
-  // CSS Style approach
-  borderTop?: string;
-  borderRight?: string;
-  borderBottom?: string;
-  borderLeft?: string;
-};
+  top: "Yes" | "No";
+  bottom: "Yes" | "No";
+  left: "Yes" | "No";
+  right: "Yes" | "No";
+  color: string;
+  width?: number;
+  fillColor?: string;
+}
 
-type CellBorderData = {
-  borders: CellBorder[];
-};
-
-type ResourceNode = {
+interface ResourceNode {
   col: number;
   row: number;
   resourceCode: string;
@@ -44,81 +43,61 @@ type ResourceNode = {
   connection?: boolean;
   errors: number;
   message?: string;
-};
+}
 
-type Connection = {
+interface Connection {
   x: string;
   y: string;
-  serial: string;
-};
+  serial: number;
+}
 
-type FlowGridData = {
-  data: ResourceNode[];
-};
+interface FlowGridProps {
+  data?: ResourceNode[];
+  connections?: Connection[];
+  cellBorderData?: HouseCell[];
+}
 
-type FlowGridConnections = {
-  connections: Connection[];
-};
-
-type FlowGridProps = {
-  data?: FlowGridData;
-  connections?: FlowGridConnections;
-  cellBorderData?: CellBorderData;
-};
-
-type ResourceConfig = {
+interface ResourceConfig {
   icon: React.ReactNode;
   color: string;
   bgColor: string;
-};
+}
 
-// Cell border styling data structure with both CSS and Tailwind examples
-const cellBorderStyles: CellBorderData = {
-  borders: [
-    // // CSS Style approach - Create a square border
-    // { row: 10, col: 8, borderTop: "2px solid black" },
-    //  { row: 1, col: 1, borderTop: "2px solid black" },
-    //  { row: 1, col: 1, borderLeft: "2px solid black" },
-    //  { row: 1, col: 1, borderBottom: "2px solid red" },
-    // { row: 12, col: 11, borderTop: "2px solid black" },
-    // { row: 11, col: 8, borderBottom: "2px solid black" },
-    // { row: 11, col: 9, borderBottom: "2px solid black" },
-    // { row: 10, col: 8, borderLeft: "2px solid black" },
-    // { row: 11, col: 8, borderLeft: "2px solid black" },
-    // { row: 10, col: 9, borderRight: "2px solid black" },
-    // { row: 11, col: 9, borderRight: "2px solid black" },
-    // // Mixed approach - L-shape with different methods
-    // { row: 7, col: 3, borderTop: "2px solid green" },
-    // { row: 7, col: 4, borderTop: "2px solid green" },
-    // { row: 7, col: 5, borderTop: "2px solid green" },
-  ],
-};
-
-// Helper function to get border styles and classes for a specific cell
-const getCellBorderStyleAndClasses = (
+// Helper function to get border styles for a specific cell
+const getCellBorderStyle = (
   row: number,
   col: number,
-  cellBorderData?: CellBorderData
+  cellBorderData?: HouseCell[]
 ) => {
-  if (!cellBorderData || !cellBorderData.borders)
-    return { style: {}, classes: [] };
+  if (!cellBorderData || cellBorderData.length === 0) return {};
 
-  const cellBorders = cellBorderData.borders.filter(
+  const cellBorder = cellBorderData.find(
     (border) => border.row === row && border.col === col
   );
 
+  if (!cellBorder) return {};
+
   const style: React.CSSProperties = {};
-  const classes: string[] = [];
 
-  cellBorders.forEach((border) => {
-    // Handle CSS styles
-    if (border.borderTop) style.borderTop = border.borderTop;
-    if (border.borderRight) style.borderRight = border.borderRight;
-    if (border.borderBottom) style.borderBottom = border.borderBottom;
-    if (border.borderLeft) style.borderLeft = border.borderLeft;
-  });
+  if (cellBorder.top === "Yes") {
+    style.borderTop = `${cellBorder.width}px solid ${cellBorder.color}`;
+  }
+  if (cellBorder.bottom === "Yes") {
+    style.borderBottom = `${cellBorder.width}px solid ${cellBorder.color}`;
+  }
+  if (cellBorder.left === "Yes") {
+    style.borderLeft = `${cellBorder.width}px solid ${cellBorder.color}`;
+  }
+  if (cellBorder.right === "Yes") {
+    style.borderRight = `${cellBorder.width}px solid ${cellBorder.color}`;
+  }
 
-  return { style, classes };
+  // Add fill color if specified
+  if (cellBorder.fillColor) {
+    style.backgroundColor = cellBorder.fillColor;
+  }
+
+  return style;
 };
 
 // Memoized resource icon map
@@ -149,7 +128,7 @@ const RESOURCE_ICON_MAP = {
     bgColor: "bg-purple-100",
   },
   ServerRoom: {
-    icon: <img src={imgLinks.switch} alt="switch" />,
+    icon: <img src={imgLinks.switch} alt="switch" className="size-5" />,
     color: "text-blue-600",
     bgColor: "bg-blue-100",
   },
@@ -171,7 +150,7 @@ const RESOURCE_ICON_MAP = {
 };
 
 const defaultConfig: ResourceConfig = {
-  icon: null,
+  icon: <Server className="size-5" />,
   color: "text-gray-600",
   bgColor: "bg-gray-100",
 };
@@ -214,8 +193,8 @@ const ResourceNodeComponent = memo<{
 
 ResourceNodeComponent.displayName = "ResourceNodeComponent";
 
-// Modified grid cells component with both CSS and Tailwind border styling
-const GridCells = memo<{ cellBorderData?: CellBorderData }>(
+// Modified grid cells component with new border styling
+const GridCells = memo<{ cellBorderData?: HouseCell[] }>(
   ({ cellBorderData }) => {
     const cells = useMemo(() => {
       const cellArray: React.ReactElement[] = [];
@@ -224,18 +203,21 @@ const GridCells = memo<{ cellBorderData?: CellBorderData }>(
         for (let col = 1; col <= gridSize; col++) {
           const index = (row - 1) * gridSize + (col - 1);
 
-          // Get custom border styles and classes for this cell
-          const { style: customBorderStyle, classes: tailwindClasses } =
-            getCellBorderStyleAndClasses(row, col, cellBorderData);
+          // Get custom border styles for this cell
+          const customBorderStyle = getCellBorderStyle(
+            row,
+            col,
+            cellBorderData
+          );
 
           cellArray.push(
             <div
               key={index}
-              className={`border border-gray-100 ${tailwindClasses.join(" ")}`}
+              className="border border-gray-100"
               style={{
                 width: cellSize,
                 height: cellSize,
-                ...customBorderStyle, // Apply custom CSS border styles
+                ...customBorderStyle, // Apply custom border styles
               }}
             />
           );
@@ -254,6 +236,8 @@ GridCells.displayName = "GridCells";
 // Memoized arrows component
 const ArrowsComponent = memo<{ connections: Connection[] }>(
   ({ connections }) => {
+    if (!connections || connections.length === 0) return null;
+
     return (
       <>
         {connections.map((link, index) => (
@@ -276,30 +260,30 @@ const ArrowsComponent = memo<{ connections: Connection[] }>(
 ArrowsComponent.displayName = "ArrowsComponent";
 
 export const FlowGrid = ({
-  data,
-  connections,
-  cellBorderData = cellBorderStyles,
+  data = [],
+  connections = [],
+  cellBorderData = [],
 }: FlowGridProps) => {
   const { openModal } = useModal();
-  const resources = data?.data || [];
-  const allConnections = connections?.connections || [];
+  const [visibleConnections, setVisibleConnections] = useState<Connection[]>(
+    []
+  );
 
-  const [visibleConnections, setVisibleConnections] =
-    useState<Connection[]>(allConnections);
+  // Use data instead of undefined resources variable
+  const resources = data || [];
 
   useEffect(() => {
     if (resources.length === 0) {
       setVisibleConnections([]);
     } else {
-      setVisibleConnections(allConnections);
+      setVisibleConnections(connections);
     }
-  }, [resources, allConnections]);
+  }, [resources, connections]);
 
-  const sortedConnections = useMemo(
-    () =>
-      [...allConnections].sort((a, b) => Number(a.serial) - Number(b.serial)),
-    [allConnections]
-  );
+  const sortedConnections = useMemo(() => {
+    if (!connections || connections.length === 0) return [];
+    return [...connections].sort((a, b) => Number(a.serial) - Number(b.serial));
+  }, [connections]);
 
   const gridStyle = useMemo(
     (): React.CSSProperties => ({
@@ -314,7 +298,7 @@ export const FlowGrid = ({
   );
 
   const animateConnections = useCallback(() => {
-    if (resources.length === 0) return;
+    if (resources.length === 0 || sortedConnections.length === 0) return;
 
     setVisibleConnections([]);
 
@@ -324,7 +308,6 @@ export const FlowGrid = ({
       const interval = setInterval(() => {
         if (i < sortedConnections.length) {
           const connectionToAdd = sortedConnections[i];
-
           setVisibleConnections((prev) => [...prev, connectionToAdd]);
           i++;
         } else {
@@ -354,9 +337,8 @@ export const FlowGrid = ({
               </p>
               <div className="text-xs">
                 <p className="font-medium mb-1">
-                  The current user does not have the required permissions to
-                  perform this action. Please ensure that the IAM role or policy
-                  attached includes the necessary access rights.
+                  {resource.message ||
+                    "The current user does not have the required permissions to perform this action. Please ensure that the IAM role or policy attached includes the necessary access rights."}
                 </p>
               </div>
             </div>
@@ -372,6 +354,9 @@ export const FlowGrid = ({
                 <p className="font-medium mb-1">
                   Resource Type: {resource.resourceType}
                 </p>
+                <p className="font-medium mb-1">
+                  Code: {resource.resourceCode}
+                </p>
               </div>
             </div>
           </div>
@@ -381,47 +366,60 @@ export const FlowGrid = ({
     [openModal]
   );
 
-  const resourceNodes = useMemo(
-    () =>
-      resources.map((resource) => {
-        const config =
-          RESOURCE_ICON_MAP[
-            resource.resourceType as keyof typeof RESOURCE_ICON_MAP
-          ] || defaultConfig;
+  const resourceNodes = useMemo(() => {
+    if (!resources || resources.length === 0) return [];
 
-        return (
-          <ResourceNodeComponent
-            key={`${resource.resourceCode}-${resource.row}-${resource.col}`}
-            resource={resource}
-            config={config}
-            onInfoClick={handleInfoClick}
-          />
-        );
-      }),
-    [resources, handleInfoClick]
-  );
+    return resources.map((resource) => {
+      const config =
+        RESOURCE_ICON_MAP[
+          resource.resourceType as keyof typeof RESOURCE_ICON_MAP
+        ] || defaultConfig;
+
+      return (
+        <ResourceNodeComponent
+          key={`${resource.resourceCode}-${resource.row}-${resource.col}`}
+          resource={resource}
+          config={config}
+          onInfoClick={handleInfoClick}
+        />
+      );
+    });
+  }, [resources, handleInfoClick]);
+
+  // Show empty state when no data
+  if (!resources || resources.length === 0) {
+    return (
+      <div className="w-full">
+        <div className="overflow-x-auto overflow-y-hidden">
+          <div className="relative min-w-fit" style={gridStyle}>
+            <GridCells cellBorderData={cellBorderData} />
+          </div>
+        </div>
+        <div className="mt-4 text-center text-gray-500">
+          <p>No resources to display</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full">
       <div className="overflow-x-auto overflow-y-hidden">
         <div className="relative min-w-fit" style={gridStyle}>
           <GridCells cellBorderData={cellBorderData} />
-          {resources.length > 0 && resourceNodes}
-          {resources.length > 0 && (
-            <ArrowsComponent connections={visibleConnections} />
-          )}
+          {resourceNodes}
+          <ArrowsComponent connections={visibleConnections} />
         </div>
       </div>
 
-      {resources.length > 0 && (
-        <div className="mt-4 text-center">
-          <Button
-            label="Simulate"
-            onClick={animateConnections}
-            prefixIcon={<Play className="size-4" />}
-          />
-        </div>
-      )}
+      <div className="mt-4 text-center">
+        <Button
+          label="Simulate"
+          onClick={animateConnections}
+          prefixIcon={<Play className="size-4" />}
+          disabled={sortedConnections.length === 0}
+        />
+      </div>
     </div>
   );
 };

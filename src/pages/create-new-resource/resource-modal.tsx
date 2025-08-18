@@ -33,7 +33,7 @@ export const ResourceModal: React.FC<ResourceModalProps> = ({
   const { data: getServicesData } = useGetServicesQuery({
     provider: dashboard.provider,
   });
-  console.log(getServicesData);
+  console.log(getServicesData, "dfjfhu");
 
   // Transform the API data to match the expected format
   const presetTypeOptions = id

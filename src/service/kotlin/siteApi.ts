@@ -40,7 +40,7 @@ export const siteApi = createApi({
       query: ({siteCode}) => `/dashboard/read-resource-type-count/${siteCode}`,    
   }),
   getSiteDataFlow:build.query<resourceDataFlowResponse, {siteCode:string}>({
-    query: ({siteCode}) => `/dashboard/site-data-flow/${siteCode}`,    
+    query: ({siteCode}) => `/site/read-architecture/${siteCode}`,    
 }),
     getAllSites: build.query<getSiteResponse, void>({
         query: () => `/dashboard/sites`,    

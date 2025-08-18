@@ -17,6 +17,7 @@ export type Parameter = {
   parameterInputType: string;
   parameterLookup: string;
   parameterMandatory: string;
+  parameterEdit:string
   parameterLabel: string;
   parameterInput: string;
   parameterLength: number;
@@ -154,25 +155,62 @@ export interface ResourceSummary {
 }
 
 
-export type resourceDataFlowResponse = {
-  connections: {
-    x: string;
-    y: string;
-    serial:string
-  }[];
-  data: {
-    col: number;
-    row: number;
-    resourceCode: string;
-    resourceName: string;
-    resourceSiteCode: string;
-    resourceType: string;
-    errors:number
-  }[];
-  responseCode: string;
-  responseMessage: string;
-};
 
+// Individual cell/border definition in the house grid
+interface HouseCell {
+  row: number;
+  col: number;
+  top: "Yes" | "No";
+  left: "Yes" | "No";
+  bottom: "Yes" | "No";
+  right: "Yes" | "No";
+  color: string; // hex color code like "#e8000b"
+  width: number;
+  fillColor?: string; 
+}
+
+// Resource definition
+interface Resource {
+  resourceSiteCode: string;
+  resourceCode: string;
+  resourceName:string
+  resourceType:
+    | "User"
+    | "ServerRoom"
+    | "Server"
+    | "Database-SQL"
+    | "InternetRouter"
+    | "HouseRouter"
+    | string; // fallback in case new types appear
+  row: number;
+  col: number;
+  errors: number;
+}
+
+// Connection between resources
+interface Connection {
+  resourceSiteCode: string; // e.g., "sample-site-001"
+  x: string; // resource code
+  y: string; // resource code
+  serial: number;
+}
+
+// Main data structure
+interface ApiResponseData {
+  house: HouseCell[];
+  resource: Resource[];
+  connection: Connection[];
+}
+
+// Complete API response
+interface resourceDataFlowResponse {
+  responseCode: string; // e.g., "00"
+  responseMessage: string; // e.g., "Success"
+  data: ApiResponseData;
+}
+
+// Export the main type
+export type { resourceDataFlowResponse, ApiResponseData, HouseCell, Resource, Connection };
 export type resourceProp = {
    resourceUpdatedAt: string;
    resourceBill: number;

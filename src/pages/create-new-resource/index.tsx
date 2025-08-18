@@ -30,11 +30,11 @@ export const CreateNewResource = () => {
     useCreateResourceMutation();
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
   const location = useLocation();
+
   const [progress, setProgress] = useState(0);
 
   const dashboard = useSelector((state: RootState) => state.dashboard);
   const locationState = location.state as any;
-
   // ALL HOOKS MUST BE CALLED BEFORE ANY EARLY RETURNS
   const { data: configData, isLoading: isConfigLoading } = useGetConfigQuery(
     {
@@ -131,10 +131,9 @@ export const CreateNewResource = () => {
         toastOptions: { type: "success", autoClose: 5000 },
       });
 
-      setProgress(0);  
+      setProgress(0);
       navigate(RouteConstant.dashboard.resources.path);
       setIsDeployModalOpen(false);
-    
     } catch (error: any) {
       console.error("Create Resource Error:", error);
       const message = ErrorHandler.extractMessage(error);

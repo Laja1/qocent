@@ -4,7 +4,7 @@ import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ArrowRight, Info } from "lucide-react";
-import { IconMichelinStar } from "@tabler/icons-react";
+import { IconHome } from "@tabler/icons-react";
 import { Button, Header, RenderField } from "@/components/shared";
 import { useModal } from "@/components/shared/modal";
 import { showCustomToast } from "@/components/shared/toast";
@@ -184,7 +184,7 @@ export const CreateNewHouse = () => {
                 provided by a provider.
               </p>
             </div>
-            <IconMichelinStar color="white" size={40} />
+            <IconHome color="white" size={40} />
           </div>
 
           <div className="flex mt-5 flex-col">

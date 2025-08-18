@@ -4,21 +4,21 @@ export type resourceType = {
   resourceCode: string;
   resourceName: string | null;
   resourceType: string;
-  resourceStatus: string;
+  resourceStatus?: string;
   resourceProvider: string;
   resourceSiteCode: string;
   resourceRoomCode: string;
   resourceHouseCode: string;
-  resourceConfig: string;
-  resourceRef: string | null;
-  resourceCreateChannel: string;
-  resourceUserId: string;
+  resourceConfig?: string;
+  resourceRef?: string | null;
+  resourceCreateChannel?: string;
+  resourceUserId?: string;
   resourceIP: string;
-  resourceCheckerId: string;
-  resourceContainerCode: string;
-  resourceContainerType: string;
+  resourceCheckerId?: string;
+  resourceContainerCode?: string;
+  resourceContainerType?: string;
   resourceCreatedAt: string; // e.g. "07/24/2025 10:12:45 AM"
-  resourceUpdatedAt: string; // e.g. "2025-07-24 10:12:45.0"
+  resourceUpdatedAt?: string; // e.g. "2025-07-24 10:12:45.0"
 };
 
 export type resourceResponse = {

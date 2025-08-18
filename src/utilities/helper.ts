@@ -69,7 +69,6 @@ export const getResourceTypeClassName = (type: string) => {
 
 
 
-
 export const replaceConfigPlaceholders = (
   obj: unknown,
   formikValues: { [x: string]: any }
@@ -78,30 +77,52 @@ export const replaceConfigPlaceholders = (
     return obj.map((item) => replaceConfigPlaceholders(item, formikValues));
   } else if (obj !== null && typeof obj === "object") {
     const newObj: { [key: string]: unknown } = {};
-    for (const [key, value] of Object.entries(
-      obj as Record<string, unknown>
-    )) {
-      newObj[key] = replaceConfigPlaceholders(value, formikValues);
+    
+    for (const [key, value] of Object.entries(obj as Record<string, unknown>)) {
+      // Process the key for placeholders
+      let newKey = key;
+      if (key.startsWith("@") && key.length > 1) {
+        const fieldName = key.substring(1);
+        newKey = formikValues[fieldName] || key;
+      }
+      
+      // Process the value recursively
+      newObj[newKey] = replaceConfigPlaceholders(value, formikValues);
     }
     return newObj;
   } else if (typeof obj === "string") {
-    // Fixed: Handle different placeholder patterns
-    if (obj === "@") {
-      // For standalone @ placeholders, we need to determine the appropriate replacement
-      // This is context-dependent, so we return a sensible default
-      return "default";
-    } else if (obj.startsWith("@") && obj.length > 1) {
-      // Handle @fieldName patterns
-      const fieldName = obj.substring(1);
-      return formikValues[fieldName] || obj;
-    }
-    // Handle template strings with ${} patterns
-    return obj.replace(/\$\{(\w+)\}/g, (match, fieldName) => {
-      return formikValues[fieldName] || match;
-    });
+    return processStringPlaceholders(obj, formikValues);
   }
   return obj;
 };
+
+const processStringPlaceholders = (
+  str: string, 
+  formikValues: { [x: string]: any }
+): string => {
+  // Handle standalone @ placeholders
+  if (str === "@") {
+    return "default";
+  }
+  
+  // Handle simple @fieldName patterns (not inside ${})
+  if (str.startsWith("@") && str.length > 1 && !str.includes("${")) {
+    const fieldName = str.substring(1);
+    return formikValues[fieldName] || str;
+  }
+  
+  // Handle complex template strings with ${}
+  return str.replace(/\$\{([^}]+)\}/g, ( content) => {
+    // First, replace any @ placeholders within the ${} content
+    const processedContent = content.replace(/@(\w+)/g, (atMatch: string, fieldName: string) => {
+      return formikValues[fieldName] || atMatch;
+    });
+    
+    // Return the processed content back in the ${} format
+    return `\${${processedContent}}`;
+  });
+};
+
 
 export const siteCodeRegex = /^[A-Z0-9]{3,10}$/; // Alphanumeric, 3-10 characters
 export const houseCodeRegex = /^[A-Z0-9]{2,20}$/; // Alphanumeric, 2-20 characters
