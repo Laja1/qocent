@@ -16,6 +16,18 @@
     --color-primary:'#edf2ef'
 }
 
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Optional: Apply base light/dark styles for body */
+@layer base {
+  body {
+    @apply bg-white text-black;
+  }
+  .dark body {
+    @apply bg-black text-white;
+  }
+}
+
 @font-face {
     font-family: AeonikPro;
     src: url('./assets/fonts/AeonikProTRIAL-Regular.otf');
@@ -172,6 +184,15 @@
 body{
     background-color: #fff;
     font-family: var(--font-brfirma);
+}
+
+@layer base {
+  body {
+    @apply bg-white text-black;
+  }
+  .dark body {
+    @apply bg-[#28282B] text-white;
+  }
 }
 
 form {

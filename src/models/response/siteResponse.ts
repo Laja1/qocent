@@ -1,3 +1,5 @@
+import type { resourceType } from "./resourceResponse";
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type genericResponse = {
     responseCode: number,
@@ -68,56 +70,48 @@ export interface getSiteResponse {
 export interface getSiteArchitectureResponse {
   responseCode: string;
   responseMessage: string;
-  data: SiteArchitecture;
-}
-
-export interface SiteArchitecture {
-  noOfServerHouse: number;
-  siteName: string;
-  parentId: string;
-  parent: string;
-  siteCode: string;
-  siteDescription: string;
-  siteProvider: string;
-  siteRegion: string;
-  siteStatus: string;
-  siteExpiryDate: string;
-  siteEOLAction: string;
-  serverHouse: ServerHouse[];
-  extraResources: {
-    resources: ExtraResource[];
+    data:SiteArchitecture
   };
-}
 
-export interface ServerRoom {
-  id: number;
-  serverRoom: string;
-  serverRoomId: string;
-  cidrBlock: string;
-  availabilityZone: string;
-  resourcesDeployed: any[]; 
-  routeTable: string;
-  securityGroups: string[];
-}
-
-export interface ServerHouse {
-  serverHouseId: string;
-  houseName: string;
-  cidrBlock: string;
-  id: number;
-  numberOfServerRooms: number;
-  serverRoom: ServerRoom[];
-}
-
-export interface ExtraResource {
-  name: string;
-  id: number;
-  type: string;
-  status: string;
-  owner: string;
-  resourceCode: string;
-  resourceProvider: string;
-}
+export type SiteArchitecture = {
+  siteCode: string;
+  userEmail: string;
+  siteProvider: string;
+  config: {
+    houses: houses[];
+  };
+  extraResources: {
+    resources: Resources[];
+  };
+};
+  
+export type houses = {
+    houseCode: string;
+    houseSite: string;
+    houseDescription: string;
+    houseLocation: string;
+    houseCidr: string;
+    houseStatus: string;
+    rooms: ServerRoom[];
+  };
+  
+export type ServerRoom = {
+    roomCode: string;
+    roomCidr: string;
+    roomHouse: string;
+    roomDescription: string;
+    roomStatus: string;
+    resourcesDeployed?: Resource[]; // optional because some rooms don’t have it
+  };
+  
+  type Resources = {
+    resourceId: number;
+    resourceName: string;
+    resourceCode: string;
+    resourceType:string
+    resourceStatus: string;
+  };
+  
 
 export type SiteResponse = {
   data: {
@@ -211,44 +205,18 @@ interface resourceDataFlowResponse {
 
 // Export the main type
 export type { resourceDataFlowResponse, ApiResponseData, HouseCell, Resource, Connection };
-export type resourceProp = {
-   resourceUpdatedAt: string;
-   resourceBill: number;
-   resourceRoomCode: string;
-   resourceConfig: string;
-   resourceRef: string;
-   resourceMakerId: string;
-   resourceContainerType: string;
-   resourceVpcId: string;
-   resourceCreateChannel: string;
-   resourceContainerCode: string;
-   resourceProviderId: string;
-   resourceCheckerId: string;
-   resourceDate: string;
-   resourceId: number;
-   resourceTagId: string;
-   resourceCode: string;
-   resourceSiteCode: string;
-   resourceSiteId: string;
-   resourceType: string;
-   resourceStatus: string;
-   resourceSite: string;
-   resourceCreatedAt: string;
-   resourceProvider: string;
-   resourceSubnetId: string;
-   resourceName: string;
-   resourceIp: string;
-   resourceUserId: string;
-  
-}
 
-export type getResourcesInSiteResponse = {
+export type getResourcesResponse = {
   responseCode: string;
   responseMessage: string;
-  data: resourceProp[];
+  data: resourceType[];
 };
 
-
+export type deploySiteResourceType = {
+  data: Record<any, any>;
+  responseCode: string;
+  responseMessage: string;
+};
 
 export type getAccountResponse = {
   responseCode: string;

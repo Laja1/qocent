@@ -1,5 +1,5 @@
 import {  object } from 'yup';
-import {defaultValidation, improvedCidrValidation,   } from '.';
+import {defaultValidation, improvedCidrValidation, passwordValidation,   } from '.';
 import * as Yup from "yup";
 
 export const deployModalSchema = object().shape({
@@ -63,8 +63,7 @@ export const generateDynamicSchema = (params?: ParameterData[]) => {
     .matches(
       /^[A-Za-z0-9]+$/,
       `${param.parameterLabel} must only contain letters and numbers (no spaces or special characters)`
-    )
-    .trim();
+    ).trim();
 
   if (param.parameterLength && param.parameterLength > 0) {
     validator = (validator as Yup.StringSchema).max(
@@ -73,10 +72,7 @@ export const generateDynamicSchema = (params?: ParameterData[]) => {
     );
   }
   break;
-
-        
-      
-      case 'CommentBox':
+case 'CommentBox':
         validator = Yup.string();
         // Apply length validation if specified
         if (param.parameterLength && param.parameterLength > 0) {
@@ -105,8 +101,7 @@ export const generateDynamicSchema = (params?: ParameterData[]) => {
         break;
       
       case 'PasswordBox':
-        validator = Yup.string()
-          .min(8, `${param.parameterLabel} must be at least 8 characters`);
+        validator = passwordValidation();
         break;
         case 'CidrBlock': {
           // Parse any additional validation options from parameterValidation field

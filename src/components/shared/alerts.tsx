@@ -22,13 +22,13 @@ export const AlertBox = ({
   return (
     <Alert
       variant={variant}
-      className={`bg-black shadow-xs border-0 text-white justify-between flex items-center rounded-sm ${className}`}
+      className={`bg-black shadow-xs border-0 text-white justify-between flex items-center rounded-xs ${className}`}
     >
       <div className="flex w-full gap-2">
         {icon}
         <div>
           <AlertTitle>{title}</AlertTitle>
-          <AlertDescription>{description}</AlertDescription>
+          <AlertDescription className="text-xs">{description}</AlertDescription>
         </div>
       </div>
       {onClose && (

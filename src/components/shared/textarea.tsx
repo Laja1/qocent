@@ -23,7 +23,7 @@ export const TextArea = ({
 }) => {
   // Memoize the textarea classes
   const textareaClasses = useMemo(() => {
-    const textareaBaseClass = `block w-full bg-white  rounded-xs py-1 px-3 text-xs border focus:ring-1 focus:ring-green-900 focus:border-black resize-vertical min-h-[60px]`;
+    const textareaBaseClass = `block w-full bg-white text-black  rounded-xs py-1 px-3 text-xs border focus:ring-1 focus:ring-green-900 focus:border-black resize-vertical min-h-[60px]`;
     const textareaState = error
       ? "border-red-500 ring-red-500"
       : "border-green-800";

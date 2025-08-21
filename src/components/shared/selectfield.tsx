@@ -20,7 +20,7 @@ export const SelectField = ({
   className,
 }: SelectProps) => {
   const selectfieldClasses = clsx(
-    "block w-full bg-white border border-gray-300 rounded-xs py-3 px-3 text-xs focus:outline-none focus:ring-0.5 focus:ring-green-700 focus:border-green-700 ",
+    "block w-full bg-white text-black border border-gray-300 rounded-xs py-3 px-3 text-xs focus:outline-none focus:ring-0.5 focus:ring-green-700 focus:border-green-700 ",
     className
   );
 
@@ -35,13 +35,14 @@ export const SelectField = ({
       {label && (
         <label
           htmlFor={name}
-          className={`text-sm text-gray-600 ${labelClassname}`}
+          className={`text-sm text-gray-600 dark:text-white ${labelClassname}`}
         >
           {label}
         </label>
       )}
-      <div className="relative mt-1">
+      <div className="relative mt-1 bg-white">
         <Select
+        
           value={value || formik?.values[name] || ""}
           onValueChange={handleChange}
         >
@@ -49,7 +50,7 @@ export const SelectField = ({
             id={name}
             className={clsx(
               selectfieldClasses,
-              "cursor-pointer flex items-center justify-between"
+              "cursor-pointer flex items-center justify-between "
             )}
           >
             <SelectValue

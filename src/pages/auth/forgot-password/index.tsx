@@ -12,6 +12,7 @@ import { forgotPasswordFormValidationSchema } from "@/utilities/schema/authSchem
 import { useFormik } from "formik";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Mail } from "lucide-react";
 
 const ForgotPassword = () => {
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
@@ -64,6 +65,7 @@ const ForgotPassword = () => {
           name="userEmail"
           label="Email"
           placeholder="Enter your email"
+          prefixIcon={<Mail size={16} className="text-black"/>}
           error={
             formik?.touched.userEmail && formik?.errors.userEmail
               ? formik?.errors.userEmail

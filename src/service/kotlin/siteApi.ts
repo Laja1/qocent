@@ -1,15 +1,18 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import type {  getResourcesInSiteResponse, getResourceSummaryResponse, getSiteArchitectureResponse, getSiteResponse, resourceDataFlowResponse, SiteResponse,  } from "@/models/response/siteResponse";
+import type {  deploySiteResourceType, getResourcesResponse, getResourceSummaryResponse, getSiteArchitectureResponse, getSiteResponse, resourceDataFlowResponse, SiteResponse,  } from "@/models/response/siteResponse";
 import { ApiEnums } from "@/utilities/enums";
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import type { createSiteRequest } from "@/models/request/siteRequest";
-import { createSiteProviderTags } from "@/utilities/tagHelpers";
+import { createResourceProviderTags, createSiteProviderTags } from "@/utilities/tagHelpers";
 import type { genericResponse } from "@/models/response";
+
+
+
 
 export const siteApi = createApi({
   reducerPath: "siteApi",
   baseQuery: kotlinBaseQueryWithResponseCodeHandling,
-  tagTypes: [ApiEnums.Site],
+  tagTypes: [ApiEnums.Site,ApiEnums.House,ApiEnums.Room,ApiEnums.Resource],
   endpoints: (build) => ({
     createServerSite: build.mutation<SiteResponse, createSiteRequest>({
       query: (body) => ({
@@ -36,6 +39,7 @@ export const siteApi = createApi({
     getSiteBySiteCode: build.query<getSiteArchitectureResponse, {siteCode:string}>({
         query: ({siteCode}) => `/dashboard/site-data/${siteCode}`,    
       }),
+
     getResourceTypeCount: build.query<getResourceSummaryResponse, {siteCode:string}>({
       query: ({siteCode}) => `/dashboard/read-resource-type-count/${siteCode}`,    
   }),
@@ -43,17 +47,23 @@ export const siteApi = createApi({
     query: ({siteCode}) => `/site/read-architecture/${siteCode}`,    
 }),
     getAllSites: build.query<getSiteResponse, void>({
-        query: () => `/dashboard/sites`,    
+        query: () => `/dashboard/sites`,  
+        providesTags: (result) => createSiteProviderTags(result,  "siteId"),
     }),
-    getResourcesInSite: build.query<getResourcesInSiteResponse, {siteCode:string}>({
-      query: ({siteCode}) => `/dashboard/resource-list/${siteCode}`,  
-      
+    getResourcesInSite: build.query<getResourcesResponse, {siteCode:string}>({
+      query: ({siteCode}) => `/dashboard/resource-list/${siteCode}`, 
+      providesTags: (result) => createResourceProviderTags(result,  "resourceId") as Array<{ type: ApiEnums.Resource; id: string | number | "LIST" }>,
   }),
-    
-  
+  deploySiteResources: build.mutation<deploySiteResourceType, {siteCode:string}>({
+    query: ({siteCode}) => ({
+      url:`/resource/deploy-resources/${siteCode}`,
+      method: "POST",
+    }),
+    invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" },{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.Resource, id: "LIST" }], 
+}),
   }),
 });
 
 
-export const { useCreateServerSiteMutation,useDeleteSiteMutation, useGetSiteByProviderQuery,useGetResourcesInSiteQuery, useGetSiteDataFlowQuery,useGetResourceTypeCountQuery,useGetSiteArchitectureQuery,useGetAllSitesQuery
+export const { useCreateServerSiteMutation,useDeleteSiteMutation,useDeploySiteResourcesMutation, useGetSiteByProviderQuery,useGetResourcesInSiteQuery, useGetSiteDataFlowQuery,useGetResourceTypeCountQuery,useGetSiteArchitectureQuery,useGetAllSitesQuery
  } = siteApi;

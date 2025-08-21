@@ -10,7 +10,7 @@ export const DashboardLayoutWithSidebar = () => {
           <SidebarLayout />
         </div>
         <div className="w-full h-full relative">
-          <div className="w-full flex flex-col z-10 overflow-y-hidden min-h-screen bg-white pt-16">
+          <div className="w-full flex flex-col z-10 overflow-y-hidden min-h-screen bg-white dark:bg-black pt-16">
             
             <Outlet />
           </div>

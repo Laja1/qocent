@@ -3,6 +3,8 @@ import { TextArea, Textfield2 } from "@/components/shared";
 import { DatePickerWithFormik } from "@/components/shared/date-picker";
 import type { FormikProps } from "formik";
 import { ResourceSelectField } from "../not-shared/resource-selectfield";
+import { useState } from "react";
+import { EyeClosed, EyeIcon, Lock } from "lucide-react";
 
 type RenderFieldProps = {
   type: string;
@@ -24,6 +26,7 @@ export const RenderField = ({
   autoComplete = "off", // Default to "off"
   ...rest
 }: RenderFieldProps) => {
+  const [seePassword, setSeePassword] = useState(false);
   const error = formik.touched[name] && formik.errors[name];
 
   return (
@@ -41,6 +44,23 @@ export const RenderField = ({
           className="w-full"
           autoComplete={autoComplete}
           {...rest}
+        />
+      )}
+      {type === "PasswordBox" && (
+        <Textfield2
+        name={name}
+        label={label}
+          placeholder="Enter your password"
+          formik={formik}
+           className="w-full"
+          prefixIcon={<Lock size={16} className="text-black"/>}
+          type={seePassword ? "text" : "password"}
+          suffixIcon={
+            <button onClick={() => setSeePassword((prev) => !prev)}>
+              {seePassword ? <EyeIcon size={16} /> : <EyeClosed size={16} />}
+            </button>
+          }
+          error={error as string}
         />
       )}
 

@@ -1,15 +1,11 @@
 import { createContext, useContext, useState, type ReactNode } from "react";
-import {
-  Dialog,
-  DialogPanel,
-} from "@headlessui/react";
+import { Dialog, DialogPanel } from "@headlessui/react";
 import { AnimatePresence, motion } from "framer-motion";
 
 type ModalData = {
   id: string;
-  content: () => ReactNode; 
+  content: () => ReactNode;
 };
-
 
 type ModalContextType = {
   openModal: (modal: ModalData) => void;
@@ -36,7 +32,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
 
   const closeModal = () => {
     setIsOpen(false);
-    setTimeout(() => setModal(null), 300); 
+    setTimeout(() => setModal(null), 300);
   };
 
   return (
@@ -46,33 +42,32 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
       {children}
 
       <AnimatePresence>
-      {isOpen && modal && (
-  <Dialog
-    static
-    open={isOpen}
-    onClose={closeModal}
-    className="relative z-50"
-  >
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="fixed inset-0 bg-black/50"
-    />
-    <div className="fixed inset-0 flex items-center justify-center p-4">
-      <DialogPanel
-        as={motion.div}
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
-        className="min-w-xs rounded-sm bg-white p-3"
-      >
-        {modal.content()} {/* 👈 Now it's reactive */}
-      </DialogPanel>
-    </div>
-  </Dialog>
-)}
-
+        {isOpen && modal && (
+          <Dialog
+            static
+            open={isOpen}
+            onClose={closeModal}
+            className="relative z-50"
+          >
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/50"
+            />
+            <div className="fixed inset-0 flex items-center justify-center p-4">
+              <DialogPanel
+                as={motion.div}
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="min-w-xs rounded-sm bg-white dark:bg-black p-3"
+              >
+                {modal.content()} {/* 👈 Now it's reactive */}
+              </DialogPanel>
+            </div>
+          </Dialog>
+        )}
       </AnimatePresence>
     </ModalContext.Provider>
   );

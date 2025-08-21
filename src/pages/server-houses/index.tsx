@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
+import { Button, Header, Tabs } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Eye, PlusIcon, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -9,130 +9,36 @@ import { Resource } from "../resource";
 import { SecurityTable } from "../server-sites/security-table";
 import { useState } from "react";
 import { useModal } from "@/components/shared/modal";
-// import { houseArchitectureData } from "@/utilities/constants/config";
-// import { HouseLevel } from "../architectural-room/house-level";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
-import { formatDate, getStatusClassName } from "@/utilities/helper";
-// import { FlowGrid } from "@/components/not-shared/data-flow/flow";
-// import { useGetSiteDataFlowQuery } from "@/service/kotlin/siteApi";
+
 import {
   useDeleteHouseMutation,
   useGetAllHouseQuery,
+  useGetResourceInHouseQuery,
 } from "@/service/kotlin/houseApi";
 import type { HouseItem } from "@/models/response/houseResponse";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
-import { Badge } from "@/components/ui/badge";
 import { Card } from "@/components/ui/card";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-
+import { ResourceTable } from "../server-sites/server-sites-table";
+import { serverHouseColumn } from "@/utilities/constants/colums";
 // Cute Data Flow Loader Component
 
 export const ServerHouses = () => {
   const navigate = useNavigate();
   const { openModal, closeModal } = useModal();
+  const [tabShow, setTabShow] = useState(false);
+  const [selectedHouseCode, setSelectedHouseCode] = useState("");
   const [rowId, setRowId] = useState("");
   const [deleteHouse, { isLoading: isDeleting }] = useDeleteHouseMutation();
   const account = useSelector((state: RootState) => state.account);
   const { data, isLoading } = useGetAllHouseQuery({
     accountCode: account?.accountCode,
   });
-
-  // const { data: dataFlow, isLoading: dataFlowLoading } =
-  //   useGetSiteDataFlowQuery({
-  //     siteCode: "sample-site-000",
-  //   });
-
-  const serverHouseColumn: ColumnDef<HouseItem>[] = [
-    {
-      id: "houseId",
-      header: "HOUSE ID",
-      accessorKey: "houseId",
-      cell: (row) => <span className="line-clamp-1">{row?.houseId}</span>,
-      sortable: true,
-    },
-    {
-      id: "houseName",
-      header: "HOUSE NAME",
-      accessorKey: "houseName",
-      cell: (row) => (
-        <span className="line-clamp-1 font-brfirma-bold">{row.houseName}</span>
-      ),
-      sortable: true,
-    },
-    {
-      id: "houseCode",
-      header: "HOUSE CODE",
-      accessorKey: "houseCode",
-      cell: (row) => <span className=" line-clamp-1">{row.houseCode}</span>,
-      sortable: true,
-      filterType: "select",
-    },
-    {
-      id: "houseSite",
-      header: "House Site",
-      accessorKey: "houseSite",
-      sortable: true,
-      cell: (row) => <span>{row.houseSite}</span>,
-    },
-    {
-      id: "houseStatus",
-      header: "STATUS",
-      accessorKey: "houseStatus",
-      cell: (row) => (
-        <div className="">
-          <Badge
-            variant="outline"
-            className={getStatusClassName(row.houseStatus)}
-          >
-            {row.houseStatus}
-          </Badge>
-        </div>
-      ),
-      sortable: true,
-      filterType: "select",
-      filterOptions: [
-        { label: "Active", value: "Active" },
-        { label: "Maintenance", value: "Maintenance" },
-      ],
-    },
-    // {
-    //   id: "resourceMaker",
-    //   header: "PROVIDER",
-    //   accessorKey: "resourceMaker",
-    //   sortable: true,
-    //   cell: (row) => (
-    //     <span className="text-center justify-center flex line-clamp-1">
-    //       {row. === "1" ? (
-    //         <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
-    //       ) : (
-    //         <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
-    //       )}
-    //     </span>
-    //   ),
-    // },
-    {
-      id: "houseCidr",
-      header: "House Cidr",
-      accessorKey: "houseCidr",
-      sortable: true,
-      cell: (row) => <span className=" ">{row.houseCidr}</span>,
-    },
-    {
-      id: "houseCreatedAt",
-      header: "DATE CREATED",
-      headerClassName: "text-right",
-      accessorKey: "houseCreatedAt",
-      sortable: true,
-      cell: (row) => (
-        <span className="text-right block ">
-          {formatDate(row.houseCreatedAt)}
-        </span>
-      ),
-    },
-  ];
+  console.log(data?.data, "sgsss");
 
   const actions = [
     {
@@ -173,7 +79,16 @@ export const ServerHouses = () => {
     },
   ];
   const row = data?.data.find((item: any) => item.siteId === rowId);
-
+  const { data: resourcesInHouseData, isLoading: isResourceLoading } =
+    useGetResourceInHouseQuery(
+      {
+        houseCode: selectedHouseCode,
+      },
+      {
+        skip: !selectedHouseCode,
+      }
+    );
+  console.log(resourcesInHouseData?.data, "useGetResourceInHouseQuery");
   const tabData = [
     {
       id: 1,
@@ -216,7 +131,12 @@ export const ServerHouses = () => {
       id: 2,
       text: "Resources",
       component: (
-        <div className="">{/* <ServerSitesTable2 rowId={rowId} /> */}</div>
+        <div className="">
+          <ResourceTable
+            resourcesInSiteData={resourcesInHouseData?.data || []}
+            isLoading={isResourceLoading}
+          />
+        </div>
       ),
     },
     // {
@@ -244,9 +164,28 @@ export const ServerHouses = () => {
       component: <SecurityTable />,
     },
   ];
+  const handleRowClick = async (row: HouseItem) => {
+    setTabShow(true);
+    setRowId(row.houseId);
+    setSelectedHouseCode(row.houseCode);
 
+    // setIsArtificialLoading(true);
+
+    // const timeout = setTimeout(() => {
+    //   setIsArtificialLoading(false);
+    // }, 1500);
+
+    // setLoadingTimeout(timeout);
+
+    try {
+      // await refetchDataFlow();
+    } catch (error) {
+      console.error("Error refetching data flow:", error);
+      // setIsArtificialLoading(false);
+    }
+  };
   return (
-    <div className="bg-white h-full">
+    <div className=" h-full">
       <Header title="Server Houses" description="Manage your server house">
         <Button
           intent="tertiary"
@@ -265,16 +204,18 @@ export const ServerHouses = () => {
           searchPlaceholder="Search server house by name, ID, or code..."
           pageSize={5}
           actions={actions}
-          onRowClick={(row) => setRowId(row.houseId)}
+          onRowClick={handleRowClick}
           highlightedRowId={rowId}
           getRowId={(row) => row.houseId}
           initialSorting={{ id: "houseCreatedAt", desc: false }}
         />
       </Card>
 
-      <div className="mx-5 mt-5 ">
-        <Tabs tabs={tabData} />
-      </div>
+      {tabShow && (
+        <div className="mx-5 mt-5">
+          <Tabs tabs={tabData} />
+        </div>
+      )}
     </div>
   );
 };

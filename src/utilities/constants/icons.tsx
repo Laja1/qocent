@@ -1,15 +1,12 @@
-import { imgLinks, svgLinks } from "@/assets/assetLink";
-import { IconDoor, IconRouter } from "@tabler/icons-react";
+import { imgLinks,  } from "@/assets/assetLink";
 import {
   DatabaseIcon,
-  File,
   Globe,
-  House,
   Network,
   Server,
-  UserCheck,
+  Shield,
+  User,
 } from "lucide-react";
-import { MdRoom } from "react-icons/md";
 
 // type IconProps = {
 //   id: number;
@@ -77,27 +74,64 @@ export const NetworkIcon = () => {
   );
 };
 
-export const ICON_MAP = {
-  Proxy: <Network className="text-red-500 size-4" />,
-  InternetRouter: <Globe className="text-purple-500 size-4" />,
-  Server: <Server className="text-red-600 size-4" />,
-  S3: <File className="text-blue-600 size-5" />,
-  API: <ApiServerIcon />,
-  Database: <DatabaseIcon className="text-green-600 size-4" />,
-  ServerRoom: <img src={imgLinks.switch} className="size-5" />,
-  ServerHouse: <IconDoor className="size-5 text-blue-600" />,
-  "Database-SQL": <DatabaseIcon className="text-purple-500 size-4" />,
-  HouseRouter: <IconRouter className="text-purple-500 size-4" />,
-};
+
+
+
 
 export const RESOURCE_MAP = {
-  Proxy: <NetworkIcon />,
-  Server: <ServerIcon />,
-  Database: <Database />,
-  "Server Rooms": <MdRoom />,
-  "Server Houses": <House />,
-  API: <ApiServerIcon />,
-  IAM: <UserCheck />,
-  S3: <img src={svgLinks.s3} className="size-8" />,
-  R53: <img src={svgLinks.r53} className="size-8" />,
-} as const;
+  User: {
+    icon: <User className="size-5" />,
+    color: "text-pink-600",
+    // bgColor: "bg-pink-100",
+  },
+  IGW: {
+    icon: <Globe className="size-5" />,
+    color: "text-blue-600",
+    // bgColor: "bg-blue-100",
+  },
+  HouseRouter: {
+    icon: <img src={imgLinks.router} alt="router" className="size-8" />,
+    color: "text-purple-600",
+    // bgColor: "bg-purple-100",
+  },
+  InternetRouter: {
+    icon: <Globe className="size-5" />,
+    color: "text-green-600",
+    // bgColor: "bg-green-100",
+  },
+  LB: {
+    icon: <Shield className="size-5" />,
+    color: "text-purple-600",
+    // bgColor: "bg-purple-100",
+  },
+  ServerRoom: {
+    icon: <img src={imgLinks.switch} alt="switch" className="size-5" />,
+    color: "text-blue-600",
+    // bgColor: "bg-blue-100",
+  },
+  "Server Room": {
+    icon: <img src={imgLinks.switch} alt="switch" className="size-8" />,
+    color: "text-blue-600",
+    // bgColor: "bg-blue-100",
+  },
+  Server: {
+    icon: <Server className="size-5" />,
+    color: "text-red-600",
+    // bgColor: "bg-red-100",
+  },
+  Database: {
+    icon: <DatabaseIcon className="size-5" />,
+    color: "text-indigo-600",
+    // bgColor: "bg-indigo-100",
+  },
+  RDS: {
+    icon: <DatabaseIcon className="size-5" />,
+    color: "text-purple-600",
+    // bgColor: "bg-indigo-100",
+  },
+  "Database-SQL": {
+    icon: <DatabaseIcon className="size-5" />,
+    color: "text-indigo-600",
+    // bgColor: "bg-indigo-100",
+  },
+};

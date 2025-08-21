@@ -3,8 +3,10 @@ import {
   BrainCog,
   Command,
   LogOut,
-  PlusCircleIcon,
+  Moon,
+  // PlusCircleIcon,
   PlusSquare,
+  Sun,
 } from "lucide-react";
 import { RouteConstant } from "@/router/routes";
 import { authStore } from "@/store/authSlice";
@@ -17,6 +19,7 @@ import type { RootState } from "@/store";
 import { ModalConstant } from "@/components/shared/modal/register";
 import { useGetUserAccountsQuery } from "@/service/kotlin/authApi";
 import { accountStore } from "@/store/accountSlice";
+import { useDarkMode } from "@/hooks/useDarkMode";
 
 // Skeleton loader component for workspaces
 const WorkspaceSkeleton = () => (
@@ -38,6 +41,7 @@ const WorkspaceSkeleton = () => (
 
 export const ConsoleLeft = () => {
   const user = useSelector((state: RootState) => state.auth);
+  const { isDark, toggle } = useDarkMode();
   const { data: workspaceData, isLoading } = useGetUserAccountsQuery(
     {
       userCode: user.userEmail || "",
@@ -75,29 +79,29 @@ export const ConsoleLeft = () => {
       alt: "Huawei",
       loading: false,
     },
-    {
-      provider: "gcp" as const,
-      name: "Google Cloud",
-      icon: imgLinks.gcp,
-      alt: "Google Cloud",
-      loading: false,
-    },
-    {
-      provider: "azure" as const,
-      name: "Azure Cloud",
-      icon: imgLinks.azure,
-      alt: "Azure Cloud",
-      loading: false,
-    },
+    // {
+    //   provider: "gcp" as const,
+    //   name: "Google Cloud",
+    //   icon: imgLinks.gcp,
+    //   alt: "Google Cloud",
+    //   loading: false,
+    // },
+    // {
+    //   provider: "azure" as const,
+    //   name: "Azure Cloud",
+    //   icon: imgLinks.azure,
+    //   alt: "Azure Cloud",
+    //   loading: false,
+    // },
   ];
 
   return (
-    <div className="h-full flex flex-col justify-between bg-white">
+    <div className="h-full flex flex-col justify-between bg-white dark:bg-black">
       {/* Top Menu */}
       <div className="p-3 sm:p-4 flex-1 overflow-y-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-4 sticky top-0 bg-white z-10 pb-2">
-          <h2 className="text-sm sm:text-base font-brfirma-bold text-gray-900">
+        <div className="flex justify-between items-center mb-4 sticky top-0 z-10 pb-2">
+          <h2 className="text-sm sm:text-base font-brfirma-bold text-gray-900 dark:text-white">
             Workspaces
           </h2>
           {/* Mobile logout button */}
@@ -130,7 +134,7 @@ export const ConsoleLeft = () => {
                 workspaceData?.data.map((workspace, index) => (
                   <div
                     key={workspace.accountId || index}
-                    className="border border-gray-200 rounded-md overflow-hidden"
+                    className="border border-gray-200 dark:border-gray-800 rounded-md overflow-hidden "
                   >
                     <CollapsibleItem
                       title={workspace.accountName}
@@ -139,12 +143,12 @@ export const ConsoleLeft = () => {
                     >
                       {/* Owner Actions */}
                       {workspace.owner === "YES" && (
-                        <div className="bg-gray-50 border-b border-gray-200">
+                        <div className="bg-gray-50 border-b  border-gray-200">
                           <div
                             onClick={() =>
                               NiceModal.show("InviteToWorkspace", workspace)
                             }
-                            className="text-gray-600 px-4 py-2 text-xs flex items-center gap-2 cursor-pointer hover:bg-gray-100 transition-colors"
+                            className="text-gray-600 px-4 py-2 text-xs flex items-center gap-2 cursor-pointer  hover:bg-gray-100   transition-colors"
                           >
                             <PlusSquare className="size-4" />
                             <span className="hidden sm:inline">
@@ -171,7 +175,7 @@ export const ConsoleLeft = () => {
                       )}
 
                       {/* Cloud Providers */}
-                      <div className="divide-y divide-gray-100">
+                      <div className="divide-y divide-gray-100 dark:divide-gray-800">
                         {workspaces.map((item) => (
                           <div key={item.provider} className="relative">
                             <SubItem
@@ -217,7 +221,7 @@ export const ConsoleLeft = () => {
         </div>
 
         {/* Add Workspace Button */}
-        <div className="mt-6 pt-4 border-t border-gray-200">
+        {/* <div className="mt-6 pt-4 border-t border-gray-200">
           <button
             onClick={() => NiceModal.show("WorkspaceModal")}
             type="button"
@@ -231,25 +235,33 @@ export const ConsoleLeft = () => {
               <span className="sm:hidden">Add Workspace</span>
             </p>
           </button>
-        </div>
+        </div> */}
       </div>
 
       {/* Desktop Logout - hidden on mobile */}
-      <div
-        onClick={handleLogout}
-        className="hidden lg:flex items-center gap-3 p-4 border-t border-gray-200
-                   text-red-600 hover:bg-red-50 active:bg-red-100 cursor-pointer
-                   transition-colors duration-200 bg-white"
-        role="button"
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            handleLogout();
-          }
-        }}
-      >
-        <LogOut className="w-4 h-4" />
-        <span className="text-sm font-medium">Logout</span>
+      <div className="flex px-4  py-2 justify-between border-t dark:bg-black dark:border-gray-800 border-gray-200">
+        <div
+          onClick={handleLogout}
+          className="hidden lg:flex items-center gap-3  
+                   text-red-500  cursor-pointer
+                   transition-colors duration-200 hover:text-white "
+          role="button"
+          tabIndex={0}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              handleLogout();
+            }
+          }}
+        >
+          <LogOut className="w-4 h-4" />
+          <span className="text-sm font-medium">Logout</span>
+        </div>
+        <button
+          onClick={toggle}
+          className=" p-2 bg-gray-200 cursor-pointer dark:bg-gray-900 rounded-full"
+        >
+          {isDark ?  <Sun size={16} />:<Moon size={16} />}
+        </button>
       </div>
     </div>
   );

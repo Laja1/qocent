@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { authRoute } from "./route/authRoute";
 import { dashboardRoute } from "./route/dashboardRoute";
 import { publicRoute } from "./route/publicRoute";
-import { ProtectedRoute } from "./route/protectedRoute";
+import { ProtectedRoute, PublicOnlyRoute } from "./route/protectedRoute";
 import { DashboardLayoutRouter } from "@/components/layouts/DashboardLayoutRouter";
 import NotFound from "@/pages/not-found-page";
 
@@ -41,9 +41,9 @@ export const routeConfig = [
   {
     path: "/",
     element: (
-      // <ProtectedRoute>
+      <PublicOnlyRoute>
       <Outlet />
-      // </ProtectedRoute>
+       </PublicOnlyRoute>
     ),
     children: authRoutesMapped,
   },

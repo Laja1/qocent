@@ -1,21 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useMemo, useCallback, memo } from "react";
 import Xarrow from "react-xarrows";
-import {
-  Info,
-  User,
-  Globe,
-  Shield,
-  Router,
-  DatabaseIcon,
-  Server,
-  CircleX,
-  Play,
-} from "lucide-react";
+import { Info, Server, CircleX, Play } from "lucide-react";
 import { useModal } from "@/components/shared/modal";
-import { imgLinks } from "@/assets/assetLink";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/shared";
+import { useDeploySiteResourcesMutation } from "@/service/kotlin/siteApi";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
+import { showCustomToast } from "@/components/shared/toast";
+import { RESOURCE_MAP } from "@/utilities/constants/icons";
+import { useDeleteResourceMutation } from "@/service/kotlin/resourceApi";
 
 const cellSize = 40;
 const gridSize = 20;
@@ -55,12 +49,13 @@ interface FlowGridProps {
   data?: ResourceNode[];
   connections?: Connection[];
   cellBorderData?: HouseCell[];
+  siteCode: string;
 }
 
 interface ResourceConfig {
   icon: React.ReactNode;
   color: string;
-  bgColor: string;
+  // bgColor: string;
 }
 
 // Helper function to get border styles for a specific cell
@@ -100,59 +95,10 @@ const getCellBorderStyle = (
   return style;
 };
 
-// Memoized resource icon map
-const RESOURCE_ICON_MAP = {
-  User: {
-    icon: <User className="size-5" />,
-    color: "text-pink-600",
-    bgColor: "bg-pink-100",
-  },
-  IGW: {
-    icon: <Globe className="size-5" />,
-    color: "text-blue-600",
-    bgColor: "bg-blue-100",
-  },
-  HouseRouter: {
-    icon: <Router className="size-5" />,
-    color: "text-green-600",
-    bgColor: "bg-green-100",
-  },
-  InternetRouter: {
-    icon: <Globe className="size-5" />,
-    color: "text-green-600",
-    bgColor: "bg-green-100",
-  },
-  LB: {
-    icon: <Shield className="size-5" />,
-    color: "text-purple-600",
-    bgColor: "bg-purple-100",
-  },
-  ServerRoom: {
-    icon: <img src={imgLinks.switch} alt="switch" className="size-5" />,
-    color: "text-blue-600",
-    bgColor: "bg-blue-100",
-  },
-  Server: {
-    icon: <Server className="size-5" />,
-    color: "text-red-600",
-    bgColor: "bg-red-100",
-  },
-  Database: {
-    icon: <DatabaseIcon className="size-5" />,
-    color: "text-indigo-600",
-    bgColor: "bg-indigo-100",
-  },
-  "Database-SQL": {
-    icon: <DatabaseIcon className="size-5" />,
-    color: "text-indigo-600",
-    bgColor: "bg-indigo-100",
-  },
-};
-
 const defaultConfig: ResourceConfig = {
   icon: <Server className="size-5" />,
   color: "text-gray-600",
-  bgColor: "bg-gray-100",
+  // bgColor: "bg-gray-100",
 };
 
 // Memoized ResourceNode component
@@ -168,7 +114,7 @@ const ResourceNodeComponent = memo<{
   return (
     <div
       id={`node-${resource.resourceCode}`}
-      className={`absolute flex flex-col items-center justify-center text-[10px] border border-white rounded-sm p-1 ${config.bgColor} ${config.color}`}
+      className={`absolute flex flex-col items-center justify-center text-[10px]  rounded-sm p-1 bg-transparent ${config.color}`}
       style={{
         top: (resource.row - 1) * cellSize,
         left: (resource.col - 1) * cellSize,
@@ -213,7 +159,7 @@ const GridCells = memo<{ cellBorderData?: HouseCell[] }>(
           cellArray.push(
             <div
               key={index}
-              className="border border-gray-100"
+              className="border border-gray-100 dark:border-gray-900"
               style={{
                 width: cellSize,
                 height: cellSize,
@@ -250,6 +196,8 @@ const ArrowsComponent = memo<{ connections: Connection[] }>(
             showHead={true}
             path="smooth"
             dashness={{ strokeLen: 2, nonStrokeLen: 5, animation: 1 }}
+            startAnchor="right"
+            endAnchor="left"
           />
         ))}
       </>
@@ -263,11 +211,33 @@ export const FlowGrid = ({
   data = [],
   connections = [],
   cellBorderData = [],
+  siteCode,
 }: FlowGridProps) => {
   const { openModal } = useModal();
+  const [deploySiteResources, { isLoading }] = useDeploySiteResourcesMutation();
+  const [deleteResources, { isLoading: isDeleting }] =
+    useDeleteResourceMutation();
   const [visibleConnections, setVisibleConnections] = useState<Connection[]>(
     []
   );
+
+  const handleDelete = async (resourceCode: string) => {
+    try {
+      const res = await deleteResources({
+        resourceId: Number(resourceCode),
+      }).unwrap();
+      await deploySiteResources({ siteCode }).unwrap();
+      showCustomToast(res.responseMessage, {
+        toastOptions: { type: "success", autoClose: 5000 },
+      });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const message = ErrorHandler.extractMessage(error);
+      showCustomToast(message, {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
+    }
+  };
 
   // Use data instead of undefined resources variable
   const resources = data || [];
@@ -359,6 +329,11 @@ export const FlowGrid = ({
                 </p>
               </div>
             </div>
+            <Button
+              label={`Delete ${resource.resourceType}`}
+              onClick={() => handleDelete(resource.resourceSiteCode)}
+              isLoading={isDeleting}
+            />
           </div>
         ),
       });
@@ -371,9 +346,8 @@ export const FlowGrid = ({
 
     return resources.map((resource) => {
       const config =
-        RESOURCE_ICON_MAP[
-          resource.resourceType as keyof typeof RESOURCE_ICON_MAP
-        ] || defaultConfig;
+        RESOURCE_MAP[resource.resourceType as keyof typeof RESOURCE_MAP] ||
+        defaultConfig;
 
       return (
         <ResourceNodeComponent
@@ -402,6 +376,22 @@ export const FlowGrid = ({
     );
   }
 
+  const handleSubmit = async () => {
+    console.log(siteCode);
+    try {
+      const res = await deploySiteResources({ siteCode }).unwrap();
+      console.log(res);
+      showCustomToast(res.responseMessage, {
+        toastOptions: { type: "success", autoClose: 5000 },
+      });
+    } catch (error: any) {
+      console.error("Delete Site Error:", error);
+      const message = ErrorHandler.extractMessage(error);
+      showCustomToast(message, {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
+    }
+  };
   return (
     <div className="w-full">
       <div className="overflow-x-auto overflow-y-hidden">
@@ -412,12 +402,18 @@ export const FlowGrid = ({
         </div>
       </div>
 
-      <div className="mt-4 text-center">
+      <div className="my-4 flex gap-3">
         <Button
           label="Simulate"
           onClick={animateConnections}
           prefixIcon={<Play className="size-4" />}
           disabled={sortedConnections.length === 0}
+        />
+        <Button
+          label="Deploy Resources"
+          isLoading={isLoading}
+          onClick={() => handleSubmit()}
+          disabled={isLoading}
         />
       </div>
     </div>

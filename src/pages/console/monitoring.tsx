@@ -4,11 +4,13 @@ export const Monitoring = () => {
   return (
     <div className="mt-3">
       <div className="grid grid-cols-1 lg:grid-cols-1 gap-3">
-       
-
         <div className=" rounded-xs border h-fit">
-          <div className="p-2 border-b flex gap-2 border-gray-200">
-            <Activity /><h3 className="text-sm  font-semibold text-black">
+          <div className="p-2 border-b flex gap-2 border-gray-200 items-center">
+            <div className="bg-red-50 border border-red-500 text-[10px] rounded-full p-1">
+              <Activity className="text-red-800 size-3" />
+            </div>
+            <h3 className="text-sm  font-semibold text-black dark:text-white">
+              {" "}
               System Health
             </h3>
           </div>
@@ -38,15 +40,15 @@ export const Monitoring = () => {
                         : "bg-yellow-600"
                     }`}
                   />
-                  <span className="text-xs text-gray-900">
+                  <span className="text-xs text-gray-900 dark:text-white">
                     {service.service}
                   </span>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs font-medium text-gray-900">
+                  <p className="text-xs font-medium text-gray-900 dark:text-white">
                     {service.uptime}
                   </p>
-                  <p className="text-[10px] text-gray-500">{service.status}</p>
+                  <p className="text-[10px] text-gray-500 dark:text-gray-600">{service.status}</p>
                 </div>
               </div>
             ))}

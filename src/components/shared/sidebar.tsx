@@ -5,9 +5,10 @@ import {
   Bot,
   LayoutList,
   AlignHorizontalDistributeCenter,
-  RotateCcw,
   Wallet,
   Webhook,
+  Moon,
+  Sun,
 } from "lucide-react";
 import {
   Sidebar,
@@ -34,6 +35,7 @@ import type { RootState } from "@/store";
 import { imgLinks, svgLinks } from "@/assets/assetLink";
 import { NavMain } from "../ui/nav-main";
 import type { ReactElement } from "react";
+import { useDarkMode } from "@/hooks/useDarkMode";
 
 export interface SidebarItem {
   title: string;
@@ -45,19 +47,19 @@ export interface SidebarItem {
 const sidebarItems: SidebarItem[] = [
   {
     title: "Build with Qoonity AI",
-    icon: <Bot className="text-black" />,
+    icon: <Bot className="text-black dark:text-gray-800" />,
     href: "/identity-center",
     isActive: false,
   },
   {
     title: "Switch workspace",
-    icon: <LayoutList className="text-black" />,
+    icon: <LayoutList className="text-black dark:text-gray-800" />,
     href: "/console",
     isActive: false,
   },
   {
     title: "Settings",
-    icon: <Settings className="text-black" />,
+    icon: <Settings className="text-black dark:text-gray-800" />,
     href: "/settings",
     isActive: false,
   },
@@ -68,8 +70,8 @@ const data = {
     {
       title: "Resources Console",
       url: "#",
-      icon: <IconCloudComputing className="text-black-500 size-5" />,
-      color: "#e51a21",
+      icon: <IconCloudComputing className="text-black-500  size-5" />,
+ 
       isActive: false,
       items: [
         {
@@ -99,15 +101,10 @@ const data = {
     {
       title: "Others",
       url: "#",
-      icon: <AlignHorizontalDistributeCenter className="text-black size-5" />,
-      color: "#e51a21",
+      icon: <AlignHorizontalDistributeCenter className=" dark:text-white size-5" />,
+   
       isActive: false,
       items: [
-        {
-          title: "Access Management",
-          icon: <RotateCcw className="size-4 text-gray-800" />,
-          url: RouteConstant.dashboard.access.path,
-        },
         {
           title: "Billing & Statements",
           icon: <Wallet className="size-4 text-gray-800" />,
@@ -124,15 +121,12 @@ const data = {
 };
 
 export const SidebarLayout = () => {
+  const { isDark, toggle } = useDarkMode();
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const user = useSelector((state: RootState) => state.auth);
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  const initials = `${user?.userFirstName?.[0] ?? ""}${
-    user?.userLastName?.[0] ?? ""
-  }`.toUpperCase();
 
   const Icon = () => {
     switch (dashboard.provider) {
@@ -155,7 +149,7 @@ export const SidebarLayout = () => {
 
   return (
     <Sidebar className="font-brfirma">
-      <SidebarHeader className="bg-gray-950 text-white border-gray-200 p-[8px]">
+      <SidebarHeader className="bg-black text-white border-gray-200 border-b dark:border-gray-800  p-[8px]">
         <div className="flex items-center space-x-2 justify-between">
           <div className="flex space-x-2">
             <img src={svgLinks.logoWhite} className="h-10" />
@@ -169,7 +163,7 @@ export const SidebarLayout = () => {
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="bg-white">
+      <SidebarContent className="bg-white dark:bg-black">
         <NavMain title="Menu" items={data.serverSite} />
         <NavMain title="Others" items={data.others} />
 
@@ -191,7 +185,7 @@ export const SidebarLayout = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t flex flex-row justify-between bg-black border-gray-200 px-4 py-1">
+      <SidebarFooter className="border-t flex flex-row justify-between bg-black dark:border-gray-700 border-gray-200 px-4 py-1">
         <div
           onClick={handleLogout}
           className="text-xs flex items-center text-white gap-2 cursor-pointer"
@@ -199,9 +193,14 @@ export const SidebarLayout = () => {
           <LogOut className="size-4" />
           <p>Logout</p>
         </div>
-        <div className="w-7 h-7  rounded-full bg-gray-100 text-black flex items-center justify-center text-xs font-medium">
-          {initials}
-        </div>
+        <button
+        onClick={toggle}
+        className=" p-2 bg-gray-200 dark:bg-gray-900 rounded-full"
+      >
+        
+        {isDark ?  <Sun size={16} />:<Moon size={16} />}
+
+      </button>
       </SidebarFooter>
     </Sidebar>
   );

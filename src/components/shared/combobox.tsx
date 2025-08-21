@@ -1,3 +1,4 @@
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import { CheckIcon, ChevronsUpDownIcon } from "lucide-react";
@@ -66,19 +67,19 @@ export const ComboBoxField = ({
   };
 
   return (
-    <div className={`${width} ${className}`}>
+    <div className={`${width} ${className} `}>
       {label && (
         <label className="block text-sm text-gray-600 mb-1">{label}</label>
       )}
 
-      <Popover open={open} onOpenChange={setOpen}>
+      <Popover open={open} onOpenChange={setOpen} >
         <PopoverTrigger asChild>
           <Button
             variant="outline"
             role="combobox"
             aria-expanded={open}
             className={cn(
-              "w-full justify-between border-green-800 rounded-xs text-xs",
+              "w-full justify-between border-green-800 border dark:border-green-600 dark:text-black rounded-xs text-xs",
               !selectedOption && "text-muted-foreground",
               error && touched && "border-red-500 focus:border-red-500"
             )}

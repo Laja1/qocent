@@ -40,6 +40,8 @@ export default function mapBackendToInitialValues(
 export type createResourceRequest = {
     resourceId: number;
     resourceSite: string;
+    resourceRoomCode:string;
+    resourceHouseCode:string;
     resourceType: string;
     resourceName: string;
     resourceProvider: string;
@@ -47,24 +49,11 @@ export type createResourceRequest = {
     resourceContainerType: string;
     resourceContainerCode: string;
     resourceStatus: string;
-    resourceDate: string; // ISO date string
+    resourceDate: string;
     resourceMakerId: string;
     resourceCheckerId: string;
     resourceRef: string;
     resourceTagId: string;
-    resourceConfig: {
-      service: string;
-      region: string;
-      clientClass: string;
-      requestClass: string;
-      operation: string;
-      authType: string;
-      async: boolean;
-      timeout: number;
-      customEndpoint: string;
-      debugMode: boolean;
-      requestBody:Record<any, any>
-      
-    };
+    resourceConfig: Record<any, any>
 };
 

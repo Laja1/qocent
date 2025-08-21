@@ -38,11 +38,15 @@ export const DrawerModal = NiceModal.create(() => {
         </tr>,
       ];
     }
-
+  
     const rows: React.ReactElement[] = [];
-
+    const hiddenKeys = ["resourceConfig", "siteKey"]; // 🚫 skip these keys
+  
     Object.entries(obj).forEach(([key, value]) => {
+      if (hiddenKeys.includes(key)) return; // <-- skip
+  
       const fullKey = prefix ? `${prefix}.${key}` : key;
+  
       if (value === null || value === undefined) {
         rows.push(
           <tr key={fullKey}>
@@ -55,7 +59,6 @@ export const DrawerModal = NiceModal.create(() => {
           </tr>
         );
       } else if (typeof value === "object" && !Array.isArray(value)) {
-        // For nested objects, add a header row and then recurse
         rows.push(
           <tr key={`${fullKey}-header`}>
             <td
@@ -126,9 +129,10 @@ export const DrawerModal = NiceModal.create(() => {
         );
       }
     });
-
+  
     return rows;
   };
+  
 
   const getTitle = (): string => {
     if (!details) return "Details";

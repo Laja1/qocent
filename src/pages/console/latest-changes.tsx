@@ -1,89 +1,60 @@
-import { Clock } from "lucide-react";
-
-interface TimelineItem {
-  timestamp: string;
-  description: string;
-  color?: "gray" | "green" | "blue" | "red" | "yellow";
-}
-
-const timelineItems: TimelineItem[] = [
-  {
-    timestamp: "5 mins ago",
-    description: "Deployed a new server instance to AWS US-East-1.",
-    color: "gray",
-  },
-  {
-    timestamp: "1 hour ago",
-    description: "Auto-scaled 2 new compute nodes on Azure.",
-    color: "gray",
-  },
-  {
-    timestamp: "3 hours ago",
-    description: "Updated firewall rules for GCP project: prod-env-main.",
-    color: "gray",
-  },
-];
-
-const getColorClasses = (color: string) => {
-  switch (color) {
-    case "green":
-      return "bg-green-500 border-green-300";
-    case "blue":
-      return "bg-blue-500 border-blue-300";
-    case "red":
-      return "bg-red-500 border-red-300";
-    case "yellow":
-      return "bg-yellow-500 border-yellow-300";
-    default:
-      return "bg-gray-500 border-gray-300";
-  }
-};
+import { Button } from "@/components/shared";
+import { CardContent } from "@/components/ui/card";
+import { AlarmClockCheck, ChevronRight } from "lucide-react";
 
 export const LatestChanges = () => {
   return (
-    <div className="space-y-4">
-      <div className=" text-black rounded-sm inline-flex flex-col border">
-    
-          
-          <div className=" p-2 flex gap-2 items-center   border-b border-gray-200">
-          <Clock size={16} className="text-green-900" />
-          <p className="text-green-900   text-sm font-semibold">
-            Latest Changes
-          </p>
-          </div>
-        
-
-        <div className="relative p-2">
-          {timelineItems.map((item, index) => (
-            <div key={index} className="relative flex items-start pb-4">
-              {/* Timeline line */}
-              {index < timelineItems.length - 1 && (
-                <div className="absolute left-2 top-6 w-0.5 h-full bg-gray-900"></div>
-              )}
-
+    <div className="rounded-xs border ">
+      <div className="p-2 border-b flex gap-2 border-gray-200 items-center">
+        <div className="bg-red-50 border border-red-500 text-[10px] rounded-full p-1">
+          <AlarmClockCheck className="text-red-800 size-3" />
+        </div>
+        <h3 className="text-sm  font-semibold text-black dark:text-white">Activity</h3>
+      </div>
+      <CardContent className="p-3">
+        <div className="space-y-3">
+          {[
+            {
+              event: "Instance deployed",
+              location: "us-east-1",
+              time: "5m ago",
+              color: "bg-black",
+            },
+            {
+              event: "Auto-scaled cluster",
+              location: "eu-west-1",
+              time: "1h ago",
+              color: "bg-black",
+            },
+            {
+              event: "Backup completed",
+              location: "ap-south-1",
+              time: "3h ago",
+              color: "bg-black",
+            },
+          ].map((activity, index) => (
+            <div key={index} className="flex gap-3">
               <div
-                className={`relative z-10 w-4 h-4 rounded-full border-2 ${getColorClasses(
-                  item.color || "gray"
-                )} mr-4 mt-1 flex-shrink-0`}
-              >
-                <div className="absolute inset-1 rounded-full bg-white/20"></div>
-              </div>
-
-              {/* Content */}
-              <div className="flex-1">
-                <p className="text-[10px] text-black">{item.timestamp}</p>
-                <p className="text-custom-white text-sm line-clamp-2 hover:underline hover:text-custom-primary cursor-pointer">
-                  {item.description.includes("prod-env-main") ? (
-                    <>Updated firewall rules for GCP project:.</>
-                  ) : (
-                    item.description
-                  )}
+                className={`h-2 w-2 rounded-full  ${activity.color} mt-1.5 flex-shrink-0`}
+              />
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-medium dark:text-white">{activity.event}</p>
+                <p className="text-xs text-black dark:text-white">
+                  {activity.location} • {activity.time}
                 </p>
               </div>
             </div>
           ))}
         </div>
-      </div>
+
+        <Button
+          label="View all"
+          size="small"
+          intent="secondary"
+          className="w-full justify-between mt-4 text-sm"
+          surfixIcon={<ChevronRight className="h-3 w-3" />}
+        />
+      </CardContent>
     </div>
   );
 };

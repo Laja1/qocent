@@ -21,11 +21,12 @@ export const signUpInit:signupRequest = {
 }
 
 export type signInRequest = {
-  userEmail: string;
-  userPassword: string;
+  userEmail?: string;
+  userPassword?: string;
+  idToken:string
 };
 
-export const signInInit:signInRequest = {
+export const signInInit = {
   userEmail: "toni@yopmail.com",
   userPassword: "Ifeoluwa01.$",
 }

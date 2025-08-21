@@ -1,23 +1,24 @@
 import { TopBanner } from "@/components/shared";
-import { Bot, Menu, X } from "lucide-react";
+import { Bot, Menu, Server, Shield, TrendingUp, X } from "lucide-react";
 import { useState } from "react";
 import {
   NotificationDropdown,
   type Notification,
 } from "@/components/shared/notification";
-import { AdsOverviewContainer } from "@/components/not-shared/console-card";
 import { LatestChanges } from "./latest-changes";
 import { ConsoleChart } from "./console-chart";
 import { Monitoring } from "./monitoring";
-import { ConsoleBot } from "./console-bot";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { IconLayoutDashboard } from "@tabler/icons-react";
 import { ConsoleLeft } from "./console-left";
+import { AlertBox } from "@/components/shared/alerts";
+import { MetricCard } from "@/components/not-shared/metric-card";
 
 export const Console = () => {
   const user = useSelector((state: RootState) => state.auth);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [showAlert, setShowAlert] = useState(true);
 
   const [notifications, setNotifications] = useState<Notification[]>([
     {
@@ -89,11 +90,40 @@ export const Console = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
+  const metrics = [
+    {
+      title: "Total Instances",
+      value: 24,
+      change: "+12%",
+      changeType: "positive" as const,
+      icon: Server,
+      description: "across all providers",
+      trend: [40, 50, 35, 60, 55, 70, 65],
+    },
 
+    {
+      title: "Revenue",
+      value: "$12,847",
+      change: "+23%",
+      changeType: "positive" as const,
+      icon: TrendingUp,
+      description: "this month",
+      trend: [100, 120, 110, 130, 140, 135, 150],
+    },
+    {
+      title: "Security Score",
+      value: "98%",
+      change: "+2%",
+      changeType: "positive" as const,
+      icon: Shield,
+      description: "compliance rate",
+      trend: [90, 92, 95, 94, 96, 97, 98],
+    },
+  ];
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-gray-50">
+    <div className="relative h-screen w-full overflow-hidden bg-gray-50 dark:bg-black">
       {/* Top Header */}
-      <header className="bg-gray-900 w-full text-white px-4 py-3 fixed top-0 z-50 shadow-lg">
+      <header className="bg-black border-b w-full text-white px-4 py-2 fixed top-0 z-10 shadow-lg">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             {/* Mobile Menu Button */}
@@ -122,12 +152,12 @@ export const Console = () => {
             />
 
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full bg-white text-gray-900 flex items-center justify-center text-sm font-semibold shadow-sm">
+              <div className="w-6 h-6 rounded-full bg-white text-gray-900 flex items-center justify-center text-xs font-semibold shadow-sm">
                 {initials}
               </div>
 
               <div className="hidden sm:block">
-                <p className="text-sm font-medium">
+                <p className="text-xs font-medium">
                   {user?.userFirstName} {user?.userLastName}
                 </p>
                 <p className="text-xs text-gray-300">{user?.userEmail}</p>
@@ -151,7 +181,7 @@ export const Console = () => {
         <aside
           className={`
             fixed lg:relative top-16 lg:top-0 left-0 h-full w-80 lg:w-1/5 xl:w-1/6 
-            bg-white border-r border-gray-200 z-40 transform transition-transform duration-300 ease-in-out
+            bg-white border-r border-gray-200 dark:border-gray-800 z-40 transform transition-transform duration-300 ease-in-out
             ${
               isSidebarOpen
                 ? "translate-x-0"
@@ -178,22 +208,36 @@ export const Console = () => {
         {/* Main Content */}
         <main className="flex-1 h-full overflow-hidden">
           <div className="h-full overflow-y-auto scrollbar-hide">
-            <div className="p-4 lg:p-6 max-w-7xl mx-auto">
+            <div className="px-4  max-w-8xl mx-auto">
               {/* Top Banner */}
-              <div className="mb-6">
-                <TopBanner />
-              </div>
+              <TopBanner />
 
               {/* Content Grid */}
               <div className="grid grid-cols-1 xl:grid-cols-[3fr_1fr] gap-6">
                 {/* Main Content Column */}
                 <div className="space-y-6">
-                  <AdsOverviewContainer />
-                  <ConsoleBot />
+                  {/* <AdsOverviewContainer /> */}
+                  {/* <ConsoleBot /> */}
 
                   {/* Chart Section - Stack on mobile */}
                   <div className="block">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mb-4 gap-6">
+                      {metrics.map((metric, index) => (
+                        <MetricCard key={index} {...metric} />
+                      ))}
+                    </div>
                     <ConsoleChart />
+
+                    <div className=" my-5">
+                      {showAlert && (
+                        <AlertBox
+                          variant="default"
+                          title="AWS Notice"
+                          description="Server Room Provisioning in progress"
+                          onClose={() => setShowAlert(false)}
+                        />
+                      )}
+                    </div>
                   </div>
                 </div>
 

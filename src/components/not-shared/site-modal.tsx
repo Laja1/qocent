@@ -46,7 +46,7 @@ export const SiteDeployModal: React.FC<DeployModalProps> = ({
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-xs rounded-lg bg-white p-6 shadow-xl"
+              className="w-full max-w-xs rounded-lg bg-white text-black p-6 shadow-xl"
             >
               <div className="flex flex-col gap-4">
                 <div className="items-center flex flex-col w-full space-y-2">

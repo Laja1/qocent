@@ -1,8 +1,8 @@
 import { Cloud, User2Icon } from "lucide-react";
 import { HouseVpcLevel } from "./house-vpc-level";
-import type { ServerHouse } from "@/models/response/siteResponse";
+import type { houses } from "@/models/response/siteResponse";
 
-export const HouseLevel = ({ houseData }: { houseData: ServerHouse }) => {
+export const HouseLevel = ({ houseData }: { houseData: houses }) => {
   // const openArchitecture = () => {
   //   openModal({
   //     id: `architecture`,

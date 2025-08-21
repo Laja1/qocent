@@ -1,6 +1,5 @@
 import { DataTable, type ColumnDef } from "@/components/shared/datatable";
 import { Plus } from "lucide-react";
-import { ICON_MAP } from "@/utilities/constants/icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { RouteConstant } from "@/router/routes";
@@ -17,17 +16,17 @@ export const SummaryTable = ({ summaryData, isLoading }: SummaryTableProps) => {
   const [selectedResourceType, setSelectedResourceType] = useState("");
 
   const summaryColums: ColumnDef<ResourceSummary>[] = [
-    {
-      id: "icon",
-      header: "",
-      accessorKey: "groupedResourceType",
-      cell: (row) => (
-        <span className="hover:cursor-pointer">
-          {ICON_MAP[row.groupedResourceType as keyof typeof ICON_MAP]}
-        </span>
-      ),
-      sortable: false,
-    },
+    // {
+    //   id: "icon",
+    //   header: "",
+    //   accessorKey: "groupedResourceType",
+    //   cell: (row) => (
+    //     <span className="hover:cursor-pointer">
+    //       {ICON_MAP[row.groupedResourceType as keyof typeof ICON_MAP]}
+    //     </span>
+    //   ),
+    //   sortable: false,
+    // },
     {
       id: "resourceTypeLabel",
       header: "Resource Type",

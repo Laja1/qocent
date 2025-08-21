@@ -15,20 +15,20 @@ import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import type { RootState } from "@/store";
 import type { ParameterData } from "../create-new-site/type";
 import {
-  useCreateResourceMutation,
   useGetConfigQuery,
   useGetResourceTemplateQuery,
 } from "@/service/kotlin/resourceApi";
 import type { createResourceRequest } from "@/models/request/resourceRequest";
 import { replaceConfigPlaceholders } from "@/utilities/helper";
 import type { ConfigResponse } from "@/models/response/resourceResponse";
+import { useCreateHouseMutation } from "@/service/kotlin/houseApi";
 
 export const CreateNewHouse = () => {
   const navigate = useNavigate();
   const dashboard = useSelector((state: RootState) => state.dashboard);
 
-  const [createResource, { isLoading: isCreatingLoading }] =
-    useCreateResourceMutation();
+  const [createHouse, { isLoading: isCreatingLoading }] =
+    useCreateHouseMutation();
   const { data: configData } = useGetConfigQuery({
     serviceId: "ServerHouse",
     configProvider: dashboard?.provider || "",
@@ -57,7 +57,7 @@ export const CreateNewHouse = () => {
           : (newJsonConfig as createResourceRequest);
       console.log(payload);
 
-      await createResource(payload).unwrap();
+      await createHouse(payload).unwrap();
       // Simulate deployment progress
       for (let i = 0; i <= 100; i += 10) {
         setProgress(i);
@@ -125,7 +125,7 @@ export const CreateNewHouse = () => {
       id: "info-modal",
       content: () => (
         <div className="flex max-w-xs flex-col gap-4 p-4">
-          <h2 className="text-lg uppercase border-b pb-2">
+          <h2 className="text-lg uppercase border-b pb-2 ">
             {row.parameterLabel}
           </h2>
           <div className="text-sm text-gray-600 space-y-2">
@@ -173,8 +173,8 @@ export const CreateNewHouse = () => {
           description="A server can have one or more server houses. A server house is provided by a provider."
         />
 
-        <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
-          <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 rounded-t-md px-3 sm:px-5 py-5">
+        <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 dark:bg-black  dark:border-gray-700 dark:border shadow-t-md rounded-t-md">
+          <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 dark:border-gray-700 dark:border-b rounded-t-md px-3 sm:px-5 py-5">
             <div>
               <p className="text-base sm:text-lg text-white">
                 Create Server House
@@ -216,7 +216,7 @@ export const CreateNewHouse = () => {
                 className="flex items-center w-full py-[1px] border-b"
                 key={item.parameterSerial}
               >
-                <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
+                <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right dark:text-white">
                   {item.parameterMandatory && (
                     <span className="text-red-500 ml-1">*</span>
                   )}

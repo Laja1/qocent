@@ -16,6 +16,7 @@ export type getAllRoomResponse = {
     roomType: string;
     roomUpdatedAt: string;
     roomUserId: string;
+    roomName:string;
     roomCidr: string;
   };
   

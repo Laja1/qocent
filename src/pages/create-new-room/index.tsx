@@ -15,19 +15,19 @@ import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import type { RootState } from "@/store";
 import type { ParameterData } from "../create-new-site/type";
 import {
-  useCreateResourceMutation,
   useGetConfigQuery,
   useGetResourceTemplateQuery,
 } from "@/service/kotlin/resourceApi";
 import type { createResourceRequest } from "@/models/request/resourceRequest";
 import { replaceConfigPlaceholders } from "@/utilities/helper";
 import type { getResourceConfigResponse } from "@/models/response/resourceResponse";
+import { useCreateRoomMutation } from "@/service/kotlin/roomApi";
 
 export const CreateNewRoom = () => {
   const navigate = useNavigate();
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  const [createResource, { isLoading: isCreatingLoading }] =
-    useCreateResourceMutation();
+  const [createRoom, { isLoading: isCreatingLoading }] =
+    useCreateRoomMutation();
   const { data: configData } = useGetConfigQuery({
     serviceId: "ServerRoom",
     configProvider: dashboard?.provider || "",
@@ -68,9 +68,9 @@ export const CreateNewRoom = () => {
         "data" in newJsonConfig
           ? (newJsonConfig.data?.configJson as unknown as createResourceRequest)
           : (newJsonConfig as createResourceRequest);
-      console.log(payload); 
+      console.log(payload);
 
-      const res = await createResource(payload).unwrap();
+      const res = await createRoom(payload).unwrap();
       console.log(res, "creating");
 
       // Simulate deployment progress
@@ -79,13 +79,13 @@ export const CreateNewRoom = () => {
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
-      showCustomToast(`Server house successfully created`, {
+      showCustomToast(`Server room successfully created`, {
         toastOptions: { type: "success", autoClose: 5000 },
       });
 
       setProgress(0);
+      navigate(RouteConstant.dashboard.serverRooms.path);
       setIsDeployModalOpen(false);
-      navigate(RouteConstant.dashboard.resources.path);
     } catch (error: any) {
       console.error("Create Resource Error:", error);
       const message = ErrorHandler.extractMessage(error);
@@ -182,8 +182,8 @@ export const CreateNewRoom = () => {
           description="A server can have one or more server rooms. A server room is provided by a provider."
         />
 
-        <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
-          <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 rounded-t-md px-3 sm:px-5 py-5">
+        <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 dark:bg-black  dark:border-gray-700 dark:border shadow-t-md rounded-t-md">
+          <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 dark:border-gray-700 dark:border-b rounded-t-md px-3 sm:px-5 py-5">
             <div>
               <p className="text-base sm:text-lg text-white">
                 Create Server Room

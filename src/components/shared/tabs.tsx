@@ -23,12 +23,12 @@ export const Tabs = ({ tabs }: TabsProps) => {
             key={tab.id}
             onClick={() => setCurrentTab(tab.id)}
             className={`relative pb-2  hover:cursor-pointer transition duration-200 ease-in-out text-sm font-medium ${
-              currentTab === tab.id ? "text-red-600" : "text-gray-500"
+              currentTab === tab.id ? "text-red-600 dark:text-red-300" : "text-gray-500"
             }`}
           >
             {tab.text}
             {currentTab === tab.id && (
-              <span className="absolute left-0 bottom-0 w-10  h-0.5 bg-red-600  rounded"></span>
+              <span className="absolute left-0 bottom-0 w-full  h-0.5 bg-red-600 dark:bg-red-300  rounded"></span>
             )}
           </button>
         ))}

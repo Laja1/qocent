@@ -7,7 +7,7 @@ export const TopBanner = () => {
   if (!isVisible) return null;
 
   return (
-    <div className="bg-gradient-to-r from-green-200 to-green-900 text-white px-6 py-2 relative">
+    <div className="bg-[#c93336] text-white px-6 py-2 mb-6 relative">
       <div className="flex lg:flex-row flex-col  justify-center space-x-4">
         <div className="flex items-center gap-2">
           <Star className="h-5 w-5 text-yellow-500" />
@@ -17,7 +17,6 @@ export const TopBanner = () => {
           </span>
         </div>
         <div>
-          
           <button className="inline-flex items-center space-x-1 bg-white/20 hover:bg-white/30 px-3 py-1 rounded-full text-xs font-medium transition-colors">
             <span>Learn More</span>
             <ArrowRight className="h-3 w-3" />

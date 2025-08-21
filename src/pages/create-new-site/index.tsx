@@ -31,6 +31,7 @@ export const CreateNewSite = () => {
 
   const { openModal, closeModal } = useModal();
   const user = useSelector((state: RootState) => state.auth);
+  const account = useSelector((state: RootState) => state.account);
   const [progress, setProgress] = useState(0);
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
 
@@ -51,6 +52,7 @@ export const CreateNewSite = () => {
         ...values,
         siteProvider: dashboard.provider,
         siteUserId: user.userId || "",
+        siteAccountId: account?.accountCode,
       };
 
       // Simulate deployment progress
@@ -58,6 +60,7 @@ export const CreateNewSite = () => {
         setProgress(i);
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
+      console.log(payload)
       await createSite(payload).unwrap();
       showCustomToast("Server Site Successfully Created", {
         toastOptions: { type: "success", autoClose: 5000 },
@@ -153,8 +156,8 @@ export const CreateNewSite = () => {
           description="A server can have one or more server houses. A server house is provided by a provider."
         />
 
-        <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
-          <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 rounded-t-md px-3 sm:px-5 py-5">
+        <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-10 0 shadow-t-md dark:border-gray-700 dark:border rounded-t-md">
+          <div className="bg-gradient-to-r flex justify-between from-black to-gray-800  dark:border-gray-700 dark:border-b rounded-t-md px-3 sm:px-5 py-5">
             <div>
               <p className="text-base sm:text-lg text-white">
                 Create Server Site
@@ -170,7 +173,7 @@ export const CreateNewSite = () => {
           <div className="flex mt-5 flex-col">
             {serverSiteParameterData.data.map((item) => (
               <div
-                className="flex items-center w-full py-[1px] border-b"
+                className="flex items-center w-full py-[1px] border-b dark:text-white"
                 key={item.parameterSerial}
               >
                 <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">

@@ -42,7 +42,7 @@ export const DatePicker = ({
   const [open, setOpen] = useState(false);
 
   const defaultTriggerClasses = clsx(
-    "w-full justify-start text-left font-normal py-1 bg-white rounded-xs px-3 py-2 flex items-center border justify-center border-green-800  text-xs cursor-pointer",
+    "w-full justify-start text-left font-normal py-1 bg-white rounded-xs px-3 py-2 flex items-center text-black border justify-center border-green-800  text-xs cursor-pointer",
     disabled && "opacity-50 cursor-not-allowed",
     triggerClassName
   );
@@ -75,7 +75,7 @@ export const DatePicker = ({
             tabIndex={disabled ? -1 : 0}
             aria-label={label || "Date picker"}
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
+            <CalendarIcon className="mr-2 h-4 w-4 text-black" />
             {value ? (
               format(value, dateFormat)
             ) : (
@@ -84,12 +84,12 @@ export const DatePicker = ({
           </div>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0" align="start">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between ">
             <Calendar
               mode="single"
               selected={value}
               onSelect={handleDateSelect}
-              className={clsx("rounded-xs border", calendarClassName)}
+              className={clsx("rounded-xs border ", calendarClassName)}
               disabled={disabled}
               captionLayout="dropdown"
               fromYear={yearRange.start}

@@ -5,7 +5,8 @@ import type {ConfigResponse, createResourceResponse, resourceResponse, } from "@
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import type { ParameterResponse } from "@/models/response/siteResponse";
 import type { createResourceRequest } from "@/models/request/resourceRequest";
-import { createConfigTags } from "@/utilities/tagHelpers";
+import { createConfigTags, createResourceProviderTags } from "@/utilities/tagHelpers";
+import type { genericResponse } from "@/models/response";
 
 
 export const kotlinResourceApi = createApi({
@@ -22,17 +23,29 @@ getConfig: build.query<ConfigResponse, { serviceId: string, configProvider: stri
 getResourceTemplate: build.query<ParameterResponse, { resource: string, provider: string }>({
     query: ({ resource, provider }) => `/resource/template/${provider}/${resource}`,
     }),
-    getAllResources: build.query<resourceResponse, { accountCode:string }>({
+    getAllResources: build.query<resourceResponse, { accountCode: string }>({
       query: ({ accountCode }) => `/resource/read-all-resources/${accountCode}`,
-      // providesTags: (result) => createResourceProviderTags(result,  "resourceId"),
+      providesTags: (result) =>
+        createResourceProviderTags(
+          result,
+          "resourceId"
+        ) as { type: ApiEnums.Resource; id: string | number | undefined }[],
     }),
-createResource: build.mutation<createResourceResponse, createResourceRequest>({
+    createResource: build.mutation<createResourceResponse, createResourceRequest>({
       query: (body) => ({
         url: "/resource/create-resource",
         method: "POST",
         body,
       }),
       invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" }],
+    }),
+    deleteResource:build.mutation<genericResponse,{resourceId:number}>({
+      query:({resourceId})=>({
+        url: `/resource/delete-resource/${resourceId}`,
+        method: "POST",
+       
+      }),
+      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" }],
     }),
   }),
 });
@@ -42,5 +55,6 @@ export const {
   useGetConfigQuery,
   useGetAllResourcesQuery,
   useGetResourceTemplateQuery,
-  useCreateResourceMutation
+  useCreateResourceMutation,
+  useDeleteResourceMutation
 } = kotlinResourceApi;

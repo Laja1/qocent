@@ -3,14 +3,19 @@ import { DataTable } from "@/components/shared/datatable";
 import { Edit, Eye, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { ICON_MAP } from "@/utilities/constants/icons";
-import type { resourceProp } from "@/models/response/siteResponse";
 import { getStatusClassName } from "@/utilities/helper";
+import { RESOURCE_MAP } from "@/utilities/constants/icons";
+import type { resourceType } from "@/models/response/resourceResponse";
+import { Icon123 } from "@tabler/icons-react";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalConstant } from "@/components/shared/modal/register";
 
-export const ServerSitesTable2 = ({
+export const ResourceTable = ({
   resourcesInSiteData,
+  isLoading,
 }: {
-  resourcesInSiteData: resourceProp[];
+  resourcesInSiteData: resourceType[];
+  isLoading: boolean;
 }) => {
   const navigate = useNavigate();
 
@@ -18,23 +23,23 @@ export const ServerSitesTable2 = ({
     {
       label: "View",
       icon: Eye,
-      onClick: async (row: resourceProp) => {
+      onClick: async (row: resourceType) => {
         console.log("View server room:", row.resourceId);
         // TODO: Implement view functionality
+        NiceModal.show(ModalConstant.DrawerModal, row);
       },
     },
     {
       label: "Edit",
       icon: Edit,
-      onClick: async (row: resourceProp) => {
+      onClick: async (row: resourceType) => {
         console.log("Edit server room:", row.resourceId);
-        // TODO: Implement edit functionality
       },
     },
     {
       label: "Delete",
       icon: Trash2,
-      onClick: async (row: resourceProp) => {
+      onClick: async (row: resourceType) => {
         console.log("Delete server room:", row.resourceId);
         // TODO: Implement delete confirmation
       },
@@ -42,7 +47,7 @@ export const ServerSitesTable2 = ({
     },
   ];
 
- const serverSiteTable2: ColumnDef<resourceProp>[] = [
+  const serverSiteTable2: ColumnDef<resourceType>[] = [
     {
       id: "resourceId",
       header: "ID",
@@ -69,12 +74,24 @@ export const ServerSitesTable2 = ({
       id: "resourceTypeIcon",
       header: "",
       accessorKey: "resourceType",
-      cell: (row) => (
-        <span className="hover:cursor-pointer">
-          {ICON_MAP[row.resourceType as keyof typeof ICON_MAP]}
-        </span>
-      ),
-      sortable: true,
+      cell: (row) => {
+        const resourceType = row.resourceType;
+        const resource =
+          RESOURCE_MAP[resourceType as keyof typeof RESOURCE_MAP];
+
+        if (!resource) {
+          return <span className="text-gray-400">?</span>;
+        }
+
+        const Icon = resource.icon;
+
+        return (
+          <span className={`hover:cursor-pointer ${resource.color}`}>
+            {/* If it's a normal component */}
+            {typeof Icon === "function" ? <Icon123 className="size-5" /> : Icon}
+          </span>
+        );
+      },
     },
     // {
     //   id: "type",
@@ -102,18 +119,18 @@ export const ServerSitesTable2 = ({
     },
 
     {
-      id: "resourceSite",
+      id: "resourceSiteCode",
       header: "PARENT",
-      accessorKey: "resourceSite",
+      accessorKey: "resourceSiteCode",
       sortable: true,
-      cell: (row) => <span className=" flex">{row.resourceSite}</span>,
+      cell: (row) => <span className=" flex">{row.resourceSiteCode}</span>,
     },
     // {
-    //   id: "parentType",
+    //   id: "resourceSiteCode",
     //   header: "PARENT TYPE",
-    //   accessorKey: "parentType",
+    //   accessorKey: "resourceSiteCode",
     //   sortable: true,
-    //   cell: (row) => <span className=" flex">{row.parentType}</span>,
+    //   cell: (row) => <span className=" flex">{row.res}</span>,
     // },
     // {
     //   id: "alerts",
@@ -163,20 +180,20 @@ export const ServerSitesTable2 = ({
         <span className="text-right block">{row.resourceCreatedAt}</span>
       ),
     },
-    {
-      id: "resourceBill",
-      header: "BILL (USD)",
-      accessorKey: "resourceBill",
-      headerClassName: "text-right",
-      cell: (row) => (
-        <span className="block text-green-700 text-right">
-          {row.resourceBill.toLocaleString("en-US", {
-            minimumFractionDigits: 2,
-          })}
-        </span>
-      ),
-      sortable: true,
-    },
+    // {
+    //   id: "resourceBill",
+    //   header: "BILL (USD)",
+    //   accessorKey: "resourceBill",
+    //   headerClassName: "text-right",
+    //   cell: (row) => (
+    //     <span className="block text-green-700 text-right">
+    //       {row.resource.toLocaleString("en-US", {
+    //         minimumFractionDigits: 2,
+    //       })}
+    //     </span>
+    //   ),
+    //   sortable: true,
+    // },
   ];
 
   return (
@@ -186,6 +203,7 @@ export const ServerSitesTable2 = ({
         columns={serverSiteTable2}
         showDownload={false}
         showSearch={false}
+        isLoading={isLoading}
         actions={actions}
         getRowId={(row) => row.resourceId}
         initialSorting={{ id: "id", desc: false }}

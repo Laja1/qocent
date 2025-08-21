@@ -7,6 +7,7 @@ export const resourceData: resourceType[] = [
     resourceRoomCode: "PROD-HSE-1",
     resourceSiteCode: "db-subnet",
     resourceProvider: "AWS",
+    resourceStatus:'Active',
     resourceHouseCode: "RUB-PROD-SITE-1",
     resourceCode: "db-subnet",
     resourceType: "Database",

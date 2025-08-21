@@ -20,7 +20,7 @@ export const Header = ({
 
   return (
     <header
-      className={`fixed top-0 z-10 bg-gray-950 text-white font-brfirma px-6 py-2 transition-all duration-300 ease-in-out left-0 right-0 ${
+      className={`fixed top-0 z-10 bg-black border-b border-gray-700 text-white font-brfirma px-6 py-2 transition-all duration-300 ease-in-out left-0 right-0 ${
         state === "expanded" ? "md:left-60" : "md:left-0"
       }`}
     >
@@ -40,7 +40,7 @@ export const Header = ({
           <div className="flex flex-col min-w-0 flex-1">
             {title && <h1 className="text-base font-bold truncate">{title}</h1>}
             {description && (
-              <p className="text-xs text-gray-400 leading-tight truncate">
+              <p className="text-xs text-gray-400 dark:text-black leading-tight truncate">
                 {description}
               </p>
             )}

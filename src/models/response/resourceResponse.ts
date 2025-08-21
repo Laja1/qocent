@@ -4,7 +4,7 @@ export type resourceType = {
   resourceCode: string;
   resourceName: string | null;
   resourceType: string;
-  resourceStatus?: string;
+  resourceStatus: string;
   resourceProvider: string;
   resourceSiteCode: string;
   resourceRoomCode: string;

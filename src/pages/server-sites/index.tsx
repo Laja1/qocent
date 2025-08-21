@@ -1,14 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { imgLinks } from "@/assets/assetLink";
-import { Button, Header, Tabs, type ColumnDef } from "@/components/shared";
+import { Button, Header, Tabs } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
-import { Badge } from "@/components/ui/badge";
 import { Edit, Eye, Trash2, PlusIcon, Plus } from "lucide-react";
 import { useState, useEffect } from "react";
-import { ServerSitesTable2 } from "./server-sites-table";
+import { ResourceTable } from "./server-sites-table";
 import { Card } from "@/components/ui/card";
 import { SiteLevel } from "../architectural-room/site-level";
-import { AlertBox } from "@/components/shared/alerts";
 import { SummaryTable } from "./summary-table";
 import { Resource } from "../resource";
 import { SecurityTable } from "./security-table";
@@ -28,13 +25,13 @@ import {
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
 import { FlowGrid } from "@/components/not-shared/data-flow/flow";
-import { formatDate, getStatusClassName } from "@/utilities/helper";
 import { ResourceModal } from "../create-new-resource/resource-modal";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { DataFlowLoader } from "@/components/not-shared/data-flow/loader";
+import { serverSiteColumns } from "@/utilities/constants/colums";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
@@ -88,10 +85,10 @@ export const ServerSites = () => {
       skip: !selectedSiteCode,
     }
   );
-
+  console.log(architectureData?.data, "architectureData?.data");
   const [deleteSite, { isLoading: isDeleteLoading }] = useDeleteSiteMutation();
 
-  const { data: resourcesInSiteData } = useGetResourcesInSiteQuery(
+  const { data: resourcesInSiteData,isLoading:isResourceLoading } = useGetResourcesInSiteQuery(
     {
       siteCode: selectedSiteCode,
     },
@@ -112,123 +109,14 @@ export const ServerSites = () => {
       skip: !selectedSiteCode,
     }
   );
-  console.log(dataFlow?.data?.house, "ssisusiuhi");
   const { openModal, closeModal } = useModal();
-  const [showAlert, setShowAlert] = useState(true);
-
-  const serverRoomColumns: ColumnDef<SiteData>[] = [
-    {
-      id: "siteId",
-      header: "ID",
-      accessorKey: "siteId",
-      cell: (row) => <span className="">{row.siteId}</span>,
-      sortable: true,
-    },
-    {
-      id: "siteName",
-      header: "SITE NAME",
-      accessorKey: "siteName",
-      cell: (row) => (
-        <span className="line-clamp-1 font-brfirma-bold text-xs">
-          {row.siteName}
-        </span>
-      ),
-      sortable: true,
-    },
-    {
-      id: "siteCode",
-      header: "SITE CODE",
-      accessorKey: "siteCode",
-      cell: (row) => (
-        <span className="hover:text-red-500 line-clamp-1">{row.siteCode}</span>
-      ),
-      sortable: true,
-    },
-    {
-      id: "siteRegion",
-      header: "Site Region",
-      headerClassName: "text-right",
-      accessorKey: "siteRegion",
-      sortable: true,
-      cell: (row) => <span className="text-right block">{row.siteRegion}</span>,
-    },
-    {
-      id: "siteProvider",
-      header: "PROVIDER",
-      accessorKey: "siteProvider",
-      headerClassName: "text-center ",
-      sortable: true,
-      cell: (row) => (
-        <span className="text-center justify-center items-left flex">
-          {row.siteProvider === "aws" ? (
-            <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
-          ) : (
-            <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
-          )}
-        </span>
-      ),
-    },
-    {
-      id: "siteStatus",
-      header: "STATUS",
-      accessorKey: "siteStatus",
-      cell: (row) => (
-        <div className="">
-          <Badge
-            variant="outline"
-            className={getStatusClassName(row.siteStatus)}
-          >
-            {row.siteStatus}
-          </Badge>
-        </div>
-      ),
-      sortable: true,
-      filterType: "select",
-      filterOptions: [
-        { label: "Active", value: "Active" },
-        { label: "Maintenance", value: "Maintenance" },
-      ],
-    },
-    {
-      id: "siteCreatedAt",
-      header: "Site Created At",
-      headerClassName: "text-right",
-      accessorKey: "siteCreatedAt",
-      sortable: true,
-      cell: (row) => (
-        <span className="text-right block">
-          {formatDate(row.siteCreatedAt)}
-        </span>
-      ),
-    },
-    {
-      id: "siteEOLAction",
-      header: "Site EOL Action",
-      headerClassName: "text-right",
-      accessorKey: "siteEOLAction",
-      sortable: true,
-      cell: (row) => (
-        <span className="text-right block">{row.siteEOLAction}</span>
-      ),
-    },
-    {
-      id: "siteBill",
-      header: "BILL (USD)",
-      accessorKey: "siteBill",
-      headerClassName: "text-right",
-      cell: (row) => (
-        <span className="block text-green-700 text-right">{row.siteBill}</span>
-      ),
-      sortable: true,
-    },
-  ];
 
   const actions = [
     {
       label: "View",
       icon: Eye,
       onClick: (row: SiteData) => {
-        console.log("View server room:", row.siteId);
+        console.log("View server Site:", row.siteId);
         NiceModal.show(ModalConstant.DrawerModal, row);
       },
     },
@@ -310,6 +198,7 @@ export const ServerSites = () => {
                 data={dataFlow?.data?.resource || []}
                 cellBorderData={dataFlow?.data?.house || []}
                 connections={dataFlow?.data?.connection || []}
+                siteCode={selectedSiteCode}
               />
             </div>
           )}
@@ -321,7 +210,8 @@ export const ServerSites = () => {
       text: "Resources",
       component: (
         <div className="">
-          <ServerSitesTable2
+          <ResourceTable
+          isLoading={isResourceLoading}
             resourcesInSiteData={resourcesInSiteData?.data || []}
           />
         </div>
@@ -406,7 +296,7 @@ export const ServerSites = () => {
         <Card className="mx-5 px-5 rounded-sm">
           <DataTable
             data={siteData?.data || []}
-            columns={serverRoomColumns}
+            columns={serverSiteColumns}
             searchPlaceholder="Search server rooms by name, ID, or region..."
             pageSize={5}
             isLoading={isSiteLoading || isDeleteLoading}
@@ -423,22 +313,16 @@ export const ServerSites = () => {
           />
         </Card>
 
+
+
+
+
+
         {tabShow && (
           <div className="mx-5 mt-5">
             <Tabs tabs={tabData} />
           </div>
         )}
-
-        <div className="mx-5 mb-10">
-          {showAlert && (
-            <AlertBox
-              variant="default"
-              title="AWS Notice"
-              description="Server Room Provisioning in progress"
-              onClose={() => setShowAlert(false)}
-            />
-          )}
-        </div>
       </div>
 
       <ResourceModal
