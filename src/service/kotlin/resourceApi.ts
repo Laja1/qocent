@@ -47,6 +47,14 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
       }),
       invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" }],
     }),
+    deleteResourceByCode:build.mutation<genericResponse,{resourceCode:string}>({
+      query:({resourceCode})=>({
+        url: `/resource/delete-resource-by-code/${resourceCode}`,
+        method: "POST",
+       
+      }),
+      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" }],
+    }),
   }),
 });
 
@@ -56,5 +64,6 @@ export const {
   useGetAllResourcesQuery,
   useGetResourceTemplateQuery,
   useCreateResourceMutation,
-  useDeleteResourceMutation
+  useDeleteResourceMutation,
+  useDeleteResourceByCodeMutation
 } = kotlinResourceApi;

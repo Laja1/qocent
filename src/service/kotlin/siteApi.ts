@@ -30,7 +30,8 @@ export const siteApi = createApi({
       invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" }],
     }),
     getSiteArchitecture: build.query<getSiteArchitectureResponse, {siteCode:string}>({
-      query: ({siteCode}) => `/dashboard/site-architecture/${siteCode}`,    
+      query: ({siteCode}) => `/dashboard/site-architecture/${siteCode}`,
+      providesTags: [{type:ApiEnums.Site,id:'LIST'},{type:ApiEnums.House,id:'LIST'},{type:ApiEnums.Resource,id:'LIST'}]
     }),
     getSiteByProvider: build.query<getSiteResponse, {provider:string,siteAccountId:string}>({
       query: ({provider,siteAccountId}) => `/site/read-by-site-account-id/${siteAccountId}/${provider}`,    
@@ -39,16 +40,16 @@ export const siteApi = createApi({
     getSiteBySiteCode: build.query<getSiteArchitectureResponse, {siteCode:string}>({
         query: ({siteCode}) => `/dashboard/site-data/${siteCode}`,    
       }),
-
     getResourceTypeCount: build.query<getResourceSummaryResponse, {siteCode:string}>({
       query: ({siteCode}) => `/dashboard/read-resource-type-count/${siteCode}`,    
   }),
-  getSiteDataFlow:build.query<resourceDataFlowResponse, {siteCode:string}>({
-    query: ({siteCode}) => `/site/read-architecture/${siteCode}`,    
-}),
-    getAllSites: build.query<getSiteResponse, void>({
-        query: () => `/dashboard/sites`,  
-        providesTags: (result) => createSiteProviderTags(result,  "siteId"),
+  getSiteDataFlow: build.query<resourceDataFlowResponse, { siteCode: string }>({
+    query: ({ siteCode }) => `/site/read-architecture/${siteCode}`,
+    providesTags: [{type:ApiEnums.Site,id:'LIST'},{type:ApiEnums.House,id:'LIST'},{type:ApiEnums.Resource,id:'LIST'}]
+  }),
+  getAllSites: build.query<getSiteResponse, void>({
+    query: () => `/dashboard/sites`,
+    providesTags: (result) => createSiteProviderTags(result, "siteId"),
     }),
     getResourcesInSite: build.query<getResourcesResponse, {siteCode:string}>({
       query: ({siteCode}) => `/dashboard/resource-list/${siteCode}`, 
@@ -59,7 +60,7 @@ export const siteApi = createApi({
       url:`/resource/deploy-resources/${siteCode}`,
       method: "POST",
     }),
-    invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" },{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.Resource, id: "LIST" }], 
+    invalidatesTags: [{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.Resource, id: "LIST" }], 
 }),
   }),
 });

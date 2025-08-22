@@ -1,5 +1,4 @@
-
-/* eslint-disable @typescript-eslint/no-explicit-any */// Updated SignIn component using ID token flow
+/* eslint-disable @typescript-eslint/no-explicit-any */ // Updated SignIn component using ID token flow
 import AuthLayout from "@/components/layouts/authLayout";
 import { Button, Textfield } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
@@ -48,7 +47,7 @@ const SignIn = () => {
       });
     }
   };
-  console.log(googleLoading)
+  console.log(googleLoading);
 
   const handleGoogleSignIn = async (credentialResponse: CredentialResponse) => {
     try {
@@ -186,20 +185,18 @@ const SignIn = () => {
 
         <div className="w-full flex justify-center">
           {/* Replace the custom button with GoogleLogin component */}
-         
-            <GoogleLogin
-              onSuccess={handleGoogleSignIn}
-              onError={handleGoogleError}
-              useOneTap={false}
-              theme="outline"
-              size="large"
-              text="continue_with"
-              shape="rectangular"
-              logo_alignment="left"
-              width="100%"
-            />
-              
 
+          <GoogleLogin
+            onSuccess={handleGoogleSignIn}
+            onError={handleGoogleError}
+            useOneTap={false}
+            theme="outline"
+            size="large"
+            text="continue_with"
+            shape="rectangular"
+            logo_alignment="left"
+            width="100%"
+          />
         </div>
       </div>
     </AuthLayout>
@@ -207,5 +204,3 @@ const SignIn = () => {
 };
 
 export default SignIn;
-
-

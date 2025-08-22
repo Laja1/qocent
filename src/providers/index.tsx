@@ -13,6 +13,7 @@ export const ProviderWrapper = ({children}:{children:React.ReactNode}) => {
     <Provider store={store}>
     <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
     <PersistGate loading={null} persistor={persistor}>
+      
     <ModalProvider>
     <ToastWrapper />
     <div>

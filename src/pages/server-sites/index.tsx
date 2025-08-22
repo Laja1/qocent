@@ -88,14 +88,15 @@ export const ServerSites = () => {
   console.log(architectureData?.data, "architectureData?.data");
   const [deleteSite, { isLoading: isDeleteLoading }] = useDeleteSiteMutation();
 
-  const { data: resourcesInSiteData,isLoading:isResourceLoading } = useGetResourcesInSiteQuery(
-    {
-      siteCode: selectedSiteCode,
-    },
-    {
-      skip: !selectedSiteCode,
-    }
-  );
+  const { data: resourcesInSiteData, isLoading: isResourceLoading } =
+    useGetResourcesInSiteQuery(
+      {
+        siteCode: selectedSiteCode,
+      },
+      {
+        skip: !selectedSiteCode,
+      }
+    );
 
   const {
     data: dataFlow,
@@ -211,7 +212,7 @@ export const ServerSites = () => {
       component: (
         <div className="">
           <ResourceTable
-          isLoading={isResourceLoading}
+            isLoading={isResourceLoading}
             resourcesInSiteData={resourcesInSiteData?.data || []}
           />
         </div>
@@ -297,7 +298,10 @@ export const ServerSites = () => {
           <DataTable
             data={siteData?.data || []}
             columns={serverSiteColumns}
-            searchPlaceholder="Search server rooms by name, ID, or region..."
+            title={"SERVER SITES"}
+            // description="Server Site"
+            filterableColumns={["siteStatus"]}
+            searchPlaceholder="Search server rooms by name, ID, or code..."
             pageSize={5}
             isLoading={isSiteLoading || isDeleteLoading}
             exportOptions={{
@@ -312,11 +316,6 @@ export const ServerSites = () => {
             initialSorting={{ id: "siteCreatedAt", desc: false }}
           />
         </Card>
-
-
-
-
-
 
         {tabShow && (
           <div className="mx-5 mt-5">

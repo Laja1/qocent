@@ -223,7 +223,6 @@ const SignUp = () => {
         </div>
 
         <div className="w-full flex justify-center">
-          <div className="w-full">
             <GoogleLogin
               onSuccess={handleGoogleSignIn}
               onError={handleGoogleError}
@@ -235,7 +234,6 @@ const SignUp = () => {
               logo_alignment="left"
               width="100%"
             />
-          </div>
         </div>
       </div>
     </AuthLayout>

@@ -101,7 +101,7 @@ export type ServerRoom = {
     roomHouse: string;
     roomDescription: string;
     roomStatus: string;
-    resourcesDeployed?: Resource[]; // optional because some rooms don’t have it
+    resourcesDeployed?: resourceNode[]; // optional because some rooms don’t have it
   };
   
   type Resources = {
@@ -164,10 +164,11 @@ interface HouseCell {
 }
 
 // Resource definition
-interface Resource {
+interface resourceNode {
   resourceSiteCode: string;
   resourceCode: string;
   resourceName:string
+  resourceId:string
   resourceType:
     | "User"
     | "ServerRoom"
@@ -192,7 +193,7 @@ interface Connection {
 // Main data structure
 interface ApiResponseData {
   house: HouseCell[];
-  resource: Resource[];
+  resource: resourceNode[];
   connection: Connection[];
 }
 
@@ -204,7 +205,7 @@ interface resourceDataFlowResponse {
 }
 
 // Export the main type
-export type { resourceDataFlowResponse, ApiResponseData, HouseCell, Resource, Connection };
+export type { resourceDataFlowResponse, ApiResponseData, HouseCell, resourceNode, Connection };
 
 export type getResourcesResponse = {
   responseCode: string;

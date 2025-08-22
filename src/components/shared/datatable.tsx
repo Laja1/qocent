@@ -458,7 +458,7 @@ export function DataTable<T>({
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 ">
           <div>
             {title && (
-              <CardTitle>
+              <CardTitle className="tracking-widest">
                 {isLoading ? <Skeleton className="h-6 w-48" /> : title}
               </CardTitle>
             )}

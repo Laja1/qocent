@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useState, useMemo, useCallback, memo } from "react";
 import Xarrow from "react-xarrows";
-import { Info, Server, CircleX, Play } from "lucide-react";
+import { Info, Server, Play } from "lucide-react";
 import { useModal } from "@/components/shared/modal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/shared";
@@ -9,44 +9,18 @@ import { useDeploySiteResourcesMutation } from "@/service/kotlin/siteApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { showCustomToast } from "@/components/shared/toast";
 import { RESOURCE_MAP } from "@/utilities/constants/icons";
-import { useDeleteResourceMutation } from "@/service/kotlin/resourceApi";
+import { useDeleteResourceByCodeMutation } from "@/service/kotlin/resourceApi";
+import type {
+  Connection,
+  HouseCell,
+  resourceNode,
+} from "@/models/response/siteResponse";
 
 const cellSize = 40;
 const gridSize = 20;
 
-// Updated interfaces to match the provided types
-interface HouseCell {
-  row: number;
-  col: number;
-  top: "Yes" | "No";
-  bottom: "Yes" | "No";
-  left: "Yes" | "No";
-  right: "Yes" | "No";
-  color: string;
-  width?: number;
-  fillColor?: string;
-}
-
-interface ResourceNode {
-  col: number;
-  row: number;
-  resourceCode: string;
-  resourceName: string;
-  resourceSiteCode: string;
-  resourceType: string;
-  connection?: boolean;
-  errors: number;
-  message?: string;
-}
-
-interface Connection {
-  x: string;
-  y: string;
-  serial: number;
-}
-
 interface FlowGridProps {
-  data?: ResourceNode[];
+  data?: resourceNode[];
   connections?: Connection[];
   cellBorderData?: HouseCell[];
   siteCode: string;
@@ -103,9 +77,9 @@ const defaultConfig: ResourceConfig = {
 
 // Memoized ResourceNode component
 const ResourceNodeComponent = memo<{
-  resource: ResourceNode;
+  resource: resourceNode;
   config: ResourceConfig;
-  onInfoClick: (resource: ResourceNode) => void;
+  onInfoClick: (resource: resourceNode) => void;
 }>(({ resource, config, onInfoClick }) => {
   const handleClick = useCallback(() => {
     onInfoClick(resource);
@@ -127,9 +101,9 @@ const ResourceNodeComponent = memo<{
         onClick={handleClick}
       >
         {resource.errors > 0 ? (
-          <CircleX className="size-4 text-red-600" />
+            <Info className="size-4 text-black dark:text-gray-500" />
         ) : (
-          <Info className="size-4 text-black" />
+          <Info className="size-4 text-black dark:text-red-500" />
         )}
       </button>
       {config.icon}
@@ -159,7 +133,7 @@ const GridCells = memo<{ cellBorderData?: HouseCell[] }>(
           cellArray.push(
             <div
               key={index}
-              className="border border-gray-100 dark:border-gray-900"
+              className="border border-gray-50 dark:border-gray-900"
               style={{
                 width: cellSize,
                 height: cellSize,
@@ -213,23 +187,26 @@ export const FlowGrid = ({
   cellBorderData = [],
   siteCode,
 }: FlowGridProps) => {
-  const { openModal } = useModal();
+  const { openModal,closeModal } = useModal();
   const [deploySiteResources, { isLoading }] = useDeploySiteResourcesMutation();
   const [deleteResources, { isLoading: isDeleting }] =
-    useDeleteResourceMutation();
+  useDeleteResourceByCodeMutation()
+    
   const [visibleConnections, setVisibleConnections] = useState<Connection[]>(
     []
   );
 
-  const handleDelete = async (resourceCode: string) => {
+  const handleDelete = async ({ resourceCode }: { resourceCode: string }) => {
     try {
       const res = await deleteResources({
-        resourceId: Number(resourceCode),
+        resourceCode: resourceCode,
       }).unwrap();
-      await deploySiteResources({ siteCode }).unwrap();
+      await deploySiteResources({ siteCode: siteCode }).unwrap();
+      closeModal()
       showCustomToast(res.responseMessage, {
         toastOptions: { type: "success", autoClose: 5000 },
       });
+     
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const message = ErrorHandler.extractMessage(error);
@@ -288,7 +265,7 @@ export const FlowGrid = ({
   }, [sortedConnections, resources.length]);
 
   const handleInfoClick = useCallback(
-    (resource: ResourceNode) => {
+    (resource: resourceNode) => {
       openModal({
         id: `modal-${resource.resourceCode}`,
         content: () => (
@@ -306,10 +283,10 @@ export const FlowGrid = ({
                 )}
               </p>
               <div className="text-xs">
-                <p className="font-medium mb-1">
+                {/* <p className="font-medium mb-1">
                   {resource.message ||
                     "The current user does not have the required permissions to perform this action. Please ensure that the IAM role or policy attached includes the necessary access rights."}
-                </p>
+                </p> */}
               </div>
             </div>
             <div>
@@ -331,7 +308,11 @@ export const FlowGrid = ({
             </div>
             <Button
               label={`Delete ${resource.resourceType}`}
-              onClick={() => handleDelete(resource.resourceSiteCode)}
+              onClick={() =>
+                handleDelete({
+                  resourceCode: resource.resourceCode,
+                })
+              }
               isLoading={isDeleting}
             />
           </div>

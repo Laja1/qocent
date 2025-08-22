@@ -61,7 +61,7 @@ export const serverHouseColumn: ColumnDef<HouseItem>[] = [
     filterType: "select",
     filterOptions: [
       { label: "Active", value: "Active" },
-      { label: "Maintenance", value: "Maintenance" },
+      { label: "Pending", value: "Pending" },
     ],
   },
   // {
@@ -159,7 +159,7 @@ export const serverSiteColumns: ColumnDef<SiteData>[] = [
     filterType: "select",
     filterOptions: [
       { label: "Active", value: "Active" },
-      { label: "Maintenance", value: "Maintenance" },
+      { label: "Pending", value: "Pending" },
     ],
   },
   {
@@ -188,11 +188,13 @@ export const serverSiteColumns: ColumnDef<SiteData>[] = [
     accessorKey: "siteBill",
     headerClassName: "text-right",
     cell: (row) => (
-      <span className="block text-green-700 text-right">{row.siteBill}</span>
+      <span className="block text-green-700 dark:text-green-400 text-right">
+        {row.siteBill}
+      </span>
     ),
     sortable: true,
   },
-]
+];
 
 export const serverRoomColumns: ColumnDef<roomData>[] = [
   {
@@ -432,5 +434,77 @@ export const resourcesColumns: ColumnDef<resourceType>[] = [
     cell: (row) => (
       <span className="text-right block">{row?.resourceCreatedAt}</span>
     ),
+  },
+];
+
+export type obsType = {
+  id: number;
+  code: string;
+  name: string | null;
+  type: string;
+  status: string;
+
+  createdAt: string; // e.g. "07/24/2025 10:12:45 AM"
+};
+
+export const obsColumns: ColumnDef<obsType>[] = [
+  {
+    id: "Id",
+    header: "ID",
+    accessorKey: "id",
+    cell: (row) => (
+      <span className="text-amber-800 line-clamp-1">{row.id}</span>
+    ),
+    sortable: true,
+  },
+  {
+    id: "name",
+    header: " NAME",
+    accessorKey: "name",
+    cell: (row) => <span className="line-clamp-1">{row.name}</span>,
+    sortable: true,
+  },
+  {
+    id: "Code",
+    header: "CODE",
+    accessorKey: "code",
+    cell: (row) => (
+      <span className="text-amber-800 line-clamp-1">{row.code}</span>
+    ),
+    sortable: true,
+    filterType: "select",
+  },
+  // {
+  //   id: "SiteCode",
+  //   header: "SITE CODE",
+  //   accessorKey: "SiteCode",
+  //   cell: (row) => <span className="line-clamp-1">{row.SiteCode}</span>,
+  //   sortable: true,
+  //   filterType: "select",
+  // },
+
+  {
+    id: "Status",
+    header: "Status",
+    accessorKey: "status",
+    sortable: true,
+    cell: (row) => (
+      <div className="">
+        <Badge
+          variant="outline"
+          // className={`text-[10px] ${getStatusClassName(row.resourceStatus)}`}
+        >
+          {row.status}
+        </Badge>
+      </div>
+    ),
+  },
+  {
+    id: "CreatedAt",
+    header: "DATE CREATED",
+    headerClassName: "text-right",
+    accessorKey: "createdAt",
+    sortable: true,
+    cell: (row) => <span className="text-right block">{row?.createdAt}</span>,
   },
 ];

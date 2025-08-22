@@ -1,8 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from "@/components/shared";
 import { useModal } from "@/components/shared/modal";
+import { showCustomToast } from "@/components/shared/toast";
 import { Badge } from "@/components/ui/badge";
 import type { ServerRoom } from "@/models/response/siteResponse";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
+import { useDeleteResourceMutation } from "@/service/kotlin/resourceApi";
+import { useDeploySiteResourcesMutation } from "@/service/kotlin/siteApi";
 import { RESOURCE_MAP } from "@/utilities/constants/icons";
 import { getStatusClassName } from "@/utilities/helper";
 import { Globe, Lock } from "lucide-react";
@@ -13,7 +17,35 @@ interface SubnetLevelProps {
 }
 
 export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
+  const [deleteResources, { isLoading: isDeleting }] =
+    useDeleteResourceMutation();
+  const [deploySiteResources, { isLoading }] = useDeploySiteResourcesMutation();
   const { openModal, closeModal } = useModal();
+  const handleDelete = async ({
+    resourceSiteCode,
+    resourceId,
+  }: {
+    resourceSiteCode: string;
+    resourceId: string;
+  }) => {
+    try {
+      const res = await deleteResources({
+        resourceId: Number(resourceId),
+      }).unwrap();
+      await deploySiteResources({ siteCode: resourceSiteCode }).unwrap();
+      closeModal();
+      showCustomToast(res.responseMessage, {
+        toastOptions: { type: "success", autoClose: 5000 },
+      });
+
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
+      const message = ErrorHandler.extractMessage(error);
+      showCustomToast(message, {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
+    }
+  };
 
   const handleOpen = (resource: any) =>
     openModal({
@@ -22,7 +54,7 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
         <div className="p-2  w-full max-w-md">
           {/* Header */}
           <div className="mb-4">
-            <h2 className="text-xl font-semibold text-gray-900">
+            <h2 className="text-xl font-semibold dark:text-gray-300 text-gray-900">
               {resource.name || "Resource Detail"}
             </h2>
             <p className="text-xs text-gray-500">
@@ -34,35 +66,45 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
           <div className="space-y-3 text-xs">
             <div className="flex justify-between border-b pb-2">
               <span className="text-gray-500">Type</span>
-              <span className="font-medium text-gray-800">
+              <span className="font-medium text-gray-800 dark:text-gray-300">
                 {resource.resourceType}
               </span>
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-gray-500">Bill</span>
-              <span className="font-medium text-gray-800">
+              <span className="font-medium text-gray-800 dark:text-gray-300">
                 {resource.resourceBill}
               </span>
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-gray-500">Created At</span>
-              <span className="font-medium text-gray-800">
+              <span className="font-medium text-gray-800 dark:text-gray-300">
                 {resource.resourceCreatedAt}
               </span>
             </div>
             <div className="flex justify-between">
               <span className="text-gray-500">Status</span>
               <Badge
-            variant="outline"
-            className={getStatusClassName(resource.resourceStatus)}
-          >
-            {resource.resourceStatus}
-          </Badge>
+                variant="outline"
+                className={getStatusClassName(resource.resourceStatus)}
+              >
+                {resource.resourceStatus}
+              </Badge>
             </div>
           </div>
 
           {/* Footer */}
-          <div className="flex justify-end mt-6">
+          <div className="flex justify-end mt-6 gap-2">
+            <Button
+              label={`Delete ${resource.resourceType}`}
+              onClick={() =>
+                handleDelete({
+                  resourceSiteCode: resource.resourceSiteCode,
+                  resourceId: resource.resourceId,
+                })
+              }
+              isLoading={isDeleting || isLoading}
+            />
             <Button onClick={closeModal} label="Close" />
           </div>
         </div>
@@ -94,7 +136,9 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
       >
         <p className="items-center text-[10px] flex p-1 gap-1">
           <span>{icon}</span>
-          <span className="lg:flex md:flex hidden dark:text-black">{serverRoom.roomCode}</span>
+          <span className="lg:flex md:flex hidden dark:text-black">
+            {serverRoom.roomCode}
+          </span>
         </p>
 
         <div

@@ -15,6 +15,7 @@ import { Billings } from "@/pages/billings";
 import { Console } from "@/pages/console";
 import AcceptInvite from "@/pages/accept-invite";
 import { UpdateResources } from "@/pages/update-resource";
+import { Obs } from "@/pages/obs";
 
 export const dashboardRoute: RouteType[] = [
   {
@@ -106,6 +107,12 @@ export const dashboardRoute: RouteType[] = [
     path: RouteConstant.dashboard.billings.path,
     name: RouteConstant.dashboard.billings.name,
     component: <Billings />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.obs.path,
+    name: RouteConstant.dashboard.obs.name,
+    component: <Obs  />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
    {

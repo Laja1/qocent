@@ -7,8 +7,6 @@ import {
   AlignHorizontalDistributeCenter,
   Wallet,
   Webhook,
-  Moon,
-  Sun,
 } from "lucide-react";
 import {
   Sidebar,
@@ -35,8 +33,6 @@ import type { RootState } from "@/store";
 import { imgLinks, svgLinks } from "@/assets/assetLink";
 import { NavMain } from "../ui/nav-main";
 import type { ReactElement } from "react";
-import { useDarkMode } from "@/hooks/useDarkMode";
-
 export interface SidebarItem {
   title: string;
   icon: ReactElement;
@@ -121,7 +117,6 @@ const data = {
 };
 
 export const SidebarLayout = () => {
-  const { isDark, toggle } = useDarkMode();
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -185,20 +180,19 @@ export const SidebarLayout = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t flex flex-row justify-between bg-black dark:border-gray-700 border-gray-200 px-4 py-1">
+      <SidebarFooter className="border-t flex flex-row justify-between  dark:border-gray-700 border-gray-200 px-4 py-1">
         <div
           onClick={handleLogout}
-          className="text-xs flex items-center text-white gap-2 cursor-pointer"
+          className="text-xs flex py-2 items-center text-red-600 gap-2 cursor-pointer"
         >
           <LogOut className="size-4" />
           <p>Logout</p>
         </div>
         <button
-        onClick={toggle}
-        className=" p-2 bg-gray-200 dark:bg-gray-900 rounded-full"
+      
+        className="  rounded-full"
       >
         
-        {isDark ?  <Sun size={16} />:<Moon size={16} />}
 
       </button>
       </SidebarFooter>

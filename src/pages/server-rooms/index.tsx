@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import {
   useDeleteRoomMutation,
   useGetAllRoomQuery,
-  useGetResourceInRoomQuery
+  useGetResourceInRoomQuery,
 } from "@/service/kotlin/roomApi";
 import type { RootState } from "@/store";
 import type { roomData } from "@/models/response/roomResponse";
@@ -23,7 +23,7 @@ import { SecurityTable } from "../server-sites/security-table";
 export const ServerRooms = () => {
   const navigate = useNavigate();
   const account = useSelector((state: RootState) => state.account);
-  const [selectedRoomCode,setSelectedRoomCode] = useState('')
+  const [selectedRoomCode, setSelectedRoomCode] = useState("");
   const [tabShow, setTabShow] = useState(false);
   const [rowId, setRowId] = useState("");
 
@@ -35,11 +35,15 @@ export const ServerRooms = () => {
       skip: !account?.accountCode,
     }
   );
-  const {data:resourceInRoom,isLoading:isResourceLoading} = useGetResourceInRoomQuery({
-    roomCode:selectedRoomCode
-  },{
- skip:!selectedRoomCode
-  })
+  const { data: resourceInRoom, isLoading: isResourceLoading } =
+    useGetResourceInRoomQuery(
+      {
+        roomCode: selectedRoomCode,
+      },
+      {
+        skip: !selectedRoomCode,
+      }
+    );
   const [deleteRoom, { isLoading: isDeleting }] = useDeleteRoomMutation();
   // const [rowId, setRowId] = useState("R-0001");
 
@@ -80,8 +84,7 @@ export const ServerRooms = () => {
     },
   ];
 
-
-  const handleRowClick= async (row: roomData) => {
+  const handleRowClick = async (row: roomData) => {
     setTabShow(true);
     setRowId(row.roomId);
     setSelectedRoomCode(row.roomCode);
@@ -102,7 +105,6 @@ export const ServerRooms = () => {
     }
   };
   const tabData = [
-    
     {
       id: 2,
       text: "Resources",
@@ -157,11 +159,12 @@ export const ServerRooms = () => {
           data={data?.data || []}
           columns={serverRoomColumns}
           isLoading={isLoading || isDeleting}
+          title={"SERVER ROOMS"}
           searchPlaceholder="Search server rooms by name, ID, or region..."
           pageSize={5}
           actions={actions}
           highlightedRowId={rowId}
-          onRowClick={(row)=>handleRowClick(row)}
+          onRowClick={(row) => handleRowClick(row)}
           getRowId={(row) => row.roomId}
           initialSorting={{ id: "roomCreatedAt", desc: false }}
         />

@@ -176,5 +176,9 @@ export const RouteConstant = {
       path: "/console",
       name: "console",
     },
+    obs: {
+      path: "/obs",
+      name: "obs",
+    },
   },
 };

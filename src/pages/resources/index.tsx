@@ -1,6 +1,6 @@
 import { Button, Header } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
-import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
+import { Edit, Eye, Trash2, PlusIcon, Upload } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 // import { SecurityTable } from "../server-sites/security-table";
@@ -22,9 +22,14 @@ import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { resourcesColumns } from "@/utilities/constants/colums";
 
 export const Resources = () => {
+  const [rowId, setRowId] = useState<number>(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
   const account = useSelector((state: RootState) => state.account);
+  const [resourceType, setResourceType] = useState("");
   const [deleteResources, { isLoading: isDeleting }] =
     useDeleteResourceMutation();
+
   const { data: resourceData, isLoading } = useGetAllResourcesQuery(
     {
       accountCode: account?.accountCode,
@@ -34,9 +39,6 @@ export const Resources = () => {
     }
   );
 
-  const [rowId, setRowId] = useState<number>(0);
-  const [isOpen, setIsOpen] = useState(false);
-  const navigate = useNavigate();
   const actions = [
     {
       label: "View",
@@ -53,6 +55,19 @@ export const Resources = () => {
         navigate(RouteConstant.dashboard.updateResources.path, { state: row });
       },
     },
+    ...(resourceType.toLocaleLowerCase() === "obs"
+      ? [
+          {
+            label: "Upload file",
+            icon: Upload,
+            onClick: (row: resourceType) => {
+              navigate(RouteConstant.dashboard.obs.path, {
+                state: row,
+              });
+            },
+          },
+        ]
+      : []),
     {
       label: "Delete",
       icon: Trash2,
@@ -81,6 +96,7 @@ export const Resources = () => {
 
   const handleRowClick = (row: resourceType) => {
     setRowId(row.resourceId);
+    setResourceType(row.resourceType);
   };
 
   // Check if tabs should be shown (when a resource is selected)
@@ -135,8 +151,9 @@ export const Resources = () => {
         <DataTable
           data={resourceData?.data || []}
           columns={resourcesColumns}
-          searchPlaceholder="Search server resources by name, ID, or region..."
+          searchPlaceholder="Search server resources by name, code, or ID..."
           pageSize={5}
+          title={"RESOURCES"}
           actions={actions}
           highlightedRowId={rowId}
           isLoading={isLoading || isDeleting}

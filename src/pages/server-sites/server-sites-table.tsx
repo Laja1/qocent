@@ -167,7 +167,7 @@ export const ResourceTable = ({
       filterType: "select",
       filterOptions: [
         { label: "Active", value: "Active" },
-        { label: "Maintenance", value: "Maintenance" },
+        { label: "Pending", value: "Pending" },
       ],
     },
     {

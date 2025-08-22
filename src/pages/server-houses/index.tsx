@@ -201,6 +201,8 @@ export const ServerHouses = () => {
           data={data?.data ?? []}
           columns={serverHouseColumn}
           isLoading={isLoading || isDeleting}
+          filterableColumns={["houseStatus"]}
+          title="Server Houses"
           searchPlaceholder="Search server house by name, ID, or code..."
           pageSize={5}
           actions={actions}

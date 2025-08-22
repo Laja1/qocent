@@ -6,8 +6,8 @@ export const SiteLevel = ({ sitesData }: { sitesData: SiteArchitecture }) => {
   return (
     <div className="w-full flex ">
       <div
-        className="w-1/6 justify-center items-center relative flex
-       border-dashed border  border-red-400 bg-gray-300 
+        className="w-1/8 justify-center rounded-l-sm items-center relative flex
+       border-dashed bg-red-50 
       "
       >
         <div className="text-gray-600 items-start justify-start absolute top-2 left-2 flex ">
@@ -24,9 +24,8 @@ export const SiteLevel = ({ sitesData }: { sitesData: SiteArchitecture }) => {
           <p className="text-xs capitalize text-black">user</p>
         </div>
       </div>
-      <div className="w-5/6 flex relative border border-dashed border-purple-500  bg-green-50">
+      <div className="w-7/8 flex relative border border-dashed border-red-600  bg-red-50">
         <div className="w-1/7 flex pb-2">
-         
           <div className="grid grid-cols-3 items-end gap-3  mt-10">
             {sitesData.extraResources.resources.map((item) => (
               <div key={item.resourceId}>

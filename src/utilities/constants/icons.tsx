@@ -1,4 +1,4 @@
-import { imgLinks,  } from "@/assets/assetLink";
+import { imgLinks } from "@/assets/assetLink";
 import {
   DatabaseIcon,
   Globe,
@@ -74,10 +74,6 @@ export const NetworkIcon = () => {
   );
 };
 
-
-
-
-
 export const RESOURCE_MAP = {
   User: {
     icon: <User className="size-5" />,
@@ -95,6 +91,16 @@ export const RESOURCE_MAP = {
     // bgColor: "bg-purple-100",
   },
   InternetRouter: {
+    icon: <Globe className="size-5" />,
+    color: "text-green-600",
+    // bgColor: "bg-green-100",
+  },
+  "Cloud Storage": {
+    icon: <Globe className="size-5" />,
+    color: "text-green-600",
+    // bgColor: "bg-green-100",
+  },
+  "EVS": {
     icon: <Globe className="size-5" />,
     color: "text-green-600",
     // bgColor: "bg-green-100",
