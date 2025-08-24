@@ -3,10 +3,10 @@ import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-w
 import { Badge } from "@/components/ui/badge";
 import NiceModal from "@ebay/nice-modal-react";
 import { motion } from "framer-motion";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 export function Hero() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   return (
     <div className="h-full w-full">
       <BackgroundBeamsWithCollision className="min-h-[80vh] py-10 lg:min-h-screen w-full  items-center px-5 justify-center dark:bg-black mt-0 ">
@@ -43,7 +43,8 @@ export function Hero() {
                 <div className="flex gap-1 items-center border dark:border-white text-xs">
                   <a href="#join-waitlist" className="bg-black text-white">
                     <p
-                      onClick={() => navigate("/sigin")}
+                      // onClick={() => navigate("/sigin")}
+                      onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
                       className="hover:cursor-pointer p-2"
                     >
                       Get started

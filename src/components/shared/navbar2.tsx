@@ -36,7 +36,7 @@ const DesktopNavigation: React.FC = () => {
 
   return (
     <nav className="hidden lg:flex items-center justify-center pt-5 fixed top-0 left-0 right-0 z-50">
-      <div className="flex items-center justify-between bg-black/20 backdrop-blur-lg border border-gray-700/30 rounded-lg px-6 py-2 w-full max-w-4xl mx-4 shadow-xl">
+      <div className="flex items-center justify-between bg-black/10 backdrop-blur-lg border border-gray-200 dark:border-gray-900 rounded-sm px-6 py-1 w-full max-w-4xl mx-4 shadow-xl">
         <div onClick={() => navigate("/")} className="cursor-pointer">
           <Logo />
         </div>
@@ -100,7 +100,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="fixed top-14 left-2 right-2 z-40 lg:hidden"
           >
-            <div className="bg-white rounded-xs mt-2 shadow-2xl border border-gray-200 overflow-hidden">
+            <div className="bg-white rounded-xs mt-2 shadow-2xl border dark:border-0 border-gray-200 overflow-hidden">
               {/* Navigation Links */}
               <nav className="py-2">
                 {navRoutes.map((item, idx) => (
