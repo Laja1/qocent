@@ -1,16 +1,21 @@
 import { VpcLevel } from "./vpc-level";
-import { AwsLogo, HuaweiLogo, RESOURCE_MAP } from "@/utilities/constants/icons";
+import {
+  AwsLogo,
+  HuaweiLogo,
+  useResourceMap,
+} from "@/utilities/constants/icons";
 import type { SiteArchitecture } from "@/models/response/siteResponse";
 
 export const SiteLevel = ({ sitesData }: { sitesData: SiteArchitecture }) => {
+  const RESOURCE_MAP = useResourceMap();
   return (
     <div className="w-full flex ">
       <div
         className="w-1/8 justify-center rounded-l-sm items-center relative flex
-       border-dashed bg-red-50 
+       border-dashed bg-red-50 dark:bg-red-950/20 
       "
       >
-        <div className="text-gray-600 items-start justify-start absolute top-2 left-2 flex ">
+        <div className="text-gray-600 dark:text-gray-300 items-start justify-start absolute top-2 left-2 flex ">
           {sitesData?.siteProvider.toLocaleLowerCase() === "aws" && <AwsLogo />}
           {sitesData?.siteProvider.toLocaleLowerCase() === "huawei" && (
             <HuaweiLogo />
@@ -21,20 +26,20 @@ export const SiteLevel = ({ sitesData }: { sitesData: SiteArchitecture }) => {
           <span className={RESOURCE_MAP.User.color}>
             {RESOURCE_MAP.User.icon}
           </span>
-          <p className="text-xs capitalize text-black">user</p>
+          <p className="text-xs capitalize text-black dark:text-white">user</p>
         </div>
       </div>
-      <div className="w-7/8 flex relative border border-dashed border-red-600  bg-red-50">
+      <div className="w-7/8 flex relative border border-dashed border-red-600 dark:border-red-400 bg-red-50 dark:bg-red-950/20">
         <div className="w-1/7 flex pb-2">
           <div className="grid grid-cols-3 items-end gap-3  mt-10">
             {sitesData.extraResources.resources.map((item) => (
               <div key={item.resourceId}>
-                {item.resourceName &&
-                RESOURCE_MAP[item.resourceName as keyof typeof RESOURCE_MAP] ? (
-                  RESOURCE_MAP[item.resourceName as keyof typeof RESOURCE_MAP]
+                {item.resourceType &&
+                RESOURCE_MAP[item.resourceType as keyof typeof RESOURCE_MAP] ? (
+                  RESOURCE_MAP[item.resourceType as keyof typeof RESOURCE_MAP]
                     .icon
                 ) : (
-                  <span className="text-red-500">?</span>
+                  <span className="text-red-500 dark:text-red-400">?</span>
                 )}
               </div>
             ))}

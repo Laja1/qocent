@@ -15,6 +15,32 @@ export const imgLinks = {
     footerlogo:'images/qocent-footer.png'
 }
 
+export const huaweiIconLinks = {
+    functionGraph :'/icons/huawei/functiongraph.png',
+    rds :'/icons/huawei/rds.png',
+    sfs :'/icons/huawei/sfs.png',
+    user :'/icons/huawei/user.png',
+    server :'/icons/huawei/server.png',
+    nat :'/icons/huawei/nat.png',
+    evs :'/icons/huawei/evs.png',
+    elb :'/icons/huawei/elb.png',
+    router :'/icons/huawei/router.png',
+    
+}
+
+export const awsIconLinks = {
+    functionGraph :'/icons/huawei/functiongraph.png',
+    rds :'/icons/huawei/rds.png',
+    sfs :'/icons/huawei/sfs.png',
+    user :'/icons/huawei/user.png',
+    server :'/icons/huawei/server.png',
+    nat :'/icons/huawei/nat.png',
+    evs :'/icons/huawei/evs.png',
+    elb :'/icons/huawei/elb.png',
+    router :'/icons/huawei/router.png',
+    
+}
+
 export const svgLinks = {
     cube: '/svg/cubes.svg',
     mosaic: '/svg/mosaic.svg',

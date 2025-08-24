@@ -4,7 +4,7 @@ export const HowIt = () => {
   return (
     <div className="justify-center flex  w-full">
       {" "}
-      <section className="w-full py-10 md:py-10 bg-gray-50 relative overflow-hidden">
+      <section className="w-full py-10 md:py-10 dark:bg-black justify-center flex items-center flex-col bg-gray-50 relative overflow-hidden">
         <div className=" px-4 w-full relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -19,7 +19,7 @@ export const HowIt = () => {
             >
               How It Works
             </Badge>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+            <h2 className="text-3xl dark:text-gray-300 md:text-4xl font-bold tracking-tight">
               Simple Process, Powerful Results
             </h2>
             <p className="max-w-[800px] text-muted-foreground md:text-lg">
@@ -57,9 +57,9 @@ export const HowIt = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="relative z-10 flex flex-col items-center text-center space-y-4"
+                className="relative  z-10 flex flex-col items-center text-center space-y-4"
               >
-                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-black to-gray-950 text-primary-foreground text-xl font-bold shadow-lg">
+                <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-black dark:text-white to-gray-950 text-primary-foreground text-xl font-bold shadow-lg">
                   {step.step}
                 </div>
                 <h3 className="text-xl font-bold">{step.title}</h3>

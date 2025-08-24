@@ -1,9 +1,9 @@
-import NavbarDemo from "@/components/shared/navbar";
 import { Hero } from "./hero";
 import { Vision } from "./vision-mission";
 import { Footer } from "@/components/shared";
 import InfiniteCardCarousel from "./inifite-cards";
 import Seo from "@/components/shared/seo";
+import Navbar from "@/components/shared/navbar2";
 
 const AboutUs = () => {
   return (
@@ -23,12 +23,11 @@ const AboutUs = () => {
         }}
       />
 
-      <NavbarDemo>
-        <Hero />
-        <Vision />
-        <InfiniteCardCarousel />
-        <Footer />
-      </NavbarDemo>
+      <Navbar />
+      <Hero />
+      <Vision />
+      <InfiniteCardCarousel />
+      <Footer />
     </div>
   );
 };

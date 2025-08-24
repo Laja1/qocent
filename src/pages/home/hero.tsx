@@ -9,29 +9,29 @@ export function Hero() {
   const navigate = useNavigate();
   return (
     <div className="h-full w-full">
-      <BackgroundBeamsWithCollision className="min-h-[80vh] py-10 lg:min-h-screen w-full bg-black items-center px-5 justify-center  bg-gradient-to-br from-black to-gray-800  drop-shadow-stone-800 drop-shadow-2xl rounded-sm">
-        <div className="z-10 w-full">
+      <BackgroundBeamsWithCollision className="min-h-[80vh] py-10 lg:min-h-screen w-full  items-center px-5 justify-center dark:bg-black mt-0 ">
+        <div className=" w-full">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-center z-1000 mx-auto relative mt-20 w-full "
+            className="text-center  mx-auto relative mt-20 w-full "
           >
             <div className=" items-center  flex flex-col justify-center  w-full">
               <Badge
-                className="mb-4 rounded-full px-4 py-1.5 text-xs  lg:text-sm font-medium"
+                className="mb-4 rounded-full px-4 py-1.5 text-xs text-red-600  lg:text-sm font-medium"
                 variant="secondary"
               >
                 One Window, All Cloud
               </Badge>
-              <h1 className="text-4xl md:text-5xl lg:text-[100px] font-bold text-white tracking-tight mb-6 bg-clip-text bg-gradient-to-r from-foreground to-foreground/70">
+              <h1 className="text-4xl md:text-5xl lg:text-[100px] font-bold  tracking-tight mb-6 bg-clip-text bg-gradient-to-r from-foreground to-foreground/70">
                 Cloud Simplified
               </h1>
               {/* <p className="text-sm  md:text-xl text-white mb-8 max-w-2xl mx-auto">
               Enterprise-grade infrastructure without the complexity. Deploy,
               scale, and manage your applications with unprecedented simplicity.{" "}
             </p> */}
-              <p className="text-sm  md:text-xl text-red-100 mb-4 max-w-2xl mx-auto">
+              <p className="text-sm  md:text-xl dark:text-red-100 text-red-900 mb-4 max-w-2xl mx-auto">
                 Deploy, manage, and optimize across AWS, GCP, Huawei, and more
                 all from a single, powerful console that delivers speed,
                 savings, and simplicity without compromise.
@@ -39,14 +39,14 @@ export function Hero() {
               {/* <p className="text-xs  md:text-xl text-red-600 mb-4 max-w-2xl mx-auto">
                 The power of three clouds in one.
               </p> */}
-              <div className="flex flex-col text-white  sm:flex-row gap-4 items-center justify-center">
-                <div className="flex gap-1 items-center border border-white text-xs">
-                  <a href="#join-waitlist">
+              <div className="flex flex-col   sm:flex-row gap-4 items-center justify-center">
+                <div className="flex gap-1 items-center border dark:border-white text-xs">
+                  <a href="#join-waitlist" className="bg-black text-white">
                     <p
                       onClick={() => navigate("/sigin")}
                       className="hover:cursor-pointer p-2"
                     >
-                      Get Started
+                      Get started
                     </p>
                   </a>
                   <div

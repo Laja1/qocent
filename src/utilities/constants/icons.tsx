@@ -1,82 +1,36 @@
-import { imgLinks } from "@/assets/assetLink";
-import {
-  DatabaseIcon,
-  Globe,
-  Network,
-  Server,
-  Shield,
-  User,
-} from "lucide-react";
+import { awsIconLinks, huaweiIconLinks, imgLinks } from "@/assets/assetLink";
+import type { RootState } from "@/store";
+import { DatabaseIcon, Globe, Shield } from "lucide-react";
+import { useSelector } from "react-redux";
 
 // type IconProps = {
 //   id: number;
 // };
 
-export const ServerIcon = () => {
-  return (
-    <div className=" rounded p-2 text-center ">
-      <Server className="h-4 w-4 text-green-600 mx-auto" />
-      {/* <p className="text-xs pt-1">Server</p> */}
-    </div>
-  );
-};
-
-export const Database = () => {
-  return (
-    <div className=" rounded p-2 text-center ">
-      <DatabaseIcon className="h-4 w-4 text-green-600 mx-auto" />
-      {/* <p className="text-xs pt-1">Database</p> */}
-    </div>
-  );
-};
-
 export const AwsLogo = () => {
-  return <img src={imgLinks.awsdark} className="size-8" />;
+  return <img src={imgLinks.awsdark} className="size-9" />;
 };
 
 export const HuaweiLogo = () => {
-  return <img src={imgLinks.huawei} className="size-8" />;
+  return <img src={imgLinks.huawei} className="size-9" />;
 };
 
-export const FileCabinetIcon = () => {
-  return (
-    <div className=" rounded p-2 text-center ">
-      <Server className="h-4 w-4 text-green-600 mx-auto" />
-      <p className="text-xs pt-1">Web Server</p>
-    </div>
-  );
-};
+export const useResourceMap = () => {
+  const dashboard = useSelector((state: RootState) => state.dashboard);
 
-export const ProxyIcon = () => {
-  return (
-    <div className=" rounded p-2 text-center ">
-      <Network className="h-4 w-4 text-green-600 mx-auto" />
-      <p className="text-xs pt-1">Proxy</p>
-    </div>
-  );
-};
-
-export const ApiServerIcon = () => {
-  return (
-    <div className=" rounded p-2 ">
-      <Server className="h-4 w-4 text-purple-600 mx-auto" />
-      <p className="text-xs pt-1">DB Server</p>
-    </div>
-  );
-};
-
-export const NetworkIcon = () => {
-  return (
-    <div className=" rounded p-2 text-purple-600">
-      <Network className="h-4 w-4  mx-auto" />
-      {/* <p className="text-xs pt-1">Network</p> */}
-    </div>
-  );
-};
-
-export const RESOURCE_MAP = {
+  return {
   User: {
-    icon: <User className="size-5" />,
+    icon: <img src={dashboard?.provider.toLowerCase() === 'huawei'? huaweiIconLinks.user : awsIconLinks.user} alt="router" className="size-9" />,
+    color: "text-pink-600",
+    // bgColor: "bg-pink-100",
+  },
+  ELB: {
+    icon: <img src={dashboard?.provider.toLowerCase() === 'huawei'? huaweiIconLinks.elb : awsIconLinks.user} alt="router" className="size-9" />,
+    color: "text-pink-600",
+    // bgColor: "bg-pink-100",
+  },
+  AwsUser: {
+    icon: <img src={awsIconLinks.user} alt="router" className="size-9" />,
     color: "text-pink-600",
     // bgColor: "bg-pink-100",
   },
@@ -86,9 +40,22 @@ export const RESOURCE_MAP = {
     // bgColor: "bg-blue-100",
   },
   HouseRouter: {
-    icon: <img src={imgLinks.router} alt="router" className="size-8" />,
+    icon: <img src={huaweiIconLinks.router} alt="router" className="size-9" />,
     color: "text-purple-600",
     // bgColor: "bg-purple-100",
+  },
+  "File Storage": {
+    icon: <img src={huaweiIconLinks.sfs} alt="sfs" className="size-9" />,
+    // color: "text-purple-600",
+    // bgColor: "bg-purple-100",
+  },
+  "Disk Storage": {
+    icon: <img src={huaweiIconLinks.evs} alt="sfs" className="size-9" />,
+    // color: "text-purple-600",
+    // bgColor: "bg-purple-100",
+  },
+  "elb": {
+    icon: <img src={huaweiIconLinks.elb} alt="sfs" className="size-9" />,
   },
   InternetRouter: {
     icon: <Globe className="size-5" />,
@@ -100,7 +67,7 @@ export const RESOURCE_MAP = {
     color: "text-green-600",
     // bgColor: "bg-green-100",
   },
-  "EVS": {
+  EVS: {
     icon: <Globe className="size-5" />,
     color: "text-green-600",
     // bgColor: "bg-green-100",
@@ -116,15 +83,16 @@ export const RESOURCE_MAP = {
     // bgColor: "bg-blue-100",
   },
   "Server Room": {
-    icon: <img src={imgLinks.switch} alt="switch" className="size-8" />,
+    icon: <img src={imgLinks.switch} alt="switch" className="size-9" />,
     color: "text-blue-600",
     // bgColor: "bg-blue-100",
   },
   Server: {
-    icon: <Server className="size-5" />,
-    color: "text-red-600",
-    // bgColor: "bg-red-100",
+    icon: <img src={huaweiIconLinks.server} alt="switch" className="size-9" />,
+    color: "text-blue-600",
+    // bgColor: "bg-blue-100",
   },
+
   Database: {
     icon: <DatabaseIcon className="size-5" />,
     color: "text-indigo-600",
@@ -140,4 +108,5 @@ export const RESOURCE_MAP = {
     color: "text-indigo-600",
     // bgColor: "bg-indigo-100",
   },
-};
+}
+}

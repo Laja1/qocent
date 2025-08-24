@@ -1,8 +1,8 @@
-import NavbarDemo from "@/components/shared/navbar";
 import { Footer } from "@/components/shared";
 import { Hero } from "./hero";
 import { PartnersCard } from "./partners-card";
 import Seo from "@/components/shared/seo";
+import Navbar from "@/components/shared/navbar2";
 
 const Partners = () => {
   return (
@@ -22,11 +22,11 @@ const Partners = () => {
         }}
       />
 
-      <NavbarDemo>
-        <Hero />
-        <PartnersCard />
-        <Footer />
-      </NavbarDemo>
+      <Navbar />
+
+      <Hero />
+      <PartnersCard />
+      <Footer />
     </div>
   );
 };

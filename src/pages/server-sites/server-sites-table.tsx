@@ -4,11 +4,11 @@ import { Edit, Eye, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { getStatusClassName } from "@/utilities/helper";
-import { RESOURCE_MAP } from "@/utilities/constants/icons";
 import type { resourceType } from "@/models/response/resourceResponse";
 import { Icon123 } from "@tabler/icons-react";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
+import { useResourceMap } from "@/utilities/constants/icons";
 
 export const ResourceTable = ({
   resourcesInSiteData,
@@ -17,6 +17,7 @@ export const ResourceTable = ({
   resourcesInSiteData: resourceType[];
   isLoading: boolean;
 }) => {
+  const RESOURCE_MAP = useResourceMap();
   const navigate = useNavigate();
 
   const actions = [
@@ -55,7 +56,7 @@ export const ResourceTable = ({
       cell: (row) => (
         <span
           onClick={() => navigate("/create-resource")}
-          className="hover:cursor-pointer"
+          className="hover:cursor-pointer text-gray-900 dark:text-gray-100"
         >
           {row.resourceId}
         </span>
@@ -67,7 +68,11 @@ export const ResourceTable = ({
       id: "resourceTypeLabel",
       header: "RESOURCES",
       accessorKey: "resourceType",
-      cell: (row) => <span className="line-clamp-1">{row.resourceType}</span>,
+      cell: (row) => (
+        <span className="line-clamp-1 text-gray-900 dark:text-gray-100">
+          {row.resourceType}
+        </span>
+      ),
       sortable: true,
     },
     {
@@ -80,13 +85,13 @@ export const ResourceTable = ({
           RESOURCE_MAP[resourceType as keyof typeof RESOURCE_MAP];
 
         if (!resource) {
-          return <span className="text-gray-400">?</span>;
+          return <span className="text-gray-400 dark:text-gray-500">?</span>;
         }
 
         const Icon = resource.icon;
 
         return (
-          <span className={`hover:cursor-pointer ${resource.color}`}>
+          <span className={`hover:cursor-pointer`}>
             {/* If it's a normal component */}
             {typeof Icon === "function" ? <Icon123 className="size-5" /> : Icon}
           </span>
@@ -113,7 +118,11 @@ export const ResourceTable = ({
       id: "resourceCode",
       header: "CODE",
       accessorKey: "resourceCode",
-      cell: (row) => <span className=" line-clamp-1">{row.resourceCode}</span>,
+      cell: (row) => (
+        <span className="line-clamp-1 text-gray-900 dark:text-gray-100">
+          {row.resourceCode}
+        </span>
+      ),
       sortable: true,
       filterType: "select",
     },
@@ -123,7 +132,11 @@ export const ResourceTable = ({
       header: "PARENT",
       accessorKey: "resourceSiteCode",
       sortable: true,
-      cell: (row) => <span className=" flex">{row.resourceSiteCode}</span>,
+      cell: (row) => (
+        <span className="flex text-gray-900 dark:text-gray-100">
+          {row.resourceSiteCode}
+        </span>
+      ),
     },
     // {
     //   id: "resourceSiteCode",

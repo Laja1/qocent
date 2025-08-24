@@ -85,7 +85,6 @@ export const ServerSites = () => {
       skip: !selectedSiteCode,
     }
   );
-  console.log(architectureData?.data, "architectureData?.data");
   const [deleteSite, { isLoading: isDeleteLoading }] = useDeleteSiteMutation();
 
   const { data: resourcesInSiteData, isLoading: isResourceLoading } =
@@ -254,7 +253,7 @@ export const ServerSites = () => {
                 label="Add Resource"
                 prefixIcon={<PlusIcon className="size-4" />}
                 size="small"
-                className="mt-2 py-0 bg-black"
+                className="mt-2 py-0 bg-black dark:bg-white"
                 intent="secondary"
                 onClick={() =>
                   openModal({

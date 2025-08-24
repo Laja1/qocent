@@ -67,7 +67,7 @@ const data = {
       title: "Resources Console",
       url: "#",
       icon: <IconCloudComputing className="text-black-500  size-5" />,
- 
+
       isActive: false,
       items: [
         {
@@ -97,18 +97,20 @@ const data = {
     {
       title: "Others",
       url: "#",
-      icon: <AlignHorizontalDistributeCenter className=" dark:text-white size-5" />,
-   
+      icon: (
+        <AlignHorizontalDistributeCenter className=" dark:text-white size-5" />
+      ),
+
       isActive: false,
       items: [
         {
           title: "Billing & Statements",
-          icon: <Wallet className="size-4 text-gray-800" />,
+          icon: <Wallet className="size-4 text-gray-800 dark:text-gray-200" />,
           url: RouteConstant.dashboard.billings.path,
         },
         {
           title: "Organization",
-          icon: <Users className="size-4 text-gray-800" />,
+          icon: <Users className="size-4 text-gray-800 dark:text-gray-200" />,
           url: RouteConstant.dashboard.billings.path,
         },
       ],
@@ -144,7 +146,7 @@ export const SidebarLayout = () => {
 
   return (
     <Sidebar className="font-brfirma">
-      <SidebarHeader className="bg-black text-white border-gray-200 border-b dark:border-gray-800  p-[8px]">
+      <SidebarHeader className="bg-white dark:bg-black text-gray-900 dark:text-white border-gray-200 border-b dark:border-gray-800  p-[8px]">
         <div className="flex items-center space-x-2 justify-between">
           <div className="flex space-x-2">
             <img src={svgLinks.logoWhite} className="h-10" />
@@ -183,18 +185,12 @@ export const SidebarLayout = () => {
       <SidebarFooter className="border-t flex flex-row justify-between  dark:border-gray-700 border-gray-200 px-4 py-1">
         <div
           onClick={handleLogout}
-          className="text-xs flex py-2 items-center text-red-600 gap-2 cursor-pointer"
+          className="text-xs flex py-2 items-center text-red-600 dark:text-red-400 gap-2 cursor-pointer"
         >
           <LogOut className="size-4" />
           <p>Logout</p>
         </div>
-        <button
-      
-        className="  rounded-full"
-      >
-        
-
-      </button>
+        <button className="  rounded-full"></button>
       </SidebarFooter>
     </Sidebar>
   );

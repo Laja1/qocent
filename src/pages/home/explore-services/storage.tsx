@@ -11,12 +11,12 @@ import { MdOutlineStorage } from "react-icons/md";
 
 export function Storage() {
   return (
-    <div className=" mx-auto px-8 py-10 lg:mt-5">
+    <div className="dark:bg-black mx-auto px-8 py-10">
       <div className="mb-4 rounded-full justify-center flex px-4 py-1.5 text-xs lg:text-sm font-medium">
-        <MdOutlineStorage className="h-14 w-14 text-gray-900" />
+        <MdOutlineStorage className="h-14 w-14" />
       </div>
       <div className="items-center flex justify-center gap-3">
-        <p className="text-black md:text-3xl text-xl lg:text-3xl leading-[56px] font-bold">
+        <p className="text-black dark:text-gray-300 md:text-3xl text-xl lg:text-3xl leading-[56px] font-bold">
           Storage Services
         </p>
       </div>

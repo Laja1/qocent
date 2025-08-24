@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState, useEffect, useCallback } from "react";
 
 const cards = [
@@ -280,15 +281,15 @@ export default function InfiniteCardCarousel() {
   };
 
   return (
-    <div className="  py-12">
-      <div className="w-full mx-auto px-4">
+    <div className=" bg-black py-12">
+      <div className="w-full justify-center flex items-center flex-col mx-auto px-4">
         <Badge
           className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium text-red-600"
           variant="secondary"
         >
           Our Core Value Propositions
         </Badge>
-        <h1 className="text-2xl md:text-4xl font-bold text-foreground mb-6">
+        <h1 className="text-2xl md:text-4xl font-bold text-foreground text-center mb-6">
           What sets Qocent apart and empowers your cloud journey.
         </h1>
 
@@ -319,40 +320,14 @@ export default function InfiniteCardCarousel() {
             className="p-2 rounded-full bg-white shadow-md hover:bg-gray-100"
             disabled={isTransitioning}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
+            <ChevronLeft className="text-black" />
           </button>
           <button
             onClick={nextCard}
             className="p-2 rounded-full bg-white shadow-md hover:bg-gray-100"
             disabled={isTransitioning}
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <ChevronRight className="text-black" />
           </button>
         </div>
       </div>

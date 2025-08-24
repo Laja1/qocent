@@ -51,16 +51,17 @@ export const getStatusClassName = (status: string) => {
 
 export const getResourceTypeClassName = (type: string) => {
   switch (type.toUpperCase()) {
-    case "DATABASE":
+    case "RDS":
       return "border-blue-200 bg-blue-50 text-blue-700";
     case "SERVER":
       return "border-red-200 bg-red-50 text-red-700";
     case "NETWORK":
       return "border-purple-200 bg-purple-50 text-purple-700";
-    case "STORAGE":
-      return "border-green-200 bg-green-50 text-green-700";
-      case "FILESTORAGE":
+    case "DISK STORAGE":
+      return "border-red-200 bg-red-50 text-red-700";
+      case "FILE STORAGE":
         return "border-green-200 bg-green-50 text-green-700";
+        case "OBS":
     default:
       return "border-gray-200 bg-gray-50 text-gray-700";
   }

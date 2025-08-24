@@ -188,59 +188,41 @@ export const CreateNewHouse = () => {
           </div>
 
           <div className="flex mt-5 flex-col">
-            {/* <div className="flex items-center w-full py-[1px] border-b">
-              <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-                <span className="text-red-500 ml-1">*</span>
-                Server Site
-              </p>
-              <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-                <RenderField
-                  name="serverSite"
-                  formik={formik}
-                  placeholder={`Select your Server Site`}
-                  parameterLookup={"serverSite"}
-                  type={"ListBox"}
-                  autoComplete="off"
-                />
-                <button
-                  // onClick={() => descriptionModal(item)}
-                  className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                  title="View more info"
+            {serverHouseTemplate?.data
+              ?.slice()
+              .sort(
+                (a, b) => Number(a.parameterSerial) - Number(b.parameterSerial)
+              )
+              .map((item) => (
+                <div
+                  className="flex items-center w-full py-[1px] border-b"
+                  key={item.parameterSerial}
                 >
-                  <Info size={16} />
-                </button>
-              </div>
-            </div> */}
-            {serverHouseTemplate.data.map((item) => (
-              <div
-                className="flex items-center w-full py-[1px] border-b"
-                key={item.parameterSerial}
-              >
-                <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right dark:text-white">
-                  {item.parameterMandatory && (
-                    <span className="text-red-500 ml-1">*</span>
-                  )}
-                  {item.parameterLabel}
-                </p>
-                <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-                  <RenderField
-                    name={item.parameterField}
-                    formik={formik}
-                    parameterLookup={item.parameterLookup}
-                    placeholder={`Enter your ${item.parameterLabel}`}
-                    type={item.parameterInputType || "text"}
-                    autoComplete="off"
-                  />
-                  <button
-                    onClick={() => descriptionModal(item)}
-                    className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                    title="View more info"
-                  >
-                    <Info size={16} />
-                  </button>
+                  <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right dark:text-white">
+                    {item.parameterMandatory && (
+                      <span className="text-red-500 ml-1">*</span>
+                    )}
+                    {item.parameterLabel}
+                  </p>
+                  <div className="lg:w-2/5 w-full pr-3 flex gap-1">
+                    <RenderField
+                      name={item.parameterField}
+                      formik={formik}
+                      parameterLookup={item.parameterLookup}
+                      placeholder={`Enter your ${item.parameterLabel}`}
+                      type={item.parameterInputType || "text"}
+                      autoComplete="off"
+                    />
+                    <button
+                      onClick={() => descriptionModal(item)}
+                      className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                      title="View more info"
+                    >
+                      <Info size={16} />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
 
           <div className="flex m-3 sm:m-5 justify-end">

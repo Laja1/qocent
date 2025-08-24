@@ -8,13 +8,13 @@ import { Button } from "@/components/shared";
 import { useDeploySiteResourcesMutation } from "@/service/kotlin/siteApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { showCustomToast } from "@/components/shared/toast";
-import { RESOURCE_MAP } from "@/utilities/constants/icons";
 import { useDeleteResourceByCodeMutation } from "@/service/kotlin/resourceApi";
 import type {
   Connection,
   HouseCell,
   resourceNode,
 } from "@/models/response/siteResponse";
+import { useResourceMap } from "@/utilities/constants/icons";
 
 const cellSize = 40;
 const gridSize = 20;
@@ -28,7 +28,6 @@ interface FlowGridProps {
 
 interface ResourceConfig {
   icon: React.ReactNode;
-  color: string;
   // bgColor: string;
 }
 
@@ -71,7 +70,6 @@ const getCellBorderStyle = (
 
 const defaultConfig: ResourceConfig = {
   icon: <Server className="size-5" />,
-  color: "text-gray-600",
   // bgColor: "bg-gray-100",
 };
 
@@ -88,7 +86,7 @@ const ResourceNodeComponent = memo<{
   return (
     <div
       id={`node-${resource.resourceCode}`}
-      className={`absolute flex flex-col items-center justify-center text-[10px]  rounded-sm p-1 bg-transparent ${config.color}`}
+      className={`absolute flex flex-col items-center justify-center text-[10px]  rounded-sm p-1 bg-transparent`}
       style={{
         top: (resource.row - 1) * cellSize,
         left: (resource.col - 1) * cellSize,
@@ -188,6 +186,7 @@ export const FlowGrid = ({
   siteCode,
 }: FlowGridProps) => {
   const { openModal,closeModal } = useModal();
+  const RESOURCE_MAP = useResourceMap()
   const [deploySiteResources, { isLoading }] = useDeploySiteResourcesMutation();
   const [deleteResources, { isLoading: isDeleting }] =
   useDeleteResourceByCodeMutation()

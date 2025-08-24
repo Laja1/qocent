@@ -7,7 +7,7 @@ import type { ServerRoom } from "@/models/response/siteResponse";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useDeleteResourceMutation } from "@/service/kotlin/resourceApi";
 import { useDeploySiteResourcesMutation } from "@/service/kotlin/siteApi";
-import { RESOURCE_MAP } from "@/utilities/constants/icons";
+import { useResourceMap } from "@/utilities/constants/icons";
 import { getStatusClassName } from "@/utilities/helper";
 import { Globe, Lock } from "lucide-react";
 
@@ -21,6 +21,7 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
     useDeleteResourceMutation();
   const [deploySiteResources, { isLoading }] = useDeploySiteResourcesMutation();
   const { openModal, closeModal } = useModal();
+  const RESOURCE_MAP = useResourceMap();
   const handleDelete = async ({
     resourceSiteCode,
     resourceId,
@@ -125,7 +126,7 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
 
   const layoutClass =
     serverRoom.resourcesDeployed && serverRoom.resourcesDeployed.length > 2
-      ? "grid grid-cols-3"
+      ? "grid grid-cols-1 lg:grid-cols-3"
       : "flex flex-row";
 
   return (
@@ -155,9 +156,7 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
                 className="text-center pb-1 px-2 hover:cursor-pointer"
               >
                 {mappedResource ? (
-                  <div className={mappedResource.color}>
-                    {mappedResource.icon}
-                  </div>
+                  <div>{mappedResource.icon}</div>
                 ) : (
                   <span className="text-red-500 text-xs">No icon</span>
                 )}

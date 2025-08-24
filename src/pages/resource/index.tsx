@@ -13,8 +13,6 @@ interface ResourceDataProps {
 }
 
 export const Resource = () => {
-  
-
   const serverColumns = [
     { id: "webServer" as const, label: "Web Server" },
     { id: "apiServer" as const, label: "API Server" },
@@ -27,18 +25,20 @@ export const Resource = () => {
       header: "Resource Parameters",
       accessorKey: "label",
       cell: (row: ResourceDataProps) => (
-        <span className="text-amber-700  font-medium line-clamp-1">
+        <span className="text-amber-700 dark:text-amber-400 font-medium line-clamp-1">
           {row.label}
         </span>
       ),
-      sortable: false,  
+      sortable: false,
     },
     ...serverColumns.map((server) => ({
       id: server.id,
       header: server.label,
       accessorKey: server.id,
       cell: (row: ResourceDataProps) => (
-        <span className="line-clamp-1">{row[server.id]}</span>
+        <span className="line-clamp-1 text-gray-900 dark:text-gray-100">
+          {row[server.id]}
+        </span>
       ),
       sortable: false,
       headerAction: {
@@ -72,20 +72,17 @@ export const Resource = () => {
   ];
 
   return (
- 
-      <div className=" flex gap-4 flex-col  overflow-y-hidden h-full">
-        <DataTable<ResourceDataProps>
-          data={resourceData}
-          columns={resourcesColumns}
-          actions={actions}
-          showDownload={false}
-          showSearch={false}
-          searchPlaceholder="Search resources by name, type, or server..."
-          onRowClick={(row) => console.log("Row Clicked:", row.id)}
-          initialSorting={{ id: "label", desc: false }}
-        />
-        
-      </div>
-  
+    <div className="flex gap-4 flex-col overflow-y-hidden h-full">
+      <DataTable<ResourceDataProps>
+        data={resourceData}
+        columns={resourcesColumns}
+        actions={actions}
+        showDownload={false}
+        showSearch={false}
+        searchPlaceholder="Search resources by name, type, or server..."
+        onRowClick={(row) => console.log("Row Clicked:", row.id)}
+        initialSorting={{ id: "label", desc: false }}
+      />
+    </div>
   );
 };

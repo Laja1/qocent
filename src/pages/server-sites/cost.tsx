@@ -3,11 +3,15 @@ import { DataTable } from "@/components/shared/datatable";
 import { Eye } from "lucide-react";
 import { useState, useMemo } from "react";
 import type { level1CostTableType } from "./type";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { allcategories, allMonths, categories } from "./config";
 import { CostTabChart } from "./cost-tab-chart";
-
-
 
 export const CostTable = () => {
   const [rowId, setRowId] = useState("104");
@@ -19,32 +23,47 @@ export const CostTable = () => {
   }, [viewType]);
 
   // Define columns
-  const costTableColumns: ColumnDef<level1CostTableType>[] = useMemo(() => [
-    {
-      id: "id",
-      header: "ID",
-      accessorKey: "id",
-      cell: (row) => row.id,
-      sortable: false,
-    },
-    {
-      id: "type",
-      header: "Type",
-      accessorKey: "type",
-      cell: (row) => <span className="font-medium">{row.type}</span>,
-      sortable: false,
-    },
-    ...allMonths.map((month) => ({
-      id: month,
-      header: month,
-      accessorKey: month,
-      cell: (row: level1CostTableType) => {
-        const cost = row.costs[month as keyof typeof row.costs];
-        return cost ? <span>${cost.toLocaleString()}</span> : <span>-</span>;
+  const costTableColumns: ColumnDef<level1CostTableType>[] = useMemo(
+    () => [
+      {
+        id: "id",
+        header: "ID",
+        accessorKey: "id",
+        cell: (row) => (
+          <span className="text-gray-900 dark:text-gray-100">{row.id}</span>
+        ),
+        sortable: false,
       },
-      sortable: false,
-    })),
-  ], []);
+      {
+        id: "type",
+        header: "Type",
+        accessorKey: "type",
+        cell: (row) => (
+          <span className="font-medium text-gray-900 dark:text-gray-100">
+            {row.type}
+          </span>
+        ),
+        sortable: false,
+      },
+      ...allMonths.map((month) => ({
+        id: month,
+        header: month,
+        accessorKey: month,
+        cell: (row: level1CostTableType) => {
+          const cost = row.costs[month as keyof typeof row.costs];
+          return cost ? (
+            <span className="text-gray-900 dark:text-gray-100">
+              ${cost.toLocaleString()}
+            </span>
+          ) : (
+            <span className="text-gray-500 dark:text-gray-400">-</span>
+          );
+        },
+        sortable: false,
+      })),
+    ],
+    []
+  );
 
   const actions = [
     {
@@ -60,9 +79,10 @@ export const CostTable = () => {
   return (
     <div className="">
       <div className="flex justify-between items-center">
-        <h2 className="text-base font-semibold">Cost Overview</h2>
+        <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+          Cost Overview
+        </h2>
         <div className="flex items-center space-x-2">
-          
           <Select
             value={viewType}
             onValueChange={(value: "all" | "categories") => setViewType(value)}
@@ -71,8 +91,12 @@ export const CostTable = () => {
               <SelectValue placeholder="Select view" />
             </SelectTrigger>
             <SelectContent className="text-xs">
-              <SelectItem className="text-xs" value="all">All Resources</SelectItem>
-              <SelectItem className="text-xs" value="categories">By Category</SelectItem>
+              <SelectItem className="text-xs" value="all">
+                All Resources
+              </SelectItem>
+              <SelectItem className="text-xs" value="categories">
+                By Category
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -90,7 +114,7 @@ export const CostTable = () => {
           filterableColumns={[]} // Disable built-in filtering
           showSearch={false} // Disable search
         />
-        <CostTabChart chartDataSource={tableData}  />
+        <CostTabChart chartDataSource={tableData} />
       </div>
     </div>
   );

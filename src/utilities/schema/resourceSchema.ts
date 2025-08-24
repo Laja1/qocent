@@ -58,20 +58,39 @@ export const generateDynamicSchema = (params?: ParameterData[]) => {
             `${param.parameterLabel} must be at most ${param.parameterLength} characters`);
         }
         break;
-        case 'NoTrailTextField':
-  validator = Yup.string()
-    .matches(
-      /^[A-Za-z0-9]+$/,
-      `${param.parameterLabel} must only contain letters and numbers (no spaces or special characters)`
-    ).trim();
-
-  if (param.parameterLength && param.parameterLength > 0) {
-    validator = (validator as Yup.StringSchema).max(
-      param.parameterLength,
-      `${param.parameterLabel} must be at most ${param.parameterLength} characters`
-    );
-  }
-  break;
+        case 'NoTrailTextField': {
+          validator = Yup.string().trim();
+          // If regex validation is provided, use it
+          if (param.parameterValidation) {
+            try {
+              // Clean the slashes and build a RegExp object
+              const regexString = param.parameterValidation.replace(/^\/|\/$/g, "");
+              const regex = new RegExp(regexString);
+        
+              validator = (validator as Yup.StringSchema).matches(
+                regex,
+                `${param.parameterLabel} is invalid`
+              );
+            } catch (err) {
+              console.warn(`Invalid regex in parameterValidation: ${param.parameterValidation}`, err);
+            }
+          } else {
+            // Default behavior (only alphanumeric, no spaces/special chars)
+            validator = (validator as Yup.StringSchema).matches(
+              /^[A-Za-z0-9]+$/,
+              `${param.parameterLabel} must only contain letters and numbers (no spaces or special characters)`
+            );
+          }
+        
+          if (param.parameterLength && param.parameterLength > 0) {
+            validator = (validator as Yup.StringSchema).max(
+              param.parameterLength,
+              `${param.parameterLabel} must be at most ${param.parameterLength} characters`
+            );
+          }
+          break;
+        }
+        
 case 'CommentBox':
         validator = Yup.string();
         // Apply length validation if specified

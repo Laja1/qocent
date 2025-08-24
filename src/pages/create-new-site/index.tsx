@@ -60,7 +60,7 @@ export const CreateNewSite = () => {
         setProgress(i);
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
-      console.log(payload)
+      console.log(payload);
       await createSite(payload).unwrap();
       showCustomToast("Server Site Successfully Created", {
         toastOptions: { type: "success", autoClose: 5000 },
@@ -147,7 +147,7 @@ export const CreateNewSite = () => {
       </div>
     );
   }
-
+  console.log(serverSiteParameterData?.data, "ddd");
   return (
     <>
       <div className="flex flex-col">
@@ -171,39 +171,44 @@ export const CreateNewSite = () => {
           </div>
 
           <div className="flex mt-5 flex-col">
-            {serverSiteParameterData.data.map((item) => (
-              <div
-                className="flex items-center w-full py-[1px] border-b dark:text-white"
-                key={item.parameterSerial}
-              >
-                <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-                  {item.parameterMandatory && (
-                    <span className="text-red-500 ml-1">*</span>
-                  )}
-                  {item.parameterLabel}
-                </p>
-                <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-                  <RenderField
-                    name={item.parameterField}
-                    formik={formik}
-                    placeholder={`Enter your ${item.parameterLabel}`}
-                    parameterLookup={item.parameterLookup}
-                    type={item.parameterInputType || "text"}
-                    // options={
-                    //   item.parameterField === "siteRegion" ? regionOptions : []
-                    // }
-                    autoComplete="off"
-                  />
-                  <button
-                    onClick={() => descriptionModal(item)}
-                    className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                    title="View more info"
-                  >
-                    <Info size={16} />
-                  </button>
+            {serverSiteParameterData.data
+              .slice()
+              .sort(
+                (a, b) => Number(a.parameterSerial) - Number(b.parameterSerial)
+              )
+              .map((item) => (
+                <div
+                  className="flex items-center w-full py-[1px] border-b dark:text-white"
+                  key={item.parameterId}
+                >
+                  <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
+                    {item.parameterMandatory && (
+                      <span className="text-red-500 ml-1">*</span>
+                    )}
+                    {item.parameterLabel}
+                  </p>
+                  <div className="lg:w-2/5 w-full pr-3 flex gap-1">
+                    <RenderField
+                      name={item.parameterField}
+                      formik={formik}
+                      placeholder={`Enter your ${item.parameterLabel}`}
+                      parameterLookup={item.parameterLookup}
+                      type={item.parameterInputType || "text"}
+                      // options={
+                      //   item.parameterField === "siteRegion" ? regionOptions : []
+                      // }
+                      autoComplete="off"
+                    />
+                    <button
+                      onClick={() => descriptionModal(item)}
+                      className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                      title="View more info"
+                    >
+                      <Info size={16} />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
           </div>
 
           <div className="flex m-3 sm:m-5 justify-end">

@@ -1,13 +1,13 @@
-import NavbarDemo from "@/components/shared/navbar";
 import { Footer } from "@/components/shared";
 import { Hero } from "./hero";
 import { Compute } from "./compute";
 import { Storage } from "./storage";
 import Seo from "@/components/shared/seo";
+import Navbar from "@/components/shared/navbar2";
 
 const ExploreServices = () => {
   return (
-    <div className=" h-full w-full">
+    <div className="dark:bg-black h-full w-full">
       <Seo
         title="Explore Services | Qocent - 361+ Integrated Cloud Services"
         description="Qocent offers a robust and diverse portfolio of cloud services, built on the reliable foundations of AWS and Huawei — designed to meet the demands of any application or workload."
@@ -23,13 +23,12 @@ const ExploreServices = () => {
         }}
       />
 
-      <NavbarDemo>
-        <Hero />
-        {/* <InfiniteCardCarousel /> */}
-        <Compute />
-        <Storage />
-        <Footer />
-      </NavbarDemo>
+      <Navbar />
+      <Hero />
+      {/* <InfiniteCardCarousel /> */}
+      <Compute />
+      <Storage />
+      <Footer />
     </div>
   );
 };

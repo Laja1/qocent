@@ -72,21 +72,23 @@ const projects = [
 
 export function Services() {
   return (
-    <div className="  max-w-6xl mx-auto px-8 py-10 lg:mt-20">
+    <div className="dark:bg-black lg:py-20 justify-center items-center w-full  flex flex-col mx-auto px-8 py-10 ">
       <Badge
         className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium text-red-600"
         variant="secondary"
       >
         Our Services
       </Badge>
-      <p className="text-black md:text-3xl text-xl lg:text-5xl leading-[56px] font-bold">
+      <p className="text-black dark:text-gray-300 text-center md:text-3xl text-xl lg:text-5xl leading-[56px] font-bold">
         Everything you need to build, scale, and thrive.
       </p>
       <p className="md:text-base text-sm lg:text-lg leading-[28px] text-neutral-400">
         From startups to enterprises, Qocent delivers the power, speed, and
         flexibility you need to run your business across any cloud—seamlessly.
       </p>
-      <HoverEffect items={projects} />
+      <div className="lg:px-20">
+        <HoverEffect items={projects} />
+      </div>
     </div>
   );
 }

@@ -1,191 +1,183 @@
+import React, { useState } from "react";
+import { Button } from "../ui/button";
+import { X, Menu } from "lucide-react";
+import { svgLinks } from "@/assets/assetLink";
+import { Link, useNavigate } from "react-router-dom";
+import { navRoutes } from "@/router/routes";
+import { motion, AnimatePresence } from "framer-motion";
+import { useDarkMode } from "@/hooks/useDarkMode";
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalConstant } from "./modal/register";
 
-import {
-  Navbar,
-  NavBody,
-  NavItems,
-  MobileNav,
-  NavbarLogo,
-  NavbarButton,
-  MobileNavHeader,
-  MobileNavToggle,
-  MobileNavMenu,
-} from "@/components/ui/resizable-navbar";
-import { useState } from "react";
-
-export function NavbarDemo() {
-  const navItems = [
-    {
-      name: "Features",
-      link: "#features",
-    },
-    {
-      name: "Pricing",
-      link: "#pricing",
-    },
-    {
-      name: "Contact",
-      link: "#contact",
-    },
-  ];
-
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
+const Logo = () => {
+  const { isDark } = useDarkMode();
   return (
-    <div className="relative w-full">
-      <Navbar>
-        {/* Desktop Navigation */}
-        <NavBody>
-          <NavbarLogo />
-          <NavItems items={navItems} />
-          <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary">Login</NavbarButton>
-            <NavbarButton variant="primary">Book a call</NavbarButton>
-          </div>
-        </NavBody>
-
-        {/* Mobile Navigation */}
-        <MobileNav>
-          <MobileNavHeader>
-            <NavbarLogo />
-            <MobileNavToggle
-              isOpen={isMobileMenuOpen}
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            />
-          </MobileNavHeader>
-
-          <MobileNavMenu
-            isOpen={isMobileMenuOpen}
-            onClose={() => setIsMobileMenuOpen(false)}
-          >
-            {navItems.map((item, idx) => (
-              <a
-                key={`mobile-link-${idx}`}
-                href={item.link}
-                onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-600 dark:text-neutral-300"
-              >
-                <span className="block">{item.name}</span>
-              </a>
-            ))}
-            <div className="flex w-full flex-col gap-4">
-              <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Login
-              </NavbarButton>
-              <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
-                variant="primary"
-                className="w-full"
-              >
-                Book a call
-              </NavbarButton>
-            </div>
-          </MobileNavMenu>
-        </MobileNav>
-      </Navbar>
-      <DummyContent />
-
-      {/* Navbar */}
-    </div>
-  );
-}
-
-const DummyContent = () => {
-  return (
-    <div className="container mx-auto p-8 pt-24">
-      <h1 className="mb-4 text-center text-3xl font-bold">
-        Check the navbar at the top of the container
-      </h1>
-      <p className="mb-10 text-center text-sm text-zinc-500">
-        For demo purpose we have kept the position as{" "}
-        <span className="font-medium">Sticky</span>. Keep in mind that this
-        component is <span className="font-medium">fixed</span> and will not
-        move when scrolling.
-      </p>
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-4">
-        {[
-          {
-            id: 1,
-            title: "The",
-            width: "md:col-span-1",
-            height: "h-60",
-            bg: "bg-neutral-100 dark:bg-neutral-800",
-          },
-          {
-            id: 2,
-            title: "First",
-            width: "md:col-span-2",
-            height: "h-60",
-            bg: "bg-neutral-100 dark:bg-neutral-800",
-          },
-          {
-            id: 3,
-            title: "Rule",
-            width: "md:col-span-1",
-            height: "h-60",
-            bg: "bg-neutral-100 dark:bg-neutral-800",
-          },
-          {
-            id: 4,
-            title: "Of",
-            width: "md:col-span-3",
-            height: "h-60",
-            bg: "bg-neutral-100 dark:bg-neutral-800",
-          },
-          {
-            id: 5,
-            title: "F",
-            width: "md:col-span-1",
-            height: "h-60",
-            bg: "bg-neutral-100 dark:bg-neutral-800",
-          },
-          {
-            id: 6,
-            title: "Club",
-            width: "md:col-span-2",
-            height: "h-60",
-            bg: "bg-neutral-100 dark:bg-neutral-800",
-          },
-          {
-            id: 7,
-            title: "Is",
-            width: "md:col-span-2",
-            height: "h-60",
-            bg: "bg-neutral-100 dark:bg-neutral-800",
-          },
-          {
-            id: 8,
-            title: "You",
-            width: "md:col-span-1",
-            height: "h-60",
-            bg: "bg-neutral-100 dark:bg-neutral-800",
-          },
-          {
-            id: 9,
-            title: "Do NOT TALK about",
-            width: "md:col-span-2",
-            height: "h-60",
-            bg: "bg-neutral-100 dark:bg-neutral-800",
-          },
-          {
-            id: 10,
-            title: "F Club",
-            width: "md:col-span-1",
-            height: "h-60",
-            bg: "bg-neutral-100 dark:bg-neutral-800",
-          },
-        ].map((box) => (
-          <div
-            key={box.id}
-            className={`${box.width} ${box.height} ${box.bg} flex items-center justify-center rounded-lg p-4 shadow-sm`}
-          >
-            <h2 className="text-xl font-medium">{box.title}</h2>
-          </div>
-        ))}
-      </div>
+    <div className="flex items-center">
+      {isDark ? (
+        <img
+          src={svgLinks.qocentLight}
+          className="lg:h-10 md-6 h-5"
+          alt="Logo"
+        />
+      ) : (
+        <img src={svgLinks.logo} className="lg:h-10 md-6 h-5" alt="Logo" />
+      )}
     </div>
   );
 };
+
+const DesktopNavigation: React.FC = () => {
+  const navigate = useNavigate();
+  const [hovered, setHovered] = useState<number | null>(null);
+
+  const onItemClick = () => {
+    setHovered(null);
+  };
+
+  return (
+    <nav className="hidden lg:flex items-center justify-center pt-5 fixed top-0 left-0 right-0 z-50">
+      <div className="flex items-center justify-between bg-black/20 backdrop-blur-lg border border-gray-700/30 rounded-lg px-6 py-2 w-full max-w-4xl mx-4 shadow-xl">
+        <div onClick={() => navigate("/")} className="cursor-pointer">
+          <Logo />
+        </div>
+        <div className="flex items-center gap-3 relative">
+          {navRoutes.map((item, idx) => (
+            <Link
+              key={`link-${idx}`}
+              to={item.link}
+              onMouseEnter={() => setHovered(idx)}
+              onMouseLeave={() => setHovered(null)}
+              onClick={onItemClick}
+              className="relative text-xs hover:px-2 py-2 text-white hover:text-gray-300 transition-colors"
+            >
+              {hovered === idx && (
+                <motion.div
+                  layoutId="hovered"
+                  className="absolute inset-0 h-full w-full rounded-md bg-white/10"
+                  transition={{ type: "spring", stiffness: 350, damping: 30 }}
+                />
+              )}
+              <span className="relative z-10">{item.name}</span>
+            </Link>
+          ))}
+          <Button
+            size="sm"
+            onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
+            className="hover:text-black hover:bg-gray-100 text-xs"
+          >
+            Book a demo
+          </Button>
+        </div>
+      </div>
+    </nav>
+  );
+};
+
+interface MobileMenuProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
+  return (
+    <AnimatePresence>
+      {isOpen && (
+        <>
+          {/* Background Overlay */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-30 lg:hidden bg-black/50"
+            onClick={onClose}
+          />
+
+          {/* Dropdown Menu */}
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: "easeOut" }}
+            className="fixed top-14 left-2 right-2 z-40 lg:hidden"
+          >
+            <div className="bg-white rounded-xs mt-2 shadow-2xl border border-gray-200 overflow-hidden">
+              {/* Navigation Links */}
+              <nav className="py-2">
+                {navRoutes.map((item, idx) => (
+                  <Link
+                    key={`mobile-link-${idx}`}
+                    to={item.link}
+                    onClick={onClose}
+                    className="block text-xs px-6 py-2 text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                  >
+                    {item.name}
+                  </Link>
+                ))}
+              </nav>
+
+              {/* CTA Button */}
+              <div className="p-4 bg-gray-50 border-t border-gray-200">
+                <Button
+                  variant="outline"
+                  className="w-full  text-black rounded-xs border py-2"
+                  onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
+                >
+                  Book A demo
+                </Button>
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+};
+
+interface MobileNavbarProps {
+  onMenuToggle: () => void;
+  isMenuOpen: boolean;
+}
+
+const MobileNavbar: React.FC<MobileNavbarProps> = ({
+  onMenuToggle,
+  isMenuOpen,
+}) => (
+  <nav className="lg:hidden fixed top-0 left-0 right-0 z-40 p-2">
+    <div className="flex items-center justify-between bg-black/20 backdrop-blur-lg border border-gray-700/30 rounded-xs px-4 py-1">
+      <Link to="/" className="cursor-pointer">
+        <Logo />
+      </Link>
+      <motion.button
+        whileTap={{ scale: 0.95 }}
+        onClick={onMenuToggle}
+        className="p-2 text-white hover:text-gray-300 transition-colors rounded-xs hover:bg-white/10"
+        aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+      >
+        <motion.div
+          animate={{ rotate: isMenuOpen ? 90 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+        </motion.div>
+      </motion.button>
+    </div>
+  </nav>
+);
+
+export default function Navbar() {
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
+
+  const toggleMobileMenu = () => setShowMobileMenu(!showMobileMenu);
+  const closeMobileMenu = () => setShowMobileMenu(false);
+
+  return (
+    <>
+      <DesktopNavigation />
+      <MobileNavbar
+        onMenuToggle={toggleMobileMenu}
+        isMenuOpen={showMobileMenu}
+      />
+      <MobileMenu isOpen={showMobileMenu} onClose={closeMobileMenu} />
+    </>
+  );
+}

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 export function Hero() {
   return (
     <div className="">
-      <div className=" bg-black py-10 items-center px-5 justify-center  bg-gradient-to-br from-black to-gray-800  drop-shadow-stone-800 drop-shadow-2xl rounded-sm">
+      <div className=" bg-black py-10 items-center px-5 justify-center  bg-gradient-to-br from-neutral-900 to-black  drop-shadow-stone-800 drop-shadow-sm ">
         <div className="z-10">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -14,7 +14,7 @@ export function Hero() {
             className="text-center z-1000 mx-auto my-12"
           >
             <Badge
-              className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium"
+              className="mb-4 mt-10 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium"
               variant="secondary"
             >
               One Window to Every Cloud

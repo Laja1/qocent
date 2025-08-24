@@ -48,7 +48,7 @@ export default function NavbarDemo({
             // onClick={() => navigate("signin")}
             onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
             variant="secondary"
-            className="text-red-600"
+            className="text-red-600 dark:text-red-600"
           >
             {/* Join Waitlist */}Book a demo
           </NavbarButton>
@@ -95,7 +95,7 @@ export default function NavbarDemo({
                   // onClick={() => navigate("signin")}
                   onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
                   variant="primary"
-                  className="w-full text-red-800"
+                 className="text-red-600 dark:text-red-600 w-full"
                 >
                   {/* Join Waitlist */}Book a demo
                 </NavbarButton>

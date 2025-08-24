@@ -3,7 +3,6 @@ import { Button, Header, RenderField } from "@/components/shared";
 import { useModal } from "@/components/shared/modal";
 import { ArrowRight, Info } from "lucide-react";
 import { useFormik } from "formik";
-import { IconMichelinStar } from "@tabler/icons-react";
 import type { ParameterData } from "../create-new-site/type";
 import { useLocation, useNavigate } from "react-router-dom";
 import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
@@ -22,6 +21,7 @@ import {
   useGetResourceTemplateQuery,
 } from "@/service/kotlin/resourceApi";
 import { replaceConfigPlaceholders } from "@/utilities/helper";
+import { useResourceMap } from "@/utilities/constants/icons";
 
 export const CreateNewResource = () => {
   const navigate = useNavigate();
@@ -30,6 +30,7 @@ export const CreateNewResource = () => {
     useCreateResourceMutation();
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
   const location = useLocation();
+  const RESOURCE_MAP = useResourceMap();
 
   const [progress, setProgress] = useState(0);
 
@@ -189,7 +190,6 @@ export const CreateNewResource = () => {
       </div>
     );
   }
-
   return (
     <div className="flex flex-col">
       <Header
@@ -208,41 +208,49 @@ export const CreateNewResource = () => {
             </p>
           </div>
           <div>
-            <IconMichelinStar color="white" size={40} />
+            {typeof locationState.resourceType === "string" &&
+              RESOURCE_MAP?.[
+                locationState.resourceType as keyof typeof RESOURCE_MAP
+              ]?.icon}
           </div>
         </div>
 
         <div className="flex mt-5 flex-col">
-          {resourceTemplate?.data?.map((item) => (
-            <div
-              className="flex lg:flex-row flex-col lg:items-center w-full py-[1px] border-b "
-              key={item.parameterSerial}
-            >
-              <p className="text-xs lg:w-1/6 w-1/2 pr-3 lg:text-right text-black dark:text-white">
-                {item.parameterMandatory && (
-                  <span className="text-red-500 ml-1">*</span>
-                )}
-                {item.parameterLabel}
-              </p>
-              <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-                <RenderField
-                  name={item.parameterField}
-                  formik={formik}
-                  placeholder={`Enter your ${item.parameterLabel}`}
-                  parameterLookup={item.parameterLookup}
-                  type={item.parameterInputType || "text"}
-                  autoComplete="off"
-                />
-                <button
-                  onClick={() => descriptionModal(item)}
-                  className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                  title="View more info"
-                >
-                  <Info size={16} />
-                </button>
+          {resourceTemplate?.data
+            ?.slice()
+            .sort(
+              (a, b) => Number(a.parameterSerial) - Number(b.parameterSerial)
+            )
+            .map((item) => (
+              <div
+                className="flex lg:flex-row flex-col lg:items-center w-full py-[1px] border-b "
+                key={item.parameterId}
+              >
+                <p className="text-xs lg:w-1/6 w-1/2 pr-3 lg:text-right text-black dark:text-white">
+                  {item.parameterMandatory && (
+                    <span className="text-red-500 ml-1">*</span>
+                  )}
+                  {item.parameterLabel}
+                </p>
+                <div className="lg:w-2/5 w-full pr-3 flex gap-1">
+                  <RenderField
+                    name={item.parameterField}
+                    formik={formik}
+                    placeholder={`Enter your ${item.parameterLabel}`}
+                    parameterLookup={item.parameterLookup}
+                    type={item.parameterInputType || "text"}
+                    autoComplete="off"
+                  />
+                  <button
+                    onClick={() => descriptionModal(item)}
+                    className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
+                    title="View more info"
+                  >
+                    <Info size={16} />
+                  </button>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
         </div>
 
         <div className="flex m-3 sm:m-5 justify-end">
