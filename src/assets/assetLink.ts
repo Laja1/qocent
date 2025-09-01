@@ -12,7 +12,8 @@ export const imgLinks = {
     azure:'/images/azure.png',
     router:'/images/router.png',
     logo:'/images/qocent-logo.png',
-    footerlogo:'images/qocent-footer.png'
+    footerlogo:'images/qocent-footer.png',
+    aws:'images/aws.png',
 }
 
 export const huaweiIconLinks = {
@@ -30,10 +31,11 @@ export const huaweiIconLinks = {
 
 export const awsIconLinks = {
     functionGraph :'/icons/huawei/functiongraph.png',
-    rds :'/icons/huawei/rds.png',
-    sfs :'/icons/huawei/sfs.png',
+    rds :'/icons/aws/rds.png',
+    s3 :'/icons/aws/s3.png',
     user :'/icons/huawei/user.png',
-    server :'/icons/huawei/server.png',
+    dynamodb:'icons/aws/dynamodb.png',
+    server :'/icons/aws/server.png',
     nat :'/icons/huawei/nat.png',
     evs :'/icons/huawei/evs.png',
     elb :'/icons/huawei/elb.png',
@@ -43,6 +45,7 @@ export const awsIconLinks = {
 
 export const svgLinks = {
     cube: '/svg/cubes.svg',
+    aws:'/svg/aws.svg',
     mosaic: '/svg/mosaic.svg',
     grunge:'/svg/grunge.svg',
     router:'/svg/router.svg',
@@ -58,5 +61,5 @@ export const svgLinks = {
     hero:'/svg/hero.svg',
     logo:'/svg/qocentlogo.svg',
     logoWhite:'/svg/qocentlogo2.svg',
-
+    azure:'/svg/azure.svg',
 }

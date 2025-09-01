@@ -1,5 +1,5 @@
 import {  object } from 'yup';
-import {defaultValidation, improvedCidrValidation, passwordValidation,   } from '.';
+import {defaultValidation, improvedCidrValidation, deploymentPasswordValidation,   } from '.';
 import * as Yup from "yup";
 
 export const deployModalSchema = object().shape({
@@ -120,7 +120,7 @@ case 'CommentBox':
         break;
       
       case 'PasswordBox':
-        validator = passwordValidation();
+        validator = deploymentPasswordValidation();
         break;
         case 'CidrBlock': {
           // Parse any additional validation options from parameterValidation field

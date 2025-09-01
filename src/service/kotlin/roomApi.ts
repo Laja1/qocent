@@ -12,10 +12,10 @@ import type { getResourcesResponse } from "@/models/response/siteResponse";
 export const roomApi = createApi({
   reducerPath: "roomApi",
   baseQuery: kotlinBaseQueryWithResponseCodeHandling,
-  tagTypes: [ApiEnums.House,ApiEnums.Room,ApiEnums.Resource],
+  tagTypes: [ApiEnums.House,ApiEnums.Room,ApiEnums.Resource,ApiEnums.ActivityLog],
   endpoints: (build) => ({
-    getAllRoom: build.query<getAllRoomResponse,{ accountCode: string }>({
-      query: ({accountCode}) => `/resource/read-room-by-account-code/${accountCode}`, 
+    getAllRoom: build.query<getAllRoomResponse,{ accountCode: string,provider:string }>({
+      query: ({accountCode,provider}) => `/resource/read-room-by-account-code/${accountCode}/${provider}`, 
       providesTags: (result) => createRoomTags(result,  "roomId"),
     }),
     createRoom: build.mutation<createResourceResponse, createResourceRequest>({
@@ -24,7 +24,7 @@ export const roomApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.Room, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
     }),
     getResourceInRoom: build.query<getResourcesResponse,{ roomCode: string }>({
       query: ({roomCode}) => `/resource/read-resource-by-room-code/${roomCode}`, 
@@ -36,7 +36,7 @@ export const roomApi = createApi({
         method: "POST",
        
       }),
-      invalidatesTags: [{ type: ApiEnums.Room, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
     }),
   }),
 });

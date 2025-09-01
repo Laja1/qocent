@@ -13,7 +13,7 @@ import type { getResourcesResponse } from "@/models/response/siteResponse";
 export const kotlinHouseApi = createApi({
   reducerPath: "kotlinHouseApi",
   baseQuery: kotlinBaseQueryWithResponseCodeHandling,
-  tagTypes: [ApiEnums.House,ApiEnums.Resource],
+  tagTypes: [ApiEnums.House,ApiEnums.Resource,ApiEnums.ActivityLog],
   endpoints: (build) => ({
     createServerHouse: build.mutation<genericResponse, void>({
       query: (body) => ({
@@ -21,7 +21,7 @@ export const kotlinHouseApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.House, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
     }),
 
     getHousesByProvider: build.query<getHouseResponse, { provider: number | null }>({
@@ -37,8 +37,8 @@ export const kotlinHouseApi = createApi({
             ]
           : [{ type: ApiEnums.House, id: "LIST" } as const],
     }),
-    getAllHouse: build.query<houseResponse,{ accountCode: string }>({
-      query: ({accountCode}) => `/resource/read-house-by-account-code/${accountCode}`, 
+    getAllHouse: build.query<houseResponse,{ accountCode: string,provider:string }>({
+      query: ({accountCode,provider}) => `/resource/read-house-by-account-code/${accountCode}/${provider}`, 
       providesTags: (result) => createHouseProviderTags(result,  "houseId"),
     }),
     getResourceInHouse: build.query<getResourcesResponse,{ houseCode: string }>({
@@ -51,7 +51,7 @@ export const kotlinHouseApi = createApi({
         method: "POST",
        
       }),
-      invalidatesTags: [{ type: ApiEnums.House, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
     }),
     createHouse: build.mutation<createResourceResponse, createResourceRequest>({
       query: (body) => ({
@@ -59,7 +59,7 @@ export const kotlinHouseApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.House, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
     }),
   }),
 });

@@ -35,8 +35,11 @@ export const ServerHouses = () => {
   const [rowId, setRowId] = useState("");
   const [deleteHouse, { isLoading: isDeleting }] = useDeleteHouseMutation();
   const account = useSelector((state: RootState) => state.account);
+  const dashboard = useSelector((state: RootState) => state.dashboard);
+
   const { data, isLoading } = useGetAllHouseQuery({
     accountCode: account?.accountCode,
+    provider:dashboard?.provider
   });
   console.log(data?.data, "sgsss");
 

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -22,6 +22,7 @@ import type { createResourceRequest } from "@/models/request/resourceRequest";
 import { replaceConfigPlaceholders } from "@/utilities/helper";
 import type { getResourceConfigResponse } from "@/models/response/resourceResponse";
 import { useCreateRoomMutation } from "@/service/kotlin/roomApi";
+import { useGetSiteByProviderQuery } from "@/service/kotlin/siteApi";
 
 export const CreateNewRoom = () => {
   const navigate = useNavigate();
@@ -36,6 +37,7 @@ export const CreateNewRoom = () => {
 
   const [progress, setProgress] = useState(0);
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
+  const user = useSelector((state: RootState) => state.account);
   const {
     data: serverRoomTemplate,
     isError,
@@ -44,16 +46,34 @@ export const CreateNewRoom = () => {
     resource: "serverRoom",
     provider: dashboard.provider,
   });
-  // Initialize form with empty values
-  const initialValues =
-    serverRoomTemplate?.data?.reduce(
-      (acc: Record<string, string>, item: ParameterData) => ({
-        ...acc,
-        [item.parameterField]: "",
-      }),
-      {}
-    ) || {};
 
+  const { data: siteData } = useGetSiteByProviderQuery(
+    {
+      provider: dashboard.provider,
+      siteAccountId: user.accountCode || "",
+    },
+    {
+      skip: !dashboard.provider,
+    }
+  );
+  const siteUserId = siteData?.data?.[0]?.siteUserId || user?.accountCode || "";
+
+  // Initialize form with empty values
+  const initialValues = useMemo(() => {
+    const templateValues =
+      serverRoomTemplate?.data?.reduce(
+        (acc: Record<string, string>, item: ParameterData) => ({
+          ...acc,
+          [item.parameterField]: "",
+        }),
+        {}
+      ) || {};
+
+    return {
+      ...templateValues,
+      siteUserId: siteUserId,
+    };
+  }, [serverRoomTemplate?.data, dashboard]);
   // Form submission handler
   const handleSubmit = async () => {
     try {
@@ -114,18 +134,6 @@ export const CreateNewRoom = () => {
     : null;
 
   console.log(formik?.errors, formik?.values);
-  useEffect(() => {
-    if (serverRoomTemplate?.data) {
-      const newValues = serverRoomTemplate.data.reduce(
-        (acc: Record<string, string>, item: ParameterData) => ({
-          ...acc,
-          [item.parameterField]: "",
-        }),
-        {}
-      );
-      formik.setValues(newValues);
-    }
-  }, [serverRoomTemplate?.data]);
 
   // Modal for parameter descriptions
   const descriptionModal = (row: ParameterData) => {

@@ -146,7 +146,7 @@ export const SidebarLayout = () => {
 
   return (
     <Sidebar className="font-brfirma">
-      <SidebarHeader className="bg-white dark:bg-black text-gray-900 dark:text-white border-gray-200 border-b dark:border-gray-800  p-[8px]">
+      <SidebarHeader className="bg-black text-gray-900 dark:text-white border-gray-200 border-b dark:border-gray-800  p-[8px]">
         <div className="flex items-center space-x-2 justify-between">
           <div className="flex space-x-2">
             <img src={svgLinks.logoWhite} className="h-10" />

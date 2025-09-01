@@ -12,7 +12,7 @@ import type { genericResponse } from "@/models/response";
 export const kotlinResourceApi = createApi({
   reducerPath: "kotlinResourceApi",
   baseQuery: kotlinBaseQueryWithResponseCodeHandling,
-  tagTypes: [ApiEnums.Resource,ApiEnums.Config,ApiEnums.House,ApiEnums.Room],
+  tagTypes: [ApiEnums.Resource,ApiEnums.Config,ApiEnums.House,ApiEnums.Room,ApiEnums.ActivityLog],
   endpoints: (build) => ({
      
 
@@ -37,7 +37,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
     }),
     deleteResource:build.mutation<genericResponse,{resourceId:number}>({
       query:({resourceId})=>({
@@ -45,7 +45,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
         method: "POST",
        
       }),
-      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
     }),
     deleteResourceByCode:build.mutation<genericResponse,{resourceCode:string}>({
       query:({resourceCode})=>({
@@ -53,7 +53,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
         method: "POST",
        
       }),
-      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
     }),
   }),
 });

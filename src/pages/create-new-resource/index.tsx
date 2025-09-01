@@ -7,7 +7,7 @@ import type { ParameterData } from "../create-new-site/type";
 import { useLocation, useNavigate } from "react-router-dom";
 import { generateDynamicSchema } from "@/utilities/schema/resourceSchema";
 import { SiteDeployModal } from "@/components/not-shared/site-modal";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { showCustomToast } from "@/components/shared/toast";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
@@ -22,6 +22,7 @@ import {
 } from "@/service/kotlin/resourceApi";
 import { replaceConfigPlaceholders } from "@/utilities/helper";
 import { useResourceMap } from "@/utilities/constants/icons";
+import { useGetSiteByProviderQuery } from "@/service/kotlin/siteApi";
 
 export const CreateNewResource = () => {
   const navigate = useNavigate();
@@ -31,10 +32,23 @@ export const CreateNewResource = () => {
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
   const location = useLocation();
   const RESOURCE_MAP = useResourceMap();
-
+ 
   const [progress, setProgress] = useState(0);
 
   const dashboard = useSelector((state: RootState) => state.dashboard);
+  const user = useSelector((state: RootState) => state.account);
+  const { data: siteData } =
+  useGetSiteByProviderQuery(
+    {
+      provider: dashboard.provider,
+      siteAccountId: user.accountCode || "",
+    },
+    {
+      skip:  !dashboard.provider,
+    }
+  );
+  const siteUserId = siteData?.data?.[0]?.siteUserId || user?.accountCode || "";
+
   const locationState = location.state as any;
   // ALL HOOKS MUST BE CALLED BEFORE ANY EARLY RETURNS
   const { data: configData, isLoading: isConfigLoading } = useGetConfigQuery(
@@ -58,14 +72,21 @@ export const CreateNewResource = () => {
   );
   console.log(resourceTemplate);
   // Initialize form values
-  const initialValues =
-    resourceTemplate?.data?.reduce(
+  const initialValues = useMemo(() => {
+    const templateValues = resourceTemplate?.data?.reduce(
       (acc: Record<string, string>, item: ParameterData) => ({
         ...acc,
         [item.parameterField]: "",
       }),
       {}
     ) || {};
+  
+    return {
+      ...templateValues,
+       siteUserId:siteUserId
+
+    };
+  }, [resourceTemplate?.data, dashboard]);
 
   const formik = useFormik({
     initialValues,
@@ -112,10 +133,7 @@ export const CreateNewResource = () => {
         throw new Error("Configuration data is not available");
       }
 
-      console.log(
-        newJsonConfig.data,
-        '"config" is an excess property and therefore is not allowed'
-      );
+     
       const payload: createResourceRequest =
         "data" in newJsonConfig
           ? (newJsonConfig.data?.configJson as unknown as createResourceRequest)

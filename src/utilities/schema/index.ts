@@ -48,14 +48,29 @@ export const passwordValidation = (label = "Password") =>
     )
     .min(8, `${label} must be at least 8 characters long`);
 
+export const deploymentPasswordValidation = (label = "Password") =>
+      string()
+        .required(`${label} is required`)
+        .matches(/[A-Z]/, `${label} must contain at least one uppercase letter`)
+        .matches(/[a-z]/, `${label} must contain at least one lowercase letter`)
+        .matches(/\d/, `${label} must contain at least one number`)
+        .matches(
+          /[!$%*?&#^()_\-+=]/,
+          `${label} must contain at least one special character (! $ % * ? & # ^ ( ) _ - + =)`
+        )
+        .matches(/^[\x20-\x7E]+$/, `${label} must contain only printable ASCII characters`)
+        .notOneOf(
+          ["/", "@", "\"", " "],
+          `${label} cannot contain '/', '@', '"', or spaces`
+        )
+        .min(8, `${label} must be at least 8 characters long`)
+        .max(41, `${label} must be at most 41 characters long`);
+    
     export const codeValidatiion = (name: string) =>
       string()
         .required(`${name} is required`)
         .min(6, `Must be ${6} digits`)
         .max(6, `Must be ${6} digits`);
-
-
-
 
         export const libraryCidrValidation = (fieldName: string, options?: {
           requirePrivate?: boolean;

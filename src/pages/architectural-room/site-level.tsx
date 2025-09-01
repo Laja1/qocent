@@ -8,6 +8,7 @@ import type { SiteArchitecture } from "@/models/response/siteResponse";
 
 export const SiteLevel = ({ sitesData }: { sitesData: SiteArchitecture }) => {
   const RESOURCE_MAP = useResourceMap();
+  console.log(sitesData);
   return (
     <div className="w-full flex ">
       <div

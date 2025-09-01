@@ -53,6 +53,8 @@ export const getResourceTypeClassName = (type: string) => {
   switch (type.toUpperCase()) {
     case "RDS":
       return "border-blue-200 bg-blue-50 text-blue-700";
+      case "NoSQL DB (DynamoDB)":
+        return "border-indigo-200 bg-indigo-50 text-indigo-700";
     case "SERVER":
       return "border-red-200 bg-red-50 text-red-700";
     case "NETWORK":
@@ -61,6 +63,8 @@ export const getResourceTypeClassName = (type: string) => {
       return "border-red-200 bg-red-50 text-red-700";
       case "FILE STORAGE":
         return "border-green-200 bg-green-50 text-green-700";
+        case "CLOUD STORAGE":
+        return "border-pink-200 bg-pink-50 text-pink-700";
         case "OBS":
     default:
       return "border-gray-200 bg-gray-50 text-gray-700";

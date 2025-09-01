@@ -37,12 +37,13 @@ createService: build.mutation<genericResponse,servicePayload>({
       }),
       invalidatesTags: [{ type: ApiEnums.Service, id: "LIST" }],
     }),
-    getFormOptions: build.mutation<formResponse, {query: string}>({
+  getFormOptions: build.mutation<formResponse, {query: string}>({
       query: (body) => ({
         url: "/look-up/form-options",
         method: "POST",
         body,
     }), }),
+ 
   }),
 });
 

@@ -79,14 +79,14 @@ export function Services() {
       >
         Our Services
       </Badge>
-      <p className="text-black dark:text-gray-300 text-center md:text-3xl text-xl lg:text-5xl leading-[56px] font-bold">
+     <div className="max-w-4xl text-center"> <p className="text-black dark:text-gray-300 text-center md:text-3xl text-xl  lg:text-5xl leading-[56px] font-bold">
         Everything you need to build, scale, and thrive.
       </p>
       <p className="md:text-base text-sm lg:text-lg leading-[28px] text-neutral-400">
         From startups to enterprises, Qocent delivers the power, speed, and
         flexibility you need to run your business across any cloud—seamlessly.
-      </p>
-      <div className="lg:px-20">
+      </p></div>
+      <div className="max-w-6xl">
         <HoverEffect items={projects} />
       </div>
     </div>

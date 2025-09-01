@@ -16,8 +16,8 @@ export function useDarkMode(defaultTheme: Theme = "system") {
     if (typeof window === "undefined") return false;
     
     const saved = localStorage.getItem("theme");
-    if (saved === "dark") return true;
-    if (saved === "light") return false;
+    if (saved === "dark") return false;
+    if (saved === "light") return true;
     
     // Default to system preference
     return window.matchMedia("(prefers-color-scheme: dark)").matches;

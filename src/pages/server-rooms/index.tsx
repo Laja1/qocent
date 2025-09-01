@@ -26,10 +26,12 @@ export const ServerRooms = () => {
   const [selectedRoomCode, setSelectedRoomCode] = useState("");
   const [tabShow, setTabShow] = useState(false);
   const [rowId, setRowId] = useState("");
+  const dashboard = useSelector((state: RootState) => state.dashboard);
 
   const { data, isLoading } = useGetAllRoomQuery(
     {
       accountCode: account?.accountCode,
+      provider: dashboard?.provider,
     },
     {
       skip: !account?.accountCode,

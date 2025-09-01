@@ -123,7 +123,7 @@ export const Console = () => {
   return (
     <div className="relative h-screen w-full overflow-hidden bg-gray-50 dark:bg-black">
       {/* Top Header */}
-      <header className="bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 w-full text-gray-900 dark:text-white px-4 py-2 fixed top-0 z-10 shadow-lg">
+      <header className="bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 w-full text-gray-900 dark:text-white px-4 py-2 fixed top-0 z-1">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             {/* Mobile Menu Button */}
@@ -183,7 +183,7 @@ export const Console = () => {
         <aside
           className={`
             fixed lg:relative top-16 lg:top-0 left-0 h-full w-80 lg:w-1/5 xl:w-1/6 
-            bg-white border-r border-gray-200 dark:border-gray-800 z-40 transform transition-transform duration-300 ease-in-out
+            bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800 z-40 transform transition-transform duration-300 ease-in-out
             ${
               isSidebarOpen
                 ? "translate-x-0"

@@ -17,7 +17,8 @@ import type {
 import { useResourceMap } from "@/utilities/constants/icons";
 
 const cellSize = 40;
-const gridSize = 20;
+const gridWidthSize = 20;
+const gridHeightSize = 25;
 
 interface FlowGridProps {
   data?: resourceNode[];
@@ -86,7 +87,7 @@ const ResourceNodeComponent = memo<{
   return (
     <div
       id={`node-${resource.resourceCode}`}
-      className={`absolute flex flex-col items-center justify-center text-[10px]  rounded-sm p-1 bg-transparent`}
+      className={`absolute flex flex-col items-center justify-center text-[10px] rounded-sm p-1 bg-transparent`}
       style={{
         top: (resource.row - 1) * cellSize,
         left: (resource.col - 1) * cellSize,
@@ -99,9 +100,9 @@ const ResourceNodeComponent = memo<{
         onClick={handleClick}
       >
         {resource.errors > 0 ? (
-            <Info className="size-4 text-black dark:text-gray-500" />
+          <Info className="size-4 text-red-500 dark:text-red-400" />
         ) : (
-          <Info className="size-4 text-black dark:text-red-500" />
+          <Info className="size-4 text-black dark:text-gray-500" />
         )}
       </button>
       {config.icon}
@@ -117,9 +118,9 @@ const GridCells = memo<{ cellBorderData?: HouseCell[] }>(
     const cells = useMemo(() => {
       const cellArray: React.ReactElement[] = [];
 
-      for (let row = 1; row <= gridSize; row++) {
-        for (let col = 1; col <= gridSize; col++) {
-          const index = (row - 1) * gridSize + (col - 1);
+      for (let row = 1; row <= gridHeightSize; row++) {
+        for (let col = 1; col <= gridWidthSize; col++) {
+          const index = (row - 1) * gridWidthSize + (col - 1);
 
           // Get custom border styles for this cell
           const customBorderStyle = getCellBorderStyle(
@@ -185,12 +186,12 @@ export const FlowGrid = ({
   cellBorderData = [],
   siteCode,
 }: FlowGridProps) => {
-  const { openModal,closeModal } = useModal();
-  const RESOURCE_MAP = useResourceMap()
+  const { openModal, closeModal } = useModal();
+  const RESOURCE_MAP = useResourceMap();
   const [deploySiteResources, { isLoading }] = useDeploySiteResourcesMutation();
   const [deleteResources, { isLoading: isDeleting }] =
-  useDeleteResourceByCodeMutation()
-    
+    useDeleteResourceByCodeMutation();
+
   const [visibleConnections, setVisibleConnections] = useState<Connection[]>(
     []
   );
@@ -201,11 +202,11 @@ export const FlowGrid = ({
         resourceCode: resourceCode,
       }).unwrap();
       await deploySiteResources({ siteCode: siteCode }).unwrap();
-      closeModal()
+      closeModal();
       showCustomToast(res.responseMessage, {
         toastOptions: { type: "success", autoClose: 5000 },
       });
-     
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       const message = ErrorHandler.extractMessage(error);
@@ -233,11 +234,11 @@ export const FlowGrid = ({
 
   const gridStyle = useMemo(
     (): React.CSSProperties => ({
-      width: `${gridSize * cellSize}px`,
-      height: `${gridSize * cellSize}px`,
+      width: `${gridWidthSize * cellSize}px`,
+      height: `${gridHeightSize * cellSize}px`,
       display: "grid",
-      gridTemplateColumns: `repeat(${gridSize}, ${cellSize}px)`,
-      gridTemplateRows: `repeat(${gridSize}, ${cellSize}px)`,
+      gridTemplateColumns: `repeat(${gridWidthSize}, ${cellSize}px)`,
+      gridTemplateRows: `repeat(${gridHeightSize}, ${cellSize}px)`,
       border: "1px solid white",
     }),
     []
@@ -249,9 +250,10 @@ export const FlowGrid = ({
     setVisibleConnections([]);
 
     let i = 0;
+    let interval: NodeJS.Timeout;
 
-    setTimeout(() => {
-      const interval = setInterval(() => {
+    const timeoutId = setTimeout(() => {
+      interval = setInterval(() => {
         if (i < sortedConnections.length) {
           const connectionToAdd = sortedConnections[i];
           setVisibleConnections((prev) => [...prev, connectionToAdd]);
@@ -261,6 +263,12 @@ export const FlowGrid = ({
         }
       }, 1000);
     }, 100);
+
+    // Cleanup function to prevent memory leaks
+    return () => {
+      clearTimeout(timeoutId);
+      if (interval) clearInterval(interval);
+    };
   }, [sortedConnections, resources.length]);
 
   const handleInfoClick = useCallback(
@@ -318,7 +326,7 @@ export const FlowGrid = ({
         ),
       });
     },
-    [openModal]
+    [openModal, handleDelete, isDeleting]
   );
 
   const resourceNodes = useMemo(() => {
@@ -338,7 +346,7 @@ export const FlowGrid = ({
         />
       );
     });
-  }, [resources, handleInfoClick]);
+  }, [resources, handleInfoClick, RESOURCE_MAP]);
 
   // Show empty state when no data
   if (!resources || resources.length === 0) {
@@ -365,36 +373,39 @@ export const FlowGrid = ({
         toastOptions: { type: "success", autoClose: 5000 },
       });
     } catch (error: any) {
-      console.error("Delete Site Error:", error);
+      console.error("Deploy Site Error:", error);
       const message = ErrorHandler.extractMessage(error);
       showCustomToast(message, {
         toastOptions: { type: "error", autoClose: 5000 },
       });
     }
   };
+
   return (
     <div className="w-full">
       <div className="overflow-x-auto overflow-y-hidden">
+        <div className="justify-between my-4 flex gap-3">
+          <p className="font-brfirma-bold underline">{siteCode}</p>
+          <div className="flex gap-3">
+            <Button
+              label="Simulate"
+              onClick={animateConnections}
+              prefixIcon={<Play className="size-4" />}
+              disabled={sortedConnections.length === 0}
+            />
+            <Button
+              label="Deploy Resources"
+              isLoading={isLoading}
+              onClick={handleSubmit}
+              disabled={isLoading}
+            />
+          </div>
+        </div>
         <div className="relative min-w-fit" style={gridStyle}>
           <GridCells cellBorderData={cellBorderData} />
           {resourceNodes}
           <ArrowsComponent connections={visibleConnections} />
         </div>
-      </div>
-
-      <div className="my-4 flex gap-3">
-        <Button
-          label="Simulate"
-          onClick={animateConnections}
-          prefixIcon={<Play className="size-4" />}
-          disabled={sortedConnections.length === 0}
-        />
-        <Button
-          label="Deploy Resources"
-          isLoading={isLoading}
-          onClick={() => handleSubmit()}
-          disabled={isLoading}
-        />
       </div>
     </div>
   );

@@ -126,3 +126,12 @@ export const createProviderTags = <T extends { [key: string]: any }>(
       : [{ type: ApiEnums.Config, id: "LIST" } as const];
   }
   
+
+export const createActivityLogTags = <T extends Record<string, any>>(
+  result: { data?: T[] } | undefined,
+  idField: keyof T
+) => {
+  return result?.data
+    ? [{ type: ApiEnums.ActivityLog, id: "LIST" } as const, ...result.data.map((item: T) => ({ type: ApiEnums.ActivityLog, id: item[idField] } as const))]
+    : [{ type: ApiEnums.ActivityLog, id: "LIST" } as const];
+}

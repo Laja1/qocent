@@ -40,7 +40,7 @@ export const DrawerModal = NiceModal.create(() => {
     }
   
     const rows: React.ReactElement[] = [];
-    const hiddenKeys = ["resourceConfig", "siteKey"]; // 🚫 skip these keys
+    const hiddenKeys = ["resourceConfig", ]; // 🚫 skip these keys
   
     Object.entries(obj).forEach(([key, value]) => {
       if (hiddenKeys.includes(key)) return; // <-- skip

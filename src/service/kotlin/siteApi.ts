@@ -12,7 +12,7 @@ import type { genericResponse } from "@/models/response";
 export const siteApi = createApi({
   reducerPath: "siteApi",
   baseQuery: kotlinBaseQueryWithResponseCodeHandling,
-  tagTypes: [ApiEnums.Site,ApiEnums.House,ApiEnums.Room,ApiEnums.Resource],
+  tagTypes: [ApiEnums.Site,ApiEnums.House,ApiEnums.Room,ApiEnums.Resource,ApiEnums.ActivityLog],
   endpoints: (build) => ({
     createServerSite: build.mutation<SiteResponse, createSiteRequest>({
       query: (body) => ({
@@ -20,14 +20,14 @@ export const siteApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
     }),
     deleteSite: build.mutation<genericResponse, {siteId:number}>({
       query: ({siteId}) => ({
         url: `/site/delete/${siteId}`,
         method: "POST",
       }),
-      invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
     }),
     getSiteArchitecture: build.query<getSiteArchitectureResponse, {siteCode:string}>({
       query: ({siteCode}) => `/dashboard/site-architecture/${siteCode}`,
@@ -60,7 +60,7 @@ export const siteApi = createApi({
       url:`/resource/deploy-resources/${siteCode}`,
       method: "POST",
     }),
-    invalidatesTags: [{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.Resource, id: "LIST" }], 
+    invalidatesTags: [{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }], 
 }),
   }),
 });

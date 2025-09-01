@@ -1,4 +1,4 @@
-import { imgLinks } from "@/assets/assetLink";
+import { imgLinks, svgLinks } from "@/assets/assetLink";
 import { Badge } from "@/components/ui/badge";
 
 export function HyperScalers() {
@@ -13,11 +13,11 @@ export function HyperScalers() {
       <p className="text-black dark:text-gray-300  md:text-3xl text-xl lg:text-5xl leading-[56px] font-bold">
         HyperScalers
       </p>
-      <div className="flex gap-10 lg:gap-30 my-10 justify-center">
-        <img src={imgLinks.awsdark} className="lg:size-24 md:size-16 size-12" />
-        <img src={imgLinks.huawei} className="lg:size-24 md:size-16 size-12" />
-        <img src={imgLinks.azure} className="lg:size-24 md:size-16 size-12" />
-        <img src={imgLinks.gcp} className="lg:size-24 md:size-16 size-12" />
+      <div className="flex gap-10 lg:gap-20 my-10 justify-center">
+        <img src={svgLinks.aws} className="lg:size-20 md:size-16 size-12" />
+        <img src={imgLinks.huawei} className="lg:size-20 md:size-16 size-12" />
+        <img src={svgLinks.azure} className="lg:size-20 md:size-16 size-12" />
+        <img src={imgLinks.gcp} className="lg:size-20 md:size-16 size-12" />
       </div>
     </div>
   );

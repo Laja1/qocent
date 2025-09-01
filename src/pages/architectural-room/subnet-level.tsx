@@ -143,7 +143,7 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
         </p>
 
         <div
-          className={`w-full items-center ${layoutClass} justify-center lg:gap-4`}
+          className={`w-full items-center ${layoutClass} justify-center `}
         >
           {(serverRoom.resourcesDeployed ?? []).map((resource) => {
             const mappedResource =

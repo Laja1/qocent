@@ -3,25 +3,21 @@ import { Button } from "../ui/button";
 import { X, Menu } from "lucide-react";
 import { svgLinks } from "@/assets/assetLink";
 import { Link, useNavigate } from "react-router-dom";
-import { navRoutes } from "@/router/routes";
+import { navRoutes, RouteConstant } from "@/router/routes";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDarkMode } from "@/hooks/useDarkMode";
-import NiceModal from "@ebay/nice-modal-react";
-import { ModalConstant } from "./modal/register";
 
-const Logo = () => {
+export const Logo = () => {
   const { isDark } = useDarkMode();
+
   return (
-    <div className="flex items-center">
-      {isDark ? (
-        <img
-          src={svgLinks.qocentLight}
-          className="lg:h-10 md-6 h-5"
-          alt="Logo"
-        />
-      ) : (
-        <img src={svgLinks.logo} className="lg:h-10 md-6 h-5" alt="Logo" />
-      )}
+    <div className="flex items-center relative">
+      <img
+        key={isDark ? "dark" : "light"}
+        src={isDark ? svgLinks.qocentLight : svgLinks.logo}
+        className="lg:h-10 md:h-6 h-5 transition-opacity duration-300 ease-in-out"
+        alt="Logo"
+      />
     </div>
   );
 };
@@ -36,7 +32,7 @@ const DesktopNavigation: React.FC = () => {
 
   return (
     <nav className="hidden lg:flex items-center justify-center pt-5 fixed top-0 left-0 right-0 z-50">
-      <div className="flex items-center justify-between bg-black/10 backdrop-blur-lg border border-gray-200 dark:border-gray-900 rounded-sm px-6 py-1 w-full max-w-4xl mx-4 shadow-xl">
+      <div className="flex items-center justify-between bg-black/10 backdrop-blur-lg border border-gray-200 dark:border-gray-700 rounded-sm px-6 py-1 w-full max-w-4xl mx-4 shadow-xl">
         <div onClick={() => navigate("/")} className="cursor-pointer">
           <Logo />
         </div>
@@ -48,7 +44,7 @@ const DesktopNavigation: React.FC = () => {
               onMouseEnter={() => setHovered(idx)}
               onMouseLeave={() => setHovered(null)}
               onClick={onItemClick}
-              className="relative text-xs hover:px-2 py-2 text-white hover:text-gray-300 transition-colors"
+              className="relative text-xs hover:px-2 py-2 text-white hover:text-gray-800 dark:hover:text-gray-300 transition-colors"
             >
               {hovered === idx && (
                 <motion.div
@@ -62,10 +58,10 @@ const DesktopNavigation: React.FC = () => {
           ))}
           <Button
             size="sm"
-            onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
-            className="hover:text-black hover:bg-gray-100 text-xs"
+            onClick={() => navigate(RouteConstant.auth.signin.path)}
+            className="hover:text-black cursor-pointer hover:bg-gray-100 text-xs"
           >
-            Book a demo
+            Login
           </Button>
         </div>
       </div>
@@ -79,6 +75,8 @@ interface MobileMenuProps {
 }
 
 const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
+  const navigate = useNavigate();
+
   return (
     <AnimatePresence>
       {isOpen && (
@@ -120,9 +118,9 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                 <Button
                   variant="outline"
                   className="w-full  text-black rounded-xs border py-2"
-                  onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
+                  onClick={() => navigate(RouteConstant.auth.signin.path)}
                 >
-                  Book A demo
+                  Login
                 </Button>
               </div>
             </div>

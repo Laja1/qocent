@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -22,6 +22,7 @@ import type { createResourceRequest } from "@/models/request/resourceRequest";
 import { replaceConfigPlaceholders } from "@/utilities/helper";
 import type { ConfigResponse } from "@/models/response/resourceResponse";
 import { useCreateHouseMutation } from "@/service/kotlin/houseApi";
+import { useGetSiteByProviderQuery } from "@/service/kotlin/siteApi";
 
 export const CreateNewHouse = () => {
   const navigate = useNavigate();
@@ -43,6 +44,18 @@ export const CreateNewHouse = () => {
     resource: "serverHouse",
     provider: dashboard.provider,
   });
+  const user = useSelector((state: RootState) => state.account);
+  const { data: siteData } =
+  useGetSiteByProviderQuery(
+    {
+      provider: dashboard.provider,
+      siteAccountId: user.accountCode || "",
+    },
+    {
+      skip:  !dashboard.provider,
+    }
+  );
+  const siteUserId = siteData?.data?.[0]?.siteUserId || user?.accountCode || "";
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
 
   const handleSubmit = async () => {
@@ -81,14 +94,21 @@ export const CreateNewHouse = () => {
     }
   };
 
-  const initialValues =
-    serverHouseTemplate?.data?.reduce(
+  const initialValues = useMemo(() => {
+    const templateValues = serverHouseTemplate?.data?.reduce(
       (acc: Record<string, string>, item: ParameterData) => ({
         ...acc,
         [item.parameterField]: "",
       }),
       {}
     ) || {};
+  
+    return {
+      ...templateValues,
+       siteUserId:siteUserId
+
+    };
+  }, [serverHouseTemplate?.data, dashboard]);
 
   const formik = useFormik({
     initialValues,
@@ -106,18 +126,7 @@ export const CreateNewHouse = () => {
       }) as ConfigResponse)
     : null;
 
-  useEffect(() => {
-    if (serverHouseTemplate?.data) {
-      const newValues = serverHouseTemplate.data.reduce(
-        (acc: Record<string, string>, item: ParameterData) => ({
-          ...acc,
-          [item.parameterField]: "",
-        }),
-        {}
-      );
-      formik.setValues(newValues);
-    }
-  }, [serverHouseTemplate?.data]);
+
 
   // Modal for parameter descriptions
   const descriptionModal = (row: ParameterData) => {
