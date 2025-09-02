@@ -15,6 +15,7 @@ export type Parameter = {
   parameterSerial: string;
   parameterName: string;
   parameterField: string;
+  parameterOptions:[]
   parameterDataType: string;
   parameterInputType: string;
   parameterLookup: string;

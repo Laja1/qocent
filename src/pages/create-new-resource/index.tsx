@@ -32,19 +32,18 @@ export const CreateNewResource = () => {
   const [isDeployModalOpen, setIsDeployModalOpen] = useState(false);
   const location = useLocation();
   const RESOURCE_MAP = useResourceMap();
- 
+
   const [progress, setProgress] = useState(0);
 
   const dashboard = useSelector((state: RootState) => state.dashboard);
   const user = useSelector((state: RootState) => state.account);
-  const { data: siteData } =
-  useGetSiteByProviderQuery(
+  const { data: siteData } = useGetSiteByProviderQuery(
     {
       provider: dashboard.provider,
       siteAccountId: user.accountCode || "",
     },
     {
-      skip:  !dashboard.provider,
+      skip: !dashboard.provider,
     }
   );
   const siteUserId = siteData?.data?.[0]?.siteUserId || user?.accountCode || "";
@@ -70,21 +69,21 @@ export const CreateNewResource = () => {
       skip: !locationState?.resourceType || !dashboard?.provider,
     }
   );
-  console.log(resourceTemplate);
+  // console.log(resourceTemplate);
   // Initialize form values
   const initialValues = useMemo(() => {
-    const templateValues = resourceTemplate?.data?.reduce(
-      (acc: Record<string, string>, item: ParameterData) => ({
-        ...acc,
-        [item.parameterField]: "",
-      }),
-      {}
-    ) || {};
-  
+    const templateValues =
+      resourceTemplate?.data?.reduce(
+        (acc: Record<string, string>, item: ParameterData) => ({
+          ...acc,
+          [item.parameterField]: "",
+        }),
+        {}
+      ) || {};
+
     return {
       ...templateValues,
-       siteUserId:siteUserId
-
+      siteUserId: siteUserId,
     };
   }, [resourceTemplate?.data, dashboard]);
 
@@ -133,7 +132,6 @@ export const CreateNewResource = () => {
         throw new Error("Configuration data is not available");
       }
 
-     
       const payload: createResourceRequest =
         "data" in newJsonConfig
           ? (newJsonConfig.data?.configJson as unknown as createResourceRequest)
@@ -188,10 +186,10 @@ export const CreateNewResource = () => {
     setIsDeployModalOpen(true);
   };
 
-  console.log(
-    "Dynamic config with formik values:",
-    newJsonConfig?.data?.configJson
-  );
+  // console.log(
+  //   "Dynamic config with formik values:",
+  //   newJsonConfig?.data?.configJson
+  // );
 
   if (isLoading) {
     return (
@@ -256,6 +254,7 @@ export const CreateNewResource = () => {
                     formik={formik}
                     placeholder={`Enter your ${item.parameterLabel}`}
                     parameterLookup={item.parameterLookup}
+                    options={item.parameterOptions}
                     type={item.parameterInputType || "text"}
                     autoComplete="off"
                   />

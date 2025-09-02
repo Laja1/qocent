@@ -292,7 +292,7 @@ export const ServerSites = () => {
         />
       </Header>
 
-      <div className="flex gap-4 flex-col overflow-y-hidden h-full">
+      <div className="flex gap-4 mb-10 lg:mb-20 flex-col overflow-y-hidden h-full">
         <Card className="mx-5 px-5 rounded-sm">
           <DataTable
             data={siteData?.data || []}

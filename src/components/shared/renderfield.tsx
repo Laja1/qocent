@@ -12,6 +12,7 @@ type RenderFieldProps = {
   label?: string;
   formik: FormikProps<any>;
   placeholder?: string;
+  options: [];
   parameterLookup?: string;
   autoComplete?: string; // Add this line
 };
@@ -23,6 +24,7 @@ export const RenderField = ({
   label,
   formik,
   parameterLookup,
+  options,
   autoComplete = "off", // Default to "off"
   ...rest
 }: RenderFieldProps) => {
@@ -46,18 +48,35 @@ export const RenderField = ({
           {...rest}
         />
       )}
+      {type === "Number" && (
+        <Textfield2
+          name={name}
+          label={label}
+          type="number"
+          placeholder={placeholder}
+          formik={formik}
+          error={error as string}
+          className="w-full"
+          autoComplete={autoComplete}
+          {...rest}
+        />
+      )}
       {type === "PasswordBox" && (
         <Textfield2
-        name={name}
-        label={label}
+          name={name}
+          label={label}
           placeholder="Enter your password"
           formik={formik}
-           className="w-full"
-          prefixIcon={<Lock size={16} className="text-black"/>}
+          className="w-full"
+          prefixIcon={<Lock size={16} className="text-black" />}
           type={seePassword ? "text" : "password"}
           suffixIcon={
             <button onClick={() => setSeePassword((prev) => !prev)}>
-              {seePassword ? <EyeIcon size={16} /> : <EyeClosed size={16} />}
+              {seePassword ? (
+                <EyeIcon size={16} className="dark:text-black" />
+              ) : (
+                <EyeClosed size={16} className="dark:text-black" />
+              )}
             </button>
           }
           error={error as string}
@@ -81,6 +100,7 @@ export const RenderField = ({
           name={name}
           parameterLookup={parameterLookup || ""}
           formik={formik}
+          option={options}
           placeholder={placeholder}
           {...rest}
         />

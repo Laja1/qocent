@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { type FormikProps } from "formik";
 import { SelectField } from "../shared";
 import { useGetFormOptionsMutation } from "@/service/kotlin/serviceApi";
@@ -9,6 +9,7 @@ import { useGetApiOptionsMutation } from "@/service/python/formApi";
 type ResourceSelectFieldProps = {
   name: string;
   label?: string;
+  option: { label: string; value: string }[]; // Changed to proper type
   formik: FormikProps<any>;
   placeholder?: string;
   parameterLookup: string;
@@ -19,6 +20,7 @@ export const ResourceSelectField = ({
   label,
   formik,
   placeholder,
+  option = [], // Default to empty array
   parameterLookup,
 }: ResourceSelectFieldProps) => {
   const [getFormOptions, { isLoading: isFormLoading }] =
@@ -26,10 +28,24 @@ export const ResourceSelectField = ({
   const [getApiOptions, { isLoading: isApiLoading }] =
     useGetApiOptionsMutation();
 
-  const [options, setOptions] = useState<{ label: string; value: string }[]>(
-    []
-  );
+  const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
   const [fetchError, setFetchError] = useState<string | null>(null);
+  
+  // Check if options are prefilled (passed via props)
+  const hasPrefillOptions = option && Array.isArray(option) && option.length > 0;
+  
+  // Initialize options with prefilled data
+  useEffect(() => {
+    if (hasPrefillOptions) {
+      console.log("Prefilling options:", option);
+      setOptions(option);
+      setFetchError(null);
+    }
+  }, [option, hasPrefillOptions]);
+
+  // Determine if fetch should be shown based on parameterLookup
+  const shouldShowFetch = parameterLookup && parameterLookup.trim() !== "";
+
   // Determine if this lookup should use API options
   const shouldUseApiOptions = useCallback((lookup: string) => {
     // Add your logic here to determine when to use API options
@@ -42,7 +58,6 @@ export const ResourceSelectField = ({
   }, []);
 
   // Parse API lookup format
-  // Fixed parseApiLookup function
   const parseApiLookup = useCallback((lookup: string, formValues: any) => {
     try {
       // Remove "API:" prefix if present
@@ -55,7 +70,7 @@ export const ResourceSelectField = ({
           category: processPlaceholders(parsed.category || "", formValues),
           resource: processPlaceholders(parsed.resource || "", formValues),
           action: processPlaceholders(parsed.action || "", formValues),
-          body: processBodyPlaceholders(parsed.body || {}, formValues), // Fixed this line
+          body: processBodyPlaceholders(parsed.body || {}, formValues),
         };
       }
 
@@ -252,7 +267,7 @@ export const ResourceSelectField = ({
         setFetchError(
           `Please select: ${dependencies.missing.join(", ")} first`
         );
-        setOptions([]);
+        setOptions(hasPrefillOptions ? option : []); // Keep prefilled options if available
         return;
       }
 
@@ -262,20 +277,19 @@ export const ResourceSelectField = ({
         const apiLookupData = parseApiLookup(parameterLookup, formik.values);
         if (!apiLookupData) {
           setFetchError("Invalid API lookup format");
-          setOptions([]);
+          setOptions(hasPrefillOptions ? option : []);
           return;
         }
 
         const res = await getApiOptions(apiLookupData);
 
         if (res?.data && Array.isArray(res.data)) {
-          const processedOptions = processOptions(res.data); // use processOptions here
+          const processedOptions = processOptions(res.data);
           setOptions(processedOptions);
-
           console.log(`Loaded ${processedOptions.length} API options`);
         } else {
           setFetchError("Failed to fetch API options");
-          setOptions([]);
+          setOptions(hasPrefillOptions ? option : []);
         }
       } else {
         // Use form options (original logic)
@@ -300,13 +314,13 @@ export const ResourceSelectField = ({
           setFetchError(
             res?.data?.responseMessage || "Failed to fetch options"
           );
-          setOptions([]);
+          setOptions(hasPrefillOptions ? option : []);
         }
       }
     } catch (error) {
       console.error("Error fetching options:", error);
       setFetchError("Failed to load options. Please try again.");
-      setOptions([]);
+      setOptions(hasPrefillOptions ? option : []);
     }
   }, [
     getFormOptions,
@@ -319,6 +333,8 @@ export const ResourceSelectField = ({
     processApiOptions,
     shouldUseApiOptions,
     parseApiLookup,
+    hasPrefillOptions,
+    option,
   ]);
 
   const error =
@@ -339,19 +355,22 @@ export const ResourceSelectField = ({
       }
       return placeholder || "Click 'Fetch options' to load...";
     }
-    return "Choose a resource...";
+    return placeholder || "Choose a resource...";
   };
 
   const dependencies = checkDependencies(parameterLookup, formik.values);
   const isDisabled = options.length === 0 || isLoading || !dependencies.ready;
+  
+  // Show fetch button only when parameterLookup is provided
+  const shouldShowFetchButton = shouldShowFetch;
 
   return (
     <div className="flex items-center gap-2 w-full">
-      <div className="flex-1">
+      <div className="flex-1 mb-2">
         <SelectField
           name={name}
           label={label}
-          options={options}
+          options={options.length > 0 ? options : option}
           placeholder={getPlaceholderText()}
           formik={formik}
           error={error}
@@ -361,55 +380,58 @@ export const ResourceSelectField = ({
         {fetchError && (
           <p className="text-red-500 text-xs mt-1">{fetchError}</p>
         )}
+        
       </div>
 
-      <button
-        type="button"
-        onClick={handleFetchOptions}
-        disabled={isLoading || !dependencies.ready}
-        className={`
-    group relative inline-flex items-center justify-center gap-1.5
-    px-3 py-1.5 text-xs font-semibold
-    bg-white hover:bg-green-50 active:bg-green-100
-    text-slate-700 hover:text-green-700
-    border border-slate-200 hover:border-green-300
-    rounded-xs shadow-xs
-    transition-all duration-200 ease-out
-    min-w-[70px] h-7
-    disabled:opacity-40 disabled:cursor-not-allowed
-    disabled:hover:bg-white disabled:hover:text-slate-700 
-    disabled:hover:border-slate-200 disabled:hover:shadow-sm
-    focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-400
-    overflow-hidden
-    ${isLoading ? "cursor-wait" : ""}
-  `}
-        aria-label="Fetch options"
-        title={
-          !dependencies.ready
-            ? `Select ${dependencies.missing.join(", ")} first`
-            : "Fetch options"
-        }
-      >
-        {/* Background gradient effect on hover */}
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      {shouldShowFetchButton && (
+        <button
+          type="button"
+          onClick={handleFetchOptions}
+          disabled={isLoading || !dependencies.ready}
+          className={`
+            group relative inline-flex items-center justify-center gap-1.5
+            px-3 py-1.5 text-xs font-semibold
+            bg-white hover:bg-green-50 active:bg-green-100
+            text-slate-700 hover:text-green-700
+            border border-slate-200 hover:border-green-300
+            rounded-xs shadow-xs
+            transition-all duration-200 ease-out
+            min-w-[70px] h-7
+            disabled:opacity-40 disabled:cursor-not-allowed
+            disabled:hover:bg-white disabled:hover:text-slate-700 
+            disabled:hover:border-slate-200 disabled:hover:shadow-sm
+            focus:outline-none focus:ring-2 focus:ring-green-500/20 focus:border-green-400
+            overflow-hidden
+            ${isLoading ? "cursor-wait" : ""}
+          `}
+          aria-label="Fetch options"
+          title={
+            !dependencies.ready
+              ? `Select ${dependencies.missing.join(", ")} first`
+              : "Fetch options"
+          }
+        >
+          {/* Background gradient effect on hover */}
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-        <IconRefresh
-          className={`size-3 flex-shrink-0 z-10 transition-all duration-300 ${
-            isLoading
-              ? "animate-spin text-green-600"
-              : "group-hover:rotate-180 group-hover:text-green-600"
-          }`}
-        />
+          <IconRefresh
+            className={`size-3 flex-shrink-0 z-10 transition-all duration-300 ${
+              isLoading
+                ? "animate-spin text-green-600"
+                : "group-hover:rotate-180 group-hover:text-green-600"
+            }`}
+          />
 
-        <span className="relative z-10 font-medium">
-          {isLoading ? "Loading..." : "Fetch"}
-        </span>
+          <span className="relative z-10 font-medium">
+            {isLoading ? "Loading..." : "Fetch"}
+          </span>
 
-        {/* Shimmer effect when loading */}
-        {isLoading && (
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-pulse" />
-        )}
-      </button>
+          {/* Shimmer effect when loading */}
+          {isLoading && (
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent animate-pulse" />
+          )}
+        </button>
+      )}
     </div>
   );
-};
+};  

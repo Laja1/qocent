@@ -65,7 +65,17 @@ export const useResourceMap = () => {
       // bgColor: "bg-purple-100",
     },
     "File Storage": {
-      icon: <img src={huaweiIconLinks.sfs} alt="sfs" className="size-7" />,
+      icon: (
+        <img
+          src={
+            dashboard?.provider.toLowerCase() === "huawei"
+              ? huaweiIconLinks.sfs
+              : awsIconLinks.efs
+          }
+          alt="router"
+          className="size-7"
+        />
+      ),
       // color: "text-purple-600",
       // bgColor: "bg-purple-100",
     },
@@ -84,8 +94,33 @@ export const useResourceMap = () => {
       // color: "text-purple-600",
       // bgColor: "bg-purple-100",
     },
+    ASG: {
+      icon: (
+        <img
+          src={
+            dashboard?.provider.toLowerCase() === "huawei"
+              ? huaweiIconLinks.sfs
+              : awsIconLinks.asg
+          }
+          alt="asg"
+          className="size-7"
+        />
+      ),
+      // color: "text-purple-600",
+      // bgColor: "bg-purple-100",
+    },
     "Disk Storage": {
-      icon: <img src={huaweiIconLinks.evs} alt="sfs" className="size-7" />,
+      icon: (
+        <img
+          src={
+            dashboard?.provider.toLowerCase() === "huawei"
+              ? huaweiIconLinks.evs
+              : awsIconLinks.ebs
+          }
+          alt="router"
+          className="size-7"
+        />
+      ),
       // color: "text-purple-600",
       // bgColor: "bg-purple-100",
     },

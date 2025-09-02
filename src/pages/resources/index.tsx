@@ -55,7 +55,7 @@ export const Resources = () => {
         navigate(RouteConstant.dashboard.updateResources.path, { state: row });
       },
     },
-    ...(resourceType.toLocaleLowerCase() === "obs"
+    ...(resourceType.toLocaleLowerCase() === "cloud storage"
       ? [
           {
             label: "Upload file",
