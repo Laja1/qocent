@@ -188,7 +188,7 @@ export const FlowGrid = ({
 }: FlowGridProps) => {
   const { openModal, closeModal } = useModal();
   const RESOURCE_MAP = useResourceMap();
-  const [deploySiteResources, { isLoading }] = useDeploySiteResourcesMutation();
+  const [deploySiteResources] = useDeploySiteResourcesMutation();
   const [deleteResources, { isLoading: isDeleting }] =
     useDeleteResourceByCodeMutation();
 
@@ -364,22 +364,22 @@ export const FlowGrid = ({
     );
   }
 
-  const handleSubmit = async () => {
-    console.log(siteCode);
-    try {
-      const res = await deploySiteResources({ siteCode }).unwrap();
-      console.log(res);
-      showCustomToast(res.responseMessage, {
-        toastOptions: { type: "success", autoClose: 5000 },
-      });
-    } catch (error: any) {
-      console.error("Deploy Site Error:", error);
-      const message = ErrorHandler.extractMessage(error);
-      showCustomToast(message, {
-        toastOptions: { type: "error", autoClose: 5000 },
-      });
-    }
-  };
+  // const handleSubmit = async () => {
+  //   console.log(siteCode);
+  //   try {
+  //     const res = await deploySiteResources({ siteCode }).unwrap();
+  //     console.log(res);
+  //     showCustomToast(res.responseMessage, {
+  //       toastOptions: { type: "success", autoClose: 5000 },
+  //     });
+  //   } catch (error: any) {
+  //     console.error("Deploy Site Error:", error);
+  //     const message = ErrorHandler.extractMessage(error);
+  //     showCustomToast(message, {
+  //       toastOptions: { type: "error", autoClose: 5000 },
+  //     });
+  //   }
+  // };
 
   return (
     <div className="w-full">
@@ -393,12 +393,12 @@ export const FlowGrid = ({
               prefixIcon={<Play className="size-4" />}
               disabled={sortedConnections.length === 0}
             />
-            <Button
+            {/* <Button
               label="Deploy Resources"
               isLoading={isLoading}
               onClick={handleSubmit}
               disabled={isLoading}
-            />
+            /> */}
           </div>
         </div>
         <div className="relative min-w-fit" style={gridStyle}>
