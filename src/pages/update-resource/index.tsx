@@ -240,6 +240,7 @@ export const UpdateResources = () => {
                   name={item.parameterField}
                   formik={formik}
                   placeholder={`Enter your ${item.parameterLabel}`}
+                  options={item.parameterOptions}
                   parameterLookup={item.parameterLookup}
                   type={item.parameterInputType || "text"}
                   autoComplete="off"

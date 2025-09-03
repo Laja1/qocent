@@ -218,6 +218,7 @@ export const CreateNewHouse = () => {
                       name={item.parameterField}
                       formik={formik}
                       parameterLookup={item.parameterLookup}
+                      options={item.parameterOptions}
                       placeholder={`Enter your ${item.parameterLabel}`}
                       type={item.parameterInputType || "text"}
                       autoComplete="off"

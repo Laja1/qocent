@@ -192,11 +192,10 @@ export const CreateNewSite = () => {
                       name={item.parameterField}
                       formik={formik}
                       placeholder={`Enter your ${item.parameterLabel}`}
+                      options={item.parameterOptions}
                       parameterLookup={item.parameterLookup}
                       type={item.parameterInputType || "text"}
-                      // options={
-                      //   item.parameterField === "siteRegion" ? regionOptions : []
-                      // }
+                      
                       autoComplete="off"
                     />
                     <button
