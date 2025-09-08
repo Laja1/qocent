@@ -5,6 +5,7 @@ import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQuery
 import type { createSiteRequest } from "@/models/request/siteRequest";
 import { createResourceProviderTags, createSiteProviderTags } from "@/utilities/tagHelpers";
 import type { genericResponse } from "@/models/response";
+import { siteStore } from "@/store/siteSlice";
 
 
 
@@ -33,10 +34,30 @@ export const siteApi = createApi({
       query: ({siteCode}) => `/dashboard/site-architecture/${siteCode}`,
       providesTags: [{type:ApiEnums.Site,id:'LIST'},{type:ApiEnums.House,id:'LIST'},{type:ApiEnums.Resource,id:'LIST'}]
     }),
-    getSiteByProvider: build.query<getSiteResponse, {provider:string,siteAccountId:string}>({
-      query: ({provider,siteAccountId}) => `/site/read-by-site-account-id/${siteAccountId}/${provider}`,    
-      providesTags: (result) => createSiteProviderTags(result,  "siteId"),
-    }),
+    getSiteByProvider: build.query<
+    getSiteResponse,
+    { provider: string; siteAccountId: string }
+  >({
+    query: ({ provider, siteAccountId }) =>
+      `/site/read-by-site-account-id/${siteAccountId}/${provider}`,
+    providesTags: (result) => createSiteProviderTags(result, "siteId"),
+    async onQueryStarted({ provider, siteAccountId }, { queryFulfilled, dispatch }) {
+      try {
+        console.log("Fetching site:", provider, siteAccountId);
+  
+        const { data } = await queryFulfilled; 
+        
+        if (Array.isArray(data?.data) && data.data.length > 0) {
+          dispatch(siteStore.action.setSiteDetails(data.data));
+        } else {
+          dispatch(siteStore.action.setSiteDetails([]));
+        }
+      } catch (err) {
+        console.error("Error fetching site by provider:", err);
+      }
+    },
+  }),
+  
     getSiteBySiteCode: build.query<getSiteArchitectureResponse, {siteCode:string}>({
         query: ({siteCode}) => `/dashboard/site-data/${siteCode}`,    
       }),

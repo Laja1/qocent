@@ -71,6 +71,14 @@ export const getResourceTypeClassName = (type: string) => {
   }
 };
 
+export const formatFileSize = (bytes: number): string => {
+  if (bytes === 0) return "0 Bytes";
+  const k = 1024;
+  const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+};
+
 
 const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 
@@ -176,3 +184,22 @@ export const replaceConfigPlaceholders = (
 export const siteCodeRegex = /^[A-Z0-9]{3,10}$/; // Alphanumeric, 3-10 characters
 export const houseCodeRegex = /^[A-Z0-9]{2,20}$/; // Alphanumeric, 2-20 characters
 export const houseNameRegex = /^[a-zA-Z0-9\s\-_]{2,50}$/; // Alphanumeric with spaces, hyphens, underscores
+
+
+
+export function calculatePresignedUrlExpiry(
+  fileSizeBytes: number,
+  uploadSpeedMbps: number = 10,
+  safetyFactor: number = 2
+): number {
+  // Convert upload speed to bytes per second
+  const uploadSpeedBytesPerSec = (uploadSpeedMbps * 1024 * 1024) / 8;
+
+  // Estimate upload time in seconds
+  const estimatedUploadTimeSec = fileSizeBytes / uploadSpeedBytesPerSec;
+
+  // Apply safety factor (to allow retries, network fluctuations, etc.)
+  const expiryTimeSec = Math.ceil(estimatedUploadTimeSec * safetyFactor);
+
+  return expiryTimeSec;
+}

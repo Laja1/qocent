@@ -46,6 +46,7 @@ export interface SiteData {
   siteCode: string;
   siteCreatedAt: string;
   siteCurrency: string;
+  siteKey:string;
   siteDescription: string;
   siteEOLAction: "Suspend" | string; 
   siteExpiryDate: string;

@@ -3,6 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import type { HouseItem } from "@/models/response/houseResponse";
 import {
   formatDate,
+  formatFileSize,
   getResourceTypeClassName,
   getStatusClassName,
 } from "../helper";
@@ -438,42 +439,20 @@ export const resourcesColumns: ColumnDef<resourceType>[] = [
 ];
 
 export type obsType = {
-  id: number;
-  code: string;
-  name: string | null;
-  type: string;
-  status: string;
-
-  createdAt: string; // e.g. "07/24/2025 10:12:45 AM"
+  Key: string | null;
+  Size: number;
+  Url: string;
 };
 
 export const obsColumns: ColumnDef<obsType>[] = [
   {
-    id: "Id",
-    header: "ID",
-    accessorKey: "id",
-    cell: (row) => (
-      <span className="text-amber-800 line-clamp-1">{row.id}</span>
-    ),
+    id: "Key",
+    header: " Key",
+    accessorKey: "Key",
+    cell: (row) => <span className="line-clamp-1">{row.Key}</span>,
     sortable: true,
   },
-  {
-    id: "name",
-    header: " NAME",
-    accessorKey: "name",
-    cell: (row) => <span className="line-clamp-1">{row.name}</span>,
-    sortable: true,
-  },
-  {
-    id: "Code",
-    header: "CODE",
-    accessorKey: "code",
-    cell: (row) => (
-      <span className="text-amber-800 line-clamp-1">{row.code}</span>
-    ),
-    sortable: true,
-    filterType: "select",
-  },
+
   // {
   //   id: "SiteCode",
   //   header: "SITE CODE",
@@ -484,27 +463,31 @@ export const obsColumns: ColumnDef<obsType>[] = [
   // },
 
   {
-    id: "Status",
-    header: "Status",
-    accessorKey: "status",
+    id: "Size",
+    header: "Size",
+    accessorKey: "Size",
     sortable: true,
     cell: (row) => (
       <div className="">
         <Badge
           variant="outline"
-          // className={`text-[10px] ${getStatusClassName(row.resourceStatus)}`}
+          className={`text-[10px] border-green-600 text-green-600`}
         >
-          {row.status}
+          {formatFileSize(row.Size)}
         </Badge>
       </div>
     ),
   },
+
   {
-    id: "CreatedAt",
-    header: "DATE CREATED",
-    headerClassName: "text-right",
-    accessorKey: "createdAt",
+    id: "Url",
+    header: "Url",
+    accessorKey: "Url",
     sortable: true,
-    cell: (row) => <span className="text-right block">{row?.createdAt}</span>,
+    cell: (row) => (
+      <a href={row.Url} target="_blank" rel="noopener noreferrer">
+        <div className="underline hover:text-red-600">{row.Url}</div>
+      </a>
+    ),
   },
 ];

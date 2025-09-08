@@ -1,16 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Header } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
-import { Edit, Eye, Trash2, PlusIcon, Upload } from "lucide-react";
+import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-// import { SecurityTable } from "../server-sites/security-table";
-// import { CostTable } from "../server-sites/cost";
-// import { ResourceDetails } from "./resource-details";
 import { ResourceModal } from "../create-new-resource/resource-modal";
 import type { resourceType } from "@/models/response/resourceResponse";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
-
 import {
   useDeleteResourceMutation,
   useGetAllResourcesQuery,
@@ -20,23 +17,20 @@ import { RouteConstant } from "@/router/routes";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { resourcesColumns } from "@/utilities/constants/colums";
+import { Obs } from "../obs";
 
 export const Resources = () => {
   const [rowId, setRowId] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const account = useSelector((state: RootState) => state.account);
-  const [resourceType, setResourceType] = useState("");
+  const [selectedType, setSelectedType] = useState("");
   const [deleteResources, { isLoading: isDeleting }] =
     useDeleteResourceMutation();
 
   const { data: resourceData, isLoading } = useGetAllResourcesQuery(
-    {
-      accountCode: account?.accountCode,
-    },
-    {
-      skip: !account?.accountCode,
-    }
+    { accountCode: account?.accountCode },
+    { skip: !account?.accountCode }
   );
 
   const actions = [
@@ -44,8 +38,7 @@ export const Resources = () => {
       label: "View",
       icon: Eye,
       onClick: (row: resourceType) => {
-        console.log("View server resource:", row.resourceId);
-        // TODO: Implement view functionality
+        console.log("View resource:", row.resourceId);
       },
     },
     {
@@ -55,19 +48,17 @@ export const Resources = () => {
         navigate(RouteConstant.dashboard.updateResources.path, { state: row });
       },
     },
-    ...(resourceType.toLocaleLowerCase() === "cloud storage"
-      ? [
-          {
-            label: "Upload file",
-            icon: Upload,
-            onClick: (row: resourceType) => {
-              navigate(RouteConstant.dashboard.obs.path, {
-                state: row,
-              });
-            },
-          },
-        ]
-      : []),
+    // ...(selectedType.toLowerCase() === "cloud storage"
+    //   ? [
+    //       {
+    //         label: "Upload file",
+    //         icon: Upload,
+    //         onClick: (row: resourceType) => {
+    //           navigate(RouteConstant.dashboard.obs.path, { state: row });
+    //         },
+    //       },
+    //     ]
+    //   : []),
     {
       label: "Delete",
       icon: Trash2,
@@ -79,7 +70,6 @@ export const Resources = () => {
           showCustomToast(res.responseMessage, {
             toastOptions: { type: "success", autoClose: 5000 },
           });
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
           const message = ErrorHandler.extractMessage(error);
           showCustomToast(message, {
@@ -90,50 +80,16 @@ export const Resources = () => {
       variant: "destructive" as const,
     },
   ];
-  const handleOpenDeployModal = () => {
-    setIsOpen(true);
-  };
 
   const handleRowClick = (row: resourceType) => {
     setRowId(row.resourceId);
-    setResourceType(row.resourceType);
+    setSelectedType(row.resourceType);
   };
 
-  // Check if tabs should be shown (when a resource is selected)
-  // const tabShow = !!rowId;
-
-  // const tabData = [
-  //   {
-  //     id: 1,
-  //     text: "Resource Details",
-  //     component: (
-  //       <div className="flex">
-  //         <div className="w-1/4 mr-5 flex">
-  //           <ResourceDetails
-  //             resourceData={resourceData}
-  //             selectedResourceId={rowId}
-  //           />
-  //         </div>
-  //         {/* <div className="w-3/4">
-  //           <Resource />
-  //         </div> */}
-  //       </div>
-  //     ),
-  //   },
-  //   {
-  //     id: 2,
-  //     text: "Security",
-  //     component: <SecurityTable />,
-  //   },
-  //   {
-  //     id: 3,
-  //     text: "Usage & Cost",
-  //     component: <CostTable />,
-  //   },
-  // ];
+  const obsData = resourceData?.data.find((item) => item.resourceId === rowId);
 
   return (
-    <div className=" h-full">
+    <div className="h-full">
       <Header
         title="Server Resources"
         description="Manage your server resource"
@@ -143,7 +99,7 @@ export const Resources = () => {
           label="Create New Resource"
           prefixIcon={<PlusIcon className="size-4" />}
           size="small"
-          onClick={handleOpenDeployModal}
+          onClick={() => setIsOpen(true)}
         />
       </Header>
 
@@ -151,9 +107,9 @@ export const Resources = () => {
         <DataTable
           data={resourceData?.data || []}
           columns={resourcesColumns}
-          searchPlaceholder="Search server resources by name, code, or ID..."
+          searchPlaceholder="Search server resources..."
           pageSize={5}
-          title={"RESOURCES"}
+          title="RESOURCES"
           actions={actions}
           highlightedRowId={rowId}
           isLoading={isLoading || isDeleting}
@@ -163,11 +119,6 @@ export const Resources = () => {
         />
       </Card>
 
-      {/* {tabShow && (
-        <div className="mx-5 mt-5">
-          <Tabs tabs={tabData} />
-        </div>
-      )} */}
       <ResourceModal
         isOpen={isOpen}
         closeModal={() => setIsOpen(false)}
@@ -177,9 +128,13 @@ export const Resources = () => {
           setIsOpen(false);
         }}
         onClose={() => setIsOpen(false)}
-        id="" // optional, or pass based on your logic
-        siteCodeId={undefined} // optional, or pass relevant id
+        id=""
+        siteCodeId={undefined}
       />
+
+      {selectedType.toLowerCase() === "cloud storage" && obsData && (
+        <Obs resourceData={obsData} />
+      )}
     </div>
   );
 };

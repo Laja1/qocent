@@ -8,19 +8,13 @@ export const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     const state = getState() as RootState;
     const token = state.auth.token;
-    const dashboard = state.dashboard;
+
 
     if (token) {
       headers.set("Authorization", `Bearer ${token}`);
     }
 
-    headers.set(
-      "X-Key",
-      dashboard.provider === "huawei"
-        ? import.meta.env.VITE_HUAWEI_X_KEY
-        : import.meta.env.VITE_AWS_X_KEY
-    );
-
+   
     return headers;
   },
 });
