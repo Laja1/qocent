@@ -6,10 +6,10 @@
 
 @custom-variant dark (&:is(.dark *));
 
-@theme{
-    --font-aeonikpro: AeonikPro, 'san-seriff';
-    --font-brfirma: Br firma,'san-seriff';
-    --font-brfirma-bold: Br FirmaBold, 'san-seriff';
+  @theme{
+      --font-aeonikpro: AeonikPro, 'san-seriff';
+      --font-brfirma: Br firma,'san-seriff';
+      --font-brfirma-bold: Br FirmaBold, 'san-seriff';
     --font-strawford: Strawford,'san-seriff';
     --color-background: #edf2ef;
     --color-sidebar: #F7F5F1;

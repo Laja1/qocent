@@ -106,6 +106,7 @@ export type DataTableProps<T> = {
   isLoading?: boolean;
   skeletonRows?: number;
   exportOptions?: ExportOptions;
+  emptyComponent?: React.ReactNode; // New prop for custom empty state
 };
 
 // Skeleton component
@@ -184,6 +185,7 @@ export function DataTable<T>({
   isLoading = false,
   skeletonRows = 10,
   exportOptions = {},
+  emptyComponent, // New prop
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -452,6 +454,24 @@ export function DataTable<T>({
     ));
   };
 
+  // Render empty state
+  const renderEmptyState = () => {
+    if (emptyComponent) {
+      return emptyComponent;
+    }
+    
+    return (
+      <TableRow>
+        <TableCell
+          colSpan={enhancedColumns.length}
+          className="h-16 text-center"
+        >
+          No results found.
+        </TableCell>
+      </TableRow>
+    );
+  };
+
   return (
     <div className="bg-white dark:bg-black font-brfirma">
       <div className="mb-2">
@@ -664,14 +684,7 @@ export function DataTable<T>({
               {isLoading ? (
                 renderSkeletonRows()
               ) : processedData.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={enhancedColumns.length}
-                    className="h-16 text-center"
-                  >
-                    No results found.
-                  </TableCell>
-                </TableRow>
+                renderEmptyState()
               ) : (
                 paginatedData.map((row, rowIndex) => {
                   const actualIndex = startIndex + rowIndex;

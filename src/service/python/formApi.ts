@@ -10,13 +10,22 @@ export const formApi = createApi({
     reducerPath: 'formApi',
     tagTypes:[ApiEnums.Bucket],
     endpoints: (build) => ({
-        getApiOptions: build.mutation<{label:string,value:string}[], {category: string,resource:string,action:string,body:string,xKey?: string}>({
-            query: ({ category, resource, action, body, xKey }) => ({
-              url: "/info",
-              method: "POST",
-              body: { category, resource, action, body },
-            headers: xKey ? { "X-Key": import.meta.env.VITE_AWS_X_KEY } : {},
-          }), }),
+      getApiOptions: build.mutation<
+      { label: string; value: string }[],
+      { category: string; resource: string; action: string; body: string; xKey?: string }
+    >({
+      query: ({ category, resource, action, body, xKey }) => ({
+        url: "/info",
+        method: "POST",
+        body: { category, resource, action, body },
+
+       headers: {
+      "Content-Type": "application/json", // safe to include
+      ...(xKey ? { "X-Key": xKey } : {}),
+    },
+      }),
+    }),
+    
 
       getS3ListContent: build.mutation<
           fileResponse,

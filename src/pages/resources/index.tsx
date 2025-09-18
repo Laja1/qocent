@@ -17,19 +17,21 @@ import { RouteConstant } from "@/router/routes";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { resourcesColumns } from "@/utilities/constants/colums";
-import { Obs } from "../obs";
+import { CloudStorage } from "../cloud-storage";
+import { ContainerRegistry } from "../ecr";
 
 export const Resources = () => {
   const [rowId, setRowId] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
   const account = useSelector((state: RootState) => state.account);
+  const dashboard = useSelector((state: RootState) => state.dashboard);
   const [selectedType, setSelectedType] = useState("");
   const [deleteResources, { isLoading: isDeleting }] =
     useDeleteResourceMutation();
 
   const { data: resourceData, isLoading } = useGetAllResourcesQuery(
-    { accountCode: account?.accountCode },
+    { accountCode: account?.accountCode, provider: dashboard.provider },
     { skip: !account?.accountCode }
   );
 
@@ -86,7 +88,9 @@ export const Resources = () => {
     setSelectedType(row.resourceType);
   };
 
-  const obsData = resourceData?.data.find((item) => item.resourceId === rowId);
+  const selectedData = resourceData?.data.find(
+    (item) => item.resourceId === rowId
+  );
 
   return (
     <div className="h-full">
@@ -132,8 +136,13 @@ export const Resources = () => {
         siteCodeId={undefined}
       />
 
-      {selectedType.toLowerCase() === "cloud storage" && obsData && (
-        <Obs resourceData={obsData} />
+      {selectedType.toLowerCase() === "cloud storage" &&
+        selectedData &&
+        selectedData.resourceStatus === "ACTIVE" && (
+          <CloudStorage resourceData={selectedData} />
+        )}
+      {selectedType.toLowerCase() === "containerregistry" && selectedData && (
+        <ContainerRegistry resourceData={selectedData} />
       )}
     </div>
   );

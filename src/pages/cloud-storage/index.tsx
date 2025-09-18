@@ -20,7 +20,7 @@ import { Download, Trash2 } from "lucide-react";
 import { showCustomToast } from "@/components/shared/toast";
 // import { calculatePresignedUrlExpiry } from "@/utilities/helper";
 
-export const Obs = ({ resourceData }: { resourceData: resourceType }) => {
+export const CloudStorage = ({ resourceData }: { resourceData: resourceType }) => {
   console.log(resourceData?.resourceCode, "resourceData");
   const uploaderRef = useRef<FileUploaderHandle>(null);
   const [rowId, setRowId] = useState<string>("");

@@ -32,22 +32,22 @@ export const logOut = () => {
   window.location.href = '/';
 };
 
-export const getStatusClassName = (status: string) => {
-  switch (status.toUpperCase()) {
-    case "ACTIVE":
-      return "bg-green-50 text-green-800 border-green-500 text-[10px]";
-    case "PENDING":
-      return "bg-amber-50 text-amber-800 border-amber-500 text-[10px]";
-    case "DEPLOYED":
-      return "bg-purple-50 text-purple-800 border-purple-500 text-[10px]";
-    case "SUSPENDED":
-      return "bg-orange-50 text-orange-800 border-orange-500 text-[10px]";
-    case "DELETED":
-      return "bg-red-50 text-red-800 border-red-500 text-[10px]";
-    default:
-      return "bg-gray-50 text-gray-800 border-gray-300 text-[10px]";
-  }
-};
+  export const getStatusClassName = (status: string) => {
+    switch (status.toUpperCase()) {
+      case "ACTIVE":
+        return "bg-green-50 text-green-800 border-green-500 text-[10px]";
+      case "PENDING":
+        return "bg-amber-50 text-amber-800 border-amber-500 text-[10px]";
+      case "DEPLOYED":
+        return "bg-purple-50 text-purple-800 border-purple-500 text-[10px]";
+      case "SUSPENDED":
+        return "bg-orange-50 text-orange-800 border-orange-500 text-[10px]";
+      case "DELETED":
+        return "bg-red-50 text-red-800 border-red-500 text-[10px]";
+      default:
+        return "bg-gray-50 text-gray-800 border-gray-300 text-[10px]";
+    }
+  };
 
 export const getResourceTypeClassName = (type: string) => {
   switch (type.toUpperCase()) {
@@ -65,7 +65,8 @@ export const getResourceTypeClassName = (type: string) => {
         return "border-green-200 bg-green-50 text-green-700";
         case "CLOUD STORAGE":
         return "border-pink-200 bg-pink-50 text-pink-700";
-        case "OBS":
+        case "CONTAINERREGISTRY":
+          return "border-amber-200 bg-amber-50 text-amber-700";
     default:
       return "border-gray-200 bg-gray-50 text-gray-700";
   }

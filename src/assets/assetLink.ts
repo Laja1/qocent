@@ -37,6 +37,8 @@ export const awsIconLinks = {
     dynamodb:'icons/aws/dynamodb.png',
     server :'/icons/aws/server.png',
     nat :'/icons/huawei/nat.png',
+    ecr:'/icons/aws/ecr.svg',
+    cm:'/icons/aws/certificate-manager.svg',
     ebs :'/icons/aws/ebs.png',
     efs :'/icons/aws/efs.png',
     asg :'/icons/aws/asg.png',

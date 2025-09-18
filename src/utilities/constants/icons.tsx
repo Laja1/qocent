@@ -94,6 +94,36 @@ export const useResourceMap = () => {
       // color: "text-purple-600",
       // bgColor: "bg-purple-100",
     },
+    ContainerRegistry: {
+      icon: (
+        <img
+          src={
+            dashboard?.provider.toLowerCase() === "huawei"
+              ? huaweiIconLinks.sfs
+              : awsIconLinks.ecr
+          }
+          alt="router"
+          className="size-7"
+        />
+      ),
+      // color: "text-purple-600",
+      // bgColor: "bg-purple-100",
+    },
+    CertificateManager: {
+      icon: (
+        <img
+          src={
+            dashboard?.provider.toLowerCase() === "huawei"
+              ?awsIconLinks.cm 
+              : awsIconLinks.cm 
+          }
+          alt="router"
+          className="size-7"
+        />
+      ),
+      // color: "text-purple-600",
+      // bgColor: "bg-purple-100",
+    },
     ASG: {
       icon: (
         <img

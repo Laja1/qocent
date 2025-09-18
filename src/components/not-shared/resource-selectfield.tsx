@@ -5,6 +5,7 @@ import { SelectField } from "../shared";
 import { useGetFormOptionsMutation } from "@/service/kotlin/serviceApi";
 import { IconRefresh } from "@tabler/icons-react";
 import { useGetApiOptionsMutation } from "@/service/python/formApi";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
 
 type ResourceSelectFieldProps = {
   name: string;
@@ -28,12 +29,16 @@ export const ResourceSelectField = ({
   const [getApiOptions, { isLoading: isApiLoading }] =
     useGetApiOptionsMutation();
 
-  const [options, setOptions] = useState<{ label: string; value: string }[]>([]);
+  const [options, setOptions] = useState<{ label: string; value: string }[]>(
+    []
+  );
+  
   const [fetchError, setFetchError] = useState<string | null>(null);
-  
+
   // Check if options are prefilled (passed via props)
-  const hasPrefillOptions = option && Array.isArray(option) && option.length > 0;
-  
+  const hasPrefillOptions =
+    option && Array.isArray(option) && option.length > 0;
+
   // Initialize options with prefilled data
   useEffect(() => {
     if (hasPrefillOptions) {
@@ -280,8 +285,11 @@ export const ResourceSelectField = ({
           setOptions(hasPrefillOptions ? option : []);
           return;
         }
-
-        const res = await getApiOptions(apiLookupData);
+        const payload = {
+          ...apiLookupData,
+          xKey: import.meta.env.VITE_AWS_X_KEY,
+        };
+        const res = await getApiOptions(payload);
 
         if (res?.data && Array.isArray(res.data)) {
           const processedOptions = processOptions(res.data);
@@ -318,6 +326,8 @@ export const ResourceSelectField = ({
         }
       }
     } catch (error) {
+      const message = ErrorHandler.extractMessage(error);
+      console.log(message);
       console.error("Error fetching options:", error);
       setFetchError("Failed to load options. Please try again.");
       setOptions(hasPrefillOptions ? option : []);
@@ -360,7 +370,7 @@ export const ResourceSelectField = ({
 
   const dependencies = checkDependencies(parameterLookup, formik.values);
   const isDisabled = options.length === 0 || isLoading || !dependencies.ready;
-  
+
   // Show fetch button only when parameterLookup is provided
   const shouldShowFetchButton = shouldShowFetch;
 
@@ -380,7 +390,6 @@ export const ResourceSelectField = ({
         {fetchError && (
           <p className="text-red-500 text-xs mt-1">{fetchError}</p>
         )}
-        
       </div>
 
       {shouldShowFetchButton && (
@@ -434,4 +443,4 @@ export const ResourceSelectField = ({
       )}
     </div>
   );
-};  
+};

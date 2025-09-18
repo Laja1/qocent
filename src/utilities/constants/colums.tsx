@@ -438,6 +438,69 @@ export const resourcesColumns: ColumnDef<resourceType>[] = [
   },
 ];
 
+export type containerRegistryType = {
+  imageType: string;
+  pushedAt: string;
+  imageUrl: string;
+  size: number;
+  pull: string;
+};
+
+export const containerRegistryColumn: ColumnDef<containerRegistryType>[] = [
+  {
+    id: "imageType",
+    header: " Image Type",
+    accessorKey: "imageType",
+    cell: (row) => <span className="line-clamp-1">{row.imageType}</span>,
+    sortable: true,
+  },
+
+  // {
+  //   id: "SiteCode",
+  //   header: "SITE CODE",
+  //   accessorKey: "SiteCode",
+  //   cell: (row) => <span className="line-clamp-1">{row.SiteCode}</span>,
+  //   sortable: true,
+  //   filterType: "select",
+  // },
+
+  {
+    id: "pushedAt",
+    header: "Pushed At",
+    accessorKey: "pushedAt",
+    sortable: true,
+    cell: (row) => (
+      <div className="">
+        <Badge
+          variant="outline"
+          className={`text-[10px] border-green-600 text-green-600`}
+        >
+          {row.pushedAt}
+        </Badge>
+      </div>
+    ),
+  },
+
+  {
+    id: "imageUrl",
+    header: "Image Url",
+    accessorKey: "imageUrl",
+    sortable: true,
+    cell: (row) => (
+      <a href={row.imageUrl} target="_blank" rel="noopener noreferrer">
+        <div className="underline hover:text-red-600">{row.imageUrl}</div>
+      </a>
+    ),
+  },
+  {
+    id: "pull",
+    header: "Pull",
+    accessorKey: "pull",
+    cell: (row) => <span className="line-clamp-1">{row.pull}</span>,
+    sortable: true,
+  },
+];
+
 export type obsType = {
   Key: string | null;
   Size: number;

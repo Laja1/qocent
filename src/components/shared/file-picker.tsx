@@ -5,7 +5,7 @@ import {
   forwardRef,
   useImperativeHandle,
 } from "react";
-import { Upload, File, X } from "lucide-react";
+import { File, X, CloudUpload } from "lucide-react";
 
 interface FileUploaderProps {
   onFileSelect: (file: File) => void;
@@ -51,9 +51,13 @@ export const FileUploader = forwardRef<FileUploaderHandle, FileUploaderProps>(
     }, [onFileRemove]);
 
     // Expose clearFile method to parent
-    useImperativeHandle(ref, () => ({
-      clearFile,
-    }), [clearFile]);
+    useImperativeHandle(
+      ref,
+      () => ({
+        clearFile,
+      }),
+      [clearFile]
+    );
 
     const validateFile = (file: File): string | null => {
       if (maxFileSize !== Infinity && file.size > maxFileSize) {
@@ -143,12 +147,12 @@ export const FileUploader = forwardRef<FileUploaderHandle, FileUploaderProps>(
 
         <div
           className={`
-            border border-dashed rounded-xs lg:rounded-xs p-5 lg:p-5 
+            border border-dashed rounded-sm p-5 lg:p-5 
             transition-all duration-200 cursor-pointer
             ${
               isDragActive
                 ? "border-red-500 bg-red-50"
-                : "border-gray-500 hover:border-orange-500"
+                : "border-gray-500 hover:border-red-300"
             }
             ${error ? "border-red-500 bg-red-50" : ""}
           `}
@@ -174,7 +178,9 @@ export const FileUploader = forwardRef<FileUploaderHandle, FileUploaderProps>(
 
           {!selectedFile ? (
             <div className="flex flex-col items-center justify-center gap-2 w-full">
-              <Upload className="w-6 h-6 text-gray-400" />
+              <div className="p-3 bg-muted rounded-full">
+                <CloudUpload className="w-4 h-4 text-muted-foreground" />
+              </div>
               <div className="text-center lg:max-w-xs">
                 <p className="text-red-500 text-xs">
                   Click to upload{" "}

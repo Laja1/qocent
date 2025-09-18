@@ -23,8 +23,8 @@ getConfig: build.query<ConfigResponse, { serviceId: string, configProvider: stri
 getResourceTemplate: build.query<ParameterResponse, { resource: string, provider: string }>({
     query: ({ resource, provider }) => `/resource/template/${provider}/${resource}`,
     }),
-    getAllResources: build.query<resourceResponse, { accountCode: string }>({
-      query: ({ accountCode }) => `/resource/read-all-resources/${accountCode}`,
+    getAllResources: build.query<resourceResponse, { accountCode: string,provider:string }>({
+      query: ({ accountCode,provider }) => `/resource/read-all-resources/${accountCode}/${provider}`,
       providesTags: (result) =>
         createResourceProviderTags(
           result,
