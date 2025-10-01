@@ -114,8 +114,8 @@ export const useResourceMap = () => {
         <img
           src={
             dashboard?.provider.toLowerCase() === "huawei"
-              ?awsIconLinks.cm 
-              : awsIconLinks.cm 
+              ? awsIconLinks.cm
+              : awsIconLinks.cm
           }
           alt="router"
           className="size-7"
@@ -123,6 +123,19 @@ export const useResourceMap = () => {
       ),
       // color: "text-purple-600",
       // bgColor: "bg-purple-100",
+    },
+    CloudWatch: {
+      icon: (
+        <img
+          src={
+            dashboard?.provider.toLowerCase() === "huawei"
+              ? awsIconLinks.cloudWatch
+              : awsIconLinks.cloudWatch
+          }
+          alt="router"
+          className="size-7"
+        />
+      ),
     },
     ASG: {
       icon: (

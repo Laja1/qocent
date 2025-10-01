@@ -116,6 +116,14 @@ export const RouteConstant = {
       path: "/accept-invitation/:inviteCode/:email",
       name: "Accept Invite",
     },
+    monitoring: {
+      path: "/monitoring",
+      name: "Monitoring",
+    },
+    starterPacks: {
+      path: "/starter-packs",
+      name: "Starter Packs",
+    },
     serverSite: {
       path: "/server-sites",
       name: "ServerSite",
@@ -123,6 +131,10 @@ export const RouteConstant = {
     serverHouses: {
       path: "/server-houses",
       name: "ServerHouses",
+    },
+    certificateManager: {
+      path: "/security/certificate-manager",
+      name: "CertificateManager",
     },
     serverRooms: {
       path: "/server-rooms",
@@ -163,6 +175,10 @@ export const RouteConstant = {
     createnewsite: {
       path: "/create-new-site",
       name: "Create New Site",
+    },
+    security: {
+      path: "/security",
+      name: "Cloud Certificate Manager",
     },
     createnewhouse: {
       path: "/create-new-house",

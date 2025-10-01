@@ -57,3 +57,12 @@ export type createResourceRequest = {
     resourceConfig: Record<any, any>
 };
 
+
+
+export type createStaterPackRequest = {
+    accountCode: string;
+    serverPassword: string;
+    siteCode: string;
+    siteProvider: string;
+    tier: number;
+};

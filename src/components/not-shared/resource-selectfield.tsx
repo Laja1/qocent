@@ -32,7 +32,7 @@ export const ResourceSelectField = ({
   const [options, setOptions] = useState<{ label: string; value: string }[]>(
     []
   );
-  
+
   const [fetchError, setFetchError] = useState<string | null>(null);
 
   // Check if options are prefilled (passed via props)
@@ -285,10 +285,12 @@ export const ResourceSelectField = ({
           setOptions(hasPrefillOptions ? option : []);
           return;
         }
+        const siteKey = formik.values.siteKey;
         const payload = {
           ...apiLookupData,
-          xKey: import.meta.env.VITE_AWS_X_KEY,
+          xKey: siteKey ?? import.meta.env.VITE_AWS_X_KEY,
         };
+        console.log(payload);
         const res = await getApiOptions(payload);
 
         if (res?.data && Array.isArray(res.data)) {

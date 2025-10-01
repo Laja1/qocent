@@ -1,22 +1,12 @@
 import { imgLinks } from "@/assets/assetLink";
-import {
-  BrainCog,
-  Command,
-  LogOut,
-  Moon,
-  // PlusCircleIcon,
-  PlusSquare,
-  Sun,
-} from "lucide-react";
+import { BrainCircuit, BrainCog, LogOut, Moon, Sun } from "lucide-react";
 import { RouteConstant } from "@/router/routes";
 import { authStore } from "@/store/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { dashboardStore } from "@/store/dashboardSlice";
 import { CollapsibleItem, SubItem } from "@/components/shared/collapsible";
-import NiceModal from "@ebay/nice-modal-react";
 import type { RootState } from "@/store";
-import { ModalConstant } from "@/components/shared/modal/register";
 import { useGetUserAccountsQuery } from "@/service/kotlin/authApi";
 import { accountStore } from "@/store/accountSlice";
 import { useDarkMode } from "@/hooks/useDarkMode";
@@ -95,6 +85,48 @@ export const ConsoleLeft = () => {
     // },
   ];
 
+  const externalWorkspaces = [
+    {
+      provider: "aws" as const,
+      name: "AWS Cloud",
+      icon: imgLinks.awsdark,
+      alt: "AWS",
+      loading: false,
+      sites: [
+        {
+          name: "Rubies-aws-001",
+          siteCode: "rubies-aws-001",
+        },
+      ],
+    },
+    {
+      provider: "huawei" as const,
+      name: "Huawei Cloud",
+      icon: imgLinks.huawei,
+      alt: "Huawei",
+      loading: false,
+      sites: [
+        {
+          name: "Rubies-aws-001",
+          siteCode: "rubies-aws-001",
+        },
+      ],
+    },
+    // {
+    //   provider: "gcp" as const,
+    //   name: "Google Cloud",
+    //   icon: imgLinks.gcp,
+    //   alt: "Google Cloud",
+    //   loading: false,
+    // },
+    // {
+    //   provider: "azure" as const,
+    //   name: "Azure Cloud",
+    //   icon: imgLinks.azure,
+    //   alt: "Azure Cloud",
+    //   loading: false,
+    // },
+  ];
   return (
     <div className="h-full flex flex-col justify-between bg-white dark:bg-black">
       {/* Top Menu */}
@@ -141,39 +173,6 @@ export const ConsoleLeft = () => {
                       icon={BrainCog}
                       defaultOpen={index === 0} // Open first workspace by default
                     >
-                      {/* Owner Actions */}
-                      {workspace.owner === "YES" && (
-                        <div className="bg-gray-50 border-b  border-gray-200">
-                          <div
-                            onClick={() =>
-                              NiceModal.show("InviteToWorkspace", workspace)
-                            }
-                            className="text-gray-600 px-4 py-2 text-xs flex items-center gap-2 cursor-pointer  hover:bg-gray-100   transition-colors"
-                          >
-                            <PlusSquare className="size-4" />
-                            <span className="hidden sm:inline">
-                              Invite to workspace
-                            </span>
-                            <span className="sm:hidden">Invite</span>
-                          </div>
-                          <div
-                            onClick={() =>
-                              NiceModal.show(
-                                ModalConstant.AccessDrawer,
-                                workspace?.accountCode
-                              )
-                            }
-                            className="text-gray-600 px-4 py-2 text-xs flex items-center gap-2 cursor-pointer hover:bg-gray-100 transition-colors border-t border-gray-100"
-                          >
-                            <Command className="size-4" />
-                            <span className="hidden sm:inline">
-                              Access management
-                            </span>
-                            <span className="sm:hidden">Access</span>
-                          </div>
-                        </div>
-                      )}
-
                       {/* Cloud Providers */}
                       <div className="divide-y divide-gray-100 dark:divide-gray-800">
                         {workspaces.map((item) => (
@@ -221,21 +220,44 @@ export const ConsoleLeft = () => {
         </div>
 
         {/* Add Workspace Button */}
-        {/* <div className="mt-6 pt-4 border-t border-gray-200">
-          <button
-            onClick={() => NiceModal.show("WorkspaceModal")}
-            type="button"
-            className="group border-2 border-dashed border-gray-300 hover:border-gray-400 
-                       px-4 py-3 rounded-md flex gap-3 items-center hover:bg-gray-50 
-                       active:bg-gray-100 transition-all duration-200 w-full text-left"
-          >
-            <PlusCircleIcon className="text-gray-500 group-hover:text-gray-700 size-4 flex-shrink-0" />
-            <p className="text-xs text-gray-600 group-hover:text-gray-800">
-              <span className="hidden sm:inline">Add New Workspace</span>
-              <span className="sm:hidden">Add Workspace</span>
-            </p>
-          </button>
-        </div> */}
+
+        <div className="mt-6 pt-4 border-t border-gray-200">
+          <div className="border-dashed border border-gray-200  dark:border-gray-800 rounded-md overflow-hidden ">
+            <CollapsibleItem
+              title="External Workspace"
+              icon={BrainCog}
+              defaultOpen={false} // no undefined "index"
+            >
+              <div className="divide-y divide-gray-100 dark:divide-gray-800">
+                {externalWorkspaces.map((item, index) => (
+                  <div key={item.provider} className="relative">
+                    <CollapsibleItem
+                      title={item.name}
+                      icon={BrainCircuit}
+                      defaultOpen={index === 0}
+                    >
+                      {item.sites.map((site) => (
+                        <SubItem
+                          key={site.siteCode}
+                          title={site.name}
+                          image={item.icon}
+                          onClick={() => {
+                            if (item.loading) return;
+                            handleClick(item.provider);
+                          }}
+                        />
+                      ))}
+                    </CollapsibleItem>
+                    {item.loading && (
+                      <div className="absolute inset-0 bg-white bg-opacity-50 cursor-not-allowed" />
+                    )}
+                  </div>
+                ))}
+              </div>
+            </CollapsibleItem>
+          </div>
+        </div>
+        <div></div>
       </div>
 
       {/* Desktop Logout - hidden on mobile */}
@@ -260,7 +282,7 @@ export const ConsoleLeft = () => {
           onClick={toggle}
           className=" p-2 bg-gray-200 cursor-pointer dark:bg-gray-900 rounded-full"
         >
-          {isDark ?  <Sun size={16} />:<Moon size={16} />}
+          {isDark ? <Sun size={16} /> : <Moon size={16} />}
         </button>
       </div>
     </div>

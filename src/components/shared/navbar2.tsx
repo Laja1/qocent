@@ -44,7 +44,7 @@ const DesktopNavigation: React.FC = () => {
               onMouseEnter={() => setHovered(idx)}
               onMouseLeave={() => setHovered(null)}
               onClick={onItemClick}
-              className="relative text-xs hover:px-2 py-2 text-white hover:text-gray-800 dark:hover:text-gray-300 transition-colors"
+              className="relative text-xs hover:px-2 py-2 dark:text-white text-black hover:text-gray-800 dark:hover:text-gray-300 transition-colors"
             >
               {hovered === idx && (
                 <motion.div

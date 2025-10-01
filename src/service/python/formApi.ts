@@ -10,20 +10,35 @@ export const formApi = createApi({
     reducerPath: 'formApi',
     tagTypes:[ApiEnums.Bucket],
     endpoints: (build) => ({
+     
       getApiOptions: build.mutation<
       { label: string; value: string }[],
-      { category: string; resource: string; action: string; body: string; xKey?: string }
+      { category: string; resource: string; action: string; body: Record<string, any> | string; xKey?: string }
     >({
-      query: ({ category, resource, action, body, xKey }) => ({
-        url: "/info",
-        method: "POST",
-        body: { category, resource, action, body },
-
-       headers: {
-      "Content-Type": "application/json", // safe to include
-      ...(xKey ? { "X-Key": xKey } : {}),
-    },
-      }),
+      query: ({ category, resource, action, body, xKey }) => {
+        
+        const config = {
+          url: "/info",
+          method: "POST",
+          body: { category, resource, action, body },
+          headers: {
+            "Content-Type": "application/json",
+            ...(xKey ? { "X-Key": xKey } : {}),
+          },
+        };
+        
+        return config;
+      },
+      transformResponse: (response: unknown): { label: string; value: string }[] => {
+        
+        if (Array.isArray(response)) {
+          return response as { label: string; value: string }[];
+        }
+        return [];
+      },
+      transformErrorResponse: (response: unknown): unknown => {
+        return response;
+      },
     }),
     
 

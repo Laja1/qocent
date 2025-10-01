@@ -554,3 +554,66 @@ export const obsColumns: ColumnDef<obsType>[] = [
     ),
   },
 ];
+
+export type certificateManagerType = {
+  name: string;
+  domainName: string;
+  domainType: string;
+  certificatinType: string;
+  expiryDate: string;
+  status: string;
+  validityPeriod: string;
+};
+
+export const certificateManagerColumns: ColumnDef<certificateManagerType>[] = [
+  {
+    id: "name",
+    header: "Certificate Name/ID",
+    accessorKey: "name",
+    cell: (row) => <span className="line-clamp-1">{row.name}</span>,
+    sortable: true,
+  },
+  {
+    id: "domainName",
+    header: "Domain Name",
+    accessorKey: "domainName",
+    sortable: true,
+    cell: (row) => <span className="line-clamp-1">{row.domainName}</span>,
+  },
+  {
+    id: "domainType",
+    header: "Domain Type",
+    accessorKey: "domainType",
+    sortable: true,
+    cell: (row) => <span className="line-clamp-1">{row.domainType}</span>,
+  },
+  {
+    id: "certificatinType",
+    header: "Certificatin Type",
+    accessorKey: "certificatinType",
+    sortable: true,
+    cell: (row) => <span className="line-clamp-1">{row.certificatinType}</span>,
+  },
+
+  {
+    id: "status",
+    header: "Status",
+    accessorKey: "status",
+    sortable: true,
+    cell: (row) => <span className="line-clamp-1">{row.status}</span>,
+  },
+  {
+    id: "validityPeriod",
+    header: "Validity Period",
+    accessorKey: "validityPeriod",
+    sortable: true,
+    cell: (row) => <span className="line-clamp-1">{row.validityPeriod}</span>,
+  },
+  {
+    id: "expiryDate",
+    header: "Expiry Date",
+    accessorKey: "expiryDate",
+    sortable: true,
+    cell: (row) => <span className="line-clamp-1">{row.expiryDate}</span>,
+  },
+];

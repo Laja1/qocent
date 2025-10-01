@@ -189,7 +189,6 @@ export const CreateNewResource = () => {
   // console.log(
   //   "Dynamic config with formik values:",
   //   newJsonConfig?.data?.configJson
-  // );
 
   if (isLoading) {
     return (

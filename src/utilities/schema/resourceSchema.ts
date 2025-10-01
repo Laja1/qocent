@@ -154,6 +154,7 @@ case 'CommentBox':
 
 
 
-
-
-  
+export const deploymentModalSchema = object().shape({
+  siteCode: Yup.string().required("Site is required"),
+  serverPassword: deploymentPasswordValidation(),
+});

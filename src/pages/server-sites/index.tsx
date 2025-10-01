@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Header, Tabs } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
-import { Edit, Eye, Trash2, PlusIcon, Plus } from "lucide-react";
+import { Edit, Eye, Trash2, PlusIcon, Plus, Users } from "lucide-react";
 import { useState, useEffect } from "react";
 import { ResourceTable } from "./server-sites-table";
 import { Card } from "@/components/ui/card";
@@ -118,6 +118,14 @@ export const ServerSites = () => {
       onClick: (row: SiteData) => {
         console.log("View server Site:", row.siteId);
         NiceModal.show(ModalConstant.DrawerModal, row);
+      },
+    },
+    {
+      label: "Invite to Site",
+      icon: Users,
+      onClick: (row: SiteData) => {
+        console.log("View server Site:", row.siteId);
+        NiceModal.show(ModalConstant.InviteToWorkspace, row);
       },
     },
     {

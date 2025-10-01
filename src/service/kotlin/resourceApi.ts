@@ -4,7 +4,7 @@ import { ApiEnums } from "@/utilities/enums";
 import type {ConfigResponse, createResourceResponse, resourceResponse, } from "@/models/response/resourceResponse";
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import type { ParameterResponse } from "@/models/response/siteResponse";
-import type { createResourceRequest } from "@/models/request/resourceRequest";
+import type { createResourceRequest, createStaterPackRequest } from "@/models/request/resourceRequest";
 import { createConfigTags, createResourceProviderTags } from "@/utilities/tagHelpers";
 import type { genericResponse } from "@/models/response";
 
@@ -30,6 +30,14 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
           result,
           "resourceId"
         ) as { type: ApiEnums.Resource; id: string | number | undefined }[],
+    }),
+    createStaterPack:build.mutation<{responseCode:string,responseMessage:string,data:Record<any, any>}, createStaterPackRequest>({
+      query: (body) => ({
+        url: "/resource/create-starter-pack",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
     }),
     createResource: build.mutation<createResourceResponse, createResourceRequest>({
       query: (body) => ({
@@ -65,5 +73,6 @@ export const {
   useGetResourceTemplateQuery,
   useCreateResourceMutation,
   useDeleteResourceMutation,
+  useCreateStaterPackMutation,
   useDeleteResourceByCodeMutation
 } = kotlinResourceApi;

@@ -2,11 +2,13 @@ import {
   LogOut,
   Settings,
   Users,
-  Bot,
   LayoutList,
   AlignHorizontalDistributeCenter,
   Wallet,
   Webhook,
+  Search,
+  PackageOpen,
+  Shield,
 } from "lucide-react";
 import {
   Sidebar,
@@ -41,12 +43,12 @@ export interface SidebarItem {
 }
 
 const sidebarItems: SidebarItem[] = [
-  {
-    title: "Build with Qoonity AI",
-    icon: <Bot className="text-black dark:text-gray-800" />,
-    href: "/identity-center",
-    isActive: false,
-  },
+  // {
+  //   title: "Build with Qoonity AI",
+  //   icon: <Bot className="text-black dark:text-gray-800" />,
+  //   href: "/identity-center",
+  //   isActive: false,
+  // },
   {
     title: "Switch workspace",
     icon: <LayoutList className="text-black dark:text-gray-800" />,
@@ -86,9 +88,19 @@ const data = {
           url: RouteConstant.dashboard.serverRooms.path,
         },
         {
-          title: "Resources ",
+          title: "Resources",
           icon: <Webhook className="text-gray-800 size-5" />,
           url: RouteConstant.dashboard.resources.path,
+        },
+        {
+          title: "Monitoring",
+          icon: <Search className="text-gray-800 size-5" />,
+          url: RouteConstant.dashboard.monitoring.path,
+        },
+        {
+          title: "Security",
+          icon: <Shield className="text-gray-800 size-5" />,
+          url: RouteConstant.dashboard.security.path,
         },
       ],
     },
@@ -103,6 +115,13 @@ const data = {
 
       isActive: false,
       items: [
+        {
+          title: "Starter Packs",
+          icon: (
+            <PackageOpen className="size-4 text-gray-800 dark:text-gray-200" />
+          ),
+          url: RouteConstant.dashboard.starterPacks.path,
+        },
         {
           title: "Billing & Statements",
           icon: <Wallet className="size-4 text-gray-800 dark:text-gray-200" />,

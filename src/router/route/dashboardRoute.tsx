@@ -15,12 +15,22 @@ import { Billings } from "@/pages/billings";
 import { Console } from "@/pages/console";
 import AcceptInvite from "@/pages/accept-invite";
 import { UpdateResources } from "@/pages/update-resource";
+import { Monitoring } from "@/pages/monitoring";
+import StarterPacksGrid from "@/pages/starter-packs";
+import { Security } from "@/pages/security";
+import { CertificateManager } from "@/pages/security/certificate-manager";
 
 export const dashboardRoute: RouteType[] = [
   {
     path: RouteConstant.dashboard.serverSite.path,
     name: RouteConstant.dashboard.serverSite.name,
     component: <ServerSites />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.certificateManager.path,
+    name: RouteConstant.dashboard.certificateManager.name,
+    component: <CertificateManager />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
   {
@@ -40,6 +50,12 @@ export const dashboardRoute: RouteType[] = [
     path: RouteConstant.dashboard.createResources.path,
     name: RouteConstant.dashboard.createResources.name,
     component: <CreateNewResource />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.monitoring.path,
+    name: RouteConstant.dashboard.monitoring.name,
+    component: <Monitoring />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
   {
@@ -73,6 +89,12 @@ export const dashboardRoute: RouteType[] = [
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
   {
+    path: RouteConstant.dashboard.starterPacks.path,
+    name: RouteConstant.dashboard.starterPacks.name,
+    component: <StarterPacksGrid />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
     path: RouteConstant.dashboard.createnewhouse.path,
     name: RouteConstant.dashboard.createnewhouse.name,
     component: <CreateNewHouse />,
@@ -94,6 +116,12 @@ export const dashboardRoute: RouteType[] = [
     path: RouteConstant.dashboard.organizations.path,
     name: RouteConstant.dashboard.organizations.name,
     component: <Organizations />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.security.path,
+    name: RouteConstant.dashboard.security.name,
+    component: <Security />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
   // {
