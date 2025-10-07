@@ -137,6 +137,19 @@ export const useResourceMap = () => {
         />
       ),
     },
+    Lambda: {
+      icon: (
+        <img
+          src={
+            dashboard?.provider.toLowerCase() === "huawei"
+              ? awsIconLinks.lambda
+              : awsIconLinks.lambda
+          }
+          alt="lambda"
+          className="size-7"
+        />
+      ),
+    },
     ASG: {
       icon: (
         <img
@@ -232,6 +245,21 @@ export const useResourceMap = () => {
       // bgColor: "bg-indigo-100",
     },
     RDS: {
+      icon: (
+        <img
+          src={
+            dashboard?.provider.toLowerCase() === "huawei"
+              ? huaweiIconLinks.rds
+              : awsIconLinks.rds
+          }
+          alt="router"
+          className="size-7"
+        />
+      ),
+      color: "text-purple-600",
+      // bgColor: "bg-indigo-100",
+    },
+    "Relational Database": {
       icon: (
         <img
           src={

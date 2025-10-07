@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -20,7 +20,6 @@ import { showCustomToast } from "../toast";
 import { SelectField } from "../selectfield";
 import { deploymentModalSchema } from "@/utilities/schema/resourceSchema";
 
-// ✅ Extracted so it doesn't re-create on every render
 const getTierTitle = (tier: 1 | 2 | 3 | null) => {
   switch (tier) {
     case 1:
@@ -67,6 +66,7 @@ export const DeploymentDialog = NiceModal.create(
       validationSchema: deploymentModalSchema,
       validateOnBlur: true,
       validateOnChange: true,
+      enableReinitialize: true, // ✅ Add this to reinitialize when props change
       onSubmit: async (values) => {
         console.log(values, "values");
         try {
@@ -86,6 +86,26 @@ export const DeploymentDialog = NiceModal.create(
       },
     });
 
+    // ✅ Update form when tier changes
+    useEffect(() => {
+      if (modal.visible) {
+        formik.setFieldValue("tier", tier || 0);
+      }
+    }, [tier, modal.visible]);
+
+    const onModalClose = () => {
+      modal.hide();
+      formik.resetForm();
+      setSeePassword(false); // ✅ Also reset password visibility
+    };
+
+    useEffect(() => {
+      if (!modal.visible) {
+        formik.resetForm();
+        setSeePassword(false); // ✅ Reset password visibility on close
+      }
+    }, [modal.visible]);
+
     // Transform site options
     const siteOptions = useMemo(
       () =>
@@ -97,7 +117,7 @@ export const DeploymentDialog = NiceModal.create(
     );
 
     return (
-      <Dialog open={modal.visible} onOpenChange={modal.hide}>
+      <Dialog open={modal.visible} onOpenChange={onModalClose}>
         <DialogContent className="sm:max-w-[400px]">
           <DialogHeader>
             <DialogTitle className="text-base">
@@ -140,6 +160,11 @@ export const DeploymentDialog = NiceModal.create(
                       role="button"
                       tabIndex={0}
                       onClick={() => setSeePassword((prev) => !prev)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" || e.key === " ") {
+                          setSeePassword((prev) => !prev);
+                        }
+                      }}
                     >
                       {seePassword ? (
                         <EyeIcon size={16} className="dark:text-black" />
@@ -161,7 +186,7 @@ export const DeploymentDialog = NiceModal.create(
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => modal.hide()}
+                onClick={onModalClose}
                 disabled={isLoading}
               >
                 Cancel

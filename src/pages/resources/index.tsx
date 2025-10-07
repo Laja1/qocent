@@ -8,18 +8,15 @@ import { ResourceModal } from "../create-new-resource/resource-modal";
 import type { resourceType } from "@/models/response/resourceResponse";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
-import {
-  useDeleteResourceMutation,
-  useGetAllResourcesQuery,
-} from "@/service/kotlin/resourceApi";
+import { useGetAllResourcesQuery } from "@/service/kotlin/resourceApi";
 import { Card } from "@/components/ui/card";
 import { RouteConstant } from "@/router/routes";
-import { showCustomToast } from "@/components/shared/toast";
-import { ErrorHandler } from "@/service/httpClient/errorHandler";
+
 import { resourcesColumns } from "@/utilities/constants/colums";
 import { CloudStorage } from "../cloud-storage";
 import { ContainerRegistry } from "../ecr";
-
+import NiceModal from "@ebay/nice-modal-react";
+import { ModalConstant } from "@/components/shared/modal/register";
 export const Resources = () => {
   const [rowId, setRowId] = useState<number>(0);
   const [isOpen, setIsOpen] = useState(false);
@@ -27,8 +24,6 @@ export const Resources = () => {
   const account = useSelector((state: RootState) => state.account);
   const dashboard = useSelector((state: RootState) => state.dashboard);
   const [selectedType, setSelectedType] = useState("");
-  const [deleteResources, { isLoading: isDeleting }] =
-    useDeleteResourceMutation();
 
   const { data: resourceData, isLoading } = useGetAllResourcesQuery(
     { accountCode: account?.accountCode, provider: dashboard.provider },
@@ -40,7 +35,7 @@ export const Resources = () => {
       label: "View",
       icon: Eye,
       onClick: (row: resourceType) => {
-        console.log("View resource:", row.resourceId);
+        NiceModal.show(ModalConstant.DrawerModal, row);
       },
     },
     {
@@ -65,19 +60,7 @@ export const Resources = () => {
       label: "Delete",
       icon: Trash2,
       onClick: async (row: resourceType) => {
-        try {
-          const res = await deleteResources({
-            resourceId: Number(row.resourceId),
-          }).unwrap();
-          showCustomToast(res.responseMessage, {
-            toastOptions: { type: "success", autoClose: 5000 },
-          });
-        } catch (error: any) {
-          const message = ErrorHandler.extractMessage(error);
-          showCustomToast(message, {
-            toastOptions: { type: "error", autoClose: 5000 },
-          });
-        }
+        NiceModal.show(ModalConstant.DeleteResourceModal, row);
       },
       variant: "destructive" as const,
     },
@@ -116,7 +99,7 @@ export const Resources = () => {
           title="RESOURCES"
           actions={actions}
           highlightedRowId={rowId}
-          isLoading={isLoading || isDeleting}
+          isLoading={isLoading}
           onRowClick={handleRowClick}
           getRowId={(row) => row.resourceId}
           initialSorting={{ id: "resourceId", desc: false }}

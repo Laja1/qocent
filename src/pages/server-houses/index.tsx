@@ -13,7 +13,6 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 
 import {
-  useDeleteHouseMutation,
   useGetAllHouseQuery,
   useGetResourceInHouseQuery,
 } from "@/service/kotlin/houseApi";
@@ -21,8 +20,6 @@ import type { HouseItem } from "@/models/response/houseResponse";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
 import { Card } from "@/components/ui/card";
-import { showCustomToast } from "@/components/shared/toast";
-import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { ResourceTable } from "../server-sites/server-sites-table";
 import { serverHouseColumn } from "@/utilities/constants/colums";
 // Cute Data Flow Loader Component
@@ -33,13 +30,12 @@ export const ServerHouses = () => {
   const [tabShow, setTabShow] = useState(false);
   const [selectedHouseCode, setSelectedHouseCode] = useState("");
   const [rowId, setRowId] = useState("");
-  const [deleteHouse, { isLoading: isDeleting }] = useDeleteHouseMutation();
   const account = useSelector((state: RootState) => state.account);
   const dashboard = useSelector((state: RootState) => state.dashboard);
 
   const { data, isLoading } = useGetAllHouseQuery({
     accountCode: account?.accountCode,
-    provider:dashboard?.provider
+    provider: dashboard?.provider,
   });
   console.log(data?.data, "sgsss");
 
@@ -63,20 +59,7 @@ export const ServerHouses = () => {
       label: "Delete",
       icon: Trash2,
       onClick: async (row: HouseItem) => {
-        try {
-          const res = await deleteHouse({
-            houseId: Number(row.houseId),
-          }).unwrap();
-          showCustomToast(res.responseMessage, {
-            toastOptions: { type: "success", autoClose: 5000 },
-          });
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-          const message = ErrorHandler.extractMessage(error);
-          showCustomToast(message, {
-            toastOptions: { type: "error", autoClose: 5000 },
-          });
-        }
+        NiceModal.show(ModalConstant.DeleteHouseModal, row);
       },
       variant: "destructive" as const,
     },
@@ -203,7 +186,7 @@ export const ServerHouses = () => {
         <DataTable
           data={data?.data ?? []}
           columns={serverHouseColumn}
-          isLoading={isLoading || isDeleting}
+          isLoading={isLoading}
           filterableColumns={["houseStatus"]}
           title="Server Houses"
           searchPlaceholder="Search server house by name, ID, or code..."

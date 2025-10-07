@@ -51,13 +51,13 @@ const sidebarItems: SidebarItem[] = [
   // },
   {
     title: "Switch workspace",
-    icon: <LayoutList className="text-black dark:text-gray-800" />,
+    icon: <LayoutList className="text-black dark:text-red-400" />,
     href: "/console",
     isActive: false,
   },
   {
     title: "Settings",
-    icon: <Settings className="text-black dark:text-gray-800" />,
+    icon: <Settings className="text-black dark:text-red-400" />,
     href: "/settings",
     isActive: false,
   },
@@ -74,32 +74,38 @@ const data = {
       items: [
         {
           title: "Server Sites",
-          icon: <IconHome className="text-gray-800 size-5" />,
+          icon: (
+            <IconHome className="text-gray-800  dark:text-red-400 size-5" />
+          ),
           url: RouteConstant.dashboard.serverSite.path,
         },
         {
           title: "Server Houses",
-          icon: <IconCarouselVertical className="text-gray-800 size-5" />,
+          icon: (
+            <IconCarouselVertical className="text-gray-800 dark:text-red-400 size-5" />
+          ),
           url: RouteConstant.dashboard.serverHouses.path,
         },
         {
           title: "Server Rooms",
-          icon: <IconBrowser className="text-gray-800 size-5" />,
+          icon: (
+            <IconBrowser className="text-gray-800 dark:text-red-400 size-5" />
+          ),
           url: RouteConstant.dashboard.serverRooms.path,
         },
         {
           title: "Resources",
-          icon: <Webhook className="text-gray-800 size-5" />,
+          icon: <Webhook className="text-gray-800 dark:text-red-400 size-5" />,
           url: RouteConstant.dashboard.resources.path,
         },
         {
           title: "Monitoring",
-          icon: <Search className="text-gray-800 size-5" />,
+          icon: <Search className="text-gray-800 dark:text-red-400 size-5" />,
           url: RouteConstant.dashboard.monitoring.path,
         },
         {
           title: "Security",
-          icon: <Shield className="text-gray-800 size-5" />,
+          icon: <Shield className="text-gray-800 dark:text-red-400 size-5" />,
           url: RouteConstant.dashboard.security.path,
         },
       ],
@@ -118,18 +124,18 @@ const data = {
         {
           title: "Starter Packs",
           icon: (
-            <PackageOpen className="size-4 text-gray-800 dark:text-gray-200" />
+            <PackageOpen className="size-4 text-gray-800 dark:text-red-400" />
           ),
           url: RouteConstant.dashboard.starterPacks.path,
         },
         {
           title: "Billing & Statements",
-          icon: <Wallet className="size-4 text-gray-800 dark:text-gray-200" />,
+          icon: <Wallet className="size-4 text-gray-800 dark:text-red-400" />,
           url: RouteConstant.dashboard.billings.path,
         },
         {
           title: "Organization",
-          icon: <Users className="size-4 text-gray-800 dark:text-gray-200" />,
+          icon: <Users className="size-4 text-gray-800 dark:text-red-400" />,
           url: RouteConstant.dashboard.billings.path,
         },
       ],

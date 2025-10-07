@@ -49,6 +49,7 @@ export const awsIconLinks = {
     ecr:'/icons/aws/ecr.svg',
     cm:'/icons/aws/certificate-manager.svg',
     ebs :'/icons/aws/ebs.png',
+    lambda:'/icons/aws/lambda.svg',
     efs :'/icons/aws/efs.png',
     asg :'/icons/aws/asg.png',
     elb :'/icons/huawei/elb.png',

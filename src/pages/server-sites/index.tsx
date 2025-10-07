@@ -20,7 +20,6 @@ import {
   useGetResourceTypeCountQuery,
   useGetSiteArchitectureQuery,
   useGetSiteDataFlowQuery,
-  useDeleteSiteMutation,
 } from "@/service/kotlin/siteApi";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
@@ -28,8 +27,6 @@ import { FlowGrid } from "@/components/not-shared/data-flow/flow";
 import { ResourceModal } from "../create-new-resource/resource-modal";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
-import { showCustomToast } from "@/components/shared/toast";
-import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { DataFlowLoader } from "@/components/not-shared/data-flow/loader";
 import { serverSiteColumns } from "@/utilities/constants/colums";
 
@@ -85,7 +82,6 @@ export const ServerSites = () => {
       skip: !selectedSiteCode,
     }
   );
-  const [deleteSite, { isLoading: isDeleteLoading }] = useDeleteSiteMutation();
 
   const { data: resourcesInSiteData, isLoading: isResourceLoading } =
     useGetResourcesInSiteQuery(
@@ -147,18 +143,7 @@ export const ServerSites = () => {
       label: "Delete",
       icon: Trash2,
       onClick: async (row: SiteData) => {
-        try {
-          const res = await deleteSite({ siteId: row.siteId }).unwrap();
-          showCustomToast(res.responseMessage, {
-            toastOptions: { type: "success", autoClose: 5000 },
-          });
-        } catch (error: any) {
-          console.error("Delete Site Error:", error);
-          const message = ErrorHandler.extractMessage(error);
-          showCustomToast(message, {
-            toastOptions: { type: "error", autoClose: 5000 },
-          });
-        }
+        NiceModal.show(ModalConstant.DeleteSiteModal, row);
       },
       variant: "destructive" as const,
     },
@@ -310,7 +295,7 @@ export const ServerSites = () => {
             filterableColumns={["siteStatus"]}
             searchPlaceholder="Search server rooms by name, ID, or code..."
             pageSize={5}
-            isLoading={isSiteLoading || isDeleteLoading}
+            isLoading={isSiteLoading}
             exportOptions={{
               filename: "server_sites_export",
               includeHeaders: true,

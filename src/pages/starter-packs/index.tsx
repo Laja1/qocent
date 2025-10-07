@@ -48,10 +48,6 @@ const starterPacks: StarterPack[] = [
 ];
 
 export const StarterPacksGrid = () => {
-  const handleTierSelect = (tier: TierType) => {
-    NiceModal.show(ModalConstant.DeploymentDialog, { tier });
-  };
-
   return (
     <>
       <Header
@@ -63,12 +59,14 @@ export const StarterPacksGrid = () => {
         {starterPacks.map((pack) => (
           <div
             key={pack.id}
-            className="group border p-3 hover:bg-[#fee2e2] rounded-md relative cursor-pointer transition-all hover:shadow-lg px-5  hover:border-[#fee2e2]"
-            onClick={() => handleTierSelect(pack.id)}
+            className="group border p-3 hover:bg-[#fee2e2] dark:hover:bg-[#1f1f1f] rounded-md relative cursor-pointer transition-all hover:shadow-lg px-5  hover:border-[#fee2e2]"
+            onClick={() =>
+              NiceModal.show(ModalConstant.DeploymentDialog, { tier: pack.id })
+            }
           >
             <div>
               <div className="mb-2 flex items-center justify-between">
-                <div className="rounded-lg bg-primary/10 p-3 text-primary transition-colors group-hover:bg-primary group-hover:text-[#fee2e2]">
+                <div className="rounded-lg bg-primary/10 p-3 text-primary transition-colors group-hover:bg-primary dark:group-hover:bg-[#1f1f1f] group-hover:text-[#fee2e2]">
                   {pack.icon}
                 </div>
               </div>

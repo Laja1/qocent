@@ -7,6 +7,10 @@ import { AccessDrawer } from "./access-drawer";
 import { BookDemoModal } from "./book-demo-modal";
 import { DeploymentDialog } from "./deplyment-modal";
 import { ApplyForCertificate } from "./apply-for-certificate";
+import { DeleteSiteModal } from "./delete-site-modal";
+import { DeleteHouseModal } from "./delete-house-modal";
+import { DeleteRoomModal } from "./delete-room-modal";
+import { DeleteResourceModal } from "./delete-resource-modal";
 
 export const ModalConstant = {
     DrawerModal: "DrawerModal",
@@ -16,7 +20,11 @@ export const ModalConstant = {
     AccessDrawer:'AccessDrawer',
     BookDemoModal:'BookDemoModal',
     DeploymentDialog:'DeploymentDialog',
-    ApplyForCertificate:'ApplyForCertificate'
+    ApplyForCertificate:'ApplyForCertificate'   ,
+    DeleteSiteModal:'DeleteSiteModal',
+    DeleteHouseModal:'DeleteHouseModal',
+    DeleteRoomModal:'DeleteRoomModal',
+    DeleteResourceModal:'DeleteResourceModal'
   };
 
 const registerSheets = {
@@ -27,7 +35,11 @@ const registerSheets = {
     [ModalConstant.AccessDrawer]:AccessDrawer,
     [ModalConstant.BookDemoModal]:BookDemoModal,
     [ModalConstant.DeploymentDialog]:DeploymentDialog,
-    [ModalConstant.ApplyForCertificate]:ApplyForCertificate
+    [ModalConstant.ApplyForCertificate]:ApplyForCertificate,
+    [ModalConstant.DeleteSiteModal]:DeleteSiteModal,
+    [ModalConstant.DeleteHouseModal]:DeleteHouseModal,
+    [ModalConstant.DeleteRoomModal]:DeleteRoomModal,
+    [ModalConstant.DeleteResourceModal]:DeleteResourceModal
 }
 
 Object.entries(registerSheets).forEach(([sheetId, SheetComponent]) => {

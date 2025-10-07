@@ -12,7 +12,7 @@ import type { genericResponse } from "@/models/response";
 export const kotlinResourceApi = createApi({
   reducerPath: "kotlinResourceApi",
   baseQuery: kotlinBaseQueryWithResponseCodeHandling,
-  tagTypes: [ApiEnums.Resource,ApiEnums.Config,ApiEnums.House,ApiEnums.Room,ApiEnums.ActivityLog],
+  tagTypes: [ApiEnums.Resource,ApiEnums.Config,ApiEnums.House,ApiEnums.Room,ApiEnums.ActivityLog,ApiEnums.Site],
   endpoints: (build) => ({
      
 
@@ -37,7 +37,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" },{ type: ApiEnums.House, id: "LIST" }],
     }),
     createResource: build.mutation<createResourceResponse, createResourceRequest>({
       query: (body) => ({
@@ -45,7 +45,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" },{ type: ApiEnums.Site, id: "LIST" }],
     }),
     deleteResource:build.mutation<genericResponse,{resourceId:number}>({
       query:({resourceId})=>({
@@ -53,7 +53,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
         method: "POST",
        
       }),
-      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" },{ type: ApiEnums.Site, id: "LIST" },],
     }),
     deleteResourceByCode:build.mutation<genericResponse,{resourceCode:string}>({
       query:({resourceCode})=>({
@@ -61,7 +61,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
         method: "POST",
        
       }),
-      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" }],
     }),
   }),
 });

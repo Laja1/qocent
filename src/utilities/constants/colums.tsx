@@ -94,7 +94,7 @@ export const serverHouseColumn: ColumnDef<HouseItem>[] = [
     accessorKey: "houseCreatedAt",
     sortable: true,
     cell: (row) => (
-      <span className="text-right block ">
+      <span className="text-right line-clamp-1 block ">
         {formatDate(row.houseCreatedAt)}
       </span>
     ),
@@ -170,7 +170,9 @@ export const serverSiteColumns: ColumnDef<SiteData>[] = [
     accessorKey: "siteCreatedAt",
     sortable: true,
     cell: (row) => (
-      <span className="text-right block">{formatDate(row.siteCreatedAt)}</span>
+      <span className="text-right line-clamp-1 block">
+        {formatDate(row.siteCreatedAt)}
+      </span>
     ),
   },
   {
@@ -180,7 +182,7 @@ export const serverSiteColumns: ColumnDef<SiteData>[] = [
     accessorKey: "siteEOLAction",
     sortable: true,
     cell: (row) => (
-      <span className="text-right block">{row.siteEOLAction}</span>
+      <span className="text-right line-clamp-1 block">{row.siteEOLAction}</span>
     ),
   },
   {
@@ -209,14 +211,18 @@ export const serverRoomColumns: ColumnDef<roomData>[] = [
     id: "roomName",
     header: "ROOM NAME",
     accessorKey: "roomName",
-    cell: (row) => <span className="line-clamp-1 ">{row.roomName}</span>,
+    cell: (row) => (
+      <span className="line-clamp-1 ellipses">{row.roomName}</span>
+    ),
     sortable: true,
   },
   {
     id: "roomCode",
     header: "ROOM CODE",
     accessorKey: "roomCode",
-    cell: (row) => <span className=" line-clamp-1">{row.roomCode}</span>,
+    cell: (row) => (
+      <span className=" line-clamp-1 ellipses">{row.roomCode}</span>
+    ),
     sortable: true,
     filterType: "select",
   },
@@ -302,7 +308,9 @@ export const serverRoomColumns: ColumnDef<roomData>[] = [
     accessorKey: "roomCreatedAt",
     sortable: true,
     cell: (row) => (
-      <span className="text-right block">{formatDate(row.roomCreatedAt)}</span>
+      <span className="text-right line-clamp-1 block">
+        {formatDate(row.roomCreatedAt)}
+      </span>
     ),
   },
   // {
@@ -401,7 +409,7 @@ export const resourcesColumns: ColumnDef<resourceType>[] = [
     accessorKey: "resourceProvider",
     sortable: true,
     cell: (row) => (
-      <span className="text-center justify-center flex">
+      <span className="text-center  justify-center flex">
         {row.resourceProvider === "AWS" ? (
           <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
         ) : (
@@ -433,7 +441,9 @@ export const resourcesColumns: ColumnDef<resourceType>[] = [
     accessorKey: "resourceCreatedAt",
     sortable: true,
     cell: (row) => (
-      <span className="text-right block">{row?.resourceCreatedAt}</span>
+      <span className="text-right line-clamp-1 block">
+        {row?.resourceCreatedAt}
+      </span>
     ),
   },
 ];

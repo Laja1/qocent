@@ -459,7 +459,7 @@ export function DataTable<T>({
     if (emptyComponent) {
       return emptyComponent;
     }
-    
+
     return (
       <TableRow>
         <TableCell
@@ -681,33 +681,35 @@ export function DataTable<T>({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {isLoading ? (
-                renderSkeletonRows()
-              ) : processedData.length === 0 ? (
-                renderEmptyState()
-              ) : (
-                paginatedData.map((row, rowIndex) => {
-                  const actualIndex = startIndex + rowIndex;
-                  const rowId = getRowId(row, actualIndex);
-                  return (
-                    <tr
-                      key={String(rowId)}
-                      className={` ${onRowClick ? "cursor-pointer" : ""} ${
-                        selectedRows.has(rowId) ? "bg-blue-50" : ""
-                      } ${highlightedRowId === rowId ? "bg-red-100 dark:text-black" : ""}`}
-                      onClick={onRowClick ? () => onRowClick(row) : undefined}
-                    >
-                      {enhancedColumns.map((column) => (
-                        <td key={column.id} className="border-b px-2 text-xs">
-                          {column.cell
-                            ? column.cell(row, rowIndex)
-                            : String(getAccessor(column)(row))}
-                        </td>
-                      ))}
-                    </tr>
-                  );
-                })
-              )}
+              {isLoading
+                ? renderSkeletonRows()
+                : processedData.length === 0
+                ? renderEmptyState()
+                : paginatedData.map((row, rowIndex) => {
+                    const actualIndex = startIndex + rowIndex;
+                    const rowId = getRowId(row, actualIndex);
+                    return (
+                      <tr
+                        key={String(rowId)}
+                        className={` ${onRowClick ? "cursor-pointer" : ""} ${
+                          selectedRows.has(rowId) ? "bg-blue-50" : ""
+                        } ${
+                          highlightedRowId === rowId
+                            ? "bg-red-100 dark:text-black"
+                            : ""
+                        }`}
+                        onClick={onRowClick ? () => onRowClick(row) : undefined}
+                      >
+                        {enhancedColumns.map((column) => (
+                          <td className="border-b px-2 text-xs truncate max-w-[130px]">
+                            {column.cell
+                              ? column.cell(row, rowIndex)
+                              : String(getAccessor(column)(row))}
+                          </td>
+                        ))}
+                      </tr>
+                    );
+                  })}
             </TableBody>
           </Table>
         </div>

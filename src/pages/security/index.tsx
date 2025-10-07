@@ -48,12 +48,12 @@ export const Security = () => {
         {data.map((item) => (
           <div
             key={item.title}
-            className="flex flex-col justify-between border border-gray-200 rounded-md p-5 min-h-[250px] w-full max-w-[350px]"
+            className="flex flex-col justify-between border border-gray-200 dark:border-gray-700 rounded-md p-5 min-h-[250px] w-full max-w-[350px]"
           >
             <div className="space-y-2">
               {item.icon}
               <h1 className="text-lg font-semibold">{item.title}</h1>
-              <p className="text-sm text-gray-600 line-clamp-5">
+              <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-5">
                 {item.description}
               </p>
             </div>

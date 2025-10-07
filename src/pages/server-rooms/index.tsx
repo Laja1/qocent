@@ -4,7 +4,6 @@ import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
-  useDeleteRoomMutation,
   useGetAllRoomQuery,
   useGetResourceInRoomQuery,
 } from "@/service/kotlin/roomApi";
@@ -13,8 +12,6 @@ import type { roomData } from "@/models/response/roomResponse";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
 import { Card } from "@/components/ui/card";
-import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { showCustomToast } from "@/components/shared/toast";
 import { serverRoomColumns } from "@/utilities/constants/colums";
 import { useState } from "react";
 import { ResourceTable } from "../server-sites/server-sites-table";
@@ -46,7 +43,6 @@ export const ServerRooms = () => {
         skip: !selectedRoomCode,
       }
     );
-  const [deleteRoom, { isLoading: isDeleting }] = useDeleteRoomMutation();
   // const [rowId, setRowId] = useState("R-0001");
 
   const actions = [
@@ -69,18 +65,7 @@ export const ServerRooms = () => {
       icon: Trash2,
       onClick: async (row: roomData) => {
         console.log("Delete server room:", row.roomId);
-        try {
-          const res = await deleteRoom({ roomId: Number(row.roomId) }).unwrap();
-          showCustomToast(res.responseMessage, {
-            toastOptions: { type: "success", autoClose: 5000 },
-          });
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (error: any) {
-          const message = ErrorHandler.extractMessage(error);
-          showCustomToast(message, {
-            toastOptions: { type: "error", autoClose: 5000 },
-          });
-        }
+        NiceModal.show(ModalConstant.DeleteRoomModal, row);
       },
       variant: "destructive" as const,
     },
@@ -160,7 +145,7 @@ export const ServerRooms = () => {
         <DataTable
           data={data?.data || []}
           columns={serverRoomColumns}
-          isLoading={isLoading || isDeleting}
+          isLoading={isLoading}
           title={"SERVER ROOMS"}
           searchPlaceholder="Search server rooms by name, ID, or region..."
           pageSize={5}
