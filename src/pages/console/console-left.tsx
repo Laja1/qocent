@@ -85,48 +85,6 @@ export const ConsoleLeft = () => {
     // },
   ];
 
-  const externalWorkspaces = [
-    {
-      provider: "aws" as const,
-      name: "AWS Cloud",
-      icon: imgLinks.awsdark,
-      alt: "AWS",
-      loading: false,
-      sites: [
-        {
-          name: "Rubies-aws-001",
-          siteCode: "rubies-aws-001",
-        },
-      ],
-    },
-    {
-      provider: "huawei" as const,
-      name: "Huawei Cloud",
-      icon: imgLinks.huawei,
-      alt: "Huawei",
-      loading: false,
-      sites: [
-        {
-          name: "Rubies-aws-001",
-          siteCode: "rubies-aws-001",
-        },
-      ],
-    },
-    // {
-    //   provider: "gcp" as const,
-    //   name: "Google Cloud",
-    //   icon: imgLinks.gcp,
-    //   alt: "Google Cloud",
-    //   loading: false,
-    // },
-    // {
-    //   provider: "azure" as const,
-    //   name: "Azure Cloud",
-    //   icon: imgLinks.azure,
-    //   alt: "Azure Cloud",
-    //   loading: false,
-    // },
-  ];
   return (
     <div className="h-full flex flex-col justify-between bg-white dark:bg-black">
       {/* Top Menu */}
@@ -155,7 +113,7 @@ export const ConsoleLeft = () => {
             <WorkspaceSkeleton />
           ) : (
             <div className="space-y-2">
-              {workspaceData?.data.length === 0 ? (
+              {workspaceData?.accounts.length === 0 ? (
                 <div className="text-center py-8 text-gray-500">
                   <div className="mb-2">No workspaces found</div>
                   <div className="text-xs">
@@ -163,7 +121,7 @@ export const ConsoleLeft = () => {
                   </div>
                 </div>
               ) : (
-                workspaceData?.data.map((workspace, index) => (
+                workspaceData?.accounts.map((workspace, index) => (
                   <div
                     key={workspace.accountId || index}
                     className="border border-gray-200 dark:border-gray-800 rounded-md overflow-hidden "
@@ -198,7 +156,7 @@ export const ConsoleLeft = () => {
                                       | "ACTIVE"
                                       | "INACTIVE"
                                       | undefined,
-                                    owner: workspace.owner,
+                                    owner: workspace.isOwner ? "YES" : "NO",
                                   })
                                 );
 
@@ -229,26 +187,24 @@ export const ConsoleLeft = () => {
               defaultOpen={false} // no undefined "index"
             >
               <div className="divide-y divide-gray-100 dark:divide-gray-800">
-                {externalWorkspaces.map((item, index) => (
-                  <div key={item.provider} className="relative">
+                {workspaceData?.externalSites.map((item, index) => (
+                  <div key={item.siteProvider} className="relative">
                     <CollapsibleItem
-                      title={item.name}
+                      title={item.siteName}
                       icon={BrainCircuit}
                       defaultOpen={index === 0}
                     >
-                      {item.sites.map((site) => (
-                        <SubItem
-                          key={site.siteCode}
-                          title={site.name}
-                          image={item.icon}
-                          onClick={() => {
-                            if (item.loading) return;
-                            handleClick(item.provider);
-                          }}
-                        />
-                      ))}
+                      <SubItem
+                        key={item.siteCode}
+                        title={item.siteName}
+                        image={item.siteProvider}
+                        // onClick={() => {
+                        //   if (item.loading) return;
+                        //   handleClick(item.siteProvider);
+                        // }}
+                      />
                     </CollapsibleItem>
-                    {item.loading && (
+                    {isLoading && (
                       <div className="absolute inset-0 bg-white bg-opacity-50 cursor-not-allowed" />
                     )}
                   </div>

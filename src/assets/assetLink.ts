@@ -26,7 +26,8 @@ export const huaweiIconLinks = {
     evs :'/icons/huawei/evs.png',
     elb :'/icons/huawei/elb.png',
     router :'/icons/huawei/router.png',
-    
+    waf:'icons/aws/waf.svg',
+
 }
 
 export const awsIconLinks = {
@@ -35,12 +36,14 @@ export const awsIconLinks = {
     s3 :'/icons/aws/s3.png',
     user :'/icons/huawei/user.png',
     dynamodb:'icons/aws/dynamodb.png',
+    waf:'icons/aws/waf.svg',
     server :'/icons/aws/server.png',
     nat :'/icons/huawei/nat.png',
     cloudSearch:'/icons/aws/cloud-search.svg',
     certificateManager:'/icons/aws/certificate-manager.svg',
     cloudWatch:'/icons/aws/cloud-watch.svg',
     cloudFront:'/icons/aws/cloud-front.svg',
+    elb:'/icons/aws/elb.svg',
     cloudTrail:'/icons/aws/cloud-trail.svg',
     cloudWatchLogs:'/icons/aws/cloud-watch-logs.svg',
     cloudWatchMetrics:'/icons/aws/cloud-watch-metrics.svg',
@@ -52,7 +55,6 @@ export const awsIconLinks = {
     lambda:'/icons/aws/lambda.svg',
     efs :'/icons/aws/efs.png',
     asg :'/icons/aws/asg.png',
-    elb :'/icons/huawei/elb.png',
     router :'/icons/huawei/router.png',
     
 }
@@ -61,6 +63,7 @@ export const svgLinks = {
     cube: '/svg/cubes.svg',
     aws:'/svg/aws.svg',
     mosaic: '/svg/mosaic.svg',
+    
     grunge:'/svg/grunge.svg',
     router:'/svg/router.svg',
     igw:'/svg/igw.svg',

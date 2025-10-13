@@ -1,6 +1,5 @@
-import { Button } from "@/components/shared";
 import { CardContent } from "@/components/ui/card";
-import { AlarmClockCheck, ChevronRight, Loader2 } from "lucide-react";
+import { AlarmClockCheck, Loader2 } from "lucide-react";
 import { useGetActivityLogQuery } from "@/service/kotlin/consoleApi";
 import type { activityLogData } from "@/models/response/consoleResponse";
 
@@ -28,7 +27,7 @@ export const LatestChanges = () => {
         </h3>
       </div>
 
-      <CardContent className="p-3">
+      <CardContent className="p-3 ">
         {isLoading ? (
           <div className="flex justify-center py-4">
             <Loader2 className="animate-spin text-gray-500 h-5 w-5" />
@@ -53,7 +52,7 @@ export const LatestChanges = () => {
                   <p className="text-sm font-medium dark:text-white truncate">
                     {activity.activityLogAction}
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 truncate">
+                  <p className="text-xs text-gray-600 w-60   dark:text-gray-400 truncate">
                     {activity.activityLogDescription}
                   </p>
                   <p className="text-[11px] text-gray-500 mt-0.5">
@@ -66,7 +65,7 @@ export const LatestChanges = () => {
         )}
 
         {/* View all button */}
-        {logs.length > 0 && (
+        {/* {logs.length > 0 && (
           <Button
             label="View all"
             size="small"
@@ -74,7 +73,7 @@ export const LatestChanges = () => {
             className="w-full justify-between mt-4 text-sm"
             surfixIcon={<ChevronRight className="h-3 w-3" />}
           />
-        )}
+        )} */}
       </CardContent>
     </div>
   );

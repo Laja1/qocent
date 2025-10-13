@@ -113,7 +113,7 @@ export const RouteConstant = {
       name: "dashboard",
     },
     acceptInvite: {
-      path: "/accept-invitation/:inviteCode/:email",
+      path: "/accept-invitation/:siteCode/:email",
       name: "Accept Invite",
     },
     monitoring: {

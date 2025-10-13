@@ -120,7 +120,6 @@ export const ServerSites = () => {
       label: "Invite to Site",
       icon: Users,
       onClick: (row: SiteData) => {
-        console.log("View server Site:", row.siteId);
         NiceModal.show(ModalConstant.InviteToWorkspace, row);
       },
     },

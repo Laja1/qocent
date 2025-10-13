@@ -71,7 +71,16 @@ export const completePasswordResetInit:completePasswordResetRequest = {
 
 
 export type invitationRequest = {
-  accountCode: string;
+  siteCode: string;
   inviteeEmail: string;
   inviterUserCode: string;
+  privileges: string[];
 };
+
+export type acceptInvitationRequest = {
+  siteCode: string;
+  userEmail: string;
+  userFirstName: string;
+  userLastName: string;
+  userRoleId: number;
+}

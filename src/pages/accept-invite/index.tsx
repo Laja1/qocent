@@ -5,10 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import {
-  useAcceptInviteMutation,
-  useGetAccountMembersQuery,
-} from "@/service/kotlin/authApi";
+import { useAcceptInviteMutation } from "@/service/kotlin/authApi";
 import {
   Check,
   X,
@@ -29,16 +26,11 @@ export default function AcceptInvite() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
 
-  const { inviteCode, email } = useParams<{
-    inviteCode: string;
+  const { siteCode, email } = useParams<{
+    siteCode: string;
     email: string;
   }>();
-
-  const { data: accountMembersData, isLoading: isLoadingAccount } =
-    useGetAccountMembersQuery({
-      accountCode: inviteCode || "",
-    });
-
+  console.log(siteCode, email);
   // Animation effect on mount
   useEffect(() => {
     const timer = setTimeout(() => setShowAnimation(true), 100);
@@ -49,12 +41,14 @@ export default function AcceptInvite() {
     if (isAccepting || isProcessing) return;
 
     setIsProcessing(true);
-    console.log( email ,
-      inviteCode,)
+
     try {
       const res = await acceptInvite({
         userEmail: email || "",
-        accountCode: inviteCode || "",
+        siteCode: siteCode || "",
+        userFirstName: "",
+        userLastName: "",
+        userRoleId: 0,
       }).unwrap();
 
       showCustomToast(res.responseMessage, {
@@ -66,7 +60,7 @@ export default function AcceptInvite() {
         navigate(RouteConstant.dashboard.console.path);
       }, 1500);
     } catch (error: any) {
-      console.log(error,'error')
+      console.log(error, "error");
       const message = ErrorHandler.extractMessage(error);
       showCustomToast(message, {
         toastOptions: { type: "error", autoClose: 5000 },
@@ -88,7 +82,7 @@ export default function AcceptInvite() {
     navigate("/console");
   };
 
-  if (isLoadingAccount) {
+  if (isAccepting) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
         <div className="animate-pulse space-y-4">
@@ -172,7 +166,7 @@ export default function AcceptInvite() {
                   </span>
                 </div>
                 <p className="font-semibold text-gray-900 text-xs">
-                  {accountMembersData?.accountName || "Loading..."}
+                  {siteCode || "Loading..."}
                 </p>
               </div>
 

@@ -221,22 +221,48 @@ export type deploySiteResourceType = {
   responseMessage: string;
 };
 
-export type getAccountResponse = {
+export interface getAccountResponse {
+  accounts: Account[];
+  externalSites: Site[];
   responseCode: string;
   responseMessage: string;
-  data: AccountData[];
-};
+}
 
-export type AccountData = {
-  accountId: number;
+export interface Account {
   accountCode: string;
-  accountUserCode: string | null;
-  accountName: string;
-  accountType: string;
-  accountStatus: string;
   accountCreatedAt: string;
-  accountUpdatedAt: string | null;
-  owner:'YES'|'NO'
-};
+  accountId: number;
+  accountName: string;
+  accountStatus: string;
+  accountType: string;
+  accountUserCode: string;
+  isOwner: boolean;
+  sites: Site[];
+}
+
+export interface Site {
+  memberCreatedAt: string;
+  memberStatus: string;
+  siteAccountId: string;
+  siteCode: string;
+  siteId: number;
+  siteName: string;
+  siteProvider: string;
+  siteRegion: string;
+  siteStatus: string;
+}
 
 
+
+
+export interface getIAMRolesResponse {
+  data: IAMRole[];
+  responseCode: string;
+  responseMessage: string;
+}
+
+export interface IAMRole {
+  availableActions: string[];
+  moduleDescription: string;
+  moduleName: string;
+}

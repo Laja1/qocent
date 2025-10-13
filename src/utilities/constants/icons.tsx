@@ -203,6 +203,36 @@ export const useResourceMap = () => {
       color: "text-green-600",
       // bgColor: "bg-green-100",
     },
+    "Load Balancer": {
+      icon: (
+        <img
+          src={
+            dashboard?.provider.toLowerCase() === "huawei"
+              ? huaweiIconLinks.elb
+              : awsIconLinks.elb
+          }
+          alt="router"
+          className="size-7"
+        />
+      ),
+      color: "text-green-600",
+      // bgColor: "bg-green-100",
+    },
+    WAF: {
+      icon: (
+        <img
+          src={
+            dashboard?.provider.toLowerCase() === "huawei"
+              ? huaweiIconLinks.waf
+              : awsIconLinks.waf
+          }
+          alt="router"
+          className="size-7"
+        />
+      ),
+      color: "text-green-600",
+      // bgColor: "bg-green-100",
+    },
     EVS: {
       icon: <Globe className="size-5" />,
       color: "text-green-600",

@@ -1,5 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import type {
+  acceptInvitationRequest,
   completeEnrollmentRequest,
   completePasswordResetRequest,
   forgotPasswordpRequest,
@@ -16,7 +17,7 @@ import type {
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import type { genericResponse } from "@/models/response";
 import { ApiEnums } from "@/utilities/enums";
-import type { getAccountResponse } from "@/models/response/siteResponse";
+import type { getAccountResponse, getIAMRolesResponse } from "@/models/response/siteResponse";
 
 export const authApi = createApi({
   reducerPath: "authApi",
@@ -87,11 +88,16 @@ export const authApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.Auth, id: "LIST" }],
+      invalidatesTags: [{ type: ApiEnums.Auth, id: "LIST" },{type:ApiEnums.Member,id:'LIST'}],
     }),
     getUserAccounts: build.query<getAccountResponse, {userCode:string}>({
-      query: ({userCode}) => `/authentication/user-accounts/${userCode}`,    
+      query: ({userCode}) => `/authentication/user-accounts/${userCode}`,  
+      providesTags:[{type:ApiEnums.Member,id:'LIST'}]  
   }),
+  getIAMRoles: build.query<getIAMRolesResponse, void>({
+    query: () => `/authentication/iam/available-modules`
+  
+}),
   getAccountMembers: build.query<AccountResponse, { accountCode: string }>({
     query: ({ accountCode }) =>
       `/authentication/account-members/${accountCode}`,
@@ -100,7 +106,7 @@ export const authApi = createApi({
         ? [{ type: ApiEnums.Member, id: accountCode }]
         : [],
   }),  
-    acceptInvite:build.mutation<AccountResponse,{accountCode:string,userEmail:string}>({
+    acceptInvite:build.mutation<AccountResponse,acceptInvitationRequest>({
       query:(body)=>({
         url: "/authentication/accept-invitation",
         method: "POST",
@@ -132,4 +138,5 @@ export const {
   useCompletePasswordResetMutation,
   useInviteToWorkspaceMutation,
   useGetUserAccountsQuery,
+  useGetIAMRolesQuery,
 } = authApi;
