@@ -28,7 +28,7 @@ export class ErrorHandler {
       }
   
       // Error object with error property
-      if (error?.error) {
+      if (error?.error) { 
         return this.parseMessage(error.error);
       }
   

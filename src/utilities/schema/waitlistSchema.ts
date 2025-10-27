@@ -1,4 +1,4 @@
-import { object } from "yup";
+import { date, object } from "yup";
 import { defaultValidation, emailValidation } from ".";
 
 export const waitlistSchema = object().shape({
@@ -7,6 +7,7 @@ export const waitlistSchema = object().shape({
   companyName: defaultValidation("Company Name"),
   email: emailValidation(),
   companyEmail: emailValidation(),
+  waitlistBookingDate:date().required(),
   companySize: defaultValidation("Company Size"),
   role: defaultValidation("Role"),
 });

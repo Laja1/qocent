@@ -14,8 +14,8 @@ export const roomApi = createApi({
   baseQuery: kotlinBaseQueryWithResponseCodeHandling,
   tagTypes: [ApiEnums.House,ApiEnums.Room,ApiEnums.Resource,ApiEnums.ActivityLog],
   endpoints: (build) => ({
-    getAllRoom: build.query<getAllRoomResponse,{ accountCode: string,provider:string }>({
-      query: ({accountCode,provider}) => `/resource/read-room-by-account-code/${accountCode}/${provider}`, 
+    getAllRoom: build.query<getAllRoomResponse,{ accountCode: string,provider:string, type: 'INTERNAL' | 'EXTERNAL' }>({
+      query: ({accountCode,provider, type}) => ({url: `/resource/read-room-by-account-code/${accountCode}/${provider}`,params: { requestType: type } }),
       providesTags: (result) => createRoomTags(result,  "roomId"),
     }),
     createRoom: build.mutation<createResourceResponse, createResourceRequest>({

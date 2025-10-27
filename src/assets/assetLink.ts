@@ -13,6 +13,12 @@ export const imgLinks = {
     router:'/images/router.png',
     logo:'/images/qocent-logo.png',
     footerlogo:'images/qocent-footer.png',
+    canva:'/images/canva.png',
+    tier1:'/images/tier-1.jpg',
+    tier2:'/images/tier-2.jpg',
+
+    tier3:'/images/tier-3.jpg',
+
     aws:'images/aws.png',
 }
 

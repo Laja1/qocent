@@ -18,6 +18,7 @@
     userLastName: string;
     memberStatus: "ACTIVE" | "INACTIVE"; // assuming possible statuses
     memberCreatedAt: string | null;
+    privileges: string[];
   };
   
   export type AccountResponse = {

@@ -11,6 +11,9 @@ import { DeleteSiteModal } from "./delete-site-modal";
 import { DeleteHouseModal } from "./delete-house-modal";
 import { DeleteRoomModal } from "./delete-room-modal";
 import { DeleteResourceModal } from "./delete-resource-modal";
+import { SelectSiteModal } from "./select-site-modal";
+import { EditAccessModal } from "./edit-access";
+import { ServiceModal } from "./servicemodal";
 
 export const ModalConstant = {
     DrawerModal: "DrawerModal",
@@ -24,7 +27,10 @@ export const ModalConstant = {
     DeleteSiteModal:'DeleteSiteModal',
     DeleteHouseModal:'DeleteHouseModal',
     DeleteRoomModal:'DeleteRoomModal',
-    DeleteResourceModal:'DeleteResourceModal'
+    DeleteResourceModal:'DeleteResourceModal',
+    SelectSiteModal:'SelectSiteModal',
+    EditAccessModal:'EditAccessModal',
+    ServiceModal:'ServiceModal'
   };
 
 const registerSheets = {
@@ -34,12 +40,15 @@ const registerSheets = {
     [ModalConstant.InviteToWorkspace]:InviteToWorkspace,
     [ModalConstant.AccessDrawer]:AccessDrawer,
     [ModalConstant.BookDemoModal]:BookDemoModal,
+    [ModalConstant.ServiceModal]:ServiceModal,
     [ModalConstant.DeploymentDialog]:DeploymentDialog,
     [ModalConstant.ApplyForCertificate]:ApplyForCertificate,
     [ModalConstant.DeleteSiteModal]:DeleteSiteModal,
     [ModalConstant.DeleteHouseModal]:DeleteHouseModal,
     [ModalConstant.DeleteRoomModal]:DeleteRoomModal,
-    [ModalConstant.DeleteResourceModal]:DeleteResourceModal
+    [ModalConstant.DeleteResourceModal]:DeleteResourceModal,
+    [ModalConstant.SelectSiteModal]:SelectSiteModal,
+    [ModalConstant.EditAccessModal]:EditAccessModal
 }
 
 Object.entries(registerSheets).forEach(([sheetId, SheetComponent]) => {

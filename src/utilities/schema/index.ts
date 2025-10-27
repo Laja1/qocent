@@ -33,8 +33,7 @@ export const optionValidation = (msg?: string) =>
 //       });
 
 export const emailValidation = () =>
-  string().email("Invalid email address").required("Email address is required");
-
+  string().email("Invalid email address").matches(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, "Invalid email address").required("Email address is required");
 
 export const passwordValidation = (label = "Password") =>
   string()

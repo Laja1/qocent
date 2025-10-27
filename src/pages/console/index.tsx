@@ -7,19 +7,20 @@ import {
 } from "@/components/shared/notification";
 import { LatestChanges } from "./latest-changes";
 import { ConsoleChart } from "./console-chart";
-import { Monitoring } from "./monitoring";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { IconLayoutDashboard } from "@tabler/icons-react";
 import { ConsoleLeft } from "./console-left";
 import { AlertBox } from "@/components/shared/alerts";
 import { MetricCard } from "@/components/not-shared/metric-card";
+import { useConsoleSummaryQuery } from "@/service/kotlin/resourceApi";
+import { Monitoring } from "./monitoring";
 
 export const Console = () => {
   const user = useSelector((state: RootState) => state.auth);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [showAlert, setShowAlert] = useState(true);
-
+  const { data: summaryData } = useConsoleSummaryQuery();
   const [notifications, setNotifications] = useState<Notification[]>([
     {
       id: 1,
@@ -56,7 +57,7 @@ export const Console = () => {
       read: false,
     },
   ]);
-
+  console.log(summaryData, "summaryData");
   const handleMarkAsRead = (id: number) => {
     setNotifications((prev) =>
       prev.map((notification) =>
@@ -88,17 +89,22 @@ export const Console = () => {
   }`.toUpperCase();
 
   const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
+    setIsSidebarOpen((prev) => !prev);
   };
+
+  // Remove incorrect and unused code that referenced non-existent 'trend' property:
+  const summary = summaryData?.data;
+  const trendValues = summary?.trend?.map((t) => t.value) || [];
+
   const metrics = [
     {
-      title: "Total Instances",
-      value: 24,
-      change: "+12%",
+      title: "Total Resources Deployed",
+      value: summary?.totalResourceDeployed || 0,
+      // change: "+12%",
       changeType: "positive" as const,
       icon: Server,
       description: "across all providers",
-      trend: [40, 50, 35, 60, 55, 70, 65],
+      trend: trendValues,
     },
 
     {

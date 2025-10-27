@@ -51,6 +51,7 @@ export const CreateNewRoom = () => {
     {
       provider: dashboard.provider,
       siteAccountId: user.accountCode || "",
+      type: user.type || "",
     },
     {
       skip: !dashboard.provider,

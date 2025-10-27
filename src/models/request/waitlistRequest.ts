@@ -2,6 +2,8 @@ export type waitlistFormPayload = {
     waitlistCompanyEmail: string;
     waitlistCompanyName: string;
     waitlistCompanySize: string;
+    waitlistBookingDate: string,
+    waitlistBookingType: string,
     waitlistEmail: string;
     waitlistFullName: string;
     waitlistPhoneNumber: string;
@@ -13,6 +15,7 @@ export const  waitlistInit = {
   email: "",
   mobileNumber: "",
   companyName: "",
+  waitlistBookingDate:new Date(),
   companyEmail: "",
   companySize: "",
   role: "",

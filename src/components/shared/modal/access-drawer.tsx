@@ -18,19 +18,17 @@ import {
   useGetAccountMembersQuery,
 } from "@/service/kotlin/authApi";
 import type { AccountMember } from "@/models/response/authResponse";
-import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { showCustomToast } from "../toast";
+import type { SiteData } from "@/models/response/siteResponse";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
 
-export const AccessDrawer = NiceModal.create(() => {
+export const AccessDrawer = NiceModal.create<{ site: SiteData }>(({ site }) => {
   const modal = useModal(ModalConstant.AccessDrawer);
-  const accountCode = modal.args;
-
   const { data: accountMembersData, isLoading: isAccountMemberLoading } =
     useGetAccountMembersQuery({
-      accountCode: typeof accountCode === "string" ? accountCode : "",
+      siteCode: site.siteCode,
     });
   const [deleteMember] = useDeleteMemberMutation();
-  console.log(accountMembersData, "accountMembersData");
   // const getDescription = () => {
   //     if (!details) return "No data available";
   //     const keys = Object.keys(details);
@@ -39,14 +37,17 @@ export const AccessDrawer = NiceModal.create(() => {
   const handleDeleteMembers = async (code: string) => {
     try {
       await deleteMember({
-        accountCode: typeof accountCode === "string" ? accountCode : "",
+        siteCode: site.siteCode,
         memberUserCode: code,
       }).unwrap();
       showCustomToast("Member deleted successfully", {
         toastOptions: { type: "success", autoClose: 5000 },
       });
     } catch (error) {
-      ErrorHandler.extractMessage(error);
+      const message = ErrorHandler.extractMessage(error);
+      showCustomToast(message, {
+        toastOptions: { type: "success", autoClose: 5000 },
+      });
     }
   };
   const memberColumns: ColumnDef<AccountMember>[] = [
@@ -57,7 +58,7 @@ export const AccessDrawer = NiceModal.create(() => {
       cell: (row) => (
         <div className="flex items-center space-x-3">
           <div>
-            <p className="text-xs text-gray-900  my-1">
+            <p className="text-xs  my-1">
               {row.userFirstName} {row.userLastName}
             </p>
           </div>
@@ -150,7 +151,10 @@ export const AccessDrawer = NiceModal.create(() => {
                     label: "Edit Role",
                     icon: Edit,
                     onClick: (row) =>
-                      console.log("Edit role", row.userFirstName),
+                      NiceModal.show(ModalConstant.EditAccessModal, {
+                        site,
+                        member: row,
+                      }),
                   },
                   {
                     label: "Remove Member",

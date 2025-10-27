@@ -1,9 +1,11 @@
-import type React from "react";
-import { CardContent, CardDescription, CardTitle } from "@/components/ui/card";
-import { Server, Database, Layers, Network } from "lucide-react";
+import React, { useState } from "react";
+import { CardDescription, CardTitle } from "@/components/ui/card";
+import { Server, Database, Layers, ChevronRight } from "lucide-react";
 import { ModalConstant } from "@/components/shared/modal/register";
 import NiceModal from "@ebay/nice-modal-react";
 import { Header } from "@/components/shared/header";
+import { Button, Tabs } from "@/components/shared";
+import { imgLinks } from "@/assets/assetLink";
 
 type TierType = 1 | 2 | 3;
 
@@ -22,14 +24,14 @@ const starterPacks: StarterPack[] = [
     title: "1-Tier Architecture",
     description: "Simple single-server deployment for basic applications",
     components: ["Server House", "Server Room", "Server"],
-    icon: <Server className="h-8 w-8" />,
+    icon: <Server className="size-4" />,
   },
   {
     id: 2,
     title: "2-Tier Architecture",
     description: "Separate web and application layers for better scalability",
     components: ["Server House", "Server Room", "Web Server", "App Server"],
-    icon: <Layers className="h-8 w-8" />,
+    icon: <Layers className="size-4" />,
     recommended: true,
   },
   {
@@ -43,11 +45,51 @@ const starterPacks: StarterPack[] = [
       "App Server",
       "Database",
     ],
-    icon: <Database className="h-8 w-8" />,
+    icon: <Database className="size-4" />,
   },
 ];
 
+const tierImages: Record<TierType, string> = {
+  1: imgLinks.tier1,
+  2: imgLinks.tier2,
+  3: imgLinks.tier3,
+};
+
 export const StarterPacksGrid = () => {
+  const [selectedPack, setSelectedPack] = useState<StarterPack | null>(null);
+
+  const tabData =
+    selectedPack !== null
+      ? [
+          {
+            id: selectedPack.id,
+            text: "Diagram",
+            component: (
+              <div className="flex px-10 pb-10 flex-col">
+                <div className="justify-end items-end w-full flex">
+                  <Button
+                    label="Deploy"
+                    surfixIcon={<ChevronRight size={18} />}
+                    onClick={() =>
+                      NiceModal.show(ModalConstant.DeploymentDialog, {
+                        tier: selectedPack.id,
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex flex-col mt-2">
+                  <img
+                    src={tierImages[selectedPack.id] || imgLinks.tier1}
+                    className="rounded-sm"
+                    alt={`${selectedPack.title} diagram`}
+                  />
+                </div>
+              </div>
+            ),
+          },
+        ]
+      : [];
+
   return (
     <>
       <Header
@@ -55,14 +97,17 @@ export const StarterPacksGrid = () => {
         description="Choose a starter pack to get started"
       />
 
-      <div className="grid gap-6 px-5 md:grid-cols-2 lg:grid-cols-3 mt-10 ">
+      <div className="grid gap-3 px-5 md:grid-cols-2 lg:grid-cols-3 mt-10">
         {starterPacks.map((pack) => (
           <div
             key={pack.id}
-            className="group border p-3 hover:bg-[#fee2e2] dark:hover:bg-[#1f1f1f] rounded-md relative cursor-pointer transition-all hover:shadow-lg px-5  hover:border-[#fee2e2]"
-            onClick={() =>
-              NiceModal.show(ModalConstant.DeploymentDialog, { tier: pack.id })
-            }
+            className={`group border p-3 rounded-md relative cursor-pointer transition-all hover:shadow-lg px-5 
+              ${
+                selectedPack?.id === pack.id
+                  ? "border-red-400 bg-[#fee2e2]/50 dark:bg-[#1f1f1f]"
+                  : "hover:bg-[#fee2e2] dark:hover:bg-[#1f1f1f]"
+              }`}
+            onClick={() => setSelectedPack(pack)}
           >
             <div>
               <div className="mb-2 flex items-center justify-between">
@@ -70,33 +115,22 @@ export const StarterPacksGrid = () => {
                   {pack.icon}
                 </div>
               </div>
-              <CardTitle className="text-xl">{pack.title}</CardTitle>
-              <CardDescription className="text-sm">
+              <CardTitle className="text-lg">{pack.title}</CardTitle>
+              <CardDescription className="text-xs">
                 {pack.description}
               </CardDescription>
             </div>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex my-2 items-center gap-2 text-sm font-medium text-muted-foreground">
-                  <Network className="h-4 w-4" />
-                  <span>Includes:</span>
-                </div>
-                <ul className="space-y-2">
-                  {pack.components.map((component, index) => (
-                    <li key={index} className="flex items-center gap-2 text-sm">
-                      <div className="h-1.5 w-1.5 rounded-full bg-primary" />
-                      <span className="text-foreground text-xs">
-                        {component}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </CardContent>
           </div>
         ))}
       </div>
+
+      {selectedPack && (
+        <div className="mx-5 mt-5 transition-all">
+          <Tabs key={selectedPack.id} tabs={tabData} />
+        </div>
+      )}
     </>
   );
 };
+
 export default StarterPacksGrid;

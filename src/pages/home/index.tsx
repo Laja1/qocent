@@ -1,5 +1,4 @@
 import { Hero } from "./hero";
-
 import { Services } from "./services";
 import { Footer } from "@/components/shared";
 import { Faq } from "./faq";
@@ -7,6 +6,7 @@ import { HowIt } from "./how-it";
 import { HyperScalers } from "./hyperscalers";
 import Seo from "@/components/shared/seo";
 import Navbar from "@/components/shared/navbar2";
+import { PartnerNetwork } from "./partner-network";
 
 const Home = () => {
   return (
@@ -26,7 +26,7 @@ const Home = () => {
       <HyperScalers />
       <HowIt />
       <Faq />
-
+      <PartnerNetwork />
       <Footer />
     </div>
   );

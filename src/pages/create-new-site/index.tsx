@@ -195,7 +195,6 @@ export const CreateNewSite = () => {
                       options={item.parameterOptions}
                       parameterLookup={item.parameterLookup}
                       type={item.parameterInputType || "text"}
-                      
                       autoComplete="off"
                     />
                     <button

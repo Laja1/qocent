@@ -29,6 +29,7 @@ export const ServerRooms = () => {
     {
       accountCode: account?.accountCode,
       provider: dashboard?.provider,
+      type: account.type,
     },
     {
       skip: !account?.accountCode,

@@ -30,6 +30,8 @@ export const BookDemoModal = NiceModal.create(() => {
       waitlistCompanyName: values.companyName,
       waitlistCompanyEmail: values.companyEmail,
       waitlistCompanySize: values.companySize,
+      waitlistBookingDate: '',
+      waitlistBookingType: '',
       waitlistRole: values.role,
     };
 

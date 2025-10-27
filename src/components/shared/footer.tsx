@@ -202,8 +202,6 @@ export const Footer = () => {
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>© {new Date().getFullYear()} QOCENT.</span>
               <span>All rights reserved.</span>
-              <span className="hidden sm:inline">•</span>
-              <span className="hidden sm:inline">Built with ❤️</span>
             </div>
 
             <div className="flex flex-wrap gap-6">

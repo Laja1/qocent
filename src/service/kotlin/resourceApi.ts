@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { ApiEnums } from "@/utilities/enums";
-import type {ConfigResponse, createResourceResponse, resourceResponse, } from "@/models/response/resourceResponse";
+import type {ConfigResponse, consoleSummaryResponse, createResourceResponse, resourceResponse, } from "@/models/response/resourceResponse";
 import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import type { ParameterResponse } from "@/models/response/siteResponse";
 import type { createResourceRequest, createStaterPackRequest } from "@/models/request/resourceRequest";
@@ -23,8 +23,8 @@ getConfig: build.query<ConfigResponse, { serviceId: string, configProvider: stri
 getResourceTemplate: build.query<ParameterResponse, { resource: string, provider: string }>({
     query: ({ resource, provider }) => `/resource/template/${provider}/${resource}`,
     }),
-    getAllResources: build.query<resourceResponse, { accountCode: string,provider:string }>({
-      query: ({ accountCode,provider }) => `/resource/read-all-resources/${accountCode}/${provider}`,
+    getAllResources: build.query<resourceResponse, { accountCode: string,provider:string, type: 'INTERNAL' | 'EXTERNAL' }>({
+      query: ({ accountCode,provider, type }) => ({url: `/resource/read-all-resources/${accountCode}/${provider}`,params: { requestType: type } }),
       providesTags: (result) =>
         createResourceProviderTags(
           result,
@@ -63,16 +63,19 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
       }),
       invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" }],
     }),
+    consoleSummary:build.query<consoleSummaryResponse,void>({
+      query:()=>`/resource/console-summary`,
+    }),
   }),
 });
 
 export const {
-
   useGetConfigQuery,
   useGetAllResourcesQuery,
   useGetResourceTemplateQuery,
   useCreateResourceMutation,
   useDeleteResourceMutation,
   useCreateStaterPackMutation,
-  useDeleteResourceByCodeMutation
+  useDeleteResourceByCodeMutation,
+  useConsoleSummaryQuery,
 } = kotlinResourceApi;

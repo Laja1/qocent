@@ -44,20 +44,24 @@ export const DeploymentDialog = NiceModal.create(
 
     // Redux state
     const { provider } = useSelector((state: RootState) => state.dashboard);
-    const { accountCode } = useSelector((state: RootState) => state.account);
+    const accountCode = useSelector((state: RootState) => state.account);
     const { userId } = useSelector((state: RootState) => state.auth);
 
     // API hooks
     const [createStaterPack, { isLoading }] = useCreateStaterPackMutation();
     const { data: siteData } = useGetSiteByProviderQuery(
-      { provider, siteAccountId: accountCode ?? "" },
-      { skip: !userId || !provider }
+      {
+        provider,
+        siteAccountId: accountCode?.accountCode ?? "",
+        type: accountCode?.type ?? "",
+      },
+      { skip: !userId || !provider || !accountCode?.type }
     );
 
     // Formik
     const formik = useFormik({
       initialValues: {
-        accountCode: accountCode ?? "",
+        accountCode: accountCode?.accountCode ?? "",
         serverPassword: "",
         siteCode: "",
         siteProvider: provider ?? "",

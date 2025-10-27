@@ -24,9 +24,10 @@ export function Hero() {
               Our Services
             </h1>
             <p className="text-sm  md:text-base text-white mb-8 max-w-2xl mx-auto">
-              Qocent offers a robust and diverse portfolio of cloud services,
-              built on the reliable foundations of AWS and Huawei, designed to
-              meet the demands of any application or workload.
+              At Qocent, we help businesses get the most out of the cloud, from
+              migration to modernization. Built on trusted platforms like AWS
+              and Huawei Cloud, our services are designed for flexibility,
+              security, and performance across any workload or application.
             </p>
 
             <div>

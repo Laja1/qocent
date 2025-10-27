@@ -1,9 +1,8 @@
-import { Footer } from "@/components/shared";
 import { Hero } from "./hero";
-import { Compute } from "./compute";
-import { Storage } from "./storage";
 import Seo from "@/components/shared/seo";
 import Navbar from "@/components/shared/navbar2";
+import { Footer } from "@/components/shared";
+import Service from "./service-modal";
 
 const ExploreServices = () => {
   return (
@@ -25,9 +24,11 @@ const ExploreServices = () => {
 
       <Navbar />
       <Hero />
+     
+        <Service />
       {/* <InfiniteCardCarousel /> */}
-      <Compute />
-      <Storage />
+      {/* <Compute />
+      <Storage /> */}
       <Footer />
     </div>
   );

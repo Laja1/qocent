@@ -36,6 +36,7 @@ export const ServerHouses = () => {
   const { data, isLoading } = useGetAllHouseQuery({
     accountCode: account?.accountCode,
     provider: dashboard?.provider,
+    type: account.type,
   });
   console.log(data?.data, "sgsss");
 

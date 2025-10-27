@@ -105,3 +105,34 @@ export type ConfigItem = {
   validJson?: boolean; // Made optional since it's not in your sample response
 };
 
+
+
+export type consoleSummaryResponse = {
+  responseCode: string;
+  responseMessage: string;
+  data: {
+    totalResourceDeployed: number;
+    totalSites: number;
+    totalHouses: number;
+    totalRooms: number;
+    trend: {
+      date: string;
+      value: number;
+    }[];
+    summary: {
+      compute: number;
+      networking: number;
+      storage: number;
+      database: number;
+      security: number;
+      others: number;
+    };
+    statusBreakdown: {
+      active: number;
+      pending: number;
+      failed: number;
+      inactive: number;
+    };
+  };
+};
+

@@ -84,3 +84,10 @@ export type acceptInvitationRequest = {
   userLastName: string;
   userRoleId: number;
 }
+
+
+export type updateMemberRequest = {
+  privileges: string[];
+  siteCode: string;
+  userId: string;
+}

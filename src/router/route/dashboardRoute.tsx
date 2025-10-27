@@ -19,6 +19,7 @@ import { Monitoring } from "@/pages/monitoring";
 import StarterPacksGrid from "@/pages/starter-packs";
 import { Security } from "@/pages/security";
 import { CertificateManager } from "@/pages/security/certificate-manager";
+import { Access } from "@/pages/access";
 
 export const dashboardRoute: RouteType[] = [
   {
@@ -124,12 +125,12 @@ export const dashboardRoute: RouteType[] = [
     component: <Security />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
-  // {
-  //   path: RouteConstant.dashboard.access.path,
-  //   name: RouteConstant.dashboard.access.name,
-  //   component: <Access />,
-  //   metadata: { isAuthenticated: true, hasSidebar: true },
-  // },
+  {
+    path: RouteConstant.dashboard.access.path,
+    name: RouteConstant.dashboard.access.name,
+    component: <Access />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
   {
     path: RouteConstant.dashboard.billings.path,
     name: RouteConstant.dashboard.billings.name,

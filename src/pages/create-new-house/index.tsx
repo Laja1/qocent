@@ -45,14 +45,14 @@ export const CreateNewHouse = () => {
     provider: dashboard.provider,
   });
   const user = useSelector((state: RootState) => state.account);
-  const { data: siteData } =
-  useGetSiteByProviderQuery(
+  const { data: siteData } = useGetSiteByProviderQuery(
     {
       provider: dashboard.provider,
       siteAccountId: user.accountCode || "",
+      type: user.type || "",
     },
     {
-      skip:  !dashboard.provider,
+      skip: !dashboard.provider,
     }
   );
   const siteUserId = siteData?.data?.[0]?.siteUserId || user?.accountCode || "";
@@ -95,18 +95,18 @@ export const CreateNewHouse = () => {
   };
 
   const initialValues = useMemo(() => {
-    const templateValues = serverHouseTemplate?.data?.reduce(
-      (acc: Record<string, string>, item: ParameterData) => ({
-        ...acc,
-        [item.parameterField]: "",
-      }),
-      {}
-    ) || {};
-  
+    const templateValues =
+      serverHouseTemplate?.data?.reduce(
+        (acc: Record<string, string>, item: ParameterData) => ({
+          ...acc,
+          [item.parameterField]: "",
+        }),
+        {}
+      ) || {};
+
     return {
       ...templateValues,
-       siteUserId:siteUserId
-
+      siteUserId: siteUserId,
     };
   }, [serverHouseTemplate?.data, dashboard]);
 
@@ -125,8 +125,6 @@ export const CreateNewHouse = () => {
         resourceType: "ServerHouse",
       }) as ConfigResponse)
     : null;
-
-
 
   // Modal for parameter descriptions
   const descriptionModal = (row: ParameterData) => {

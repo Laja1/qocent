@@ -8,6 +8,7 @@ import type {
   resendOtpRequest,
   signInRequest,
   signupRequest,
+  updateMemberRequest,
 } from "@/models/request/authRequest";
 import type {
 
@@ -81,7 +82,7 @@ export const authApi = createApi({
         method: "POST",
         body: body,
       }),
-    }),
+    }), 
     inviteToWorkspace: build.mutation<genericResponse, invitationRequest>({
       query: (body) => ({
         url: "/authentication/invite-user",
@@ -98,13 +99,10 @@ export const authApi = createApi({
     query: () => `/authentication/iam/available-modules`
   
 }),
-  getAccountMembers: build.query<AccountResponse, { accountCode: string }>({
-    query: ({ accountCode }) =>
-      `/authentication/account-members/${accountCode}`,
-    providesTags: (result, _error, { accountCode }) =>
-      result
-        ? [{ type: ApiEnums.Member, id: accountCode }]
-        : [],
+  getAccountMembers: build.query<AccountResponse, { siteCode: string }>({
+    query: ({ siteCode }) =>
+      `/authentication/site-members/${siteCode}`,
+    providesTags:[{type:ApiEnums.Member,id:'LIST'}]   
   }),  
     acceptInvite:build.mutation<AccountResponse,acceptInvitationRequest>({
       query:(body)=>({
@@ -115,9 +113,17 @@ export const authApi = createApi({
       invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
       
     }),
-    deleteMember:build.mutation<genericResponse,{ accountCode: string,memberUserCode: string;}>({
+    deleteMember:build.mutation<genericResponse,{ siteCode: string,memberUserCode: string;}>({
       query:(body)=>({
-        url: "/authentication/remove-member",
+        url: "/authentication/remove-site-member",
+        method: "POST",
+        body:body,
+      }),
+      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
+    }),
+    updateMember:build.mutation<genericResponse,updateMemberRequest>({
+      query:(body)=>({
+        url: "/authentication/update-site-member",
         method: "POST",
         body:body,
       }),
@@ -139,4 +145,5 @@ export const {
   useInviteToWorkspaceMutation,
   useGetUserAccountsQuery,
   useGetIAMRolesQuery,
+  useUpdateMemberMutation,
 } = authApi;

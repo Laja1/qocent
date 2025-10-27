@@ -6,18 +6,13 @@ import { useState, useEffect } from "react";
 import { ResourceTable } from "./server-sites-table";
 import { Card } from "@/components/ui/card";
 import { SiteLevel } from "../architectural-room/site-level";
-import { SummaryTable } from "./summary-table";
-import { Resource } from "../resource";
 import { SecurityTable } from "./security-table";
-import { DeployResources } from "@/components/not-shared/deploy-resources";
-import { useModal } from "@/components/shared/modal";
 import { useNavigate } from "react-router-dom";
 import { CostTable } from "./cost";
 import type { SiteData } from "@/models/response/siteResponse";
 import {
   useGetSiteByProviderQuery,
   useGetResourcesInSiteQuery,
-  useGetResourceTypeCountQuery,
   useGetSiteArchitectureQuery,
   useGetSiteDataFlowQuery,
 } from "@/service/kotlin/siteApi";
@@ -58,19 +53,10 @@ export const ServerSites = () => {
       {
         provider: dashboard.provider,
         siteAccountId: account.accountCode || "",
+        type: account.type,
       },
       {
         skip: !user.userId || !dashboard.provider,
-      }
-    );
-
-  const { data: summaryData, isLoading: isSiteSummaryLoading } =
-    useGetResourceTypeCountQuery(
-      {
-        siteCode: selectedSiteCode,
-      },
-      {
-        skip: !selectedSiteCode,
       }
     );
 
@@ -105,48 +91,41 @@ export const ServerSites = () => {
       skip: !selectedSiteCode,
     }
   );
-  const { openModal, closeModal } = useModal();
 
   const actions = [
     {
       label: "View",
       icon: Eye,
-      onClick: (row: SiteData) => {
-        console.log("View server Site:", row.siteId);
-        NiceModal.show(ModalConstant.DrawerModal, row);
-      },
-    },
-    {
-      label: "Invite to Site",
-      icon: Users,
-      onClick: (row: SiteData) => {
-        NiceModal.show(ModalConstant.InviteToWorkspace, row);
-      },
+      onClick: (row: SiteData) =>
+        NiceModal.show(ModalConstant.DrawerModal, row),
     },
     {
       label: "Edit",
       icon: Edit,
-      onClick: (row: SiteData) => {
-        console.log("Edit server room:", row.siteId);
-        // TODO: Implement edit functionality
-      },
+      onClick: (row: SiteData) => console.log("Edit server room:", row.siteId),
     },
     {
       label: "Deploy Resource",
       icon: Plus,
-      onClick: () => {
-        setIsOpen(true);
-      },
+      onClick: () => setIsOpen(true),
     },
     {
       label: "Delete",
       icon: Trash2,
-      onClick: async (row: SiteData) => {
-        NiceModal.show(ModalConstant.DeleteSiteModal, row);
-      },
+      onClick: (row: SiteData) =>
+        NiceModal.show(ModalConstant.DeleteSiteModal, row),
       variant: "destructive" as const,
     },
   ];
+
+  if (account.type === "INTERNAL") {
+    actions.splice(1, 0, {
+      label: "Invite to Site",
+      icon: Users,
+      onClick: (row: SiteData) =>
+        NiceModal.show(ModalConstant.InviteToWorkspace, row),
+    });
+  }
 
   const isDataFlowLoading = dataFlowLoading || isArtificialLoading;
 
@@ -230,46 +209,46 @@ export const ServerSites = () => {
       text: "Cost",
       component: <CostTable />,
     },
-    {
-      id: 6,
-      text: "Summary",
-      component: (
-        <div className="flex lg:flex-row flex-col">
-          <div className="lg:w-1/4 lg:mr-5 flex">
-            <div className="flex flex-col w-full">
-              <SummaryTable
-                summaryData={summaryData?.data || []}
-                isLoading={isSiteSummaryLoading}
-              />
-              <Button
-                label="Add Resource"
-                prefixIcon={<PlusIcon className="size-4" />}
-                size="small"
-                className="mt-2 py-0 bg-black dark:bg-white"
-                intent="secondary"
-                onClick={() =>
-                  openModal({
-                    id: `deploy-${selectedSiteCode}`,
-                    content: () => (
-                      <DeployResources
-                        closeModal={closeModal}
-                        onProceed={() => navigate("/create-new-resource")}
-                        onNavigate={(path, state) => {
-                          navigate(path, { state });
-                        }}
-                      />
-                    ),
-                  })
-                }
-              />
-            </div>
-          </div>
-          <div className="w-full lg:w-3/4">
-            <Resource />
-          </div>
-        </div>
-      ),
-    },
+    // {
+    //   id: 6,
+    //   text: "Summary",
+    //   component: (
+    //     <div className="flex lg:flex-row flex-col">
+    //       <div className="lg:w-1/4 lg:mr-5 flex">
+    //         <div className="flex flex-col w-full">
+    //           <SummaryTable
+    //             summaryData={summaryData?.data || []}
+    //             isLoading={isSiteSummaryLoading}
+    //           />
+    //           <Button
+    //             label="Add Resource"
+    //             prefixIcon={<PlusIcon className="size-4" />}
+    //             size="small"
+    //             className="mt-2 py-0 bg-black dark:bg-white"
+    //             intent="secondary"
+    //             onClick={() =>
+    //               openModal({
+    //                 id: `deploy-${selectedSiteCode}`,
+    //                 content: () => (
+    //                   <DeployResources
+    //                     closeModal={closeModal}
+    //                     onProceed={() => navigate("/create-new-resource")}
+    //                     onNavigate={(path, state) => {
+    //                       navigate(path, { state });
+    //                     }}
+    //                   />
+    //                 ),
+    //               })
+    //             }
+    //           />
+    //         </div>
+    //       </div>
+    //       <div className="w-full lg:w-3/4">
+    //         <Resource />
+    //       </div>
+    //     </div>
+    //   ),
+    // },
   ];
 
   return (

@@ -5,6 +5,7 @@ interface AccountState {
   accountCode: string;
   accountName: string;
   accountUserCode: string;
+  type: "INTERNAL" | "EXTERNAL";
   accountType: "INDIVIDUAL" | "ORGANIZATION";
   accountStatus: "ACTIVE" | "INACTIVE";
   memberStatus: "ACTIVE" | "INACTIVE";
@@ -18,6 +19,7 @@ const initialState: AccountState = {
   accountCode: "",
   accountName: "",
   accountUserCode: "",
+  type: "INTERNAL",
   accountType: "INDIVIDUAL",
   accountStatus: "ACTIVE",
   memberStatus: "ACTIVE",

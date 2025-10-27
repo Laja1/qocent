@@ -42,6 +42,7 @@ export const Monitoring = () => {
   const { data, isLoading } = useGetAllHouseQuery({
     accountCode: account?.accountCode,
     provider: dashboard?.provider,
+    type: account?.type || "",
   });
 
   const actions = [

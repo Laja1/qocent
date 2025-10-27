@@ -11,7 +11,6 @@ import { useSelector } from "react-redux";
 import { useGetAllResourcesQuery } from "@/service/kotlin/resourceApi";
 import { Card } from "@/components/ui/card";
 import { RouteConstant } from "@/router/routes";
-
 import { resourcesColumns } from "@/utilities/constants/colums";
 import { CloudStorage } from "../cloud-storage";
 import { ContainerRegistry } from "../ecr";
@@ -26,7 +25,11 @@ export const Resources = () => {
   const [selectedType, setSelectedType] = useState("");
 
   const { data: resourceData, isLoading } = useGetAllResourcesQuery(
-    { accountCode: account?.accountCode, provider: dashboard.provider },
+    {
+      accountCode: account?.accountCode,
+      provider: dashboard.provider,
+      type: account.type,
+    },
     { skip: !account?.accountCode }
   );
 
@@ -77,10 +80,7 @@ export const Resources = () => {
 
   return (
     <div className="h-full">
-      <Header
-        title="Server Resources"
-        description="Manage your server resource"
-      >
+      <Header title="Resources" description="Manage your resources">
         <Button
           intent="tertiary"
           label="Create New Resource"

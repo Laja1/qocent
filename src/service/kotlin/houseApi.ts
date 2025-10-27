@@ -37,8 +37,8 @@ export const kotlinHouseApi = createApi({
             ]
           : [{ type: ApiEnums.House, id: "LIST" } as const],
     }),
-    getAllHouse: build.query<houseResponse,{ accountCode: string,provider:string }>({
-      query: ({accountCode,provider}) => `/resource/read-house-by-account-code/${accountCode}/${provider}`, 
+    getAllHouse: build.query<houseResponse,{ accountCode: string,provider:string, type: 'INTERNAL' | 'EXTERNAL' }>({
+      query: ({accountCode,provider, type}) => ({url: `/resource/read-house-by-account-code/${accountCode}/${provider}`,params: { requestType: type } }),
       providesTags: (result) => createHouseProviderTags(result,  "houseId"),
     }),
     getResourceInHouse: build.query<getResourcesResponse,{ houseCode: string }>({

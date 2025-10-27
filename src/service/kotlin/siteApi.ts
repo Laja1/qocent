@@ -36,11 +36,13 @@ export const siteApi = createApi({
     }),
     getSiteByProvider: build.query<
     getSiteResponse,
-    { provider: string; siteAccountId: string }
+    { provider: string; siteAccountId: string; type: string }
   >({
-    query: ({ provider, siteAccountId }) =>
-      `/site/read-by-site-account-id/${siteAccountId}/${provider}`,
-    providesTags: (result) => createSiteProviderTags(result, "siteId"),
+    query: ({ provider, siteAccountId, type }) => ({
+      url: `/site/read-by-site-account-id/${siteAccountId}/${provider}`,
+      params: { requestType: type },
+    }),
+    providesTags: (result) => createSiteProviderTags(result, "siteId"),  
     async onQueryStarted({ provider, siteAccountId }, { queryFulfilled, dispatch }) {
       try {
         console.log("Fetching site:", provider, siteAccountId);

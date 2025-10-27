@@ -42,111 +42,130 @@ export interface SidebarItem {
   isActive: boolean;
 }
 
-const sidebarItems: SidebarItem[] = [
-  // {
-  //   title: "Build with Qoonity AI",
-  //   icon: <Bot className="text-black dark:text-gray-800" />,
-  //   href: "/identity-center",
-  //   isActive: false,
-  // },
-  {
-    title: "Switch workspace",
-    icon: <LayoutList className="text-black dark:text-red-400" />,
-    href: "/console",
-    isActive: false,
-  },
-  {
-    title: "Settings",
-    icon: <Settings className="text-black dark:text-red-400" />,
-    href: "/settings",
-    isActive: false,
-  },
-];
-
-const data = {
-  serverSite: [
-    {
-      title: "Resources Console",
-      url: "#",
-      icon: <IconCloudComputing className="text-black-500  size-5" />,
-
-      isActive: false,
-      items: [
-        {
-          title: "Server Sites",
-          icon: (
-            <IconHome className="text-gray-800  dark:text-red-400 size-5" />
-          ),
-          url: RouteConstant.dashboard.serverSite.path,
-        },
-        {
-          title: "Server Houses",
-          icon: (
-            <IconCarouselVertical className="text-gray-800 dark:text-red-400 size-5" />
-          ),
-          url: RouteConstant.dashboard.serverHouses.path,
-        },
-        {
-          title: "Server Rooms",
-          icon: (
-            <IconBrowser className="text-gray-800 dark:text-red-400 size-5" />
-          ),
-          url: RouteConstant.dashboard.serverRooms.path,
-        },
-        {
-          title: "Resources",
-          icon: <Webhook className="text-gray-800 dark:text-red-400 size-5" />,
-          url: RouteConstant.dashboard.resources.path,
-        },
-        {
-          title: "Monitoring",
-          icon: <Search className="text-gray-800 dark:text-red-400 size-5" />,
-          url: RouteConstant.dashboard.monitoring.path,
-        },
-        {
-          title: "Security",
-          icon: <Shield className="text-gray-800 dark:text-red-400 size-5" />,
-          url: RouteConstant.dashboard.security.path,
-        },
-      ],
-    },
-  ],
-  others: [
-    {
-      title: "Others",
-      url: "#",
-      icon: (
-        <AlignHorizontalDistributeCenter className=" dark:text-white size-5" />
-      ),
-
-      isActive: false,
-      items: [
-        {
-          title: "Starter Packs",
-          icon: (
-            <PackageOpen className="size-4 text-gray-800 dark:text-red-400" />
-          ),
-          url: RouteConstant.dashboard.starterPacks.path,
-        },
-        {
-          title: "Billing & Statements",
-          icon: <Wallet className="size-4 text-gray-800 dark:text-red-400" />,
-          url: RouteConstant.dashboard.billings.path,
-        },
-        {
-          title: "Organization",
-          icon: <Users className="size-4 text-gray-800 dark:text-red-400" />,
-          url: RouteConstant.dashboard.billings.path,
-        },
-      ],
-    },
-  ],
-};
-
 export const SidebarLayout = () => {
   const { pathname } = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const account = useSelector((state: RootState) => state.account);
+  const sidebarItems: SidebarItem[] = [
+    // {
+    //   title: "Build with Qoonity AI",
+    //   icon: <Bot className="text-black dark:text-gray-800" />,
+    //   href: "/identity-center",
+    //   isActive: false,
+    // },
+    {
+      title: "Switch workspace",
+      icon: <LayoutList className="text-black dark:text-red-400" />,
+      href: "/console",
+      isActive: false,
+    },
+    {
+      title: "Settings",
+      icon: <Settings className="text-black dark:text-red-400" />,
+      href: "/settings",
+      isActive: false,
+    },
+  ];
+
+  const data = {
+    serverSite: [
+      {
+        title: "Resources Console",
+        url: "#",
+        icon: <IconCloudComputing className="text-black-500  size-5" />,
+
+        isActive: false,
+        items: [
+          {
+            title: "Server Sites",
+            icon: (
+              <IconHome className="text-gray-800  dark:text-red-400 size-5" />
+            ),
+            url: RouteConstant.dashboard.serverSite.path,
+          },
+          {
+            title: "Server Houses",
+            icon: (
+              <IconCarouselVertical className="text-gray-800 dark:text-red-400 size-5" />
+            ),
+            url: RouteConstant.dashboard.serverHouses.path,
+          },
+          {
+            title: "Server Rooms",
+            icon: (
+              <IconBrowser className="text-gray-800 dark:text-red-400 size-5" />
+            ),
+            url: RouteConstant.dashboard.serverRooms.path,
+          },
+          {
+            title: "Resources",
+            icon: (
+              <Webhook className="text-gray-800 dark:text-red-400 size-5" />
+            ),
+            url: RouteConstant.dashboard.resources.path,
+          },
+          {
+            title: "Monitoring",
+            icon: <Search className="text-gray-800 dark:text-red-400 size-5" />,
+            url: RouteConstant.dashboard.monitoring.path,
+          },
+          {
+            title: "Security",
+            icon: <Shield className="text-gray-800 dark:text-red-400 size-5" />,
+            url: RouteConstant.dashboard.security.path,
+          },
+        ],
+      },
+    ],
+    others: [
+      {
+        title: "Others",
+        url: "#",
+        icon: (
+          <AlignHorizontalDistributeCenter className=" dark:text-white size-5" />
+        ),
+
+        isActive: false,
+        items: [
+          {
+            title: "Starter Packs",
+            icon: (
+              <PackageOpen className="size-4 text-gray-800 dark:text-red-400" />
+            ),
+            url: RouteConstant.dashboard.starterPacks.path,
+          },
+          {
+            title: "Billing & Statements",
+            icon: <Wallet className="size-4 text-gray-800 dark:text-red-400" />,
+            url: RouteConstant.dashboard.billings.path,
+          },
+          account.type === "INTERNAL"
+            ? {
+                title: "Organization",
+                icon: (
+                  <Users className="size-4 text-gray-800 dark:text-red-400" />
+                ),
+                url: RouteConstant.dashboard.billings.path,
+              }
+            : null,
+          account.type === "INTERNAL"
+            ? {
+                title: "Access",
+                icon: (
+                  <Users className="size-4 text-gray-800 dark:text-red-400" />
+                ),
+                url: RouteConstant.dashboard.access.path,
+              }
+            : null,
+        ].filter(Boolean) as {
+          title: string;
+          icon: ReactElement;
+          url: string;
+        }[],
+      },
+    ],
+  };
 
   const dashboard = useSelector((state: RootState) => state.dashboard);
 
