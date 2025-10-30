@@ -145,7 +145,7 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             </span>
           )}
           {surfixIcon && !isLoading && (
-            <span className={`${surfixClass} xl:ml-1`}>{surfixIcon}</span>
+            <span className={`${surfixClass} xl:ml-1 ml-1`}>{surfixIcon}</span>
           )}
         </div>
       </button>

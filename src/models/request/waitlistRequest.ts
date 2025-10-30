@@ -11,12 +11,13 @@ export type waitlistFormPayload = {
   };
   
 export const  waitlistInit = {
-  fullName: "",
+  businessName: "",
+  businessWebsite: "",
+  businessVertical: "",
+  contactName: "",
+  contactNumber: "",
   email: "",
-  mobileNumber: "",
-  companyName: "",
-  waitlistBookingDate:new Date(),
-  companyEmail: "",
   companySize: "",
   role: "",
+  bookingDate: "",    
   }

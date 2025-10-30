@@ -1,24 +1,54 @@
-export type signupRequest = {
-  accountName?: string;
+export type Business = {
+  businessContactEmail?: string;
+  businessContactName?: string;
+  businessContactNumber?: string;
+  businessContactRole?: string;
+  businessDescription?: string;
+  businessName: string;
+  businessSize: string;
+  businessWebsite?: string;
+};
+
+export type Service = {
+  serviceBookingDate: string;
+  serviceType: 'MIGRATION' | 'OPTIMIZATION' | 'MODERNIZATION' | 'MANAGED_SERVICE';
+};
+
+export type SignupRequestBase = {
+  accountName: string;
   accountType: string;
   userCountry?: string;
   userEmail: string;
   userFirstName: string;
   userLastName: string;
   userPassword: string;
-  userRoleId?: number;
+  userRoleId: number;
+};
+
+export type signupRequest =
+  | (SignupRequestBase & {
+      accountType: "organization";
+      business: Business;
+      services?: Service[];
+    })
+  | (SignupRequestBase & {
+      accountType: "individual";
+      business?: never;
+      services?: never;
+    });
+
+    
+export const signUpInit: signupRequest = {
+  userFirstName: "",
+  userLastName: "",
+  userEmail: "",
+  userPassword: "",
+  accountType: "individual",
+  accountName: "",
+  userRoleId: 100
 };
 
 
-export const signUpInit:signupRequest = {
-    userFirstName: "",
-    userLastName: "",
-    userEmail: "",
-    userPassword: "",
-    accountType:"",
-    accountName:"",
-    userRoleId:100
-}
 
 export type signInRequest = {
   userEmail?: string;

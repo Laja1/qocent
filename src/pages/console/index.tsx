@@ -5,6 +5,7 @@ import {
   NotificationDropdown,
   type Notification,
 } from "@/components/shared/notification";
+import { motion } from "framer-motion";
 import { LatestChanges } from "./latest-changes";
 import { ConsoleChart } from "./console-chart";
 import { useSelector } from "react-redux";
@@ -15,6 +16,7 @@ import { AlertBox } from "@/components/shared/alerts";
 import { MetricCard } from "@/components/not-shared/metric-card";
 import { useConsoleSummaryQuery } from "@/service/kotlin/resourceApi";
 import { Monitoring } from "./monitoring";
+import { useServiceStore } from "@/store/businessStore";
 
 export const Console = () => {
   const user = useSelector((state: RootState) => state.auth);
@@ -66,6 +68,8 @@ export const Console = () => {
     );
   };
 
+  const { services } = useServiceStore();
+
   const handleMarkAllAsRead = () => {
     setNotifications((prev) =>
       prev.map((notification) => ({ ...notification, read: true }))
@@ -91,6 +95,8 @@ export const Console = () => {
   const toggleSidebar = () => {
     setIsSidebarOpen((prev) => !prev);
   };
+
+  console.log(services);
 
   // Remove incorrect and unused code that referenced non-existent 'trend' property:
   const summary = summaryData?.data;
@@ -235,6 +241,28 @@ export const Console = () => {
                       ))}
                     </div>
                     <ConsoleChart />
+                    {services?.length && (
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        className="p-4 rounded-xl bg-gradient-to-r mt-4 from-green-100 to-green-50 
+               dark:from-green-900/40 dark:to-green-800/30 border border-green-200 dark:border-green-700"
+                      >
+                        <h3 className="text-sm font-bold text-green-700 dark:text-green-300 mb-1">
+                          Active Services
+                        </h3>
+                        <div className="flex flex-wrap gap-2">
+                          {services.map((service) => (
+                            <span
+                              key={service}
+                              className="text-xs px-2 py-1 bg-white/50 dark:bg-black/20 rounded-md"
+                            >
+                              {service}
+                            </span>
+                          ))}
+                        </div>
+                      </motion.div>
+                    )}
 
                     <div className=" my-5">
                       {showAlert && (

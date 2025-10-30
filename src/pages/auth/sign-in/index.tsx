@@ -14,6 +14,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
+import { useServiceStore } from "@/store/businessStore";
 
 const SignIn = () => {
   const [seePassword, setSeePassword] = useState(false);
@@ -36,6 +37,11 @@ const SignIn = () => {
           userId: res?.userId,
         })
       );
+      console.log(res);
+
+      // Fix: setServices expects a string[], but res.service is Service[]
+      useServiceStore.getState().setServices(res?.services);
+
       navigate(RouteConstant.dashboard.console.path);
     } catch (error: any) {
       const message = ErrorHandler.extractMessage(error);
@@ -47,6 +53,7 @@ const SignIn = () => {
       });
     }
   };
+
   console.log(googleLoading);
 
   const handleGoogleSignIn = async (credentialResponse: CredentialResponse) => {

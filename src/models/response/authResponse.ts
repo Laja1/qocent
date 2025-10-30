@@ -1,3 +1,5 @@
+import type { Business, } from "../request/authRequest";
+
  export interface signInResponse {
     accessToken: string;
     privileges: string[];
@@ -7,6 +9,8 @@
     userFirstName: string;
     userId: number;
     userLastName: string;
+    business:Business
+    services:string[]
     userRoleId: number;
   }
   

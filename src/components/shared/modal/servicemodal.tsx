@@ -138,52 +138,53 @@ export const ServiceModal = NiceModal.create<ServiceModalProps>(
                         >
                           <div className="space-y-4">
                             <Textfield
-                              label="Full Name *"
-                              className="text-black"
-                              name="fullName"
+                              label="Business Name *"
+                              name="businessName"
+                              formik={formik}
+                              placeholder="e.g., Acme Corp"
+                            />
+
+                            <Textfield
+                              label="Business Website"
+                              name="businessWebsite"
+                              formik={formik}
+                              placeholder="https://acme.com"
+                            />
+
+                            <Textfield
+                              label="Business Vertical *"
+                              name="businessVertical"
+                              formik={formik}
+                              placeholder="e.g., FinTech, Healthcare, Logistics"
+                            />
+
+                            <Textfield
+                              label="Name of Sales Lead *"
+                              name="contactName"
                               formik={formik}
                               placeholder="John Doe"
                             />
 
                             <Textfield
-                              label="Email *"
-                              name="email"
-                              type="email"
-                              className="text-black"
-                              formik={formik}
-                              placeholder="john.doe@example.com"
-                            />
-
-                            <Textfield
-                              label="Mobile Number *"
-                              className="text-black"
-                              name="mobileNumber"
+                              label="Contact Number *"
+                              name="contactNumber"
                               type="tel"
                               formik={formik}
                               placeholder="+1 (555) 123-4567"
                             />
 
                             <Textfield
-                              label="Company Name *"
-                              className="text-black"
-                              name="companyName"
-                              formik={formik}
-                              placeholder="Your Company Inc."
-                            />
-
-                            <Textfield
-                              label="Company Email *"
-                              className="text-black"
-                              name="companyEmail"
+                              label="Email *"
+                              name="email"
                               type="email"
                               formik={formik}
-                              placeholder="info@company.com"
+                              placeholder="john.doe@example.com"
                             />
 
                             <SelectField
                               name="companySize"
                               placeholder="Select company size"
-                              label="Company Size *"
+                              label="Company Size"
                               formik={formik}
                               labelClassname="text-white"
                               className="text-black"
@@ -198,17 +199,19 @@ export const ServiceModal = NiceModal.create<ServiceModalProps>(
                                 { label: "500+ employees", value: "500+" },
                               ]}
                             />
+
                             <DatePickerWithFormik
-                              name="waitlistBookingDate"
+                              name="bookingDate"
                               formik={formik}
-                              label="Select a Date"
+                              label="Preferred Booking Date"
                             />
+
                             <Textfield
-                              label="Role *"
+                              label="Role / Title"
                               name="role"
                               className="text-black"
                               formik={formik}
-                              placeholder="e.g., CTO, DevOps Engineer, IT Manager"
+                              placeholder="e.g., CTO, Project Manager"
                             />
                           </div>
                         </form>

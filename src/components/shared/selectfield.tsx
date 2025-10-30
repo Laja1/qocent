@@ -1,4 +1,5 @@
 import clsx from "clsx";
+import { getIn } from "formik";
 import type { SelectfieldOptions, SelectProps } from "./types";
 import {
   Select,
@@ -19,9 +20,16 @@ export const SelectField = ({
   value,
   className,
 }: SelectProps) => {
+  // ✅ Use getIn to safely access nested formik values and errors
+  const fieldValue = value ?? getIn(formik?.values, name) ?? "";
+  const fieldError = error ?? getIn(formik?.errors, name);
+  const touched = getIn(formik?.touched, name);
+  const displayError = touched && fieldError;
+
   const selectfieldClasses = clsx(
-    "block w-full bg-white text-black border border-gray-300 rounded-xs py-3 px-3 text-xs focus:outline-none focus:ring-0.5 focus:ring-green-700 focus:border-green-700 ",
-    className
+    "block w-full bg-white text-black border border-gray-300 rounded-xs py-3 px-3 text-xs focus:outline-none focus:ring-0.5 focus:ring-green-700 focus:border-green-700",
+    className,
+    { "border-red-500": displayError }
   );
 
   const handleChange = (selectedValue: string) => {
@@ -35,22 +43,22 @@ export const SelectField = ({
       {label && (
         <label
           htmlFor={name}
-          className={`text-sm text-gray-600 dark:text-white ${labelClassname}`}
+          className={clsx(
+            "text-sm text-gray-600 dark:text-white",
+            labelClassname
+          )}
         >
           {label}
         </label>
       )}
+
       <div className="relative mt-1 bg-white">
-        <Select
-        
-          value={value || formik?.values[name] || ""}
-          onValueChange={handleChange}
-        >
+        <Select value={fieldValue} onValueChange={handleChange}>
           <SelectTrigger
             id={name}
             className={clsx(
               selectfieldClasses,
-              "cursor-pointer flex items-center justify-between "
+              "cursor-pointer flex items-center justify-between"
             )}
           >
             <SelectValue
@@ -58,6 +66,7 @@ export const SelectField = ({
               className="flex-grow placeholder:text-black"
             />
           </SelectTrigger>
+
           <SelectContent>
             {options?.map(({ label, value }: SelectfieldOptions) => (
               <SelectItem key={value} value={value}>
@@ -67,7 +76,10 @@ export const SelectField = ({
           </SelectContent>
         </Select>
       </div>
-      {error && <p className="text-red-500 text-xs my-1">{error}</p>}
+
+      {displayError && (
+        <p className="text-red-500 text-xs my-1">{displayError}</p>
+      )}
     </div>
   );
 };

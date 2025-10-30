@@ -6,6 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 type AuthLayoutProps = {
   children: React.ReactNode;
   title: string;
+  cardbodyClass?: string;
   subtitle?: string;
   mainContainerProps?: React.DetailedHTMLProps<
     React.HTMLAttributes<HTMLElement>,
@@ -20,6 +21,7 @@ const AuthLayout = ({
   children,
   title,
   subtitle,
+  cardbodyClass,
   mainContainerProps,
   ...divProps
 }: AuthLayoutProps) => {
@@ -63,11 +65,12 @@ const AuthLayout = ({
         className="flex flex-col items-center dark:bg-black relative justify-center space-y-5 flex-1 py-5"
         {...mainContainerProps}
       >
-        <div className="flex rounded-sm justify-center items-center w-full lg:max-w-md">
+        <div
+          className={`flex rounded-sm justify-center items-center w-full ${cardbodyClass} lg:max-w-lg`}
+        >
           <div className="bg-[#FFFFFF0D] border  mx-5 rounded-md py-5 px-8 w-full">
             <div className="justify-center flex text-gray-700 font-alumni">
               {isDark ? (
-            
                 <img
                   src={svgLinks.qocentLight}
                   alt="QOCENT Logo"
@@ -75,10 +78,10 @@ const AuthLayout = ({
                 />
               ) : (
                 <img
-                src={svgLinks.logo}
-                alt="QOCENT Logo"
-                className="h-20 w-20"
-              />
+                  src={svgLinks.logo}
+                  alt="QOCENT Logo"
+                  className="h-20 w-20"
+                />
               )}
             </div>
             <div className="justify-center items-center flex-col flex space-y-3">
