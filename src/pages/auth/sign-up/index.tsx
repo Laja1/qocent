@@ -20,7 +20,6 @@ import {
   ArrowLeft,
   Globe,
   FileText,
-  Calendar,
   MailIcon,
 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -33,35 +32,10 @@ const SignUp = () => {
   const [seePassword, setSeePassword] = useState(false);
   const [googleLoading, setGoogleLoading] = useState(false);
   const [currentStep, setCurrentStep] = useState(1);
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [signupMutation, { isLoading }] = useSignUpMutation();
   const [signIn] = useSignInMutation();
-
-  const serviceTypes = [
-    {
-      value: "MIGRATION",
-      label: "Migration",
-      description: "Move your infrastructure seamlessly",
-    },
-    {
-      value: "OPTIMIZATION",
-      label: "Optimization",
-      description: "Improve performance and efficiency",
-    },
-    {
-      value: "MODERNIZATION",
-      label: "Modernization",
-      description: "Update and transform your systems",
-    },
-    {
-      value: "MANAGED_SERVICE",
-      label: "Managed Service",
-      description: "Ongoing support and management",
-    },
-  ];
 
   const businessSizes = [
     { label: "1-10 employees", value: "1-10" },
@@ -89,13 +63,6 @@ const SignUp = () => {
               ...values.business,
               businessContactNumber: "",
             },
-            services:
-              selectedServices.length > 0
-                ? selectedServices.map((service) => ({
-                    serviceType: service as any,
-                    serviceBookingDate: new Date().toISOString(),
-                  }))
-                : undefined, // Don't include empty array
           };
         } else {
           submissionData = values;
@@ -115,7 +82,7 @@ const SignUp = () => {
     },
   });
   const isOrganization = formik.values.accountType === "organization";
-  const totalSteps = isOrganization ? 4 : 2;
+  const totalSteps = isOrganization ? 3 : 2;
   useEffect(() => {
     formik.validateForm();
   }, []);
@@ -155,14 +122,6 @@ const SignUp = () => {
     showCustomToast("Google sign-in failed. Please try again.", {
       toastOptions: { type: "error", autoClose: 3000 },
     });
-  };
-
-  const toggleService = (service: string) => {
-    setSelectedServices((prev) =>
-      prev.includes(service)
-        ? prev.filter((s) => s !== service)
-        : [...prev, service]
-    );
   };
 
   const handleNext = () => {
@@ -212,15 +171,25 @@ const SignUp = () => {
     }
 
     if (currentStep === 2 && isOrganization) {
-      // Validate business fields
+      // Validate business fields - check for required fields
+      const business = formik.values.business;
+      const hasRequiredFields =
+        business?.businessName?.trim() &&
+        business?.businessContactEmail?.trim() &&
+        business?.businessDescription?.trim() &&
+        business?.businessSize;
+
       const businessErrors = formik.errors.business;
-      return !businessErrors || Object.keys(businessErrors).length === 0;
+      const hasNoErrors =
+        !businessErrors || Object.keys(businessErrors).length === 0;
+
+      return hasRequiredFields && hasNoErrors;
     }
 
     return true;
   };
 
-  console.log(formik.values.business?.businessName);
+  console.log(formik.errors);
   const renderStepTitle = () => {
     if (isOrganization) {
       switch (currentStep) {
@@ -229,8 +198,6 @@ const SignUp = () => {
         case 2:
           return "Business Details";
         case 3:
-          return "Services";
-        case 4:
           return "Review & Submit";
         default:
           return "Sign Up";
@@ -453,64 +420,7 @@ const SignUp = () => {
       }
     }
 
-    // Step 3: Services (Organization only)
     if (currentStep === 3 && isOrganization) {
-      return (
-        <div className="flex flex-col gap-4">
-          <p className="text-sm text-gray-600">
-            What services are you interested in? (Optional)
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {serviceTypes.map((service) => (
-              <button
-                key={service.value}
-                type="button"
-                onClick={() => toggleService(service.value)}
-                className={`p-4 rounded-lg border-2 transition-all text-left ${
-                  selectedServices.includes(service.value)
-                    ? "border-blue-600 bg-blue-50"
-                    : "border-gray-200 hover:border-gray-300"
-                }`}
-              >
-                <div className="flex items-start justify-between mb-2">
-                  <Calendar
-                    className={`w-5 h-5 ${
-                      selectedServices.includes(service.value)
-                        ? "text-blue-600"
-                        : "text-gray-400"
-                    }`}
-                  />
-                  {selectedServices.includes(service.value) && (
-                    <CheckCircle2 className="w-5 h-5 text-blue-600" />
-                  )}
-                </div>
-                <h4 className="font-semibold text-sm mb-1">{service.label}</h4>
-                <p className="text-xs text-gray-600">{service.description}</p>
-              </button>
-            ))}
-          </div>
-
-          <div className="flex gap-3 mt-4">
-            <Button
-              prefixIcon={<ArrowLeft size={16} />}
-              label="Back"
-              className="flex-1"
-              onClick={handleBack}
-            />
-            <Button
-              surfixIcon={<ArrowRight size={16} />}
-              label="Continue"
-              className="flex-1"
-              onClick={handleNext}
-            />
-          </div>
-        </div>
-      );
-    }
-
-    // Step 4: Review & Submit (Organization only)
-    if (currentStep === 4 && isOrganization) {
       return (
         <div className="flex flex-col gap-4">
           <div className="bg-gray-50 rounded-lg p-4">
@@ -596,24 +506,6 @@ const SignUp = () => {
                     {formik.values.business?.businessContactNumber}
                   </span>
                 </div>
-              </div>
-            </div>
-          )}
-
-          {selectedServices.length > 0 && (
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h4 className="font-semibold text-gray-900 mb-3">
-                Selected Services
-              </h4>
-              <div className="space-y-1 text-sm">
-                {selectedServices.map((service) => (
-                  <div key={service} className="flex items-center gap-2">
-                    <CheckCircle2 className="w-4 h-4 text-green-600" />
-                    <span>
-                      {serviceTypes.find((s) => s.value === service)?.label}
-                    </span>
-                  </div>
-                ))}
               </div>
             </div>
           )}

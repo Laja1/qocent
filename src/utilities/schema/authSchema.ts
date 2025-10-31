@@ -34,9 +34,6 @@ export const registerFormValidationSchema = object().shape({
     }),
     otherwise: (schema) => schema.notRequired(),
   }),
-  
-  // Services - optional
-  services: array().notRequired(),
 });
 
 

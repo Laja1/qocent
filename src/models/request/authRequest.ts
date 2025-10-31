@@ -9,10 +9,6 @@ export type Business = {
   businessWebsite?: string;
 };
 
-export type Service = {
-  serviceBookingDate: string;
-  serviceType: 'MIGRATION' | 'OPTIMIZATION' | 'MODERNIZATION' | 'MANAGED_SERVICE';
-};
 
 export type SignupRequestBase = {
   accountName: string;
@@ -29,12 +25,10 @@ export type signupRequest =
   | (SignupRequestBase & {
       accountType: "organization";
       business: Business;
-      services?: Service[];
     })
   | (SignupRequestBase & {
       accountType: "individual";
       business?: never;
-      services?: never;
     });
 
     

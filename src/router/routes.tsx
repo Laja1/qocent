@@ -128,6 +128,10 @@ export const RouteConstant = {
       path: "/server-sites",
       name: "ServerSite",
     },
+    professionalServices: {
+      path: "/professional-services",
+      name: "professionalServices",
+    },
     serverHouses: {
       path: "/server-houses",
       name: "ServerHouses",

@@ -241,12 +241,12 @@ export const Console = () => {
                       ))}
                     </div>
                     <ConsoleChart />
-                    {services?.length && (
+                    {services && services.length > 0 && (
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
                         className="p-4 rounded-xl bg-gradient-to-r mt-4 from-green-100 to-green-50 
-               dark:from-green-900/40 dark:to-green-800/30 border border-green-200 dark:border-green-700"
+      dark:from-green-900/40 dark:to-green-800/30 border border-green-200 dark:border-green-700"
                       >
                         <h3 className="text-sm font-bold text-green-700 dark:text-green-300 mb-1">
                           Active Services

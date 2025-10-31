@@ -20,6 +20,7 @@ import StarterPacksGrid from "@/pages/starter-packs";
 import { Security } from "@/pages/security";
 import { CertificateManager } from "@/pages/security/certificate-manager";
 import { Access } from "@/pages/access";
+import { ProfessionalServices } from "@/pages/professional-services";
 
 export const dashboardRoute: RouteType[] = [
   {
@@ -57,6 +58,12 @@ export const dashboardRoute: RouteType[] = [
     path: RouteConstant.dashboard.monitoring.path,
     name: RouteConstant.dashboard.monitoring.name,
     component: <Monitoring />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.professionalServices.path,
+    name: RouteConstant.dashboard.professionalServices.name,
+    component: <ProfessionalServices />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
   {

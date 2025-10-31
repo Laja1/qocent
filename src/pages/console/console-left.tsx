@@ -180,84 +180,90 @@ export const ConsoleLeft = () => {
 
         {/* Add Workspace Button */}
 
-        {workspaceData?.externalSites?.length && (
-          <div className="mt-6 pt-4 border-t border-gray-200">
-            <div className="border-dashed border border-gray-200  dark:border-gray-800 rounded-md overflow-hidden ">
-              <div className="space-y-2">
-                {isLoading ? (
-                  <WorkspaceSkeleton />
-                ) : (
-                  <div className="space-y-2">
-                    {workspaceData?.accounts.length === 0 ? (
-                      <div className="text-center py-8 text-gray-500">
-                        <div className="mb-2">No workspaces found</div>
-                        <div className="text-xs">
-                          Create your first workspace to get started
+        {workspaceData?.externalSites &&
+          workspaceData?.externalSites?.length > 0 && (
+            <div className="mt-6 pt-4 border-t border-gray-200">
+              <div className="border-dashed border border-gray-200  dark:border-gray-800 rounded-md overflow-hidden ">
+                <div className="space-y-2">
+                  {isLoading ? (
+                    <WorkspaceSkeleton />
+                  ) : (
+                    <div className="space-y-2">
+                      {workspaceData?.accounts.length === 0 ? (
+                        <div className="text-center py-8 text-gray-500">
+                          <div className="mb-2">No workspaces found</div>
+                          <div className="text-xs">
+                            Create your first workspace to get started
+                          </div>
                         </div>
-                      </div>
-                    ) : (
-                      workspaceData?.accounts.map((workspace, index) => (
-                        <div
-                          key={workspace.accountId || index}
-                          className="border border-gray-200 dark:border-gray-800 rounded-md overflow-hidden "
-                        >
-                          <CollapsibleItem
-                            title={"External Workspace"}
-                            icon={BrainCircuit}
-                            defaultOpen={index === 0} // Open first workspace by default
+                      ) : (
+                        workspaceData?.accounts.map((workspace, index) => (
+                          <div
+                            key={workspace.accountId || index}
+                            className="border border-gray-200 dark:border-gray-800 rounded-md overflow-hidden "
                           >
-                            {/* Cloud Providers */}
-                            <div className="divide-y divide-gray-100 dark:divide-gray-800">
-                              {workspaces.map((item) => (
-                                <div key={item.provider} className="relative">
-                                  <SubItem
-                                    title={item.name}
-                                    image={item.icon}
-                                    onClick={() => {
-                                      if (item.loading) return;
+                            <CollapsibleItem
+                              title={"External Workspace"}
+                              icon={BrainCircuit}
+                              defaultOpen={index === 0} // Open first workspace by default
+                            >
+                              {/* Cloud Providers */}
+                              <div className="divide-y divide-gray-100 dark:divide-gray-800">
+                                {workspaces.map((item) => (
+                                  <div key={item.provider} className="relative">
+                                    <SubItem
+                                      title={item.name}
+                                      image={item.icon}
+                                      onClick={() => {
+                                        if (item.loading) return;
 
-                                      dispatch(
-                                        accountStore.action.setAccountDetails({
-                                          accountId: workspace.accountId,
-                                          accountCode: workspace.accountCode,
-                                          accountName: workspace.accountName,
-                                          accountUserCode:
-                                            workspace.accountUserCode || "",
-                                          accountType: workspace.accountType as
-                                            | "INDIVIDUAL"
-                                            | "ORGANIZATION"
-                                            | undefined,
-                                          type: "EXTERNAL",
-                                          accountStatus:
-                                            workspace.accountStatus as
-                                              | "ACTIVE"
-                                              | "INACTIVE"
-                                              | undefined,
-                                          owner: workspace.isOwner
-                                            ? "YES"
-                                            : "NO",
-                                        })
-                                      );
+                                        dispatch(
+                                          accountStore.action.setAccountDetails(
+                                            {
+                                              accountId: workspace.accountId,
+                                              accountCode:
+                                                workspace.accountCode,
+                                              accountName:
+                                                workspace.accountName,
+                                              accountUserCode:
+                                                workspace.accountUserCode || "",
+                                              accountType:
+                                                workspace.accountType as
+                                                  | "INDIVIDUAL"
+                                                  | "ORGANIZATION"
+                                                  | undefined,
+                                              type: "EXTERNAL",
+                                              accountStatus:
+                                                workspace.accountStatus as
+                                                  | "ACTIVE"
+                                                  | "INACTIVE"
+                                                  | undefined,
+                                              owner: workspace.isOwner
+                                                ? "YES"
+                                                : "NO",
+                                            }
+                                          )
+                                        );
 
-                                      handleClick(item.provider);
-                                    }}
-                                  />
-                                  {item.loading && (
-                                    <div className="absolute inset-0 bg-white bg-opacity-50 cursor-not-allowed" />
-                                  )}
-                                </div>
-                              ))}
-                            </div>
-                          </CollapsibleItem>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                )}
+                                        handleClick(item.provider);
+                                      }}
+                                    />
+                                    {item.loading && (
+                                      <div className="absolute inset-0 bg-white bg-opacity-50 cursor-not-allowed" />
+                                    )}
+                                  </div>
+                                ))}
+                              </div>
+                            </CollapsibleItem>
+                          </div>
+                        ))
+                      )}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
         <div></div>
       </div>
 

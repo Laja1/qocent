@@ -158,6 +158,16 @@ export const SidebarLayout = () => {
                 url: RouteConstant.dashboard.access.path,
               }
             : null,
+
+          account.type === "INTERNAL"
+            ? {
+                title: "Professional Services",
+                icon: (
+                  <Users className="size-4 text-gray-800 dark:text-red-400" />
+                ),
+                url: RouteConstant.dashboard.professionalServices.path,
+              }
+            : null,
         ].filter(Boolean) as {
           title: string;
           icon: ReactElement;
