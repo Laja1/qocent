@@ -69,33 +69,12 @@ const statusConfig = {
 export const ProfessionalServices = () => {
   // TODO: Replace with actual API call when it is provided
   const navigate = useNavigate();
-  const [enrolledServices, setEnrolledServices] = useState<EnrolledService[]>([
+  const [enrolledServices] = useState<EnrolledService[]>([
     { type: "MIGRATION", status: "IN_PROGRESS", appliedDate: "2025-10-15" },
     { type: "OPTIMIZATION", status: "COMPLETED", appliedDate: "2025-09-20" },
   ]);
 
-  const [isApplyingForNewService, setIsApplyingForNewService] = useState(false);
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-
-  const toggleService = (service: string) => {
-    setSelectedServices((prev) =>
-      prev.includes(service)
-        ? prev.filter((s) => s !== service)
-        : [...prev, service]
-    );
-  };
-
-  const handleApplyForNewService = () => {
-    setIsApplyingForNewService(true);
-  };
-
-  const handleSubmitNew = () => {
-    // TODO: Call update endpoint with selectedServices
-    console.log("Applying for services:", selectedServices);
-    // Reset state after submission
-    setIsApplyingForNewService(false);
-    setSelectedServices([]);
-  };
+  const [isApplyingForNewService] = useState(false);
 
   const hasEnrollments = enrolledServices.length > 0;
 

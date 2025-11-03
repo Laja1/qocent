@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { string, object, array } from 'yup';
+import { string, object } from 'yup';
 import { codeValidatiion, defaultValidation, emailValidation, passwordValidation } from '.';
 
 export const loginFormValidationSchema = object().shape({
