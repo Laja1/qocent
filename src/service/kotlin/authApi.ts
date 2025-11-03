@@ -9,6 +9,7 @@ import type {
   signInRequest,
   signupRequest,
   updateMemberRequest,
+  updateProfessionalServiceRequest,
 } from "@/models/request/authRequest";
 import type {
 
@@ -62,6 +63,13 @@ export const authApi = createApi({
     >({
       query: (body) => ({
         url: "/authentication/initiate-password-reset",
+        method: "POST",
+        body: body,
+      }),
+    }),
+    updateProfessionalService:build.mutation<genericResponse,updateProfessionalServiceRequest[]>({
+      query: (body) => ({
+        url: "/authentication/business/professional-services/update",
         method: "POST",
         body: body,
       }),
@@ -146,4 +154,5 @@ export const {
   useGetUserAccountsQuery,
   useGetIAMRolesQuery,
   useUpdateMemberMutation,
+  useUpdateProfessionalServiceMutation,
 } = authApi;

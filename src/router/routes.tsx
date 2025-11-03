@@ -98,6 +98,7 @@ export const RouteConstant = {
       path: "/forgot-password",
       name: "forgot-password",
     },
+
     resetPassword: {
       path: "/reset-password",
       name: "reset-Password",
@@ -119,6 +120,10 @@ export const RouteConstant = {
     monitoring: {
       path: "/monitoring",
       name: "Monitoring",
+    },
+    createProfessionalService: {
+      path: "/create-professional-service",
+      name: "Create Professional Service",
     },
     starterPacks: {
       path: "/starter-packs",

@@ -1,8 +1,19 @@
-import { Header } from "@/components/shared";
-import { Box, CheckCheck, CheckCircle2, Clock, Cloud, Plus, RefreshCcw, Settings } from "lucide-react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { Button, Header } from "@/components/shared";
+import { RouteConstant } from "@/router/routes";
+import {
+  Box,
+  CheckCheck,
+  Clock,
+  Cloud,
+  Plus,
+  RefreshCcw,
+  Settings,
+} from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const serviceTypes = [
+export const serviceTypes = [
   {
     value: "MIGRATION",
     label: "Migration",
@@ -57,6 +68,7 @@ const statusConfig = {
 
 export const ProfessionalServices = () => {
   // TODO: Replace with actual API call when it is provided
+  const navigate = useNavigate();
   const [enrolledServices, setEnrolledServices] = useState<EnrolledService[]>([
     { type: "MIGRATION", status: "IN_PROGRESS", appliedDate: "2025-10-15" },
     { type: "OPTIMIZATION", status: "COMPLETED", appliedDate: "2025-09-20" },
@@ -98,88 +110,28 @@ export const ProfessionalServices = () => {
         <div className="space-y-6 mt-6">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold mb-4">Your Services</h3>
-            <button
-              onClick={handleApplyForNewService}
-              className="w-fit py-3 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
-            >
-              <Plus className="w-5 h-5" />
-              Apply for Another Service
-            </button>
+
+            <Button
+              label="Apply for Another Service"
+              onClick={() => {
+                navigate(
+                  RouteConstant.dashboard.createProfessionalService.path
+                );
+              }}
+              prefixIcon={<Plus className="w-5 h-5" />}
+              className="w-fit py-2 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+            />
           </div>
-          <div className="grid grid-cols-2 gap-4">
-            {enrolledServices.map((enrollment) =>
+          <div className="grid grid-cols-3 gap-4">
+            {enrolledServices.map((enrollment) => (
               <EnrolledService enrollment={enrollment} key={enrollment.type} />
-            )}
-          </div>
-        </div>
-      )}
-
-      {(isApplyingForNewService || !hasEnrollments) && (
-        <div className="mt-6">
-          <h3 className="text-lg font-semibold mb-4">
-            {hasEnrollments ? "Select Additional Services" : "Select Services"}
-          </h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-            {serviceTypes
-              .filter((service) => !enrolledServices.some((e) => e.type === service.value))
-              .map((service) => (
-                <button
-                  key={service.value}
-                  type="button"
-                  onClick={() => toggleService(service.value)}
-                  className={`p-4 rounded-lg border-2 transition-all text-left ${selectedServices.includes(service.value)
-                    ? "border-blue-600 bg-blue-50"
-                    : "border-gray-200 hover:border-gray-300"
-                    }`}
-                >
-                  <div className="flex items-start justify-between mb-2">
-                    <div
-                      className={
-                        selectedServices.includes(service.value)
-                          ? "text-blue-600"
-                          : "text-gray-400"
-                      }
-                    >
-                      {service.triggerIcon}
-                    </div>
-                    {selectedServices.includes(service.value) && (
-                      <CheckCircle2 className="w-5 h-5 text-blue-600" />
-                    )}
-                  </div>
-                  <h4 className="font-semibold text-sm mb-1">{service.label}</h4>
-                  <p className="text-xs text-gray-600">{service.description}</p>
-                </button>
-              ))}
-          </div>
-
-          <div className="grid grid-cols-2 w-full gap-3">
-            <div />
-            <div className="flex gap-4">
-              {isApplyingForNewService && (
-                <button
-                  onClick={() => {
-                    setIsApplyingForNewService(false);
-                    setSelectedServices([]);
-                  }}
-                  className="flex-1 py-3 px-4 border-2 border-gray-300 text-gray-700 rounded-lg font-medium hover:bg-gray-50 transition-colors"
-                >
-                  Cancel
-                </button>
-              )}
-              <button
-                onClick={handleSubmitNew}
-                disabled={selectedServices.length === 0}
-                className="flex-1 py-3 px-4 border-2 not-disabled:bg-blue-600 disabled:border-gray-300 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors"
-              >
-                {hasEnrollments ? "Submit Additional Services" : "Submit Application"}
-              </button>
-            </div>
+            ))}
           </div>
         </div>
       )}
     </div>
   );
-}
+};
 
 function EnrolledService({ enrollment }: { enrollment: EnrolledService }) {
   const service = serviceTypes.find((s) => s.value === enrollment.type);
@@ -192,22 +144,18 @@ function EnrolledService({ enrollment }: { enrollment: EnrolledService }) {
     >
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3 flex-1">
-          <div className="text-red-400 mt-1">
-            {service?.triggerIcon}
-          </div>
+          <div className="text-red-400 mt-1">{service?.triggerIcon}</div>
           <div className="flex-1">
-            <h4 className="font-semibold text-sm mb-1">
-              {service?.label}
-            </h4>
-            <p className="text-xs text-gray-600 mb-2">
-              {service?.description}
-            </p>
+            <h4 className="font-semibold text-sm mb-1">{service?.label}</h4>
+            <p className="text-xs text-gray-600 mb-2">{service?.description}</p>
             <p className="text-xs text-gray-500">
               Applied: {new Date(enrollment.appliedDate).toLocaleDateString()}
             </p>
           </div>
         </div>
-        <div className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${status.color}`}>
+        <div
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${status.color}`}
+        >
           {status.icon}
           {status.label}
         </div>
@@ -217,24 +165,29 @@ function EnrolledService({ enrollment }: { enrollment: EnrolledService }) {
       <div className="mt-4 pt-4 border-t border-gray-600">
         <div className="flex items-center justify-between mb-2">
           {["APPLIED", "IN_PROGRESS", "COMPLETED"].map((step, idx) => (
-            <div key={step} className={`flex items-center ${idx === 2 ? "" : "flex-1"}`}>
+            <div
+              key={step}
+              className={`flex items-center ${idx === 2 ? "" : "flex-1"}`}
+            >
               <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${enrollment.status === step ||
-                  (step === "APPLIED") ||
+                className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-medium ${
+                  enrollment.status === step ||
+                  step === "APPLIED" ||
                   (step === "IN_PROGRESS" && enrollment.status === "COMPLETED")
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-200 text-gray-500"
-                  }`}
+                    ? "bg-blue-600 text-white"
+                    : "bg-gray-200 text-gray-500"
+                }`}
               >
                 {idx + 1}
               </div>
               {idx < 2 && (
                 <div
-                  className={`flex-1 h-1 mx-2 ${enrollment.status === "COMPLETED" ||
+                  className={`flex-1 h-1 mx-2 ${
+                    enrollment.status === "COMPLETED" ||
                     (enrollment.status === "IN_PROGRESS" && step === "APPLIED")
-                    ? "bg-blue-600"
-                    : "bg-gray-200"
-                    }`}
+                      ? "bg-blue-600"
+                      : "bg-gray-200"
+                  }`}
                 />
               )}
             </div>

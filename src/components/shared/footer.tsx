@@ -34,25 +34,25 @@ export const Footer = () => {
     {
       title: "Solutions",
       links: [
-        { name: "Features", href: "/features" },
-        { name: "Pricing", href: "/pricing" },
-        { name: "Integrations", href: "/integrations" },
-        { name: "API", href: "/api" },
+        { name: "Features", href: "/#" },
+        { name: "Pricing", href: "/#" },
+        { name: "Integrations", href: "/#" },
+        { name: "API", href: "/#" },
       ],
     },
     {
       title: "Use Cases",
       links: [
-        { name: "Documentation", href: "/docs" },
-        { name: "Guides", href: "/guides" },
-        { name: "Blog", href: "/blog" },
-        { name: "Support", href: "/support" },
+        { name: "Documentation", href: "/#" },
+        { name: "Guides", href: "/#" },
+        { name: "Blog", href: "/#" },
+        { name: "Support", href: "/#" },
       ],
     },
     {
       title: "Company",
       links: [
-        { name: "About", href: "/about" },
+        { name: "About", href: "/about-us" },
         { name: "Partners", href: "/our-partners" },
         { name: "Careers", href: "/careers" },
         { name: "Contact", href: "/contact" },

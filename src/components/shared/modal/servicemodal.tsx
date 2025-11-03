@@ -71,14 +71,18 @@ export const ServiceModal = NiceModal.create<ServiceModalProps>(
       validationSchema: waitlistSchema,
     });
 
-    // Handle cancel button
     const handleCancel = () => {
       formik.resetForm();
+      setActiveStep(1);
       modal.hide();
     };
 
+    const handleModalClose = () => {
+      setActiveStep(1);
+      modal.hide();
+    };
     return (
-      <Dialog open={modal.visible} onOpenChange={() => modal.hide()}>
+      <Dialog open={modal.visible} onOpenChange={handleModalClose}>
         <DialogOverlay className="bg-black">
           <DialogContent
             className="sm:max-w-[800px] flex bg-black"
@@ -93,12 +97,12 @@ export const ServiceModal = NiceModal.create<ServiceModalProps>(
               <div className="w-1/2 p-4">
                 {activeStep === 1 && (
                   <>
-                    <h4 className="text-lg md:text-2xl text-neutral-100 font-bold text-center mb-8">
+                    <h4 className="text-lg md:text-2xl  text-neutral-100 font-bold text-center mb-8">
                       {title}
                     </h4>
 
                     <ScrollArea className="h-64 rounded-md ">
-                      <div className="py-10 mx-5 flex flex-wrap gap-x-4 gap-y-6 items-start justify-start max-w-sm">
+                      <div className="py-10 mx-5 flex flex-wrap gap-x-4 text-white gap-y-6 items-start justify-start max-w-sm">
                         {content}
                       </div>
                     </ScrollArea>
@@ -116,16 +120,12 @@ export const ServiceModal = NiceModal.create<ServiceModalProps>(
                 {activeStep === 2 && (
                   <>
                     <h4 className="text-lg md:text-2xl text-neutral-100 font-bold text-center mb-8">
-                      Book A Session
+                      Book A {title} Session
                     </h4>
 
-                    <form
-                      onSubmit={formik.handleSubmit}
-                      method="post"
-                    >
+                    <form onSubmit={formik.handleSubmit} method="post">
                       <ScrollArea className="h-64 rounded-md border">
                         <div className="py-10 mx-5 flex flex-wrap gap-x-4 gap-y-6 items-start justify-start max-w-sm">
-
                           <div className="space-y-4 w-full">
                             <Textfield
                               label="Business Name *"

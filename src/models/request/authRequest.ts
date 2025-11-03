@@ -115,3 +115,13 @@ export type updateMemberRequest = {
   siteCode: string;
   userId: string;
 }
+
+export type updateProfessionalServiceRequest = {
+  serviceBookingDate: string;
+  serviceType: string;
+}
+
+export const updateProfessionalServiceInit:updateProfessionalServiceRequest = {
+  serviceBookingDate: "",
+  serviceType: "",
+}

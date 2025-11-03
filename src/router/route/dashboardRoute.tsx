@@ -21,6 +21,7 @@ import { Security } from "@/pages/security";
 import { CertificateManager } from "@/pages/security/certificate-manager";
 import { Access } from "@/pages/access";
 import { ProfessionalServices } from "@/pages/professional-services";
+import { CreateProfessionalService } from "@/pages/create-professional-service";
 
 export const dashboardRoute: RouteType[] = [
   {
@@ -130,6 +131,12 @@ export const dashboardRoute: RouteType[] = [
     path: RouteConstant.dashboard.security.path,
     name: RouteConstant.dashboard.security.name,
     component: <Security />,
+    metadata: { isAuthenticated: true, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.createProfessionalService.path,
+    name: RouteConstant.dashboard.createProfessionalService.name,
+    component: <CreateProfessionalService />,
     metadata: { isAuthenticated: true, hasSidebar: true },
   },
   {

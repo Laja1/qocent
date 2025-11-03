@@ -56,7 +56,10 @@ export const Textfield = ({
         {label && (
           <label
             htmlFor={name}
-            className={clsx("text-sm text-tetiary-lighter", labelClassName)}
+            className={clsx(
+              "text-sm text-white text-tetiary-lighter",
+              labelClassName
+            )}
           >
             {label}
           </label>
