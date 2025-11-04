@@ -223,6 +223,7 @@ export type deploySiteResourceType = {
 
 export interface getAccountResponse {
   accounts: Account[];
+  business: Business;
   externalSites: Site[];
   responseCode: string;
   responseMessage: string;
@@ -251,6 +252,29 @@ export interface Site {
   siteRegion: string;
   siteStatus: string;
 }
+
+export interface Business {
+  businessAccountCode: string;
+  businessContactEmail: string;
+  businessContactName: string;
+  businessContactNumber: string;
+  businessContactRole: string;
+  businessDescription: string;
+  businessId: number;
+  businessName: string;
+  businessSize: string;
+  businessStatus: string;
+  businessUserId: number;
+  businessWebsite: string;
+  services: BusinessService[];
+}
+
+export interface BusinessService {
+  bookingDate: string;
+  serviceName: string;
+  status: string;
+}
+
 
 
 

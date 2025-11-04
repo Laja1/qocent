@@ -16,7 +16,7 @@ import { AlertBox } from "@/components/shared/alerts";
 import { MetricCard } from "@/components/not-shared/metric-card";
 import { useConsoleSummaryQuery } from "@/service/kotlin/resourceApi";
 import { Monitoring } from "./monitoring";
-import { useServiceStore } from "@/store/businessStore";
+import { useServiceStore } from "@/store/serviceStore";
 
 export const Console = () => {
   const user = useSelector((state: RootState) => state.auth);

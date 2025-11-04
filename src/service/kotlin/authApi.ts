@@ -73,6 +73,7 @@ export const authApi = createApi({
         method: "POST",
         body: body,
       }),
+      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
     }),
     changePassword:build.mutation<genericResponse,{oldPassword:string,userPassword:string}>({
       query: (body) => ({

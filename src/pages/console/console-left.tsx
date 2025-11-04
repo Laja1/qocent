@@ -10,6 +10,8 @@ import type { RootState } from "@/store";
 import { useGetUserAccountsQuery } from "@/service/kotlin/authApi";
 import { accountStore } from "@/store/accountSlice";
 import { useDarkMode } from "@/hooks/useDarkMode";
+import { useEffect } from "react";
+import { useBusinessStore } from "@/store/businessStore";
 
 // Skeleton loader component for workspaces
 const WorkspaceSkeleton = () => (
@@ -32,6 +34,7 @@ const WorkspaceSkeleton = () => (
 export const ConsoleLeft = () => {
   const user = useSelector((state: RootState) => state.auth);
   const { isDark, toggle } = useDarkMode();
+  const { setBusiness } = useBusinessStore();
   const { data: workspaceData, isLoading } = useGetUserAccountsQuery(
     {
       userCode: user.userEmail || "",
@@ -43,6 +46,13 @@ export const ConsoleLeft = () => {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (workspaceData?.business) {
+      // ✅ Automatically persist to Zustand
+      setBusiness(workspaceData.business);
+    }
+  }, [workspaceData, setBusiness]);
 
   const handleLogout = () => {
     dispatch(authStore.action.logout());

@@ -1,5 +1,4 @@
 import { Button, Header } from "@/components/shared";
-import { useServiceStore } from "@/store/businessStore";
 import { useUpdateProfessionalServiceMutation } from "@/service/kotlin/authApi";
 import { useState } from "react";
 import { serviceTypes } from "../professional-services";
@@ -8,15 +7,17 @@ import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useNavigate } from "react-router-dom";
 import { RouteConstant } from "@/router/routes";
+import { useBusinessStore } from "@/store/businessStore";
 
 export const CreateProfessionalService = () => {
-  const service = useServiceStore().services; // e.g. ['MIGRATION', 'OPTIMIZATION']
   const [updateProfessionalService, { isLoading }] =
     useUpdateProfessionalServiceMutation();
+  const { business } = useBusinessStore();
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const navigate = useNavigate();
-  const enrolledServices = service || [];
-  const hasEnrollments = enrolledServices.length > 0;
+
+  const enrolledServices =
+    business?.services?.map((service) => service.serviceName) || [];
 
   const toggleService = (serviceValue: string) => {
     setSelectedServices((prev) =>
@@ -30,12 +31,21 @@ export const CreateProfessionalService = () => {
     if (selectedServices.length === 0) return;
 
     try {
-      const payload = selectedServices.map((serviceType) => ({
+      const newServices = selectedServices.map((serviceType) => ({
         serviceBookingDate: new Date().toISOString(),
         serviceType,
       }));
 
-      const response = await updateProfessionalService(payload).unwrap();
+      const existingServices =
+        business?.services?.map((service) => ({
+          serviceBookingDate: service.bookingDate,
+          serviceType: service.serviceName,
+        })) || [];
+
+      // Combine existing and new services
+      const finalPayload = [...existingServices, ...newServices];
+
+      const response = await updateProfessionalService(finalPayload).unwrap();
 
       showCustomToast(response.responseMessage, {
         toastOptions: { type: "success", autoClose: 5000 },
@@ -58,22 +68,16 @@ export const CreateProfessionalService = () => {
   return (
     <div>
       <Header
-        title="Create Professional Service"
-        description="Create a new professional service"
+        title="Apply for Professional Service"
+        description="Select services to add to your account"
       />
 
       <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 dark:bg-black dark:border-gray-700 dark:border shadow-t-md rounded-t-md">
         <div className="bg-gradient-to-r from-black to-gray-800 dark:border-gray-700 dark:border-b rounded-t-md px-3 sm:px-5 py-5">
-          <div className="text-base sm:text-lg text-white">
-            Apply for Professional Service
-          </div>
+          <div className="text-base sm:text-lg text-white">Select Services</div>
         </div>
 
         <div className="p-6">
-          <h3 className="text-lg font-semibold mb-4">
-            {hasEnrollments ? "Select Additional Services" : "Select Services"}
-          </h3>
-
           {availableServices.length === 0 ? (
             <p className="text-gray-600 mb-6">
               You have already enrolled in all available services.

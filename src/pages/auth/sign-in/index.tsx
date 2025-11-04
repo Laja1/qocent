@@ -14,7 +14,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin, type CredentialResponse } from "@react-oauth/google";
-import { useServiceStore } from "@/store/businessStore";
+import { useServiceStore } from "@/store/serviceStore";
 
 const SignIn = () => {
   const [seePassword, setSeePassword] = useState(false);

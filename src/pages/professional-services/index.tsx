@@ -1,16 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button, Header } from "@/components/shared";
 import { RouteConstant } from "@/router/routes";
+import { useGetUserAccountsQuery } from "@/service/kotlin/authApi";
+import type { RootState } from "@/store";
+import { useBusinessStore } from "@/store/businessStore";
 import {
   Box,
   CheckCheck,
-  Clock,
   Cloud,
   Plus,
   RefreshCcw,
   Settings,
 } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useMemo } from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const serviceTypes = [
@@ -29,14 +32,14 @@ export const serviceTypes = [
   {
     value: "MODERNIZATION",
     label: "Modernization",
-    triggerIcon: <RefreshCcw className="w-5 h-5" />,
     description: "Update and transform your systems",
+    triggerIcon: <RefreshCcw className="w-5 h-5" />,
   },
   {
     value: "MANAGED_SERVICE",
     label: "Managed Service",
-    triggerIcon: <Box className="w-5 h-5" />,
     description: "Ongoing support and management",
+    triggerIcon: <Box className="w-5 h-5" />,
   },
 ];
 
@@ -52,7 +55,7 @@ const statusConfig = {
   APPLIED: {
     label: "Applied",
     color: "bg-blue-100 text-blue-700 border-blue-200",
-    icon: <Clock className="w-4 h-4" />,
+    icon: <RefreshCcw className="w-4 h-4" />,
   },
   IN_PROGRESS: {
     label: "In Progress",
@@ -67,14 +70,34 @@ const statusConfig = {
 };
 
 export const ProfessionalServices = () => {
-  // TODO: Replace with actual API call when it is provided
   const navigate = useNavigate();
-  const [enrolledServices] = useState<EnrolledService[]>([
-    { type: "MIGRATION", status: "IN_PROGRESS", appliedDate: "2025-10-15" },
-    { type: "OPTIMIZATION", status: "COMPLETED", appliedDate: "2025-09-20" },
-  ]);
+  const { setBusiness } = useBusinessStore();
+  const user = useSelector((state: RootState) => state.auth);
+  const { data: workspaceData } = useGetUserAccountsQuery(
+    {
+      userCode: user.userEmail || "",
+    },
+    {
+      skip: !user.userEmail,
+    }
+  );
 
-  const [isApplyingForNewService] = useState(false);
+  const enrolledServices = useMemo(
+    () =>
+      workspaceData?.business?.services?.map((s) => ({
+        type: s.serviceName,
+        status: (s.status as ServiceStatus) || "APPLIED",
+        appliedDate: s.bookingDate,
+      })) || [],
+    [workspaceData]
+  );
+
+  useEffect(() => {
+    if (workspaceData?.business) {
+      // ✅ Automatically persist to Zustand
+      setBusiness(workspaceData.business);
+    }
+  }, [workspaceData, setBusiness]);
 
   const hasEnrollments = enrolledServices.length > 0;
 
@@ -85,53 +108,76 @@ export const ProfessionalServices = () => {
         description="Manage your service enrollments and apply for new services"
       />
 
-      {hasEnrollments && !isApplyingForNewService && (
+      {hasEnrollments ? (
         <div className="space-y-6 mt-6">
           <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold mb-4">Your Services</h3>
 
             <Button
               label="Apply for Another Service"
-              onClick={() => {
-                navigate(
-                  RouteConstant.dashboard.createProfessionalService.path
-                );
-              }}
+              onClick={() =>
+                navigate(RouteConstant.dashboard.createProfessionalService.path)
+              }
               prefixIcon={<Plus className="w-5 h-5" />}
               className="w-fit py-2 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
             />
           </div>
+
           <div className="grid grid-cols-3 gap-4">
             {enrolledServices.map((enrollment) => (
-              <EnrolledService enrollment={enrollment} key={enrollment.type} />
+              <EnrolledServiceCard
+                enrollment={enrollment}
+                key={enrollment.type}
+              />
             ))}
           </div>
+        </div>
+      ) : (
+        <div className="flex flex-col items-center justify-center py-16 mt-6">
+          <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+            <Box className="w-8 h-8 text-gray-400" />
+          </div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+            No Services Yet
+          </h3>
+          <p className="text-sm text-gray-600 mb-6 text-center max-w-md">
+            You haven't enrolled in any professional services yet. Apply for a
+            service to get started.
+          </p>
+          <Button
+            label="Apply for Service"
+            onClick={() =>
+              navigate(RouteConstant.dashboard.createProfessionalService.path)
+            }
+            prefixIcon={<Plus className="w-5 h-5" />}
+            className="w-fit py-2 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+          />
         </div>
       )}
     </div>
   );
 };
 
-function EnrolledService({ enrollment }: { enrollment: EnrolledService }) {
-  const service = serviceTypes.find((s) => s.value === enrollment.type);
+function EnrolledServiceCard({ enrollment }: { enrollment: EnrolledService }) {
+  const serviceInfo = serviceTypes.find((s) => s.value === enrollment.type);
   const status = statusConfig[enrollment.status];
 
   return (
-    <div
-      key={enrollment.type}
-      className="p-4 rounded-lg border-2 border-gray-200"
-    >
+    <div className="p-4 rounded-lg border-2 border-gray-200">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3 flex-1">
-          <div className="text-red-400 mt-1">{service?.triggerIcon}</div>
+          <div className="text-blue-500 mt-1">{serviceInfo?.triggerIcon}</div>
           <div className="flex-1">
-            <h4 className="font-semibold text-sm mb-1">{service?.label}</h4>
-            <p className="text-xs text-gray-600 mb-2">{service?.description}</p>
+            <h4 className="font-semibold text-sm mb-1">{serviceInfo?.label}</h4>
+            <p className="text-xs text-gray-600 mb-2">
+              {serviceInfo?.description}
+            </p>
             <p className="text-xs text-gray-500">
               Applied: {new Date(enrollment.appliedDate).toLocaleDateString()}
             </p>
           </div>
         </div>
+
         <div
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-medium ${status.color}`}
         >
@@ -141,7 +187,7 @@ function EnrolledService({ enrollment }: { enrollment: EnrolledService }) {
       </div>
 
       {/* Progress Tracker */}
-      <div className="mt-4 pt-4 border-t border-gray-600">
+      <div className="mt-4 pt-4 border-t border-gray-200">
         <div className="flex items-center justify-between mb-2">
           {["APPLIED", "IN_PROGRESS", "COMPLETED"].map((step, idx) => (
             <div
