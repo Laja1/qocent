@@ -1,7 +1,7 @@
 export const navRoutes = [
   {
     link: "/explore",
-    name: "Explore Services",
+    name: "Professional Services",
   },
 
   // {

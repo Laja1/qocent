@@ -1,8 +1,16 @@
+import { Button } from "@/components/shared";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
-import { TvMinimal } from "lucide-react";
+import { Download, TvMinimal } from "lucide-react";
 
 export function Hero() {
+  const handleDownload = () => {
+    const pdfUrl = "/Qocent User Guide.pdf";
+    const link = document.createElement("a");
+    link.href = pdfUrl;
+    link.download = "Qocent User Guide.pdf";
+    link.click();
+  };
   return (
     <div className="">
       <div className=" bg-black  py-10 items-center px-5 justify-centerbg-gradient-to-br from-black to-neutral-950    drop-shadow-stone-800 drop-shadow-sm">
@@ -26,7 +34,12 @@ export function Hero() {
               Learn how to build, deploy, and scale your applications on Qocent.
               Follow our step-by-step guide to get started.
             </p>
-
+            <Button
+              label="Download User Guide"
+              intent="secondary"
+              prefixIcon={<Download className="w-4 h-4" />}
+              onClick={handleDownload}
+            />
             <div>
               <div className="my-4 gap-4 justify-center flex px-4 py-1.5 text-xs lg:text-sm font-medium">
                 <TvMinimal className="text-white" />

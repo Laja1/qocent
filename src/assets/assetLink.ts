@@ -14,10 +14,12 @@ export const imgLinks = {
     logo:'/images/qocent-logo.png',
     footerlogo:'images/qocent-footer.png',
     canva:'/images/canva.png',
-    tier1:'/images/tier-1.jpg',
-    tier2:'/images/tier-2.jpg',
-
-    tier3:'/images/tier-3.jpg',
+    awstier1:'/images/aws-tier1.JPG',
+    awstier2:'/images/aws-tier2.JPG',
+    awstier3:'/images/aws-tier3.JPG',
+    huaweitier1:'/images/huawei-tier1.JPG',
+    huaweitier2:'/images/huawei-tier2.JPG',
+    huaweitier3:'/images/huawei-tier3.JPG',
 
     aws:'images/aws.png',
 }

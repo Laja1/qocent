@@ -3,7 +3,6 @@ import Developers from "./docs";
 import { Hero } from "./hero";
 import Seo from "@/components/shared/seo";
 import Navbar from "@/components/shared/navbar2";
-
 const Documentation = () => {
   return (
     <div className=" h-full w-full">
@@ -25,6 +24,7 @@ const Documentation = () => {
       <Navbar />
       <Hero />
       <Developers />
+
       <Footer />
     </div>
   );

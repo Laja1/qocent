@@ -6,6 +6,8 @@ import NiceModal from "@ebay/nice-modal-react";
 import { Header } from "@/components/shared/header";
 import { Button, Tabs } from "@/components/shared";
 import { imgLinks } from "@/assets/assetLink";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 type TierType = 1 | 2 | 3;
 
@@ -49,15 +51,14 @@ const starterPacks: StarterPack[] = [
   },
 ];
 
-const tierImages: Record<TierType, string> = {
-  1: imgLinks.tier1,
-  2: imgLinks.tier2,
-  3: imgLinks.tier3,
-};
-
 export const StarterPacksGrid = () => {
   const [selectedPack, setSelectedPack] = useState<StarterPack | null>(null);
-
+  const provider = useSelector((state: RootState) => state.dashboard.provider);
+  const tierImages: Record<TierType, string> = {
+    1: provider === "aws" ? imgLinks.awstier1 : imgLinks.huaweitier1,
+    2: provider === "aws" ? imgLinks.awstier2 : imgLinks.huaweitier2,
+    3: provider === "aws" ? imgLinks.awstier3 : imgLinks.huaweitier3,
+  };
   const tabData =
     selectedPack !== null
       ? [
@@ -79,7 +80,7 @@ export const StarterPacksGrid = () => {
                 </div>
                 <div className="flex flex-col mt-2">
                   <img
-                    src={tierImages[selectedPack.id] || imgLinks.tier1}
+                    src={tierImages[selectedPack.id] || imgLinks.awstier1}
                     className="rounded-sm"
                     alt={`${selectedPack.title} diagram`}
                   />
