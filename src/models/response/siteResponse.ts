@@ -116,21 +116,13 @@ export type ServerRoom = {
   
 
 export type SiteResponse = {
-  data: {
-    siteAccountId: string;
-    siteCode: string;
-    siteCurrency: string;
-    siteDescription: string;
-    siteExpiryDate: string;
-    siteName: string;
-    siteProvider: string;
-    siteRegion: string;
-    siteUserId: number;
-  };
-  error: string;
-  message: string;
-  success: boolean;
+  status: string;
+  account_name: string;
+  account_id: string;
+  ou_name: string;
 };
+
+
 
 
 

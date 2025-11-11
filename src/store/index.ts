@@ -15,6 +15,7 @@ import { roomApi } from "@/service/kotlin/roomApi";
 import { formApi } from "@/service/python/formApi";
 import { consoleApi } from "@/service/kotlin/consoleApi";
 import { siteStore } from "./siteSlice";
+import { pythonSiteApi } from "@/service/python/siteApi";
 
 // Combine all your reducers
 const rootReducer = combineReducers({
@@ -22,6 +23,7 @@ const rootReducer = combineReducers({
   dashboard:dashboardStore.reducer,
   [authApi.reducerPath]: authApi.reducer,
   [siteApi.reducerPath]: siteApi.reducer,
+  [pythonSiteApi.reducerPath]: pythonSiteApi.reducer,
   [kotlinHouseApi.reducerPath]:kotlinHouseApi.reducer,
   [kotlinResourceApi.reducerPath]:kotlinResourceApi.reducer,
   [serviceApi.reducerPath]:serviceApi.reducer,
@@ -60,7 +62,7 @@ export const store = configureStore({
           "persist/REGISTER",
         ],
       },
-    }).concat(authApi.middleware,kotlinHouseApi.middleware, siteApi.middleware,roomApi.middleware,kotlinResourceApi.middleware,serviceApi.middleware,waitlistApi.middleware,formApi.middleware,consoleApi.middleware,),
+    }).concat(authApi.middleware,kotlinHouseApi.middleware, pythonSiteApi.middleware, siteApi.middleware,roomApi.middleware,kotlinResourceApi.middleware,serviceApi.middleware,waitlistApi.middleware,formApi.middleware,consoleApi.middleware,),
 });
 
 // Persistor instance

@@ -151,6 +151,9 @@ case 'CommentBox':
   return Yup.object().shape(shape);
 };
 
+export const serverSiteSchema = object().shape({
+  siteName:defaultValidation('Account name')
+})
 
 
 

@@ -1,0 +1,93 @@
+import { createApi } from "@reduxjs/toolkit/query/react";
+import type {  deploySiteResourceType, getResourcesResponse, getResourceSummaryResponse, getSiteArchitectureResponse, getSiteResponse, resourceDataFlowResponse, SiteResponse,  } from "@/models/response/siteResponse";
+import { ApiEnums } from "@/utilities/enums";
+import type { createSiteRequest } from "@/models/request/siteRequest";
+import { createResourceProviderTags, createSiteProviderTags } from "@/utilities/tagHelpers";
+import type { genericResponse } from "@/models/response";
+import { siteStore } from "@/store/siteSlice";
+import { baseQuery } from "../httpClient/baseQuery";
+
+
+
+
+export const pythonSiteApi = createApi({
+  reducerPath: "pythonSiteApi",
+  baseQuery: baseQuery,
+  tagTypes: [ApiEnums.Site,ApiEnums.House,ApiEnums.Room,ApiEnums.Resource,ApiEnums.ActivityLog],
+  endpoints: (build) => ({
+    createServerSite: build.mutation<SiteResponse, createSiteRequest>({
+      query: (body) => ({
+        url: "/aws-auto/aws/ou/bootstrap",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
+    }),
+    deleteSite: build.mutation<genericResponse, {siteId:number}>({
+      query: ({siteId}) => ({
+        url: `/site/delete/${siteId}`,
+        method: "POST",
+      }),
+      invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
+    }),
+    getSiteArchitecture: build.query<getSiteArchitectureResponse, {siteCode:string}>({
+      query: ({siteCode}) => `/dashboard/site-architecture/${siteCode}`,
+      providesTags: [{type:ApiEnums.Site,id:'LIST'},{type:ApiEnums.House,id:'LIST'},{type:ApiEnums.Resource,id:'LIST'}]
+    }),
+    getSiteByProvider: build.query<
+    getSiteResponse,
+    { provider: string; siteAccountId: string; type: string }
+  >({
+    query: ({ provider, siteAccountId, type }) => ({
+      url: `/site/read-by-site-account-id/${siteAccountId}/${provider}`,
+      params: { requestType: type },
+    }),
+    providesTags: (result) => createSiteProviderTags(result, "siteId"),  
+    async onQueryStarted({ provider, siteAccountId }, { queryFulfilled, dispatch }) {
+      try {
+        console.log("Fetching site:", provider, siteAccountId);
+  
+        const { data } = await queryFulfilled; 
+        
+        if (Array.isArray(data?.data) && data.data.length > 0) {
+          dispatch(siteStore.action.setSiteDetails(data.data));
+        } else {
+          dispatch(siteStore.action.setSiteDetails([]));
+        }
+      } catch (err) {
+        console.error("Error fetching site by provider:", err);
+      }
+    },
+  }),
+  
+    getSiteBySiteCode: build.query<getSiteArchitectureResponse, {siteCode:string}>({
+        query: ({siteCode}) => `/dashboard/site-data/${siteCode}`,    
+      }),
+    getResourceTypeCount: build.query<getResourceSummaryResponse, {siteCode:string}>({
+      query: ({siteCode}) => `/dashboard/read-resource-type-count/${siteCode}`,    
+  }),
+  getSiteDataFlow: build.query<resourceDataFlowResponse, { siteCode: string }>({
+    query: ({ siteCode }) => `/site/read-architecture/${siteCode}`,
+    providesTags: [{type:ApiEnums.Site,id:'LIST'},{type:ApiEnums.House,id:'LIST'},{type:ApiEnums.Resource,id:'LIST'}]
+  }),
+  getAllSites: build.query<getSiteResponse, void>({
+    query: () => `/dashboard/sites`,
+    providesTags: (result) => createSiteProviderTags(result, "siteId"),
+    }),
+    getResourcesInSite: build.query<getResourcesResponse, {siteCode:string}>({
+      query: ({siteCode}) => `/dashboard/resource-list/${siteCode}`, 
+      providesTags: (result) => createResourceProviderTags(result,  "resourceId") as Array<{ type: ApiEnums.Resource; id: string | number | "LIST" }>,
+  }),
+  deploySiteResources: build.mutation<deploySiteResourceType, {siteCode:string}>({
+    query: ({siteCode}) => ({
+      url:`/resource/deploy-resources/${siteCode}`,
+      method: "POST",
+    }),
+    invalidatesTags: [{ type: ApiEnums.House, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" },{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }], 
+}),
+  }),
+});
+
+
+export const { useCreateServerSiteMutation,useDeleteSiteMutation,useDeploySiteResourcesMutation, useGetSiteByProviderQuery,useGetResourcesInSiteQuery, useGetSiteDataFlowQuery,useGetResourceTypeCountQuery,useGetSiteArchitectureQuery,useGetAllSitesQuery
+ } = pythonSiteApi;
