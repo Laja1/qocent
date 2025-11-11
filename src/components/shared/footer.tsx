@@ -34,19 +34,19 @@ export const Footer = () => {
     {
       title: "Solutions",
       links: [
-        { name: "Features", href: "/#" },
-        { name: "Pricing", href: "/#" },
-        { name: "Integrations", href: "/#" },
-        { name: "API", href: "/#" },
+        { name: "Features", href: "/#features" },
+        { name: "Pricing", href: "/#pricing" },
+        { name: "Integrations", href: "/#integrations" },
+        { name: "API", href: "/docs#api" },
       ],
     },
     {
       title: "Use Cases",
       links: [
-        { name: "Documentation", href: "/#" },
-        { name: "Guides", href: "/#" },
-        { name: "Blog", href: "/#" },
-        { name: "Support", href: "/#" },
+        { name: "Documentation", href: "/docs" },
+        { name: "Guides", href: "/docs#guides" },
+        { name: "Blog", href: "/#blog" },
+        { name: "Support", href: "/contact" },
       ],
     },
     {
@@ -178,12 +178,13 @@ export const Footer = () => {
                   <h4 className="text-sm font-semibold text-foreground tracking-wide">
                     {section.title}
                   </h4>
-                  <ul className="space-y-3">
+                  <ul className="space-y-3" role="list">
                     {section.links.map((link, linkIndex) => (
                       <li key={linkIndex}>
                         <Link
                           to={link.href}
                           className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 hover:translate-x-1 inline-block"
+                          aria-label={`${link.name} - ${section.title}`}
                         >
                           {link.name}
                         </Link>
@@ -204,17 +205,20 @@ export const Footer = () => {
               <span>All rights reserved.</span>
             </div>
 
-            <div className="flex flex-wrap gap-6">
-              {legalLinks.map((link, index) => (
-                <Link
-                  key={index}
-                  to={link.href}
-                  className="text-xs text-muted-foreground hover:text-primary transition-colors"
-                >
-                  {link.name}
-                </Link>
-              ))}
-            </div>
+            <nav aria-label="Legal Links">
+              <div className="flex flex-wrap gap-6">
+                {legalLinks.map((link, index) => (
+                  <Link
+                    key={index}
+                    to={link.href}
+                    className="text-xs text-muted-foreground hover:text-primary transition-colors"
+                    aria-label={link.name}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+              </div>
+            </nav>
           </div>
         </div>
       </div>

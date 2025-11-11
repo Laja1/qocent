@@ -31,12 +31,19 @@ const DesktopNavigation: React.FC = () => {
   };
 
   return (
-    <nav className="hidden lg:flex items-center justify-center pt-5 fixed top-0 left-0 right-0 z-50">
+    <nav
+      className="hidden lg:flex items-center justify-center pt-5 fixed top-0 left-0 right-0 z-50"
+      aria-label="Main Navigation"
+    >
       <div className="flex items-center justify-between bg-black/10 backdrop-blur-lg border border-gray-200 dark:border-gray-700 rounded-sm px-6 py-1 w-full max-w-4xl mx-4 shadow-xl">
-        <div onClick={() => navigate("/")} className="cursor-pointer">
+        <div
+          onClick={() => navigate("/")}
+          className="cursor-pointer"
+          aria-label="Qocent Home"
+        >
           <Logo />
         </div>
-        <div className="flex items-center gap-3 relative">
+        <div className="flex items-center gap-3 relative" role="list">
           {navRoutes.map((item, idx) => (
             <Link
               key={`link-${idx}`}
@@ -45,6 +52,7 @@ const DesktopNavigation: React.FC = () => {
               onMouseLeave={() => setHovered(null)}
               onClick={onItemClick}
               className="relative text-xs hover:px-2 py-2 dark:text-white text-black hover:text-gray-800 dark:hover:text-gray-300 transition-colors"
+              aria-label={`Navigate to ${item.name}`}
             >
               {hovered === idx && (
                 <motion.div
@@ -60,6 +68,7 @@ const DesktopNavigation: React.FC = () => {
             size="sm"
             onClick={() => navigate(RouteConstant.auth.signin.path)}
             className="hover:text-black cursor-pointer hover:bg-gray-100 text-xs"
+            aria-label="Sign in to Qocent"
           >
             Login
           </Button>
@@ -100,13 +109,14 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
           >
             <div className="bg-white rounded-xs mt-2 shadow-2xl border dark:border-0 border-gray-200 overflow-hidden">
               {/* Navigation Links */}
-              <nav className="py-2">
+              <nav className="py-2" aria-label="Mobile Navigation">
                 {navRoutes.map((item, idx) => (
                   <Link
                     key={`mobile-link-${idx}`}
                     to={item.link}
                     onClick={onClose}
                     className="block text-xs px-6 py-2 text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                    aria-label={`Navigate to ${item.name}`}
                   >
                     {item.name}
                   </Link>
