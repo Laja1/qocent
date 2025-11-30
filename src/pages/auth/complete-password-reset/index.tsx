@@ -9,8 +9,8 @@ import {
 import { RouteConstant } from "@/router/routes";
 import {
   useCompletePasswordResetMutation,
-  useResendOtpMutation,
-} from "@/service/kotlin/authApi";
+  useForgotPasswordMutation,
+} from "@/service/python/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { resetPasswordSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
@@ -26,16 +26,16 @@ const CompletePasswordReset = () => {
 
   const [completePasswordReset, { isLoading }] =
     useCompletePasswordResetMutation();
-  const [resendOtp] = useResendOtpMutation();
+  const [resendOtp] = useForgotPasswordMutation();
   const onSubmit = async (values: completePasswordResetRequest) => {
     const payload = {
-      userEmail: state,
-      userPassword: values?.userPassword,
-      otp: String(values?.otp),
+      confirm_password: values?.new_password,
+      new_password: values?.new_password,
+      token: String(values?.token),
     };
     try {
       const res = await completePasswordReset(payload).unwrap();
-      showCustomToast(res?.responseMessage, {
+      showCustomToast(res?.message, {
         toastOptions: {
           type: "success",
           autoClose: 5000,
@@ -57,12 +57,12 @@ const CompletePasswordReset = () => {
 
   const ResendOtp = async () => {
     const payload = {
-      userEmail: state,
+      email: state,
     };
     try {
       const res = await resendOtp(payload).unwrap();
       console.log(res);
-      showCustomToast(res?.responseMessage, {
+      showCustomToast(res?.message, {
         toastOptions: {
           type: "success",
           autoClose: 5000,
@@ -98,18 +98,18 @@ const CompletePasswordReset = () => {
       <div className="flex flex-col gap-3">
         <Textfield
           formik={formik}
-          name="otp"
-          maxLength={6}
-          label="OTP"
-          type="number"
-          placeholder="Enter your OTP"
+          name="token"
+          label="Token"
+          placeholder="Enter your token"
           error={
-            formik?.touched.otp && formik?.errors.otp ? formik?.errors.otp : ""
+            formik?.touched.token && formik?.errors.token
+              ? formik?.errors.token
+              : ""
           }
         />
         <Textfield
           label="New Password"
-          name="userPassword"
+          name="new_password"
           placeholder="Enter your password"
           type={seePassword ? "text" : "password"}
           suffixIcon={
@@ -119,8 +119,8 @@ const CompletePasswordReset = () => {
           }
           formik={formik}
           error={
-            formik?.touched.userPassword && formik?.errors.userPassword
-              ? formik?.errors.userPassword
+            formik?.touched.new_password && formik?.errors.new_password
+              ? formik?.errors.new_password
               : ""
           }
         />

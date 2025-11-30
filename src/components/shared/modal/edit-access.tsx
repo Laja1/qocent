@@ -20,7 +20,7 @@ import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import {
   useGetIAMRolesQuery,
   useUpdateMemberMutation,
-} from "@/service/kotlin/authApi";
+} from "@/service/python/authApi";
 import type { updateMemberRequest } from "@/models/request/authRequest";
 import { useEffect, useState } from "react";
 import { RiseLoader } from "react-spinners";

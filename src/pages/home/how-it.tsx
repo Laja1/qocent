@@ -3,8 +3,7 @@ import { motion } from "framer-motion";
 export const HowIt = () => {
   return (
     <div className="justify-center flex  w-full">
-      {" "}
-      <section className="w-full py-10 md:py-10 dark:bg-black justify-center flex items-center flex-col bg-gray-50 relative overflow-hidden">
+      <section className=" w-full py-10 md:py-10 dark:bg-black justify-center flex items-center flex-col bg-gray-50 relative overflow-hidden">
         <div className=" px-4 w-full relative">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -28,10 +27,10 @@ export const HowIt = () => {
             </p>
           </motion.div>
 
-          <div className="md:flex justify-center  items-center flex-col lg:flex-row flex gap-8 md:gap-12 relative">
-            <div className="hidden md:block absolute top-1/2 left-0 right-0 h-0.5 bg-gradient-to-r from-transparent  to-transparent -translate-y-1/2 z-0"></div>
+          <div className="md:flex justify-center  w-full  items-center flex-col lg:flex-row flex md:gap-12  relative">
 
-            {[
+           <div className="max-w-4xl flex gap-4">
+             {[
               {
                 step: "01",
                 title: "Create Account",
@@ -57,7 +56,7 @@ export const HowIt = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="relative  z-10 flex flex-col items-center text-center space-y-4"
+                className="relative   z-10 flex flex-col items-center text-center space-y-4"
               >
                 <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-black dark:text-white to-gray-950 text-primary-foreground text-xl font-bold shadow-lg">
                   {step.step}
@@ -66,6 +65,7 @@ export const HowIt = () => {
                 <p className="text-muted-foreground">{step.description}</p>
               </motion.div>
             ))}
+           </div>
           </div>
         </div>
       </section>

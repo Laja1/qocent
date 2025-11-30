@@ -9,8 +9,8 @@ const AboutUs = () => {
   return (
     <div className=" h-full w-full">
       <Seo
-        title="About Us | Qocent - One Window, All Cloud"
-        description="Discover how Qocent empowers developers and businesses with multi-cloud flexibility, transparency, simplicity, and speed — all from one unified platform."
+        title="Qocent–About Us"
+        description="See what makes our multi-cloud management platform different from others.  "
         canonical="https://qocent.com/about"
         image="https://qocent.com/og-image.jpg"
         schemaMarkup={{
@@ -18,7 +18,7 @@ const AboutUs = () => {
           "@type": "WebPage",
           name: "About Us - Qocent",
           description:
-            "Discover how Qocent empowers developers and businesses with multi-cloud flexibility, transparency, simplicity, and speed — all from one unified platform.",
+            "See what makes our multi-cloud management platform different from others.  ",
           url: "https://qocent.com/about",
         }}
       />

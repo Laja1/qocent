@@ -7,8 +7,8 @@ const Documentation = () => {
   return (
     <div className=" h-full w-full">
       <Seo
-        title="Qocent Documentation | Build, Deploy, Scale with Confidence"
-        description="Learn how to build, deploy, and scale your applications on Qocent. Follow our step-by-step guide to get started with our powerful multi-cloud platform."
+        title="Your Qocent account setup guide"
+        description="Follow our process for setting up your account on Qocent cloud computing platform "
         canonical="https://qocent.com/docs"
         image="https://qocent.com/og-image.jpg"
         schemaMarkup={{

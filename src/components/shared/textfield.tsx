@@ -57,7 +57,7 @@ export const Textfield = ({
           <label
             htmlFor={name}
             className={clsx(
-              "text-sm text-white text-tetiary-lighter",
+              "text-sm",
               labelClassName
             )}
           >

@@ -24,6 +24,10 @@ import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { DataFlowLoader } from "@/components/not-shared/data-flow/loader";
 import { serverSiteColumns } from "@/utilities/constants/colums";
+import { useGetQueryMonthlyBillQuery } from "@/service/python/costApi";
+import MonthlyBill from "@/components/shared/monthly-bill";
+import type { getQueryMonthlyBillResponse } from "@/models/response/costResponse";
+import { PacmanLoader } from "react-spinners";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
@@ -68,6 +72,9 @@ export const ServerSites = () => {
       skip: !selectedSiteCode,
     }
   );
+  const { data, isLoading } = useGetQueryMonthlyBillQuery({
+    bill_cycle: "2025-08",
+  });
 
   const { data: resourcesInSiteData, isLoading: isResourceLoading } =
     useGetResourcesInSiteQuery(
@@ -207,7 +214,16 @@ export const ServerSites = () => {
     {
       id: 5,
       text: "Cost",
-      component: <CostTable />,
+      component: (
+        <div className="flex flex-col">
+          <CostTable />
+          {isLoading ? (
+            <PacmanLoader />
+          ) : (
+            <MonthlyBill data={data as getQueryMonthlyBillResponse} />
+          )}
+        </div>
+      ),
     },
     // {
     //   id: 6,

@@ -1,5 +1,5 @@
 import { Button, Header } from "@/components/shared";
-import { useUpdateProfessionalServiceMutation } from "@/service/kotlin/authApi";
+import { useUpdateProfessionalServiceMutation } from "@/service/python/authApi";
 import { useState } from "react";
 import { serviceTypes } from "../professional-services";
 import { CheckCircle2 } from "lucide-react";

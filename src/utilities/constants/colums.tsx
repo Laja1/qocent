@@ -11,6 +11,7 @@ import type { SiteData } from "@/models/response/siteResponse";
 import { imgLinks } from "@/assets/assetLink";
 import type { roomData } from "@/models/response/roomResponse";
 import type { resourceType } from "@/models/response/resourceResponse";
+import type { billProps } from "@/models/response/costResponse";
 
 export const serverHouseColumn: ColumnDef<HouseItem>[] = [
   {
@@ -196,6 +197,59 @@ export const serverSiteColumns: ColumnDef<SiteData>[] = [
       </span>
     ),
     sortable: true,
+  },
+];
+
+export const monthlyCostTableColumn: ColumnDef<billProps>[] = [
+  {
+    id: "service_type_name",
+    header: "SERVICE TYPE NAME",
+    accessorKey: "service_type_name",
+    cell: (row) => <span className="">{row.service_type_name}</span>,
+    sortable: true,
+  },
+  {
+    id: "count",
+    header: "COUNT",
+    accessorKey: "count",
+    cell: (row) => <span className="line-clamp-1 text-xs">{row.count}</span>,
+    sortable: true,
+  },
+  {
+    id: "official_amount",
+    header: "AMOUNT ($)",
+    accessorKey: "official_amount",
+    headerClassName: "text-right",
+    cell: (row) => (
+      <span className="hover:text-red-500 text-right line-clamp-1">
+        {row.official_amount}
+      </span>
+    ),
+    sortable: true,
+  },
+  {
+    id: "official_discount_amount",
+    header: "DISCOUNT AMOUNT ($)",
+    accessorKey: "official_discount_amount",
+    headerClassName: "text-right",
+    sortable: true,
+    cell: (row) => (
+      <span className="hover:text-red-500 text-right line-clamp-1">
+        {row.official_discount_amount}
+      </span>
+    ),
+  },
+  {
+    id: "debt_amount",
+    header: "DEBT ($)",
+    headerClassName: "text-right",
+    accessorKey: "debt_amount",
+    sortable: true,
+    cell: (row) => (
+      <span className="hover:text-red-500 text-right line-clamp-1">
+        {row.debt_amount}
+      </span>
+    ),
   },
 ];
 

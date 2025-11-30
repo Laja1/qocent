@@ -1,16 +1,14 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AuthLayout from "@/components/layouts/authLayout";
 import { getMaskedEmail } from "@/components/not-shared/masked-email";
 import { Button, Textfield } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
-import {
-  completeEnrollmentInit,
-  type completeEnrollmentRequest,
-} from "@/models/request/authRequest";
+import { completeEnrollmentInit } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
 import {
   useCompleteEnrollmentMutation,
-  useResendOtpMutation,
-} from "@/service/kotlin/authApi";
+  useSendOtpMutation,
+} from "@/service/python/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { confirmAccountSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
@@ -23,16 +21,16 @@ const ConfirmAccount = () => {
   const state = location.state;
 
   const [completeEnrollment, { isLoading }] = useCompleteEnrollmentMutation();
-  const [resendOtp] = useResendOtpMutation();
-  const onSubmit = async (values: completeEnrollmentRequest) => {
+  const [resendOtp] = useSendOtpMutation();
+  const onSubmit = async (values: any) => {
     const payload = {
-      userEmail: state,
-      otp: String(values?.otp),
+      email: state,
+      code: String(values?.otp),
     };
     console.log(payload);
     try {
       const res = await completeEnrollment(payload).unwrap();
-      showCustomToast(res?.responseMessage, {
+      showCustomToast(res?.message, {
         toastOptions: {
           type: "success",
           autoClose: 5000,
@@ -53,7 +51,7 @@ const ConfirmAccount = () => {
 
   const ResendOtp = async () => {
     const payload = {
-      userEmail: state,
+      email: state,
     };
     try {
       const res = await resendOtp(payload).unwrap();

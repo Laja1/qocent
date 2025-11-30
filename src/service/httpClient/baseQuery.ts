@@ -3,7 +3,7 @@
   import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
   export const baseQuery = fetchBaseQuery({
-    baseUrl: "https://6qien66b62hqqoxqdyowdbplwa0leclu.lambda-url.us-east-1.on.aws",
+    baseUrl: "https://iodmdiaajutj2ivdmc2knkd3xi0eaevr.lambda-url.us-east-1.on.aws/api/v1",
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState;
       const token = state.auth.token;

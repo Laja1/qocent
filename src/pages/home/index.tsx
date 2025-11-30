@@ -14,8 +14,9 @@ const Home = () => {
     "@type": "WebSite",
     name: "Qocent",
     url: "https://qocent.com",
+    title: "Qocent–Cloud Services Provider",
     description:
-      "Deploy, manage, and optimize across AWS, GCP, Huawei, and more all from a single, powerful console that delivers speed, savings, and simplicity without compromise.",
+      "Monitor and scale multi-cloud deployments through Qocent cloud services. Manage your AWS, Azure, Huawei and Google Cloud accounts in one place.",
     potentialAction: {
       "@type": "SearchAction",
       target: "https://qocent.com/search?q={search_term_string}",

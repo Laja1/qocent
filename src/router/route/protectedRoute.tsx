@@ -8,7 +8,6 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const { isAuthenticated, token } = useSelector(
     (state: RootState) => state.auth
   );
-
   const isAllowed = isAuthenticated && !!token;
 
   return isAllowed ? (
@@ -18,7 +17,11 @@ export const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export const PublicOnlyRoute = ({ children }: { children: React.ReactNode }) => {
+export const PublicOnlyRoute = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => { 
   const { isAuthenticated, token } = useSelector(
     (state: RootState) => state.auth
   );

@@ -22,7 +22,7 @@ import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import {
   useGetIAMRolesQuery,
   useInviteToWorkspaceMutation,
-} from "@/service/kotlin/authApi";
+} from "@/service/python/authApi";
 import type { invitationRequest } from "@/models/request/authRequest";
 import { useEffect, useState } from "react";
 import type { RootState } from "@/store";

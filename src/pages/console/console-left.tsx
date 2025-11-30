@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { dashboardStore } from "@/store/dashboardSlice";
 import { CollapsibleItem, SubItem } from "@/components/shared/collapsible";
 import type { RootState } from "@/store";
-import { useGetUserAccountsQuery } from "@/service/kotlin/authApi";
+import { useGetUserAccountsQuery } from "@/service/python/authApi";
 import { accountStore } from "@/store/accountSlice";
 import { useDarkMode } from "@/hooks/useDarkMode";
 import { useEffect } from "react";

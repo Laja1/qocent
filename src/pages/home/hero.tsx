@@ -1,8 +1,6 @@
-import RippleGrid from "@/components/RippleGrid";
 // import { ModalConstant } from "@/components/shared/modal/register";
 import { BackgroundBeamsWithCollision } from "@/components/ui/background-beams-with-collision";
 import { Badge } from "@/components/ui/badge";
-import { useDarkMode } from "@/hooks/useDarkMode";
 // import NiceModal from "@ebay/nice-modal-react";
 import { motion } from "motion/react";
 import { Link } from "react-router-dom";
@@ -10,7 +8,6 @@ import { Link } from "react-router-dom";
 
 export function Hero() {
   // const navigate = useNavigate();
-  const { isDark } = useDarkMode();
   return (
     <div className="h-full w-full">
       <BackgroundBeamsWithCollision className="min-h-[80vh] py-10 lg:min-h-screen w-full  items-center px-5 justify-center dark:bg-black mt-0 ">
@@ -42,7 +39,7 @@ export function Hero() {
                   overflow: "hidden",
                 }}
               >
-                <RippleGrid
+                {/* <RippleGrid
                   enableRainbow={false}
                   gridColor={isDark ? "#fff" : "#000"}
                   rippleIntensity={0.05}
@@ -51,7 +48,7 @@ export function Hero() {
                   mouseInteraction={true}
                   mouseInteractionRadius={1.2}
                   opacity={0.1}
-                />
+                /> */}
               </div>
               <p className="text-sm  z-30 md:text-xl dark:text-red-100 text-red-600 mb-4 max-w-2xl mx-auto">
                 Deploy, manage, and optimize across AWS, GCP, Huawei, and more

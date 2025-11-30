@@ -8,8 +8,8 @@ const ExploreServices = () => {
   return (
     <div className="dark:bg-black h-full w-full">
       <Seo
-        title="Explore Services | Qocent - 361+ Integrated Cloud Services"
-        description="Qocent offers a robust and diverse portfolio of cloud services, built on the reliable foundations of AWS and Huawei — designed to meet the demands of any application or workload."
+        title="Qocent multi-cloud management platform solutions"
+        description="Explore our multi-cloud management platform for cutting-edge solutions, from cloud management and optimization to migration and modernization."
         canonical="https://qocent.com/services"
         image="https://qocent.com/og-image.jpg"
         schemaMarkup={{
@@ -24,8 +24,8 @@ const ExploreServices = () => {
 
       <Navbar />
       <Hero />
-     
-        <Service />
+
+      <Service />
       {/* <InfiniteCardCarousel /> */}
       {/* <Compute />
       <Storage /> */}

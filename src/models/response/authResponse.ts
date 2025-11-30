@@ -1,18 +1,32 @@
-import type { Business, } from "../request/authRequest";
-
- export interface signInResponse {
-    accessToken: string;
-    privileges: string[];
-    responseCode: string;
-    responseMessage: string;
-    userEmail: string;
-    userFirstName: string;
-    userId: number;
-    userLastName: string;
-    business:Business
-    services:string[]
-    userRoleId: number;
-  }
+  export interface signInResponse {
+    access_token: string;
+    token_type: "bearer";
+    user: {
+      user_id: string;
+      user_email: string;
+      user_first_name: string;
+      user_last_name: string;
+      user_phone_number: string;
+      user_country: string;
+      user_is_email_verified: boolean;
+      user_created_at: string; // ISO date string
+    };
+  };
+  
+  export type signUpResponse = {
+    message: string;
+    user: {
+      user_id: string;
+      user_email: string;
+      user_first_name: string;
+      user_last_name: string;
+      user_phone_number: string;
+      user_country: string;
+      user_is_email_verified: boolean;
+      user_created_at: string; // ISO timestamp
+    };
+  };
+  
   
 
   export type AccountMember = {

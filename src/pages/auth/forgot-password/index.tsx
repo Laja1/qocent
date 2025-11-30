@@ -6,7 +6,7 @@ import {
   type forgotPasswordpRequest,
 } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
-import { useForgotPasswordMutation } from "@/service/kotlin/authApi";
+import { useForgotPasswordMutation } from "@/service/python/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { forgotPasswordFormValidationSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
@@ -22,7 +22,7 @@ const ForgotPassword = () => {
       console.log(res);
 
       // Now res.responseMessage will be available
-      showCustomToast(res?.responseMessage, {
+      showCustomToast(res?.message, {
         toastOptions: {
           type: "success",
           autoClose: 5000,
@@ -30,7 +30,7 @@ const ForgotPassword = () => {
       });
 
       navigate(RouteConstant.auth.confirmPasswordReset.path, {
-        state: values?.userEmail,
+        state: values?.email,
       });
     } catch (error) {
       console.log(error);
@@ -62,13 +62,13 @@ const ForgotPassword = () => {
       <div className="flex flex-col gap-3">
         <Textfield
           formik={formik}
-          name="userEmail"
+          name="email"
           label="Email"
           placeholder="Enter your email"
-          prefixIcon={<Mail size={16} className="text-black"/>}
+          prefixIcon={<Mail size={16} className="text-black" />}
           error={
-            formik?.touched.userEmail && formik?.errors.userEmail
-              ? formik?.errors.userEmail
+            formik?.touched.email && formik?.errors.email
+              ? formik?.errors.email
               : ""
           }
         />

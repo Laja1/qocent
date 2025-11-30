@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button, Header } from "@/components/shared";
 import { RouteConstant } from "@/router/routes";
-import { useGetUserAccountsQuery } from "@/service/kotlin/authApi";
+import { useGetUserAccountsQuery } from "@/service/python/authApi";
 import type { RootState } from "@/store";
 import { useBusinessStore } from "@/store/businessStore";
 import {

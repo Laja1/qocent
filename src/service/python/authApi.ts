@@ -15,54 +15,55 @@ import type {
 
   AccountResponse,
   signInResponse,
+  signUpResponse,
 } from "@/models/response/authResponse";
-import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
-import type { genericResponse } from "@/models/response";
+import type { baseResponse, genericResponse } from "@/models/response";
 import { ApiEnums } from "@/utilities/enums";
 import type { getAccountResponse, getIAMRolesResponse } from "@/models/response/siteResponse";
+import { baseQuery } from "../httpClient/baseQuery";
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: kotlinBaseQueryWithResponseCodeHandling,
+  baseQuery: baseQuery,
   tagTypes:[ApiEnums.Auth,ApiEnums.Member],
   endpoints: (build) => ({
-    signUp: build.mutation<genericResponse, signupRequest>({
+    signUp: build.mutation<signUpResponse, signupRequest>({
       query: (body) => ({
-        url: "/authentication/initiate-enrollment",
+        url: "/signup",
         method: "POST",
         body: body,
       }),
     }),
     signIn: build.mutation<signInResponse, signInRequest>({
       query: (body) => ({
-        url: "/authentication/login",
+        url: "/login",
         method: "POST",
         body: body,
       }),
     }),
     completeEnrollment: build.mutation<
-      genericResponse,
+    baseResponse,
       completeEnrollmentRequest
     >({
       query: (body) => ({
-        url: "/authentication/complete-enrollment",
+        url: "/verify-otp",
         method: "POST",
         body: body,
       }),
     }),
-    resendOtp: build.mutation<genericResponse, resendOtpRequest>({
+    sendOtp: build.mutation<genericResponse, resendOtpRequest>({
       query: (body) => ({
-        url: "/authentication/resend-otp",
+        url: "/send-verification",
         method: "POST",
         body: body,
       }),
     }),
     forgotPassword: build.mutation<
-      genericResponse,
+      baseResponse,
       forgotPasswordpRequest
     >({
       query: (body) => ({
-        url: "/authentication/initiate-password-reset",
+        url: "/forgot-password",
         method: "POST",
         body: body,
       }),
@@ -83,11 +84,11 @@ export const authApi = createApi({
       }),
     }),
     completePasswordReset: build.mutation<
-      genericResponse,
+      baseResponse,
       completePasswordResetRequest
     >({
       query: (body) => ({
-        url: "/authentication/complete-password-reset",
+        url: "/reset-password",
         method: "POST",
         body: body,
       }),
@@ -144,7 +145,7 @@ export const authApi = createApi({
 export const {
   useSignUpMutation,
   useCompleteEnrollmentMutation,
-  useResendOtpMutation,
+  useSendOtpMutation,
   useSignInMutation,
   useAcceptInviteMutation,
   useDeleteMemberMutation,

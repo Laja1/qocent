@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useAcceptInviteMutation } from "@/service/kotlin/authApi";
+import { useAcceptInviteMutation } from "@/service/python/authApi";
 import {
   Check,
   X,

@@ -7,7 +7,7 @@ import { dashboardStore } from "./dashboardSlice";
 import { kotlinResourceApi } from "@/service/kotlin/resourceApi";
 import { siteApi } from "@/service/kotlin/siteApi";
 import { serviceApi } from "@/service/kotlin/serviceApi";
-import { authApi } from "@/service/kotlin/authApi";
+import { authApi } from "@/service/python/authApi";
 import { accountStore } from "./accountSlice";
 import { waitlistApi } from "@/service/kotlin/waitlistApi";
 import { kotlinHouseApi } from "@/service/kotlin/houseApi";
@@ -16,6 +16,7 @@ import { formApi } from "@/service/python/formApi";
 import { consoleApi } from "@/service/kotlin/consoleApi";
 import { siteStore } from "./siteSlice";
 import { pythonSiteApi } from "@/service/python/siteApi";
+import { costApi } from "@/service/python/costApi";
 
 // Combine all your reducers
 const rootReducer = combineReducers({
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   [serviceApi.reducerPath]:serviceApi.reducer,
   [waitlistApi.reducerPath]:waitlistApi.reducer,
   [roomApi.reducerPath]:roomApi.reducer,
+  [costApi.reducerPath]:costApi.reducer,
  account:accountStore.reducer,
  [formApi.reducerPath]:formApi.reducer,
  [consoleApi.reducerPath]:consoleApi.reducer,
@@ -62,7 +64,7 @@ export const store = configureStore({
           "persist/REGISTER",
         ],
       },
-    }).concat(authApi.middleware,kotlinHouseApi.middleware, pythonSiteApi.middleware, siteApi.middleware,roomApi.middleware,kotlinResourceApi.middleware,serviceApi.middleware,waitlistApi.middleware,formApi.middleware,consoleApi.middleware,),
+    }).concat(authApi.middleware,kotlinHouseApi.middleware, costApi.middleware,  pythonSiteApi.middleware, siteApi.middleware,roomApi.middleware,kotlinResourceApi.middleware,serviceApi.middleware,waitlistApi.middleware,formApi.middleware,consoleApi.middleware,),
 });
 
 // Persistor instance

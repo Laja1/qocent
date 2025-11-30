@@ -16,7 +16,7 @@ import { Edit, Trash2 } from "lucide-react";
 import {
   useDeleteMemberMutation,
   useGetAccountMembersQuery,
-} from "@/service/kotlin/authApi";
+} from "@/service/python/authApi";
 import type { AccountMember } from "@/models/response/authResponse";
 import { showCustomToast } from "../toast";
 import type { SiteData } from "@/models/response/siteResponse";

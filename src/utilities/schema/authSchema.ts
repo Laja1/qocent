@@ -3,37 +3,19 @@ import { string, object } from 'yup';
 import { codeValidatiion, defaultValidation, emailValidation, passwordValidation } from '.';
 
 export const loginFormValidationSchema = object().shape({
-  userEmail: emailValidation(),
-  userPassword: passwordValidation(),
+  user_email: emailValidation(),
+  user_password: passwordValidation(),
 });
 
 export const registerFormValidationSchema = object().shape({
   // Personal information
-  userFirstName: defaultValidation('First Name'),
-  userLastName: defaultValidation('Last Name'),
-  userEmail: emailValidation(),
-  userPassword: passwordValidation(),
-  accountType: string()
-    .oneOf(['individual', 'organization'], 'Invalid account type')
-    .required('Account type is required'),
-  accountName: string().notRequired(),
-  userRoleId: string().notRequired(),
-  
-  // Business - only required fields for organization
-  business: object().when('accountType', {
-    is: 'organization',
-    then: (schema) => schema.shape({
-      businessName: defaultValidation('Business name'),
-      businessDescription: defaultValidation('Business description'),
-      businessSize: defaultValidation('Company size'),
-      businessWebsite: string().url('Please enter a valid URL').notRequired(),
-      businessContactName: string().notRequired(),
-      businessContactEmail: emailValidation(),
-      businessContactNumber: string().notRequired(),
-      businessContactRole: string().notRequired(),
-    }),
-    otherwise: (schema) => schema.notRequired(),
-  }),
+  user_first_name: defaultValidation('First Name'),
+  user_last_name: defaultValidation('Last Name'),
+  user_email: emailValidation(),
+  user_password: passwordValidation(),
+  user_phone_number:defaultValidation('Phone number'),
+  user_country:defaultValidation('User country'),  
+ 
 });
 
 
@@ -48,12 +30,12 @@ export const completePasswordSchema = object().shape({
 });
 
 export const resetPasswordSchema = object().shape({
-  otp:codeValidatiion('OTP'),
-  userPassword: passwordValidation(),
+  token:defaultValidation('Token sent to your email'),
+  new_password: passwordValidation(),
 });
 
 export const forgotPasswordFormValidationSchema = object().shape({
-  userEmail: emailValidation(),
+  email: emailValidation(),
 });
 
 export const resetPasswordFormValidationSchema = object().shape({

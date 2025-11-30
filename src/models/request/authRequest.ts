@@ -1,95 +1,69 @@
-export type Business = {
-  businessContactEmail?: string;
-  businessContactName?: string;
-  businessContactNumber?: string;
-  businessContactRole?: string;
-  businessDescription?: string;
-  businessName: string;
-  businessSize: string;
-  businessWebsite?: string;
+
+
+export type signupRequest = {
+  user_first_name:string,
+  user_last_name:string,
+  user_email:string,
+  user_phone_number:string
+  user_country:string
+  user_password:string,
 };
-
-
-export type SignupRequestBase = {
-  accountName: string;
-  accountType: string;
-  userCountry?: string;
-  userEmail: string;
-  userFirstName: string;
-  userLastName: string;
-  userPassword: string;
-  userRoleId: number;
-};
-
-export type signupRequest =
-  | (SignupRequestBase & {
-      accountType: "organization";
-      business: Business;
-    })
-  | (SignupRequestBase & {
-      accountType: "individual";
-      business?: never;
-    });
-
     
-export const signUpInit: signupRequest = {
-  userFirstName: "",
-  userLastName: "",
-  userEmail: "",
-  userPassword: "",
-  accountType: "individual",
-  accountName: "",
-  userRoleId: 100
+export const signUpInit = {
+  user_first_name: "",
+  user_last_name: "",
+  user_email: "",
+  user_phone_number:"",
+  user_country:'',
+  user_password: "",
 };
 
 
 
 export type signInRequest = {
-  userEmail?: string;
-  userPassword?: string;
-  idToken:string
+  user_email?: string;
+  user_password?: string;
 };
 
 export const signInInit = {
-  userEmail: "toni@yopmail.com",
-  userPassword: "Ifeoluwa01.$",
+  user_email: "yp@yopmail.com",
+  user_password: "Ifeoluwa01.$",
 }
 
 export const forgotPasswordInit = {
-    userEmail: "",
+    email: "",
 }
 
 
   
 
 export type completeEnrollmentRequest = {
-    otp: string,
-   userEmail: string
+  code: string,
+   email: string
  }
  
- export const completeEnrollmentInit:completeEnrollmentRequest = {
+ export const completeEnrollmentInit = {
     otp: "",
-   userEmail: ""
+   email: ""
  }
  
  export type resendOtpRequest = {
- userEmail: string
+ email: string
 }
 
 export type forgotPasswordpRequest = {
-  userEmail: string
+  email: string
  }
 
  export type completePasswordResetRequest = {
-  otp: string,
- userEmail?: string,
- userPassword: string,
+  new_password: string,
+ confirm_password?: string,
+ token: string,
 }
 
 export const completePasswordResetInit:completePasswordResetRequest = {
-  otp: "",
- userEmail: "",
- userPassword: "",
+  token: "",
+ new_password: "",
 }
 
 

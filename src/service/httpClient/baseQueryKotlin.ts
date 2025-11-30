@@ -11,7 +11,7 @@ export const baseQuery = fetchBaseQuery({
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).auth.token;
     if (token) {
-      headers.set("Authorization", `${token}`);
+      headers.set("Authorization", `Bearer ${token}`);
     }
     return headers;
   },
@@ -19,6 +19,40 @@ export const baseQuery = fetchBaseQuery({
 
 
 
+
+const triggerSessionLogout = (api: any, original: unknown) => {
+  api.dispatch(authStore.action.logout());
+  window.location.href = RouteConstant.auth.signin.path;
+  return {
+    error: {
+      status: "SESSION_EXPIRED",
+      data: {
+        message: "Session expired. Redirecting to login.",
+        original,
+      },
+    },
+  };
+};
+
+const shouldLogoutFromBody = (result: any) => {
+  if (!result) return false;
+
+  const responseCode = typeof result.responseCode === "string" ? result.responseCode.toUpperCase() : undefined;
+  const normalizedMessage =
+    typeof result.responseMessage === "string"
+      ? result.responseMessage.toLowerCase()
+      : "";
+
+  const explicitSessionCodes = ["401", "403", "SESSION_EXPIRED", "UNAUTHORIZED"];
+  const hasExplicitCode = responseCode
+    ? explicitSessionCodes.includes(responseCode)
+    : false;
+  const mentionsExpiry =
+    normalizedMessage.includes("jwt expired") ||
+    normalizedMessage.includes("token expired");
+
+  return hasExplicitCode || mentionsExpiry;
+};
 
 export const kotlinBaseQueryWithResponseCodeHandling: typeof baseQuery = async (
   args,
@@ -28,13 +62,17 @@ export const kotlinBaseQueryWithResponseCodeHandling: typeof baseQuery = async (
   const rawResult = await baseQuery(args, api, extraOptions);
 
   if (rawResult.error) {
+    const status = rawResult.error.status;
+    if (status === 401 || status === 403) {
+      return triggerSessionLogout(api, rawResult.error.data);
+    }
     return rawResult;
   }
 
   const result = rawResult.data as any;
 
   // ✅ SUCCESS
-  if (result.responseCode === "00") {
+  if (result?.responseCode === "00") {
     return {
       data: {
         ...result,
@@ -44,33 +82,17 @@ export const kotlinBaseQueryWithResponseCodeHandling: typeof baseQuery = async (
     };
   }
 
-  // 🛑 Detect JWT/session timeout
-  const isJWTExpired =
-    typeof result.responseMessage === "string" &&
-    result.responseMessage.toLowerCase().includes("jwt");
-
-  if (isJWTExpired) {
-    // Logout and redirect
-    api.dispatch(authStore.action.logout());
-    window.location.href = RouteConstant.auth.signin.path;
-    return {
-      error: {
-        status: "SESSION_EXPIRED",
-        data: {
-          message: "Session expired. Redirecting to login.",
-          original: result,
-        },
-      },
-    };
+  if (shouldLogoutFromBody(result)) {
+    return triggerSessionLogout(api, result);
   }
 
   // 🧯 Default error message
   let errorMessage = "An unknown error occurred";
-  if (typeof result.responseMessage === "string") {
+  if (typeof result?.responseMessage === "string") {
     errorMessage = result.responseMessage;
   } else if (
-    typeof result.responseMessage === "object" &&
-    result.responseMessage !== null
+    typeof result?.responseMessage === "object" &&
+    result?.responseMessage !== null
   ) {
     errorMessage = Object.entries(result.responseMessage)
       .map(([key, value]) => `${key}: ${value}`)
@@ -79,7 +101,7 @@ export const kotlinBaseQueryWithResponseCodeHandling: typeof baseQuery = async (
 
   return {
     error: {
-      status: result.responseCode,
+      status: result?.responseCode,
       data: {
         message: errorMessage,
         original: result,

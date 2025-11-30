@@ -41,18 +41,19 @@ export const routeConfig = [
   {
     path: "/",
     element: (
-      <PublicOnlyRoute>
+      // <PublicOnlyRoute>
       <Outlet />
-       </PublicOnlyRoute>
+      // </PublicOnlyRoute>
     ),
     children: authRoutesMapped,
   },
   {
-    path: "/",
+    path: `/`,
+    // path: RouteConstant.dashboard.dashboard.path,
     element: (
-      <ProtectedRoute>
-        <DashboardLayoutRouter />
-      </ProtectedRoute>
+      // <ProtectedRoute>
+      <DashboardLayoutRouter />
+      // </ProtectedRoute>
     ),
     children: dashboardRoutesMapped,
   },
