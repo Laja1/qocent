@@ -41,9 +41,9 @@ export const routeConfig = [
   {
     path: "/",
     element: (
-      // <PublicOnlyRoute>
-      <Outlet />
-      // </PublicOnlyRoute>
+      <PublicOnlyRoute>
+        <Outlet />
+      </PublicOnlyRoute>
     ),
     children: authRoutesMapped,
   },
@@ -51,9 +51,9 @@ export const routeConfig = [
     path: `/`,
     // path: RouteConstant.dashboard.dashboard.path,
     element: (
-      // <ProtectedRoute>
-      <DashboardLayoutRouter />
-      // </ProtectedRoute>
+      <ProtectedRoute>
+        <DashboardLayoutRouter />
+      </ProtectedRoute>
     ),
     children: dashboardRoutesMapped,
   },

@@ -56,13 +56,15 @@ export type forgotPasswordpRequest = {
  }
 
  export type completePasswordResetRequest = {
+  email:string
   new_password: string,
  confirm_password?: string,
  token: string,
 }
 
-export const completePasswordResetInit:completePasswordResetRequest = {
+export const completePasswordResetInit = {
   token: "",
+  email:"",
  new_password: "",
 }
 

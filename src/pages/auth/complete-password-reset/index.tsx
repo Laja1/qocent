@@ -29,6 +29,7 @@ const CompletePasswordReset = () => {
   const [resendOtp] = useForgotPasswordMutation();
   const onSubmit = async (values: completePasswordResetRequest) => {
     const payload = {
+      email: state,
       confirm_password: values?.new_password,
       new_password: values?.new_password,
       token: String(values?.token),
