@@ -1,58 +1,17 @@
 import { imgLinks } from "@/assets/assetLink";
-import { BrainCircuit, BrainCog, LogOut, Moon, Sun } from "lucide-react";
+import { LogOut, Moon, Sun } from "lucide-react";
 import { RouteConstant } from "@/router/routes";
 import { authStore } from "@/store/authSlice";
 import { useNavigate } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { dashboardStore } from "@/store/dashboardSlice";
-import { CollapsibleItem, SubItem } from "@/components/shared/collapsible";
-import type { RootState } from "@/store";
-import { useGetUserAccountsQuery } from "@/service/python/authApi";
-import { accountStore } from "@/store/accountSlice";
 import { useDarkMode } from "@/hooks/useDarkMode";
-import { useEffect } from "react";
-import { useBusinessStore } from "@/store/businessStore";
-
-// Skeleton loader component for workspaces
-const WorkspaceSkeleton = () => (
-  <div className="animate-pulse space-y-3">
-    {[1, 2, 3].map((index) => (
-      <div key={index} className="border rounded-md p-3">
-        <div className="flex items-center space-x-3">
-          <div className="w-6 h-6 bg-gray-200 rounded"></div>
-          <div className="h-4 bg-gray-200 rounded w-24"></div>
-        </div>
-        <div className="mt-3 ml-9 space-y-2">
-          <div className="h-3 bg-gray-200 rounded w-20"></div>
-          <div className="h-3 bg-gray-200 rounded w-16"></div>
-        </div>
-      </div>
-    ))}
-  </div>
-);
 
 export const ConsoleLeft = () => {
-  const user = useSelector((state: RootState) => state.auth);
   const { isDark, toggle } = useDarkMode();
-  const { setBusiness } = useBusinessStore();
-  const { data: workspaceData, isLoading } = useGetUserAccountsQuery(
-    {
-      userCode: user.userEmail || "",
-    },
-    {
-      skip: !user.userEmail,
-    }
-  );
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (workspaceData?.business) {
-      // ✅ Automatically persist to Zustand
-      setBusiness(workspaceData.business);
-    }
-  }, [workspaceData, setBusiness]);
 
   const handleLogout = () => {
     dispatch(authStore.action.logout());
@@ -79,6 +38,7 @@ export const ConsoleLeft = () => {
       alt: "Huawei",
       loading: false,
     },
+    // Uncomment when ready
     // {
     //   provider: "gcp" as const,
     //   name: "Google Cloud",
@@ -104,6 +64,7 @@ export const ConsoleLeft = () => {
           <h2 className="text-sm sm:text-base font-brfirma-bold text-gray-900 dark:text-white">
             Workspaces
           </h2>
+
           {/* Mobile logout button */}
           <button
             onClick={handleLogout}
@@ -119,171 +80,43 @@ export const ConsoleLeft = () => {
 
         {/* Workspaces List */}
         <div className="space-y-2">
-          {isLoading ? (
-            <WorkspaceSkeleton />
+          {workspaces && workspaces.length > 0 ? (
+            workspaces.map((item) => (
+              <div
+                key={item.provider}
+                onClick={() => handleClick(item.provider)}
+                className="border border-gray-200 dark:border-gray-800 rounded-md 
+                           p-3 flex items-center gap-3 cursor-pointer
+                           hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+              >
+                <img
+                  src={item.icon}
+                  alt={item.alt}
+                  className="w-6 h-6 object-contain"
+                />
+                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                  {item.name}
+                </span>
+              </div>
+            ))
           ) : (
-            <div className="space-y-2">
-              {workspaceData?.accounts.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">
-                  <div className="mb-2">No workspaces found</div>
-                  <div className="text-xs">
-                    Create your first workspace to get started
-                  </div>
-                </div>
-              ) : (
-                workspaceData?.accounts.map((workspace, index) => (
-                  <div
-                    key={workspace.accountId || index}
-                    className="border border-gray-200 dark:border-gray-800 rounded-md overflow-hidden "
-                  >
-                    <CollapsibleItem
-                      title={workspace.accountName}
-                      icon={BrainCog}
-                      defaultOpen={index === 0} // Open first workspace by default
-                    >
-                      {/* Cloud Providers */}
-                      <div className="divide-y divide-gray-100 dark:divide-gray-800">
-                        {workspaces.map((item) => (
-                          <div key={item.provider} className="relative">
-                            <SubItem
-                              title={item.name}
-                              image={item.icon}
-                              onClick={() => {
-                                if (item.loading) return;
-
-                                dispatch(
-                                  accountStore.action.setAccountDetails({
-                                    accountId: workspace.accountId,
-                                    accountCode: workspace.accountCode,
-                                    accountName: workspace.accountName,
-                                    type: "INTERNAL",
-                                    accountUserCode:
-                                      workspace.accountUserCode || "",
-                                    accountType: workspace.accountType as
-                                      | "INDIVIDUAL"
-                                      | "ORGANIZATION"
-                                      | undefined,
-                                    accountStatus: workspace.accountStatus as
-                                      | "ACTIVE"
-                                      | "INACTIVE"
-                                      | undefined,
-                                    owner: workspace.isOwner ? "YES" : "NO",
-                                  })
-                                );
-
-                                handleClick(item.provider);
-                              }}
-                            />
-                            {item.loading && (
-                              <div className="absolute inset-0 bg-white bg-opacity-50 cursor-not-allowed" />
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    </CollapsibleItem>
-                  </div>
-                ))
-              )}
-            </div>
-          )}
-        </div>
-
-        {/* Add Workspace Button */}
-
-        {workspaceData?.externalSites &&
-          workspaceData?.externalSites?.length > 0 && (
-            <div className="mt-6 pt-4 border-t border-gray-200">
-              <div className="border-dashed border border-gray-200  dark:border-gray-800 rounded-md overflow-hidden ">
-                <div className="space-y-2">
-                  {isLoading ? (
-                    <WorkspaceSkeleton />
-                  ) : (
-                    <div className="space-y-2">
-                      {workspaceData?.accounts.length === 0 ? (
-                        <div className="text-center py-8 text-gray-500">
-                          <div className="mb-2">No workspaces found</div>
-                          <div className="text-xs">
-                            Create your first workspace to get started
-                          </div>
-                        </div>
-                      ) : (
-                        workspaceData?.accounts.map((workspace, index) => (
-                          <div
-                            key={workspace.accountId || index}
-                            className="border border-gray-200 dark:border-gray-800 rounded-md overflow-hidden "
-                          >
-                            <CollapsibleItem
-                              title={"External Workspace"}
-                              icon={BrainCircuit}
-                              defaultOpen={index === 0} // Open first workspace by default
-                            >
-                              {/* Cloud Providers */}
-                              <div className="divide-y divide-gray-100 dark:divide-gray-800">
-                                {workspaces.map((item) => (
-                                  <div key={item.provider} className="relative">
-                                    <SubItem
-                                      title={item.name}
-                                      image={item.icon}
-                                      onClick={() => {
-                                        if (item.loading) return;
-
-                                        dispatch(
-                                          accountStore.action.setAccountDetails(
-                                            {
-                                              accountId: workspace.accountId,
-                                              accountCode:
-                                                workspace.accountCode,
-                                              accountName:
-                                                workspace.accountName,
-                                              accountUserCode:
-                                                workspace.accountUserCode || "",
-                                              accountType:
-                                                workspace.accountType as
-                                                  | "INDIVIDUAL"
-                                                  | "ORGANIZATION"
-                                                  | undefined,
-                                              type: "EXTERNAL",
-                                              accountStatus:
-                                                workspace.accountStatus as
-                                                  | "ACTIVE"
-                                                  | "INACTIVE"
-                                                  | undefined,
-                                              owner: workspace.isOwner
-                                                ? "YES"
-                                                : "NO",
-                                            }
-                                          )
-                                        );
-
-                                        handleClick(item.provider);
-                                      }}
-                                    />
-                                    {item.loading && (
-                                      <div className="absolute inset-0 bg-white bg-opacity-50 cursor-not-allowed" />
-                                    )}
-                                  </div>
-                                ))}
-                              </div>
-                            </CollapsibleItem>
-                          </div>
-                        ))
-                      )}
-                    </div>
-                  )}
-                </div>
+            <div className="text-center py-8 text-gray-500">
+              <div className="mb-2">No workspaces found</div>
+              <div className="text-xs">
+                Create your first workspace to get started
               </div>
             </div>
           )}
-        <div></div>
+        </div>
       </div>
 
-      {/* Desktop Logout - hidden on mobile */}
-      <div className="flex px-4  py-2 justify-between border-t dark:bg-black dark:border-gray-800 border-gray-200">
+      {/* Bottom Section */}
+      <div className="flex px-4 py-2 justify-between border-t dark:bg-black dark:border-gray-800 border-gray-200">
+        {/* Desktop Logout */}
         <div
           onClick={handleLogout}
-          className="hidden lg:flex items-center gap-3  
-                   text-red-500  cursor-pointer
-                   transition-colors duration-200 hover:text-white "
+          className="hidden lg:flex items-center gap-3 text-red-500 cursor-pointer
+                     transition-colors duration-200 hover:text-white"
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
@@ -295,9 +128,11 @@ export const ConsoleLeft = () => {
           <LogOut className="w-4 h-4" />
           <span className="text-sm font-medium">Logout</span>
         </div>
+
+        {/* Dark mode toggle */}
         <button
           onClick={toggle}
-          className=" p-2 bg-gray-200 cursor-pointer dark:bg-gray-900 rounded-full"
+          className="p-2 bg-gray-200 cursor-pointer dark:bg-gray-900 rounded-full"
         >
           {isDark ? <Sun size={16} /> : <Moon size={16} />}
         </button>

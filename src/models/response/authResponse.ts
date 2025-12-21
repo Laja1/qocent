@@ -1,6 +1,9 @@
-  export interface signInResponse {
+export interface signInResponse {
+  status: string;
+  message: string;
+  data: {
     access_token: string;
-    token_type: "bearer";
+    token_type: string;
     user: {
       user_id: string;
       user_email: string;
@@ -12,6 +15,8 @@
       user_created_at: string; // ISO date string
     };
   };
+}
+
   
   export type signUpResponse = {
     message: string;

@@ -23,14 +23,13 @@ const SignIn = () => {
   const handleRegularSignIn = async (values: any) => {
     try {
       const res = await signIn(values).unwrap();
-      console.log(res);
       dispatch(
         authStore.action.setCredentials({
-          token: res?.access_token,
-          userEmail: res?.user.user_email,
-          userFirstName: res?.user?.user_first_name,
-          userLastName: res?.user?.user_last_name,
-          userId: Number(res?.user?.user_id),
+          token: res?.data?.access_token,
+          userEmail: res?.data?.user.user_email,
+          userFirstName: res?.data?.user?.user_first_name,
+          userLastName: res?.data?.user?.user_last_name,
+          userId: Number(res?.data?.user?.user_id),
         })
       );
       console.log(res);

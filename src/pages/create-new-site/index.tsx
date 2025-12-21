@@ -10,12 +10,14 @@ import { SiteDeployModal } from "@/components/not-shared/site-modal";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { serverSiteSchema } from "@/utilities/schema/resourceSchema";
-import { useCreateServerSiteMutation } from "@/service/python/siteApi";
+import { useCreateAccountMutation } from "@/service/python/cloudServerices";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 
 export const CreateNewSite = () => {
   const navigate = useNavigate();
-  const [createSite, { isLoading }] = useCreateServerSiteMutation();
-
+  const [createSite, { isLoading }] = useCreateAccountMutation();
+  const dahsboard = useSelector((state: RootState) => state.dashboard);
   const { openModal, closeModal } = useModal();
 
   const [progress, setProgress] = useState(0);
@@ -30,15 +32,16 @@ export const CreateNewSite = () => {
 
       try {
         const payload = {
-          ou_name: `${values.siteName}_ou`,
           account_name: values.siteName,
-          account_email: "to@yopmail.com",
         };
 
         // Show indeterminate progress (e.g., 30% while waiting)
         setProgress(30);
 
-        await createSite(payload).unwrap();
+        await createSite({
+          body: payload,
+          csp: dahsboard?.provider,
+        }).unwrap();
 
         setProgress(100);
 
