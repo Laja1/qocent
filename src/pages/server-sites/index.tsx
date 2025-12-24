@@ -3,42 +3,36 @@ import { Button, Header, Tabs } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Edit, Eye, Trash2, PlusIcon, Plus, Users } from "lucide-react";
 import { useState, useEffect } from "react";
-import { ResourceTable } from "./server-sites-table";
 import { Card } from "@/components/ui/card";
-import { SiteLevel } from "../architectural-room/site-level";
-import { SecurityTable } from "./security-table";
 import { useNavigate } from "react-router-dom";
-import { CostTable } from "./cost";
-import type { SiteData } from "@/models/response/siteResponse";
-import {
-  useGetSiteByProviderQuery,
-  useGetResourcesInSiteQuery,
-  useGetSiteArchitectureQuery,
-  useGetSiteDataFlowQuery,
-} from "@/service/kotlin/siteApi";
+
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
-import { FlowGrid } from "@/components/not-shared/data-flow/flow";
 import { ResourceModal } from "../create-new-resource/resource-modal";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
-import { DataFlowLoader } from "@/components/not-shared/data-flow/loader";
 import { serverSiteColumns } from "@/utilities/constants/colums";
-import { useGetQueryMonthlyBillQuery } from "@/service/python/costApi";
-import MonthlyBill from "@/components/shared/monthly-bill";
-import type { getQueryMonthlyBillResponse } from "@/models/response/costResponse";
-import { PacmanLoader } from "react-spinners";
+import {
+  useGetOrganizationAccountQuery,
+  useGetOrganizationQuery,
+} from "@/service/python/organizationApi";
+import type { Account } from "@/models/response/organizationResponse";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
+  const { data } = useGetOrganizationQuery();
+  const { data: organizationAccount, isLoading: isSiteLoading } =
+    useGetOrganizationAccountQuery({
+      org_id: String(data?.data?.org_id) || "",
+    });
+
   const [isOpen, setIsOpen] = useState(false);
   const [tabShow, setTabShow] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState("");
-  const [selectedSiteCode, setSelectedSiteCode] = useState("");
+  // const [selectedSiteCode, setSelectedSiteCode] = useState("");
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  const user = useSelector((state: RootState) => state.auth);
+
   const account = useSelector((state: RootState) => state.account);
-  const [isArtificialLoading, setIsArtificialLoading] = useState(false);
   const [loadingTimeout, setLoadingTimeout] = useState<NodeJS.Timeout | null>(
     null
   );
@@ -52,64 +46,52 @@ export const ServerSites = () => {
     };
   }, [loadingTimeout]);
 
-  const { data: siteData, isLoading: isSiteLoading } =
-    useGetSiteByProviderQuery(
-      {
-        provider: dashboard.provider,
-        siteAccountId: account.accountCode || "",
-        type: account.type,
-      },
-      {
-        skip: !user.userId || !dashboard.provider,
-      }
-    );
+  // const { data: architectureData } = useGetSiteArchitectureQuery(
+  //   {
+  //     siteCode: selectedSiteCode,
+  //   },
+  //   {
+  //     skip: !selectedSiteCode,
+  //   }
+  // );
+  // const { data, isLoading } = useGetQueryMonthlyBillQuery({
+  //   bill_cycle: "2025-08",
+  // });
 
-  const { data: architectureData } = useGetSiteArchitectureQuery(
-    {
-      siteCode: selectedSiteCode,
-    },
-    {
-      skip: !selectedSiteCode,
-    }
-  );
-  const { data, isLoading } = useGetQueryMonthlyBillQuery({
-    bill_cycle: "2025-08",
-  });
+  // const { data: resourcesInSiteData, isLoading: isResourceLoading } =
+  //   useGetResourcesInSiteQuery(
+  //     {
+  //       siteCode: selectedSiteCode,
+  //     },
+  //     {
+  //       skip: !selectedSiteCode,
+  //     }
+  //   );
 
-  const { data: resourcesInSiteData, isLoading: isResourceLoading } =
-    useGetResourcesInSiteQuery(
-      {
-        siteCode: selectedSiteCode,
-      },
-      {
-        skip: !selectedSiteCode,
-      }
-    );
-
-  const {
-    data: dataFlow,
-    isLoading: dataFlowLoading,
-    refetch: refetchDataFlow,
-  } = useGetSiteDataFlowQuery(
-    {
-      siteCode: selectedSiteCode,
-    },
-    {
-      skip: !selectedSiteCode,
-    }
-  );
+  // const {
+  //   data: dataFlow,
+  //   isLoading: dataFlowLoading,
+  //   refetch: refetchDataFlow,
+  // } = useGetSiteDataFlowQuery(
+  //   {
+  //     siteCode: selectedSiteCode,
+  //   },
+  //   {
+  //     skip: !selectedSiteCode,
+  //   }
+  // );
 
   const actions = [
     {
       label: "View",
       icon: Eye,
-      onClick: (row: SiteData) =>
-        NiceModal.show(ModalConstant.DrawerModal, row),
+      onClick: (row: Account) => NiceModal.show(ModalConstant.DrawerModal, row),
     },
     {
       label: "Edit",
       icon: Edit,
-      onClick: (row: SiteData) => console.log("Edit server room:", row.siteId),
+      onClick: (row: Account) =>
+        console.log("Edit server room:", row.account_id),
     },
     {
       label: "Deploy Resource",
@@ -119,7 +101,7 @@ export const ServerSites = () => {
     {
       label: "Delete",
       icon: Trash2,
-      onClick: (row: SiteData) =>
+      onClick: (row: Account) =>
         NiceModal.show(ModalConstant.DeleteSiteModal, row),
       variant: "destructive" as const,
     },
@@ -134,138 +116,132 @@ export const ServerSites = () => {
     });
   }
 
-  const isDataFlowLoading = dataFlowLoading || isArtificialLoading;
-
-  const handleRowClick = async (row: SiteData) => {
+  const handleRowClick = async (row: Account) => {
     // Clear existing timeout
     if (loadingTimeout) {
       clearTimeout(loadingTimeout);
     }
 
     setTabShow(true);
-    setSelectedRowId(row.siteId.toString());
-    setSelectedSiteCode(row.siteCode);
-
-    setIsArtificialLoading(true);
-
-    const timeout = setTimeout(() => {
-      setIsArtificialLoading(false);
-    }, 1500);
-
-    setLoadingTimeout(timeout);
+    setSelectedRowId(row.account_id.toString());
+    // setSelectedSiteCode(row.siteCode);
 
     try {
-      await refetchDataFlow();
+      // await refetchDataFlow();
     } catch (error) {
       console.error("Error refetching data flow:", error);
-      setIsArtificialLoading(false);
     }
   };
   // const selectedData = siteData?.data.find((item) => item.siteCode);
-  const tabData = [
-    {
-      id: 1,
-      text: "Visual Site",
-      component: (
-        <div>
-          {isDataFlowLoading ? (
-            <DataFlowLoader />
-          ) : (
-            <div className="flex lg:flex-row flex-col  ">
-              <FlowGrid
-                data={dataFlow?.data?.resource || []}
-                cellBorderData={dataFlow?.data?.house || []}
-                connections={dataFlow?.data?.connection || []}
-                siteCode={selectedSiteCode}
-              />
-            </div>
-          )}
-        </div>
-      ),
-    },
-    {
-      id: 2,
-      text: "Resources",
-      component: (
-        <div className="">
-          <ResourceTable
-            isLoading={isResourceLoading}
-            resourcesInSiteData={resourcesInSiteData?.data || []}
-          />
-        </div>
-      ),
-    },
-    {
-      id: 3,
-      text: "Architecture",
-      component: architectureData?.data ? (
-        <div>
-          <SiteLevel sitesData={architectureData.data} />
-        </div>
-      ) : (
-        <div>No architecture data available</div>
-      ),
-    },
-    {
-      id: 4,
-      text: "Notifications",
-      component: <SecurityTable />,
-    },
-    {
-      id: 5,
-      text: "Cost",
-      component: (
-        <div className="flex flex-col">
-          <CostTable />
-          {isLoading ? (
-            <PacmanLoader />
-          ) : (
-            <MonthlyBill data={data as getQueryMonthlyBillResponse} />
-          )}
-        </div>
-      ),
-    },
-    // {
-    //   id: 6,
-    //   text: "Summary",
-    //   component: (
-    //     <div className="flex lg:flex-row flex-col">
-    //       <div className="lg:w-1/4 lg:mr-5 flex">
-    //         <div className="flex flex-col w-full">
-    //           <SummaryTable
-    //             summaryData={summaryData?.data || []}
-    //             isLoading={isSiteSummaryLoading}
-    //           />
-    //           <Button
-    //             label="Add Resource"
-    //             prefixIcon={<PlusIcon className="size-4" />}
-    //             size="small"
-    //             className="mt-2 py-0 bg-black dark:bg-white"
-    //             intent="secondary"
-    //             onClick={() =>
-    //               openModal({
-    //                 id: `deploy-${selectedSiteCode}`,
-    //                 content: () => (
-    //                   <DeployResources
-    //                     closeModal={closeModal}
-    //                     onProceed={() => navigate("/create-new-resource")}
-    //                     onNavigate={(path, state) => {
-    //                       navigate(path, { state });
-    //                     }}
-    //                   />
-    //                 ),
-    //               })
-    //             }
-    //           />
-    //         </div>
-    //       </div>
-    //       <div className="w-full lg:w-3/4">
-    //         <Resource />
-    //       </div>
-    //     </div>
-    //   ),
-    // },
-  ];
+  // const tabData = [
+  //   {
+  //     id: 1,
+  //     text: "Visual Site",
+  //     component: (
+  //       <div>
+  //         {isDataFlowLoading ? (
+  //           <DataFlowLoader />
+  //         ) : (
+  //           <div className="flex lg:flex-row flex-col  ">
+  //             <FlowGrid
+  //               data={dataFlow?.data?.resource || []}
+  //               cellBorderData={dataFlow?.data?.house || []}
+  //               connections={dataFlow?.data?.connection || []}
+  //               siteCode={selectedSiteCode}
+  //             />
+  //           </div>
+  //         )}
+  //       </div>
+  //     ),
+  //   },
+  //   {
+  //     id: 2,
+  //     text: "Resources",
+  //     component: (
+  //       <div className="">
+  //         <ResourceTable
+  //           isLoading={isResourceLoading}
+  //           resourcesInSiteData={resourcesInSiteData?.data || []}
+  //         />
+  //       </div>
+  //     ),
+  //   },
+  //   {
+  //     id: 3,
+  //     text: "Architecture",
+  //     component: architectureData?.data ? (
+  //       <div>
+  //         <SiteLevel sitesData={architectureData.data} />
+  //       </div>
+  //     ) : (
+  //       <div>No architecture data available</div>
+  //     ),
+  //   },
+  //   {
+  //     id: 4,
+  //     text: "Notifications",
+  //     component: <SecurityTable />,
+  //   },
+  //   // {
+  //   //   id: 5,
+  //   //   text: "Cost",
+  //   //   component: (
+  //   //     <div className="flex flex-col">
+  //   //       <CostTable />
+  //   //       {isLoading ? (
+  //   //         <PacmanLoader />
+  //   //       ) : (
+  //   //         <MonthlyBill data={data as getQueryMonthlyBillResponse} />
+  //   //       )}
+  //   //     </div>
+  //   //   ),
+  //   // },
+  //   // {
+  //   //   id: 6,
+  //   //   text: "Summary",
+  //   //   component: (
+  //   //     <div className="flex lg:flex-row flex-col">
+  //   //       <div className="lg:w-1/4 lg:mr-5 flex">
+  //   //         <div className="flex flex-col w-full">
+  //   //           <SummaryTable
+  //   //             summaryData={summaryData?.data || []}
+  //   //             isLoading={isSiteSummaryLoading}
+  //   //           />
+  //   //           <Button
+  //   //             label="Add Resource"
+  //   //             prefixIcon={<PlusIcon className="size-4" />}
+  //   //             size="small"
+  //   //             className="mt-2 py-0 bg-black dark:bg-white"
+  //   //             intent="secondary"
+  //   //             onClick={() =>
+  //   //               openModal({
+  //   //                 id: `deploy-${selectedSiteCode}`,
+  //   //                 content: () => (
+  //   //                   <DeployResources
+  //   //                     closeModal={closeModal}
+  //   //                     onProceed={() => navigate("/create-new-resource")}
+  //   //                     onNavigate={(path, state) => {
+  //   //                       navigate(path, { state });
+  //   //                     }}
+  //   //                   />
+  //   //                 ),
+  //   //               })
+  //   //             }
+  //   //           />
+  //   //         </div>
+  //   //       </div>
+  //   //       <div className="w-full lg:w-3/4">
+  //   //         <Resource />
+  //   //       </div>
+  //   //     </div>
+  //   //   ),
+  //   // },
+  // ];
+  const sitesToDisplay = organizationAccount?.data?.accounts?.filter(
+    (item) =>
+      item.account_provider?.toLocaleLowerCase() ===
+      dashboard.provider?.toLocaleLowerCase()
+  );
 
   return (
     <div className="h-full mt-5">
@@ -282,7 +258,7 @@ export const ServerSites = () => {
       <div className="flex gap-4 mb-10 lg:mb-20 flex-col overflow-y-hidden h-full">
         <Card className="mx-5 px-5 rounded-sm">
           <DataTable
-            data={siteData?.data || []}
+            data={sitesToDisplay || []}
             columns={serverSiteColumns}
             title={"SERVER SITES"}
             // description="Server Site"
@@ -295,19 +271,19 @@ export const ServerSites = () => {
               includeHeaders: true,
             }}
             actions={actions}
-            skeletonRows={siteData?.data?.length || 5}
+            skeletonRows={sitesToDisplay?.length || 5}
             onRowClick={handleRowClick}
-            getRowId={(row) => row.siteId.toString()}
+            getRowId={(row) => row.account_id.toString()}
             highlightedRowId={selectedRowId}
             initialSorting={{ id: "siteCreatedAt", desc: false }}
           />
         </Card>
 
-        {tabShow && (
+        {/* {tabShow && (
           <div className="mx-5 mt-5">
             <Tabs tabs={tabData} />
           </div>
-        )}
+        )} */}
       </div>
 
       <ResourceModal

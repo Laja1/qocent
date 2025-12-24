@@ -10,7 +10,7 @@ import { SiteDeployModal } from "@/components/not-shared/site-modal";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { serverSiteSchema } from "@/utilities/schema/resourceSchema";
-import { useCreateAccountMutation } from "@/service/python/cloudServerices";
+import { useCreateAccountMutation } from "@/service/python/cloudServericesApi";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 

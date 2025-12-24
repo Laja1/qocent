@@ -7,11 +7,11 @@ import {
   getResourceTypeClassName,
   getStatusClassName,
 } from "../helper";
-import type { SiteData } from "@/models/response/siteResponse";
 import { imgLinks } from "@/assets/assetLink";
 import type { roomData } from "@/models/response/roomResponse";
 import type { resourceType } from "@/models/response/resourceResponse";
 import type { billProps } from "@/models/response/costResponse";
+import type { Account } from "@/models/response/organizationResponse";
 
 export const serverHouseColumn: ColumnDef<HouseItem>[] = [
   {
@@ -102,43 +102,34 @@ export const serverHouseColumn: ColumnDef<HouseItem>[] = [
   },
 ];
 
-export const serverSiteColumns: ColumnDef<SiteData>[] = [
+export const serverSiteColumns: ColumnDef<Account>[] = [
   {
-    id: "siteId",
+    id: "account_id",
     header: "ID",
-    accessorKey: "siteId",
-    cell: (row) => <span className="">{row.siteId}</span>,
+    accessorKey: "account_id",
+    cell: (row) => <span className="">{row.account_id}</span>,
     sortable: true,
   },
   {
-    id: "siteName",
+    id: "account_id",
     header: "SITE NAME",
-    accessorKey: "siteName",
+    accessorKey: "account_id",
     cell: (row) => (
       <span className="line-clamp-1 font-brfirma-bold text-xs">
-        {row.siteName}
+        {row.account_id}
       </span>
     ),
     sortable: true,
   },
   {
-    id: "siteCode",
-    header: "SITE CODE",
-    accessorKey: "siteCode",
-    cell: (row) => (
-      <span className="hover:text-red-500 line-clamp-1">{row.siteCode}</span>
-    ),
-    sortable: true,
-  },
-  {
-    id: "siteProvider",
+    id: "account_provider",
     header: "PROVIDER",
-    accessorKey: "siteProvider",
+    accessorKey: "account_provider",
     headerClassName: "text-center ",
     sortable: true,
     cell: (row) => (
       <span className="text-center justify-center items-left flex">
-        {row.siteProvider === "aws" ? (
+        {row.account_provider === "aws" ? (
           <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
         ) : (
           <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
@@ -147,13 +138,16 @@ export const serverSiteColumns: ColumnDef<SiteData>[] = [
     ),
   },
   {
-    id: "siteStatus",
+    id: "account_status",
     header: "STATUS",
-    accessorKey: "siteStatus",
+    accessorKey: "account_status",
     cell: (row) => (
       <div className="">
-        <Badge variant="outline" className={getStatusClassName(row.siteStatus)}>
-          {row.siteStatus}
+        <Badge
+          variant="outline"
+          className={getStatusClassName(row.account_status)}
+        >
+          {row.account_status}
         </Badge>
       </div>
     ),
@@ -165,39 +159,39 @@ export const serverSiteColumns: ColumnDef<SiteData>[] = [
     ],
   },
   {
-    id: "siteCreatedAt",
+    id: "account_created_at",
     header: "Site Created At",
     headerClassName: "text-right",
-    accessorKey: "siteCreatedAt",
+    accessorKey: "account_created_at",
     sortable: true,
     cell: (row) => (
       <span className="text-right line-clamp-1 block">
-        {formatDate(row.siteCreatedAt)}
+        {formatDate(row.account_created_at)}
       </span>
     ),
   },
-  {
-    id: "siteEOLAction",
-    header: "Site EOL Action",
-    headerClassName: "text-right",
-    accessorKey: "siteEOLAction",
-    sortable: true,
-    cell: (row) => (
-      <span className="text-right line-clamp-1 block">{row.siteEOLAction}</span>
-    ),
-  },
-  {
-    id: "siteBill",
-    header: "BILL (USD)",
-    accessorKey: "siteBill",
-    headerClassName: "text-right",
-    cell: (row) => (
-      <span className="block text-green-700 dark:text-green-400 text-right">
-        {row.siteBill}
-      </span>
-    ),
-    sortable: true,
-  },
+  // {
+  //   id: "siteEOLAction",
+  //   header: "Site EOL Action",
+  //   headerClassName: "text-right",
+  //   accessorKey: "siteEOLAction",
+  //   sortable: true,
+  //   cell: (row) => (
+  //     <span className="text-right line-clamp-1 block">{row.siteEOLAction}</span>
+  //   ),
+  // },
+  // {
+  //   id: "siteBill",
+  //   header: "BILL (USD)",
+  //   accessorKey: "siteBill",
+  //   headerClassName: "text-right",
+  //   cell: (row) => (
+  //     <span className="block text-green-700 dark:text-green-400 text-right">
+  //       {row.siteBill}
+  //     </span>
+  //   ),
+  //   sortable: true,
+  // },
 ];
 
 export const monthlyCostTableColumn: ColumnDef<billProps>[] = [

@@ -6,15 +6,27 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { dashboardStore } from "@/store/dashboardSlice";
 import { useDarkMode } from "@/hooks/useDarkMode";
+import { useGetOrganizationQuery } from "@/service/python/organizationApi";
+import { useOrganizationStore } from "@/store/organizationStore";
+import { useEffect } from "react";
 
 export const ConsoleLeft = () => {
   const { isDark, toggle } = useDarkMode();
-
+  const { data } = useGetOrganizationQuery();
+  const { setOrganization, clearOrganization } = useOrganizationStore();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  // Set organization if data exists
+  useEffect(() => {
+    if (data?.data) {
+      setOrganization(data.data);
+    }
+  }, [data, setOrganization]);
+
   const handleLogout = () => {
     dispatch(authStore.action.logout());
+    clearOrganization();
     navigate(RouteConstant.auth.signin.path);
   };
 
