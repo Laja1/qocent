@@ -1,12 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQuery } from "../httpClient/baseQuery";
+import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
 import type { deleteBucketContentResponse, fileResponse, getSignedBucketUrlResponse } from "@/models/response/bucketResponse";
 import type { downloadBucketContentRequest, getSignedBucketUrlRequest } from "@/models/request/bucketRequest";
 import { ApiEnums } from "@/utilities/enums";
 
 export const formApi = createApi({
-    baseQuery: baseQuery,
+    baseQuery: baseQueryWithAuthGuard,
     reducerPath: 'formApi',
     tagTypes:[ApiEnums.Bucket],
     endpoints: (build) => ({
@@ -78,7 +78,7 @@ export const formApi = createApi({
               method: "POST",
               body: { category, resource, action, body },
               headers: xKey ? { "X-Key": xKey } : {}, 
-              responseHandler: (response) => response.blob(), 
+              responseHandler: (response:any) => response.blob(), 
           }), }),
           generateUploadUrl: build.mutation<getSignedBucketUrlResponse, getSignedBucketUrlRequest>({
             query: ({ category, resource, action, body, xKey }) => ({

@@ -18,13 +18,13 @@ import type {
 import type { baseResponse, genericResponse } from "@/models/response";
 import { ApiEnums } from "@/utilities/enums";
 import type { getAccountResponse, getIAMRolesResponse } from "@/models/response/siteResponse";
-import { baseQuery } from "../httpClient/baseQuery";
+import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
 import type { CreateAccountPayload } from "@/models/request/cloudService";
 import type { CreateAccountResponse } from "@/models/response/cloudServiceResponse";
 
 export const cloudServicesApi = createApi({
   reducerPath: "cloudServices",
-  baseQuery: baseQuery,
+  baseQuery: baseQueryWithAuthGuard,
   tagTypes:[ApiEnums.Auth,ApiEnums.Member],
   endpoints: (build) => ({
     createAccount: build.mutation<CreateAccountResponse, {body:CreateAccountPayload,csp:string}>({

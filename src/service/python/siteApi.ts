@@ -5,14 +5,14 @@ import type { createSiteRequest } from "@/models/request/siteRequest";
 import { createResourceProviderTags, createSiteProviderTags } from "@/utilities/tagHelpers";
 import type { genericResponse } from "@/models/response";
 import { siteStore } from "@/store/siteSlice";
-import { baseQuery } from "../httpClient/baseQuery";
+import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
 
 
 
 
 export const pythonSiteApi = createApi({
   reducerPath: "pythonSiteApi",
-  baseQuery: baseQuery,
+  baseQuery: baseQueryWithAuthGuard,
   tagTypes: [ApiEnums.Site,ApiEnums.House,ApiEnums.Room,ApiEnums.Resource,ApiEnums.ActivityLog],
   endpoints: (build) => ({
     createServerSite: build.mutation<SiteResponse, createSiteRequest>({

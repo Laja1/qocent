@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Header, Tabs } from "@/components/shared";
+import { Button, Header, } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Edit, Eye, Trash2, PlusIcon, Plus, Users } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 
@@ -14,37 +14,25 @@ import { useSelector } from "react-redux";
 import { serverSiteColumns } from "@/utilities/constants/colums";
 import {
   useGetOrganizationAccountQuery,
-  useGetOrganizationQuery,
 } from "@/service/python/organizationApi";
 import type { Account } from "@/models/response/organizationResponse";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
-  const { data } = useGetOrganizationQuery();
+  const dashboard = useSelector((state: RootState) => state.dashboard);
+
   const { data: organizationAccount, isLoading: isSiteLoading } =
     useGetOrganizationAccountQuery({
-      org_id: String(data?.data?.org_id) || "",
+      provider: String(dashboard?.provider) || "",
     });
 
   const [isOpen, setIsOpen] = useState(false);
-  const [tabShow, setTabShow] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState("");
   // const [selectedSiteCode, setSelectedSiteCode] = useState("");
-  const dashboard = useSelector((state: RootState) => state.dashboard);
 
-  const account = useSelector((state: RootState) => state.account);
-  const [loadingTimeout, setLoadingTimeout] = useState<NodeJS.Timeout | null>(
-    null
-  );
 
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (loadingTimeout) {
-        clearTimeout(loadingTimeout);
-      }
-    };
-  }, [loadingTimeout]);
+
+
 
   // const { data: architectureData } = useGetSiteArchitectureQuery(
   //   {
@@ -107,22 +95,24 @@ export const ServerSites = () => {
     },
   ];
 
-  if (account.type === "INTERNAL") {
+  // Only show "Invite to Site" for admin users
+  if (
+    organizationAccount?.data?.accounts?.some(
+      (item) => item.member_type === "Admin"
+    )
+  ) {
     actions.splice(1, 0, {
       label: "Invite to Site",
       icon: Users,
-      onClick: (row: SiteData) =>
+      onClick: (row: Account) =>
         NiceModal.show(ModalConstant.InviteToWorkspace, row),
     });
   }
 
   const handleRowClick = async (row: Account) => {
     // Clear existing timeout
-    if (loadingTimeout) {
-      clearTimeout(loadingTimeout);
-    }
+   
 
-    setTabShow(true);
     setSelectedRowId(row.account_id.toString());
     // setSelectedSiteCode(row.siteCode);
 

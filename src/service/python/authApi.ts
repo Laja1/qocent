@@ -20,11 +20,11 @@ import type {
 import type { baseResponse, genericResponse } from "@/models/response";
 import { ApiEnums } from "@/utilities/enums";
 import type { getAccountResponse, getIAMRolesResponse } from "@/models/response/siteResponse";
-import { baseQuery } from "../httpClient/baseQuery";
+import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: baseQuery,
+  baseQuery: baseQueryWithAuthGuard,
   tagTypes:[ApiEnums.Auth,ApiEnums.Member],
   endpoints: (build) => ({
     signUp: build.mutation<signUpResponse, signupRequest>({

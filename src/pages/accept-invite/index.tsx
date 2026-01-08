@@ -5,32 +5,30 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useAcceptInviteMutation } from "@/service/python/authApi";
 import {
   Check,
   X,
   Users,
-  Mail,
-  Building2,
   Loader2,
   ArrowLeft,
   Shield,
   Star,
 } from "lucide-react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import { useAcceptInviteMutation, useRejectInviteMutation } from "@/service/python/invitationApi";
 
 export default function AcceptInvite() {
   const navigate = useNavigate();
   const [acceptInvite, { isLoading: isAccepting }] = useAcceptInviteMutation();
+  const [rejectInvite, { isLoading: isRejecting }] = useRejectInviteMutation();
+
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
 
-  const { siteCode, email } = useParams<{
-    siteCode: string;
-    email: string;
-  }>();
-  console.log(siteCode, email);
+  const [searchParams] = useSearchParams();
+  const inviteId = searchParams.get("invite_id");
   // Animation effect on mount
   useEffect(() => {
     const timer = setTimeout(() => setShowAnimation(true), 100);
@@ -44,14 +42,11 @@ export default function AcceptInvite() {
 
     try {
       const res = await acceptInvite({
-        userEmail: email || "",
-        siteCode: siteCode || "",
-        userFirstName: "",
-        userLastName: "",
-        userRoleId: 0,
+        invite_id: inviteId || "",
+       
       }).unwrap();
 
-      showCustomToast(res.responseMessage, {
+      showCustomToast(res.message, {
         toastOptions: { type: "success", autoClose: 5000 },
       });
 
@@ -69,13 +64,27 @@ export default function AcceptInvite() {
     }
   };
 
-  const handleDecline = () => {
-    if (isProcessing) return;
+  const handleDecline = async() => {
+   
+    try {
+      const res = await rejectInvite({
+        invite_id: inviteId || "",
+       
+      }).unwrap();
 
-    showCustomToast("Invitation declined", {
-      toastOptions: { type: "info", autoClose: 3000 },
-    });
-    navigate("/console");
+      showCustomToast(res?.message, {
+        toastOptions: { type: "info", autoClose: 3000 },
+      });
+      navigate("/console");
+    } catch (error: any) {
+      console.log(error, "error");
+      const message = ErrorHandler.extractMessage(error);
+      showCustomToast(message, {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
+    }
+
+   
   };
 
   const handleGoBack = () => {
@@ -157,29 +166,7 @@ export default function AcceptInvite() {
           <div className="p-8 space-y-6">
             {/* Invitation Details */}
 
-            <div className="items-center flex-row flex w-full space-x-5 ">
-              <div className="bg-gradient-to-r w-full from-blue-50 to-indigo-50 rounded-xs p-2 border border-blue-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <Building2 className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm font-medium text-gray-600">
-                    Organization
-                  </span>
-                </div>
-                <p className="font-semibold text-gray-900 text-xs">
-                  {siteCode || "Loading..."}
-                </p>
-              </div>
-
-              <div className="bg-gradient-to-r w-full from-gray-50 to-slate-50 rounded-xs p-2 border border-gray-100">
-                <div className="flex items-center gap-3 mb-2">
-                  <Mail className="w-5 h-5 text-gray-600" />
-                  <span className="text-sm font-medium text-gray-600">
-                    Invited Email
-                  </span>
-                </div>
-                <p className="font-medium text-gray-900 text-xs">{email}</p>
-              </div>
-            </div>
+           
 
             {/* Benefits Section */}
             <div className="bg-green-50 rounded-xs p-4 border border-green-100">
@@ -229,7 +216,7 @@ export default function AcceptInvite() {
                 variant="outline"
                 className="flex-1 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 text-gray-700 h-8 text-sm font-semibold transition-all duration-200"
                 onClick={handleDecline}
-                disabled={isProcessing}
+                disabled={isProcessing || isRejecting}
               >
                 <X className="w-5 h-5 mr-2" />
                 Decline

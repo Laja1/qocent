@@ -1,3 +1,3 @@
 export type organizationAccountRequest = {
-    org_id:string
+    provider:string
 }

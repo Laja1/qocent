@@ -111,12 +111,12 @@ export const serverSiteColumns: ColumnDef<Account>[] = [
     sortable: true,
   },
   {
-    id: "account_id",
+    id: "account_name",
     header: "SITE NAME",
-    accessorKey: "account_id",
+    accessorKey: "account_name",
     cell: (row) => (
       <span className="line-clamp-1 font-brfirma-bold text-xs">
-        {row.account_id}
+        {row.account_name}
       </span>
     ),
     sortable: true,
@@ -129,7 +129,7 @@ export const serverSiteColumns: ColumnDef<Account>[] = [
     sortable: true,
     cell: (row) => (
       <span className="text-center justify-center items-left flex">
-        {row.account_provider === "aws" ? (
+        {row.account_provider.toLocaleLowerCase() === "aws" ? (
           <img src={imgLinks.awsdark} className="size-5" alt="AWS" />
         ) : (
           <img src={imgLinks.huawei} className="size-5" alt="Huawei" />
