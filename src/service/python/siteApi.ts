@@ -21,7 +21,7 @@ export const pythonSiteApi = createApi({
         method: "POST",
         body,
       }),
-       invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" }],
+       invalidatesTags: [{ type: ApiEnums.Site, id: "LIST" }],
     }),
     deleteSite: build.mutation<genericResponse, {siteId:number}>({
       query: ({siteId}) => ({

@@ -2,7 +2,6 @@ import { ServerSites } from "@/pages/server-sites";
 import { RouteConstant } from "../routes";
 import { ServerHouses } from "@/pages/server-houses";
 import { ServerRooms } from "@/pages/server-rooms";
-import { Resource } from "@/pages/resource";
 import { Resources } from "@/pages/resources";
 import type { RouteType } from "./type";
 import { CreateNewSite } from "@/pages/create-new-site";
@@ -14,14 +13,12 @@ import { Organizations } from "@/pages/organization";
 import { Billings } from "@/pages/billings";
 import { Console } from "@/pages/console";
 import AcceptInvite from "@/pages/accept-invite";
-import { UpdateResources } from "@/pages/update-resource";
-import { Monitoring } from "@/pages/monitoring";
 import StarterPacksGrid from "@/pages/starter-packs";
-import { Security } from "@/pages/security";
-import { CertificateManager } from "@/pages/security/certificate-manager";
 import { Access } from "@/pages/access";
 import { ProfessionalServices } from "@/pages/professional-services";
 import { CreateProfessionalService } from "@/pages/create-professional-service";
+import { Finops } from "@/pages/finops";
+import SubscriptionCards from "@/pages/subscription/page";
 
 export const dashboardRoute: RouteType[] = [
   {
@@ -31,11 +28,18 @@ export const dashboardRoute: RouteType[] = [
     metadata: { isAuthenticated: false, hasSidebar: true },
   },
   {
-    path: RouteConstant.dashboard.certificateManager.path,
-    name: RouteConstant.dashboard.certificateManager.name,
-    component: <CertificateManager />,
+    path: RouteConstant.dashboard.subscription.path,
+    name: RouteConstant.dashboard.subscription.name,
+    component: <SubscriptionCards />,
     metadata: { isAuthenticated: false, hasSidebar: true },
   },
+  {
+    path: RouteConstant.dashboard.finops.path,
+    name: RouteConstant.dashboard.finops.name,
+    component: <Finops />,
+    metadata: { isAuthenticated: false, hasSidebar: true },
+  },
+
   {
     path: RouteConstant.dashboard.serverHouses.path,
     name: RouteConstant.dashboard.serverHouses.name,
@@ -56,21 +60,9 @@ export const dashboardRoute: RouteType[] = [
     metadata: { isAuthenticated: false, hasSidebar: true },
   },
   {
-    path: RouteConstant.dashboard.monitoring.path,
-    name: RouteConstant.dashboard.monitoring.name,
-    component: <Monitoring />,
-    metadata: { isAuthenticated: false, hasSidebar: true },
-  },
-  {
     path: RouteConstant.dashboard.professionalServices.path,
     name: RouteConstant.dashboard.professionalServices.name,
     component: <ProfessionalServices />,
-    metadata: { isAuthenticated: false, hasSidebar: true },
-  },
-  {
-    path: RouteConstant.dashboard.resource.path,
-    name: RouteConstant.dashboard.resource.name,
-    component: <Resource />,
     metadata: { isAuthenticated: false, hasSidebar: true },
   },
   {
@@ -128,12 +120,6 @@ export const dashboardRoute: RouteType[] = [
     metadata: { isAuthenticated: false, hasSidebar: true },
   },
   {
-    path: RouteConstant.dashboard.security.path,
-    name: RouteConstant.dashboard.security.name,
-    component: <Security />,
-    metadata: { isAuthenticated: false, hasSidebar: true },
-  },
-  {
     path: RouteConstant.dashboard.createProfessionalService.path,
     name: RouteConstant.dashboard.createProfessionalService.name,
     component: <CreateProfessionalService />,
@@ -149,13 +135,6 @@ export const dashboardRoute: RouteType[] = [
     path: RouteConstant.dashboard.billings.path,
     name: RouteConstant.dashboard.billings.name,
     component: <Billings />,
-    metadata: { isAuthenticated: false, hasSidebar: true },
-  },
-
-  {
-    path: RouteConstant.dashboard.updateResources.path,
-    name: RouteConstant.dashboard.updateResources.name,
-    component: <UpdateResources />,
     metadata: { isAuthenticated: false, hasSidebar: true },
   },
 ];

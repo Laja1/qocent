@@ -1,26 +1,9 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import type {
-  acceptInvitationRequest,
-  completeEnrollmentRequest,
-  completePasswordResetRequest,
-  forgotPasswordpRequest,
-  invitationRequest,
-  resendOtpRequest,
-  signInRequest,
-  updateMemberRequest,
-  updateProfessionalServiceRequest,
-} from "@/models/request/authRequest";
-import type {
-
-  AccountResponse,
-  signInResponse,
-} from "@/models/response/authResponse";
-import type { baseResponse, genericResponse } from "@/models/response";
+import { createApi } from "@reduxjs/toolkit/query/react"
 import { ApiEnums } from "@/utilities/enums";
-import type { getAccountResponse, getIAMRolesResponse } from "@/models/response/siteResponse";
 import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
-import type { CreateAccountPayload } from "@/models/request/cloudService";
-import type { CreateAccountResponse } from "@/models/response/cloudServiceResponse";
+import type { CreateAccountPayload, InviteAccountPayload, CompleteInvitePayload, GrantAccessPayload } from "@/models/request/cloudService";
+import type { CreateAccountResponse, InitiateInviteResponse } from "@/models/response/cloudServiceResponse";
+import type { baseResponse } from "@/models/response";
 
 export const cloudServicesApi = createApi({
   reducerPath: "cloudServices",
@@ -34,127 +17,45 @@ export const cloudServicesApi = createApi({
         body: body,
       }),
     }),
-    signIn: build.mutation<signInResponse, signInRequest>({
-      query: (body) => ({
-        url: "/login",
+    
+    initiateInviteAccount: build.mutation<InitiateInviteResponse, {body:InviteAccountPayload,csp:string}>({
+      query: ({body,csp}) => ({
+        url: `/${csp}/initiate_invite_account`,
         method: "POST",
         body: body,
       }),
     }),
-    completeEnrollment: build.mutation<
-    baseResponse,
-      completeEnrollmentRequest
-    >({
-      query: (body) => ({
-        url: "/verify-otp",
+    
+    completeInviteAccount: build.mutation<CreateAccountResponse, {body:CompleteInvitePayload,csp:string}>({
+      query: ({body,csp}) => ({
+        url: `/${csp}/complete_invite_account`,
         method: "POST",
         body: body,
       }),
     }),
-    sendOtp: build.mutation<genericResponse, resendOtpRequest>({
-      query: (body) => ({
-        url: "/send-verification",
+    
+    grantAdminAccess: build.mutation<baseResponse, {body:GrantAccessPayload,csp:string}>({
+      query: ({body,csp}) => ({
+        url: `/${csp}/grant-admin-access`,
         method: "POST",
         body: body,
       }),
     }),
-    forgotPassword: build.mutation<
-      baseResponse,
-      forgotPasswordpRequest
-    >({
-      query: (body) => ({
-        url: "/forgot-password",
+    
+    generateProviderLoginUrl: build.mutation<baseResponse, {csp:string,account_id:string}>({
+      query: ({csp,account_id}) => ({
+        url: `/${csp}/generate-provider-login-url?account_id=${account_id}`,
         method: "POST",
-        body: body,
       }),
     }),
-    updateProfessionalService:build.mutation<genericResponse,updateProfessionalServiceRequest[]>({
-      query: (body) => ({
-        url: "/authentication/business/professional-services/update",
-        method: "POST",
-        body: body,
-      }),
-      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
-    }),
-    changePassword:build.mutation<genericResponse,{oldPassword:string,userPassword:string}>({
-      query: (body) => ({
-        url: "/authentication/change-password",
-        method: "POST",
-        body: body,
-      }),
-    }),
-    completePasswordReset: build.mutation<
-      baseResponse,
-      completePasswordResetRequest
-    >({
-      query: (body) => ({
-        url: "/reset-password",
-        method: "POST",
-        body: body,
-      }),
-    }), 
-    inviteToWorkspace: build.mutation<genericResponse, invitationRequest>({
-      query: (body) => ({
-        url: "/authentication/invite-user",
-        method: "POST",
-        body,
-      }),
-      invalidatesTags: [{ type: ApiEnums.Auth, id: "LIST" },{type:ApiEnums.Member,id:'LIST'}],
-    }),
-    getUserAccounts: build.query<getAccountResponse, {userCode:string}>({
-      query: ({userCode}) => `/authentication/user-accounts/${userCode}`,  
-      providesTags:[{type:ApiEnums.Member,id:'LIST'}]  
-  }),
-  getIAMRoles: build.query<getIAMRolesResponse, void>({
-    query: () => `/authentication/iam/available-modules`
-  
-}),
-  getAccount: build.query<AccountResponse, { siteCode: string }>({
-    query: ({ siteCode }) =>
-      `/authentication/site-members/${siteCode}`,
-    providesTags:[{type:ApiEnums.Member,id:'LIST'}]   
-  }),  
-    acceptInvite:build.mutation<AccountResponse,acceptInvitationRequest>({
-      query:(body)=>({
-        url: "/authentication/accept-invitation",
-        method: "POST",
-        body,
-      }),
-      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
-      
-    }),
-    deleteMember:build.mutation<genericResponse,{ siteCode: string,memberUserCode: string;}>({
-      query:(body)=>({
-        url: "/authentication/remove-site-member",
-        method: "POST",
-        body:body,
-      }),
-      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
-    }),
-    updateMember:build.mutation<genericResponse,updateMemberRequest>({
-      query:(body)=>({
-        url: "/authentication/update-site-member",
-        method: "POST",
-        body:body,
-      }),
-      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
-    }),
+
   }),
 });
 
 export const {
   useCreateAccountMutation,
-  useCompleteEnrollmentMutation,
-  useSendOtpMutation,
-  useSignInMutation,
-  useAcceptInviteMutation,
-  useDeleteMemberMutation,
-  useGetAccountQuery,
-  useForgotPasswordMutation,
-  useCompletePasswordResetMutation,
-  useInviteToWorkspaceMutation,
-  useGetUserAccountsQuery,
-  useGetIAMRolesQuery,
-  useUpdateMemberMutation,
-  useUpdateProfessionalServiceMutation,
+  useInitiateInviteAccountMutation,
+  useCompleteInviteAccountMutation,
+  useGrantAdminAccessMutation,
+  useGenerateProviderLoginUrlMutation,
 } = cloudServicesApi;

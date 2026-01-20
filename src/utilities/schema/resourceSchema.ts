@@ -11,6 +11,10 @@ export const resourceModalSchema = object().shape({
   resourceType: defaultValidation('Resource type is required'),
 });
 
+export const inviteSiteSchema = object().shape({
+  member_identifier: defaultValidation('Account Id is required'),
+});
+
 export type ParameterData = {
   parameterId: number;
   parameterProvider: string;

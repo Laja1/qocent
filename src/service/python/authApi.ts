@@ -8,7 +8,6 @@ import type {
   resendOtpRequest,
   signInRequest,
   signupRequest,
-  updateMemberRequest,
   updateProfessionalServiceRequest,
 } from "@/models/request/authRequest";
 import type {
@@ -109,11 +108,7 @@ export const authApi = createApi({
     query: () => `/authentication/iam/available-modules`
   
 }),
-  getAccountMembers: build.query<AccountResponse, { siteCode: string }>({
-    query: ({ siteCode }) =>
-      `/authentication/site-members/${siteCode}`,
-    providesTags:[{type:ApiEnums.Member,id:'LIST'}]   
-  }),  
+  
     acceptInvite:build.mutation<AccountResponse,acceptInvitationRequest>({
       query:(body)=>({
         url: "/authentication/accept-invitation",
@@ -123,22 +118,8 @@ export const authApi = createApi({
       invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
       
     }),
-    deleteMember:build.mutation<genericResponse,{ siteCode: string,memberUserCode: string;}>({
-      query:(body)=>({
-        url: "/authentication/remove-site-member",
-        method: "POST",
-        body:body,
-      }),
-      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
-    }),
-    updateMember:build.mutation<genericResponse,updateMemberRequest>({
-      query:(body)=>({
-        url: "/authentication/update-site-member",
-        method: "POST",
-        body:body,
-      }),
-      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
-    }),
+  
+   
   }),
 });
 
@@ -148,13 +129,10 @@ export const {
   useSendOtpMutation,
   useSignInMutation,
   useAcceptInviteMutation,
-  useDeleteMemberMutation,
-  useGetAccountMembersQuery,
   useForgotPasswordMutation,
   useCompletePasswordResetMutation,
   useInviteToWorkspaceMutation,
   useGetUserAccountsQuery,
   useGetIAMRolesQuery,
-  useUpdateMemberMutation,
   useUpdateProfessionalServiceMutation,
 } = authApi;

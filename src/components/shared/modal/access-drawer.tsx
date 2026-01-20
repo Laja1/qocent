@@ -13,53 +13,50 @@ import { DataTable } from "../datatable";
 import type { ColumnDef } from "../table";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2 } from "lucide-react";
-import {
-  useDeleteMemberMutation,
-  useGetAccountMembersQuery,
-} from "@/service/python/authApi";
-import type { AccountMember } from "@/models/response/authResponse";
 import { showCustomToast } from "../toast";
-import type { SiteData } from "@/models/response/siteResponse";
-import { ErrorHandler } from "@/service/httpClient/errorHandler";
+import type { Account } from "@/models/response/organizationResponse";
+import {
+  useGetAccountMembersQuery,
+  useRemoveAccountMemberMutation,
+} from "@/service/python/accountsApi";
+import type { AccountMemberResponse } from "@/models/response/accountResponse";
 
-export const AccessDrawer = NiceModal.create<{ site: SiteData }>(({ site }) => {
+export const AccessDrawer = NiceModal.create<{ site: Account }>(({ site }) => {
   const modal = useModal(ModalConstant.AccessDrawer);
   const { data: accountMembersData, isLoading: isAccountMemberLoading } =
-    useGetAccountMembersQuery({
-      siteCode: site.siteCode,
-    });
-  const [deleteMember] = useDeleteMemberMutation();
+    useGetAccountMembersQuery(site.account_id);
+  const [removeMember] = useRemoveAccountMemberMutation();
   // const getDescription = () => {
   //     if (!details) return "No data available";
   //     const keys = Object.keys(details);
   //     return `Viewing object with ${keys.length} properties`;
   // };
-  const handleDeleteMembers = async (code: string) => {
+  const handleDeleteMembers = async (userId: string) => {
     try {
-      await deleteMember({
-        siteCode: site.siteCode,
-        memberUserCode: code,
+      await removeMember({
+        account_id: site.account_id,
+        body: { user_id: userId },
       }).unwrap();
       showCustomToast("Member deleted successfully", {
         toastOptions: { type: "success", autoClose: 5000 },
       });
-    } catch (error) {
-      const message = ErrorHandler.extractMessage(error);
+    } catch (error: any) {
+      const message = error?.data?.message || "Failed to delete member";
       showCustomToast(message, {
-        toastOptions: { type: "success", autoClose: 5000 },
+        toastOptions: { type: "error", autoClose: 5000 },
       });
     }
   };
-  const memberColumns: ColumnDef<AccountMember>[] = [
+  const memberColumns: ColumnDef<AccountMemberResponse>[] = [
     {
       id: "user",
       header: "User",
-      accessorKey: "userFirstName",
+      accessorKey: "user_first_name",
       cell: (row) => (
         <div className="flex items-center space-x-3">
           <div>
             <p className="text-xs  my-1">
-              {row.userFirstName} {row.userLastName}
+              {row.user_first_name} {row.user_last_name}
             </p>
           </div>
         </div>
@@ -69,11 +66,11 @@ export const AccessDrawer = NiceModal.create<{ site: SiteData }>(({ site }) => {
     {
       id: "userEmail",
       header: "Email",
-      accessorKey: "userEmail",
+      accessorKey: "user_email",
       cell: (row) => (
         <div className="flex items-center space-x-3">
           <div>
-            <p className="text-xs">{row.userEmail}</p>
+            <p className="text-xs">{row.user_email}</p>
           </div>
         </div>
       ),
@@ -81,40 +78,40 @@ export const AccessDrawer = NiceModal.create<{ site: SiteData }>(({ site }) => {
     },
 
     {
-      id: "memberStatus",
-      header: "Status",
-      accessorKey: "memberStatus",
+      id: "account_member_type",
+      header: "Role",
+      accessorKey: "account_member_type",
       cell: (row) => (
         <Badge
           variant="outline"
           className={
-            row.memberStatus === "ACTIVE"
-              ? "bg-green-50 text-green-700 border-green-200"
-              : row.memberStatus === "INACTIVE"
-              ? "bg-yellow-50 text-yellow-700 border-yellow-200"
-              : "bg-red-50 text-red-700 border-red-200"
+            row.account_member_type === "Admin"
+              ? "bg-blue-50 text-blue-700 border-blue-200"
+              : "bg-gray-50 text-gray-700 border-gray-200"
           }
         >
-          {row.memberStatus}
+          {row.account_member_type}
         </Badge>
       ),
       sortable: true,
       filterType: "select",
       filterOptions: [
-        { label: "Active", value: "Active" },
-        { label: "Pending", value: "Pending" },
-        { label: "Suspended", value: "Suspended" },
+        { label: "Admin", value: "Admin" },
+        { label: "Member", value: "Member" },
+        { label: "Viewer", value: "Viewer" },
       ],
     },
 
     {
-      id: "memberCreatedAt",
+      id: "account_member_created_at",
       header: "Member Created At",
-      accessorKey: "memberCreatedAt",
+      accessorKey: "account_member_created_at",
       cell: (row) => (
         <div className="flex items-center space-x-3">
           <div>
-            <p className="text-xs">{row.memberCreatedAt}</p>
+            <p className="text-xs">
+              {new Date(row.account_member_created_at).toLocaleDateString()}
+            </p>
           </div>
         </div>
       ),
@@ -132,14 +129,14 @@ export const AccessDrawer = NiceModal.create<{ site: SiteData }>(({ site }) => {
       <DrawerContent>
         <div className="mx-auto w-full max-w-4xl max-h-[80vh] overflow-hidden">
           <DrawerHeader className="pb-4">
-            <DrawerTitle>{accountMembersData?.accountName} Members</DrawerTitle>
+            <DrawerTitle>{site.account_name} Members</DrawerTitle>
             {/* <DrawerDescription>{getDescription()}</DrawerDescription> */}
           </DrawerHeader>
 
           <div className="px-4 pb-6 overflow-y-auto max-h-[60vh]">
             <div className="px-5 flex flex-col">
               <DataTable
-                data={accountMembersData?.members || []}
+                data={accountMembersData?.data || []}
                 columns={memberColumns}
                 searchPlaceholder="Search member"
                 showDownload={false}
@@ -152,14 +149,13 @@ export const AccessDrawer = NiceModal.create<{ site: SiteData }>(({ site }) => {
                     icon: Edit,
                     onClick: (row) =>
                       NiceModal.show(ModalConstant.EditAccessModal, {
-                        site,
                         member: row,
                       }),
                   },
                   {
                     label: "Remove Member",
                     icon: Trash2,
-                    onClick: (row) => handleDeleteMembers(row.memberUserCode),
+                    onClick: (row) => handleDeleteMembers(row.account_user_id),
                     variant: "destructive",
                   },
                 ]}

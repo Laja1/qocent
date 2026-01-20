@@ -8,31 +8,23 @@ import {
   DrawerTitle,
 } from "@/components/ui/drawer";
 import { Button } from "@/components/ui/button";
-import { useGetSiteByProviderQuery } from "@/service/kotlin/siteApi"; // hypothetical endpoint
 import { useSelector } from "react-redux";
 import { type RootState } from "@/store";
 import { Loader2 } from "lucide-react";
-import type { SiteData } from "@/models/response/siteResponse";
+import { useGetUserAccountsByProviderQuery } from "@/service/python/organizationApi";
+import type { Account } from "@/models/response/organizationResponse";
 
 export const SelectSiteModal = NiceModal.create(() => {
   const modal = useModal(ModalConstant.SelectSiteModal);
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  const account = useSelector((state: RootState) => state.account);
 
-  const { data: siteData, isLoading: isSiteLoading } =
-    useGetSiteByProviderQuery(
-      {
-        provider: dashboard.provider,
-        siteAccountId: account.accountCode || "",
-        type: account.type,
-      },
-      {
-        skip: !account.accountCode || !dashboard.provider,
-      }
-    );
-  const handleSelect = (site: SiteData) => {
+  const { data: organizationAccount, isLoading: isSiteLoading } =
+    useGetUserAccountsByProviderQuery({
+      provider: String(dashboard?.provider) || "",
+    });
+  const handleSelect = (site: Account) => {
     modal.hide();
-    NiceModal.show(ModalConstant.AccessDrawer, { site: site }); // open next step
+    NiceModal.show(ModalConstant.AccessDrawer, { site: site });
   };
 
   return (
@@ -49,13 +41,13 @@ export const SelectSiteModal = NiceModal.create(() => {
                 <Loader2 className="animate-spin w-6 h-6 text-gray-600" />
               </div>
             ) : (
-              siteData?.data?.map((site: any) => (
+              organizationAccount?.data?.accounts.map((site: Account) => (
                 <Button
-                  key={site.siteId}
+                  key={site.account_id}
                   className="w-full  "
                   onClick={() => handleSelect(site)}
                 >
-                  {site.siteName}
+                  {site.account_name}
                 </Button>
               ))
             )}

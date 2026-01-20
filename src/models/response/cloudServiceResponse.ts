@@ -9,5 +9,10 @@ export type CreateAccountResponse = {
       member_type: string;
       org_id: string;
     };
-  };
+};
+
+export type InitiateInviteResponse = {
+    handshake_id: string;
+    message?: string;
+};
   

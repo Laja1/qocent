@@ -4,6 +4,7 @@ import { Button, SelectField } from "@/components/shared";
 import { PhoneField } from "@/components/shared/phonefield";
 import { Textfield } from "@/components/shared/textfield";
 import { showCustomToast } from "@/components/shared/toast";
+import { Checkbox } from "@/components/ui/checkbox";
 import { signUpInit, type signupRequest } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
@@ -17,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 
 const SignUp = () => {
   const [seePassword, setSeePassword] = useState(false);
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const navigate = useNavigate();
   const [signupMutation, { isLoading }] = useSignUpMutation();
   const handleSubmit = async (values: signupRequest) => {
@@ -138,10 +140,25 @@ const SignUp = () => {
               : ""
           }
         />
+        <div className="flex items-center gap-2">
+          <Checkbox
+            checked={agreedToTerms}
+            onCheckedChange={(checked) => setAgreedToTerms(checked as boolean)}
+          />
+          <p className="text-sm">
+            I agree to the{" "}
+            <a
+              href="https://drive.google.com/uc?export=download&id=1gbUBF4PuRxnvAw5F6EKRBWoYKO4TN3Il"
+              download
+            >
+              Terms and Conditions
+            </a>
+          </p>
+        </div>
         <Button
           label="Sign Up"
           className="w-full mt-3"
-          disabled={!formik.isValid || isLoading}
+          disabled={!formik.isValid || isLoading || !agreedToTerms}
           onClick={formik.handleSubmit}
           isLoading={isLoading}
         />

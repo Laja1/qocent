@@ -5,7 +5,6 @@ import { Eye, PlusIcon, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SummaryTable } from "../server-sites/summary-table";
 import { DeployResources } from "@/components/not-shared/deploy-resources";
-import { Resource } from "../resource";
 import { SecurityTable } from "../server-sites/security-table";
 import { useState } from "react";
 import { useModal } from "@/components/shared/modal";

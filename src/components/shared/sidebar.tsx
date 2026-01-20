@@ -5,10 +5,9 @@ import {
   LayoutList,
   AlignHorizontalDistributeCenter,
   Wallet,
-  Webhook,
-  Search,
-  PackageOpen,
-  Shield,
+  // Webhook,
+  // Search,
+  ChartNoAxesColumn,
 } from "lucide-react";
 import {
   Sidebar,
@@ -24,8 +23,8 @@ import {
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { RouteConstant } from "@/router/routes";
 import {
-  IconBrowser,
-  IconCarouselVertical,
+  // IconBrowser,
+  // IconCarouselVertical,
   IconCloudComputing,
   IconHome,
 } from "@tabler/icons-react";
@@ -84,43 +83,45 @@ export const SidebarLayout = () => {
             ),
             url: RouteConstant.dashboard.serverSite.path,
           },
+          // {
+          //   title: "Server Houses",
+          //   icon: (
+          //     <IconCarouselVertical className="text-gray-800 dark:text-red-400 size-5" />
+          //   ),
+          //   url: RouteConstant.dashboard.serverHouses.path,
+          // },
+          // {
+          //   title: "Server Rooms",
+          //   icon: (
+          //     <IconBrowser className="text-gray-800 dark:text-red-400 size-5" />
+          //   ),
+          //   url: RouteConstant.dashboard.serverRooms.path,
+          // },
+          // {
+          //   title: "Resources",
+          //   icon: (
+          //     <Webhook className="text-gray-800 dark:text-red-400 size-5" />
+          //   ),
+          //   url: RouteConstant.dashboard.resources.path,
+          // },
+          // {
+          //   title: "Monitoring",
+          //   icon: <Search className="text-gray-800 dark:text-red-400 size-5" />,
+          //   url: RouteConstant.dashboard.monitoring.path,
+          // },
           {
-            title: "Server Houses",
+            title: "Finops",
             icon: (
-              <IconCarouselVertical className="text-gray-800 dark:text-red-400 size-5" />
+              <ChartNoAxesColumn className="text-gray-800 dark:text-red-400 size-5" />
             ),
-            url: RouteConstant.dashboard.serverHouses.path,
-          },
-          {
-            title: "Server Rooms",
-            icon: (
-              <IconBrowser className="text-gray-800 dark:text-red-400 size-5" />
-            ),
-            url: RouteConstant.dashboard.serverRooms.path,
-          },
-          {
-            title: "Resources",
-            icon: (
-              <Webhook className="text-gray-800 dark:text-red-400 size-5" />
-            ),
-            url: RouteConstant.dashboard.resources.path,
-          },
-          {
-            title: "Monitoring",
-            icon: <Search className="text-gray-800 dark:text-red-400 size-5" />,
-            url: RouteConstant.dashboard.monitoring.path,
-          },
-          {
-            title: "Security",
-            icon: <Shield className="text-gray-800 dark:text-red-400 size-5" />,
-            url: RouteConstant.dashboard.security.path,
+            url: RouteConstant.dashboard.finops.path,
           },
         ],
       },
     ],
     others: [
       {
-        title: "Others",
+        title: "Management",
         url: "#",
         icon: (
           <AlignHorizontalDistributeCenter className=" dark:text-white size-5" />
@@ -129,26 +130,31 @@ export const SidebarLayout = () => {
         isActive: false,
         items: [
           {
-            title: "Starter Packs",
-            icon: (
-              <PackageOpen className="size-4 text-gray-800 dark:text-red-400" />
-            ),
-            url: RouteConstant.dashboard.starterPacks.path,
+            title: "Subscriptions",
+            icon: <Users className="size-4 text-gray-800 dark:text-red-400" />,
+            url: RouteConstant.dashboard.subscription.path,
           },
+          // {
+          //   title: "Starter Packs",
+          //   icon: (
+          //     <PackageOpen className="size-4 text-gray-800 dark:text-red-400" />
+          //   ),
+          //   url: RouteConstant.dashboard.starterPacks.path,
+          // },
           {
             title: "Billing & Statements",
             icon: <Wallet className="size-4 text-gray-800 dark:text-red-400" />,
             url: RouteConstant.dashboard.billings.path,
           },
-          account.type === "INTERNAL"
-            ? {
-                title: "Organization",
-                icon: (
-                  <Users className="size-4 text-gray-800 dark:text-red-400" />
-                ),
-                url: RouteConstant.dashboard.billings.path,
-              }
-            : null,
+          // account.type === "INTERNAL"
+          //   ? {
+          //       title: "Organization",
+          //       icon: (
+          //         <Users className="size-4 text-gray-800 dark:text-red-400" />
+          //       ),
+          //       url: RouteConstant.dashboard.billings.path,
+          //     }
+          //   : null,
           account.type === "INTERNAL"
             ? {
                 title: "Access",
@@ -156,16 +162,6 @@ export const SidebarLayout = () => {
                   <Users className="size-4 text-gray-800 dark:text-red-400" />
                 ),
                 url: RouteConstant.dashboard.access.path,
-              }
-            : null,
-
-          account.type === "INTERNAL"
-            ? {
-                title: "Professional Services",
-                icon: (
-                  <Users className="size-4 text-gray-800 dark:text-red-400" />
-                ),
-                url: RouteConstant.dashboard.professionalServices.path,
               }
             : null,
         ].filter(Boolean) as {

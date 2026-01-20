@@ -12,7 +12,6 @@ import { useGetAllResourcesQuery } from "@/service/kotlin/resourceApi";
 import { Card } from "@/components/ui/card";
 import { RouteConstant } from "@/router/routes";
 import { resourcesColumns } from "@/utilities/constants/colums";
-import { CloudStorage } from "../cloud-storage";
 import { ContainerRegistry } from "../ecr";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
@@ -119,11 +118,6 @@ export const Resources = () => {
         siteCodeId={undefined}
       />
 
-      {selectedType.toLowerCase() === "cloud storage" &&
-        selectedData &&
-        selectedData.resourceStatus === "ACTIVE" && (
-          <CloudStorage resourceData={selectedData} />
-        )}
       {selectedType.toLowerCase() === "containerregistry" && selectedData && (
         <ContainerRegistry resourceData={selectedData} />
       )}

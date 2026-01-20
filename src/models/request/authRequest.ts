@@ -26,7 +26,7 @@ export type signInRequest = {
 };
 
 export const signInInit = {
-  user_email: "tomi@yopmail.com ",
+  user_email: "tomi@yopmail.com",
   user_password: "Ifeoluwa01.$",
 }
 
@@ -85,12 +85,6 @@ export type acceptInvitationRequest = {
   userRoleId: number;
 }
 
-
-export type updateMemberRequest = {
-  privileges: string[];
-  siteCode: string;
-  userId: string;
-}
 
 export type updateProfessionalServiceRequest = {
   serviceBookingDate: string;

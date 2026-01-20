@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Header, } from "@/components/shared";
+import { Button, Header } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Edit, Eye, Trash2, PlusIcon, Plus, Users } from "lucide-react";
 import { useState } from "react";
@@ -12,9 +12,7 @@ import { ResourceModal } from "../create-new-resource/resource-modal";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { serverSiteColumns } from "@/utilities/constants/colums";
-import {
-  useGetOrganizationAccountQuery,
-} from "@/service/python/organizationApi";
+import { useGetUserAccountsByProviderQuery } from "@/service/python/organizationApi";
 import type { Account } from "@/models/response/organizationResponse";
 
 export const ServerSites = () => {
@@ -22,17 +20,13 @@ export const ServerSites = () => {
   const dashboard = useSelector((state: RootState) => state.dashboard);
 
   const { data: organizationAccount, isLoading: isSiteLoading } =
-    useGetOrganizationAccountQuery({
+    useGetUserAccountsByProviderQuery({
       provider: String(dashboard?.provider) || "",
     });
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState("");
   // const [selectedSiteCode, setSelectedSiteCode] = useState("");
-
-
-
-
 
   // const { data: architectureData } = useGetSiteArchitectureQuery(
   //   {
@@ -111,7 +105,6 @@ export const ServerSites = () => {
 
   const handleRowClick = async (row: Account) => {
     // Clear existing timeout
-   
 
     setSelectedRowId(row.account_id.toString());
     // setSelectedSiteCode(row.siteCode);
@@ -236,13 +229,23 @@ export const ServerSites = () => {
   return (
     <div className="h-full mt-5">
       <Header title="Server Sites" description="Manage your server site">
-        <Button
-          intent="tertiary"
-          label="Create New Site"
-          prefixIcon={<PlusIcon className="size-4" />}
-          onClick={() => navigate("/create-new-site")}
-          size="small"
-        />
+        <div className="gap-2 flex">
+          <Button
+            intent="tertiary"
+            label="Create New Site"
+            prefixIcon={<PlusIcon className="size-4" />}
+            onClick={() => navigate("/create-new-site")}
+            size="small"
+          />
+
+          <Button
+            intent="tertiary"
+            label="Join Site"
+            prefixIcon={<PlusIcon className="size-4" />}
+            onClick={() => NiceModal.show(ModalConstant.InviteSiteModal)}
+            size="small"
+          />
+        </div>{" "}
       </Header>
 
       <div className="flex gap-4 mb-10 lg:mb-20 flex-col overflow-y-hidden h-full">

@@ -117,6 +117,15 @@ export const RouteConstant = {
       path: "/invitations/accept",
       name: "Accept Invite",
     },
+    subscription: {
+      path: "/subscription",
+      name: "Subscription",
+    },
+
+    finops: {
+      path: "/finops",
+      name: "Finops",
+    },
     monitoring: {
       path: "/monitoring",
       name: "Monitoring",
