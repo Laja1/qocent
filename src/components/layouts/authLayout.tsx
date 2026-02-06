@@ -1,5 +1,4 @@
 import { svgLinks } from "@/assets/assetLink";
-import { useDarkMode } from "@/hooks/useDarkMode";
 import { RouteConstant } from "@/router/routes";
 import { Link, useLocation } from "react-router-dom";
 
@@ -27,12 +26,12 @@ const AuthLayout = ({
 }: AuthLayoutProps) => {
   const location = useLocation();
   const pathname = location.pathname;
-  const { isDark } = useDarkMode();
+  
   const renderFooterText = (pathname: string) => {
     switch (pathname) {
       case RouteConstant.auth.signin.path:
         return (
-          <p className="text-center text-xs text-gray-700 dark:text-white">
+          <p className="text-center text-xs text-gray-700">
             Not registered yet?{" "}
             <Link
               to={RouteConstant.auth.signup.path}
@@ -44,7 +43,7 @@ const AuthLayout = ({
         );
       case RouteConstant.auth.signup.path:
         return (
-          <p className="text-center text-xs text-gray-700 dark:text-white flex gap-1 justify-center">
+          <p className="text-center text-xs text-gray-700 flex gap-1 justify-center">
             Already have an account?{" "}
             <Link
               to={RouteConstant.auth.signin.path}
@@ -60,9 +59,9 @@ const AuthLayout = ({
   };
 
   return (
-    <div className="h-screen w-full dark:bg-black flex flex-col" {...divProps}>
+    <div className="h-screen w-full flex flex-col" {...divProps}>
       <main
-        className="flex flex-col items-center dark:bg-black relative justify-center space-y-5 flex-1 py-5"
+        className="flex flex-col items-center relative justify-center space-y-5 flex-1 py-5"
         {...mainContainerProps}
       >
         <div
@@ -70,19 +69,11 @@ const AuthLayout = ({
         >
           <div className="bg-[#FFFFFF0D] border  mx-5 rounded-md py-5 px-8 w-full">
             <div className="justify-center flex text-gray-700 font-alumni">
-              {isDark ? (
-                <img
-                  src={svgLinks.qocentLight}
-                  alt="QOCENT Logo"
-                  className="h-20 w-20"
-                />
-              ) : (
-                <img
-                  src={svgLinks.logo}
-                  alt="QOCENT Logo"
-                  className="h-20 w-20"
-                />
-              )}
+              <img
+                src={svgLinks.logo}
+                alt="QOCENT Logo"
+                className="h-20 w-20"
+              />
             </div>
             <div className="justify-center items-center flex-col flex space-y-3">
               <h1 className="font-bold lg:text-3xl text-xl">{title}</h1>
@@ -97,7 +88,7 @@ const AuthLayout = ({
           </div>
         </div>
       </main>
-      <footer className="flex justify-center text-gray-500 pb-4 dark:bg-black">
+      <footer className="flex justify-center text-gray-500 pb-4">
         <p className="text-xs">
           QOCENT. All rights reserved. © {new Date().getFullYear()}
         </p>

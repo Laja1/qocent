@@ -11,27 +11,34 @@ const cards = [
     theme: "dark",
     bgColor: "bg-black",
   },
+
   {
     id: 2,
     type: "Simplicity",
     title:
-      "Designed for clarity and speed, Qocent’s platform gets out of your way so you can get things done faster with zero guesswork.",
+      `One console for all your clouds. No jumping between
+dashboards, no learning multiple interfaces, no confusion. Just
+straightforward multi-cloud management that works the way you
+think.`,
     theme: "blue",
     bgColor: "bg-black",
   },
   {
     id: 3,
-    type: "Transparent Pricing",
+    type: "FinOps & Cost Optimization",
     title:
-      "Straightforward, predictable billing with no surprises. What you see and use is what you pay.",
+      `Stop overpaying for cloud resources. Qocent's FinOps tools automatically identify waste, optimize spending, and provide actionable insights to reduce your cloud bills by 30-40%—across all providers from one dashboard.`,
     theme: "green",
     bgColor: "bg-black",
   },
   {
     id: 4,
-    type: "Global Reach",
+    type: "Security & Compliance",
     title:
-      "Qocent is registered in the U.S. and built to serve organizations worldwide. We’re expanding rapidly across key markets.",
+      `Enterprise-grade security across all your clouds. Unified access control,
+compliance monitoring, threat detection, and audit logging—ensuring your
+multi-cloud environment meets the highest security standards without
+the complexity.`,
     theme: "purple",
     bgColor: "bg-black",
   },
@@ -39,8 +46,21 @@ const cards = [
     id: 5,
     type: "Developer-Centric",
     title:
-      "Built with modern teams in mind — API-first, CLI-ready, and fully documented for speed, scale, and control.",
+      `Built by developers, for developers. API-first design, CLI tools,
+comprehensive documentation,
+and infrastructure-as-code support. Automate everything, script
+anything, integrate everywhere.`,
     theme: "orange",
+    bgColor: "bg-black",
+  },
+  {
+    id: 6,
+    type: "Quick Integration",
+    title:
+      `Link your existing AWS, Azure, GCP, or Huawei accounts in under 10
+minutes. No migration, no downtime, no infrastructure changes. Start
+managing your multi-cloud environment immediately.`,
+    theme: "dark",
     bgColor: "bg-black",
   },
 ];

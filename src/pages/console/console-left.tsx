@@ -1,16 +1,13 @@
 import { imgLinks } from "@/assets/assetLink";
-import { LogOut, Moon, Sun } from "lucide-react";
+import { LogOut } from "lucide-react";
 import { RouteConstant } from "@/router/routes";
 import { authStore } from "@/store/authSlice";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { dashboardStore } from "@/store/dashboardSlice";
-import { useDarkMode } from "@/hooks/useDarkMode";
 import { useOrganizationStore } from "@/store/organizationStore";
 
 export const ConsoleLeft = () => {
-  const { isDark, toggle } = useDarkMode();
-
   const { clearOrganization } = useOrganizationStore();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -59,12 +56,12 @@ export const ConsoleLeft = () => {
   ];
 
   return (
-    <div className="h-full flex flex-col justify-between bg-white dark:bg-black">
+    <div className="h-full flex flex-col justify-between bg-white">
       {/* Top Menu */}
       <div className="p-3 sm:p-4 flex-1 overflow-y-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-4 sticky top-0 z-10 pb-2">
-          <h2 className="text-sm sm:text-base font-brfirma-bold text-gray-900 dark:text-white">
+          <h2 className="text-sm sm:text-base font-brfirma-bold text-gray-900">
             Workspaces
           </h2>
 
@@ -88,16 +85,16 @@ export const ConsoleLeft = () => {
               <div
                 key={item.provider}
                 onClick={() => handleClick(item.provider)}
-                className="border border-gray-200 dark:border-gray-800 rounded-md 
+                className="border border-gray-200 rounded-md 
                            p-3 flex items-center gap-3 cursor-pointer
-                           hover:bg-gray-100 dark:hover:bg-gray-900 transition"
+                           hover:bg-gray-100 transition"
               >
                 <img
                   src={item.icon}
                   alt={item.alt}
                   className="w-6 h-6 object-contain"
                 />
-                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                <span className="text-sm font-medium text-gray-900">
                   {item.name}
                 </span>
               </div>
@@ -114,12 +111,12 @@ export const ConsoleLeft = () => {
       </div>
 
       {/* Bottom Section */}
-      <div className="flex px-4 py-2 justify-between border-t dark:bg-black dark:border-gray-800 border-gray-200">
+      <div className="flex px-4 py-2 justify-between border-t border-gray-200">
         {/* Desktop Logout */}
         <div
           onClick={handleLogout}
           className="hidden lg:flex items-center gap-3 text-red-500 cursor-pointer
-                     transition-colors duration-200 hover:text-white"
+                     transition-colors duration-200 hover:text-red-700"
           role="button"
           tabIndex={0}
           onKeyDown={(e) => {
@@ -131,14 +128,6 @@ export const ConsoleLeft = () => {
           <LogOut className="w-4 h-4" />
           <span className="text-sm font-medium">Logout</span>
         </div>
-
-        {/* Dark mode toggle */}
-        <button
-          onClick={toggle}
-          className="p-2 bg-gray-200 cursor-pointer dark:bg-gray-900 rounded-full"
-        >
-          {isDark ? <Sun size={16} /> : <Moon size={16} />}
-        </button>
       </div>
     </div>
   );

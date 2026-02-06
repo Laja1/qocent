@@ -7,17 +7,22 @@ export const Vision = () => {
       <section className="w-full dark:bg-black  lg:pt-20 md:py-10 pt-10  items-center  justify-center flex flex-col px-5">
         <div className="flex-col text-left mb-10 max-w-4xl ">
           <p className="text-xs md:text-sm lg:text-base text-left text-muted-foreground leading-relaxed mb-6">
-            <span className="font-brfirma-bold text-black dark:text-white underline">Qocent</span> is your
-            single gateway to the world’s leading cloud platforms: AWS, Azure,
-            GCP, Oracle, Huawei, and more. With a unified and intuitive console,
-            we simplify multi-cloud deployment, management, and scaling, no more
-            switching between platforms, pricing models, or dashboards.
+            <span className="font-brfirma-bold text-black dark:text-white underline">Qocent</span> 
+            is your unified gateway to multi-cloud infrastructure management.
+Instead of juggling separate consoles for AWS, Azure, GCP, and Huawei,
+manage everything from one powerful platform.
+Deploy resources, monitor performance, optimize costs with FinOps, and
+secure your environment—all without switching dashboards, learning
+different interfaces, or compromising control.
           </p>
           <p className="text-xs md:text-sm lg:text-base text-muted-foreground leading-relaxed ">
-            We are built for businesses that demand flexibility, transparency,
-            and speed. Whether you&apos;re a startup deploying your first app or
-            an enterprise optimizing infrastructure across regions, Qocent
-            brings everything together into one seamless experience.
+         
+We built Qocent for developers and businesses tired of multi-cloud
+complexity. Whether you're a solo developer managing side projects, a
+startup scaling rapidly across regions, or an enterprise running mission-
+critical infrastructure, Qocent brings clarity to cloud chaos. Link your existing
+accounts in minutes, start managing immediately, and gain insights that were
+previously scattered across multiple platforms.
           </p>
         </div>
         <div className="container px-4 md:px-6 max-w-4xl mx-auto grid gap-12 md:grid-cols-2">
@@ -28,10 +33,9 @@ export const Vision = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm p-5 text-muted-foreground leading-relaxed">
-                To become a global leader in cloud services by providing the
-                most accessible, easy-to-use, multi-cloud, and cost-effective
-                platform that helps organizations unlock the full potential of
-                technology.
+              To become the global standard for multi-cloud management—making it as
+easy to manage infrastructure across AWS, Azure, GCP, and Huawei as it is to
+manage a single cloud provider.
               </p>
             </CardContent>
           </div>
@@ -43,12 +47,12 @@ export const Vision = () => {
             </CardHeader>
             <CardContent>
               <p className="text-sm px-5 pb-3 text-muted-foreground leading-relaxed">
-                Our mission is to simplify access to cloud technology by
-                delivering a user-friendly, affordable, multi-cloud, and
-                reliable platform built on world-class infrastructure. We are
-                focused on empowering businesses of all sizes, especially in
-                emerging markets, through transparent pricing, responsive
-                support, and seamless digital experiences.
+              We make multi-cloud management accessible to every business. Qocent
+provides a unified, easy-to-use platform that connects to your existing AWS,
+Azure, GCP, and Huawei infrastructure—delivering cost optimization, security
+insights, and operational clarity from day one. We're committed to
+transparent pricing, responsive support, and empowering organizations of all
+sizes to harness multi-cloud advantages without the traditional complexity.
               </p>
             </CardContent>
           </div>

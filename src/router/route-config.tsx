@@ -1,4 +1,3 @@
-import Home from "@/pages/home";
 import { Outlet } from "react-router-dom";
 import { authRoute } from "./route/authRoute";
 import { dashboardRoute } from "./route/dashboardRoute";
@@ -6,6 +5,7 @@ import { publicRoute } from "./route/publicRoute";
 import { ProtectedRoute, PublicOnlyRoute } from "./route/protectedRoute";
 import { DashboardLayoutRouter } from "@/components/layouts/DashboardLayoutRouter";
 import NotFound from "@/pages/not-found-page";
+import Home from "@/pages/home/home";
 
 const publicRoutesMapped = publicRoute.map((route) => ({
   path: route.path,

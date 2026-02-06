@@ -50,7 +50,7 @@ export function PartnerNetwork() {
         ].map(({ icon, title, text }, i) => (
           <div
             key={i}
-            className="text-center border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 w-[300px] p-8 flex flex-col justify-center items-center gap-3"
+            className="text-center border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 rounded-xl hover:shadow-lg transition-shadow duration-300 w-[300px] p-8 flex flex-col justify-center items-center gap-3"
           >
             <div className="text-red-600 dark:text-red-500">{icon}</div>
             <p className="font-bold uppercase text-gray-900 dark:text-gray-200">

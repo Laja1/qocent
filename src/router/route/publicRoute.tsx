@@ -1,10 +1,10 @@
-import Home from "@/pages/home";
 import { RouteConstant } from "../routes";
 import type { RouteType } from "./type";
 import ExploreServices from "@/pages/home/explore-services";
 import Documentation from "@/pages/home/documentation";
 import AboutUs from "@/pages/home/about-us";
 import Partners from "@/pages/home/our-partners";
+import Home from "@/pages/home/home";
 
 export const publicRoute: RouteType[] = [
   {

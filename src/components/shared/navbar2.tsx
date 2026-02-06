@@ -5,16 +5,12 @@ import { svgLinks } from "@/assets/assetLink";
 import { Link, useNavigate } from "react-router-dom";
 import { navRoutes, RouteConstant } from "@/router/routes";
 import { motion, AnimatePresence } from "framer-motion";
-import { useDarkMode } from "@/hooks/useDarkMode";
 
 export const Logo = () => {
-  const { isDark } = useDarkMode();
-
   return (
     <div className="flex items-center relative">
       <img
-        key={isDark ? "dark" : "light"}
-        src={isDark ? svgLinks.qocentLight : svgLinks.logo}
+        src={svgLinks.logo}
         className="lg:h-10 md:h-6 h-5 transition-opacity duration-300 ease-in-out"
         alt="Logo"
       />
@@ -35,7 +31,7 @@ const DesktopNavigation: React.FC = () => {
       className="hidden lg:flex items-center justify-center pt-5 fixed top-0 left-0 right-0 z-50"
       aria-label="Main Navigation"
     >
-      <div className="flex items-center justify-between bg-black/10 backdrop-blur-lg border border-gray-200 dark:border-gray-700 rounded-sm px-6 py-1 w-full max-w-4xl mx-4 shadow-xl">
+      <div className="flex items-center justify-between bg-black/10 backdrop-blur-lg border border-gray-200 rounded-3xl px-6 py-1 w-full max-w-4xl mx-4 shadow-xl">
         <div
           onClick={() => navigate("/")}
           className="cursor-pointer"
@@ -51,7 +47,7 @@ const DesktopNavigation: React.FC = () => {
               onMouseEnter={() => setHovered(idx)}
               onMouseLeave={() => setHovered(null)}
               onClick={onItemClick}
-              className="relative text-xs hover:px-2 py-2 dark:text-white text-black hover:text-gray-800 dark:hover:text-gray-300 transition-colors"
+              className="relative text-xs hover:font-bold  hover:text-sm hover:text-red-500 hover:px-2 py-2 text-black hover:text-gray-800 transition-colors"
               aria-label={`Navigate to ${item.name}`}
             >
               {hovered === idx && (
@@ -64,7 +60,9 @@ const DesktopNavigation: React.FC = () => {
               <span className="relative z-10">{item.name}</span>
             </Link>
           ))}
-          <Button
+          
+        </div>
+        <Button
             size="sm"
             onClick={() => navigate(RouteConstant.auth.signin.path)}
             className="hover:text-black cursor-pointer hover:bg-gray-100 text-xs"
@@ -72,7 +70,6 @@ const DesktopNavigation: React.FC = () => {
           >
             Login
           </Button>
-        </div>
       </div>
     </nav>
   );
@@ -115,7 +112,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                     key={`mobile-link-${idx}`}
                     to={item.link}
                     onClick={onClose}
-                    className="block text-xs px-6 py-2 text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
+                    className="block text-xs  hover:font-bold  hover:text-sm hover:text-red-500 px-6 py-2 text-gray-700 hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-b-0"
                     aria-label={`Navigate to ${item.name}`}
                   >
                     {item.name}

@@ -4,11 +4,13 @@ export const imgLinks = {
     huaweiLight: '/images/huawei-light.png',
     awsdark: '/images/aws-dark.png',
     texture1: './images/texture1.png',
+    container2:'./images/container2.png',
     nibss: '/images/nibss.png',
     rubies:'/images/rubies.png',
     image:'/images/image.png',
     gcp:'/images/gcp.webp',
     switch:'/images/switch.png',
+    successStories:'/images/success-stories.png',
     azure:'/images/azure.png',
     router:'/images/router.png',
     logo:'/images/qocent-logo.png',
@@ -20,6 +22,12 @@ export const imgLinks = {
     huaweitier1:'/images/huawei-tier1.JPG',
     huaweitier2:'/images/huawei-tier2.JPG',
     huaweitier3:'/images/huawei-tier3.JPG',
+    bgLayer:'/images/bg-layer.png',
+    container:'/images/container.png',
+    whiteCloud:'/images/white-cloud.png',
+    bgRay:'/images/bg-ray.png',
+    sectionProject:'/images/section-project.png',
+    whiteOverlay:'/images/white-overlay.png',
 
     aws:'images/aws.png',
 }
@@ -64,14 +72,12 @@ export const awsIconLinks = {
     efs :'/icons/aws/efs.png',
     asg :'/icons/aws/asg.png',
     router :'/icons/huawei/router.png',
-    
-}
+}   
 
 export const svgLinks = {
     cube: '/svg/cubes.svg',
     aws:'/svg/aws.svg',
-    mosaic: '/svg/mosaic.svg',
-    
+    mosaic: '/svg/mosaic.svg',  
     grunge:'/svg/grunge.svg',
     router:'/svg/router.svg',
     igw:'/svg/igw.svg',
@@ -87,4 +93,8 @@ export const svgLinks = {
     logo:'/svg/qocentlogo.svg',
     logoWhite:'/svg/qocentlogo2.svg',
     azure:'/svg/azure.svg',
+    qoonity:'/svg/qoonity.svg',
+    qucoon:'/svg/qucoon.svg',
+    univaciti:'/svg/univaciti.svg',
+    rubies:'/svg/rubies.svg'
 }

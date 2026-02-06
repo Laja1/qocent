@@ -3,6 +3,7 @@ import { Profile } from "./profile";
 import { Integrations } from "./integrations";
 import { Security } from "./secuirty";
 import { Payment } from "./payment";
+import { Subscription } from "./subscription";
 
 export const Settings = () => {
   const tabData = [
@@ -29,6 +30,11 @@ export const Settings = () => {
       id:4,
       text: "Payment Method",
       component: <Payment />,
+    },
+    {
+      id:5,
+      text: "Subscription",
+      component: <Subscription />,
     },
   ];
 

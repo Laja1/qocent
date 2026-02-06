@@ -6,12 +6,8 @@ import {
 } from "@tabler/icons-react";
 import { MdEmail, MdPhone } from "react-icons/md";
 import { Link } from "react-router-dom";
-import { Sun, Moon } from "lucide-react";
-import { useDarkMode } from "@/hooks/useDarkMode";
 
 export const Footer = () => {
-  const { isDark, toggle } = useDarkMode();
-
   const socialLinks = [
     {
       icon: IconBrandTwitter,
@@ -32,27 +28,26 @@ export const Footer = () => {
 
   const footerSections = [
     {
-      title: "Solutions",
+      title: "Product",
       links: [
-        { name: "Features", href: "/#features" },
-        { name: "Pricing", href: "/#pricing" },
-        { name: "Integrations", href: "/#integrations" },
-        { name: "API", href: "/docs#api" },
+        { name: "Multi-Cloud Management", href: "/#features" },
+        { name: "FinOps & Cost Optimization", href: "/#pricing" },
+        { name: "Security & Compliance", href: "/#integrations" },
+        { name: "Account Integration", href: "/docs#api" },
       ],
     },
     {
-      title: "Use Cases",
+      title: "Resources",
       links: [
         { name: "Documentation", href: "/docs" },
-        { name: "Guides", href: "/docs#guides" },
-        { name: "Blog", href: "/#blog" },
-        { name: "Support", href: "/contact" },
+        { name: "Getting Started Guide", href: "/docs#guides" },
+        { name: "Contact Support", href: "/contact" },  
       ],
     },
     {
       title: "Company",
       links: [
-        { name: "About", href: "/about-us" },
+        { name: "About Us", href: "/about-us" },
         { name: "Partners", href: "/our-partners" },
         { name: "Careers", href: "/careers" },
         { name: "Contact", href: "/contact" },
@@ -67,9 +62,9 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="relative w-full border-t border-border/80 bg-gradient-to-b   dark:bg-black backdrop-blur-sm">
+    <footer className="relative w-full border-t border-border/80 bg-gradient-to-b backdrop-blur-sm">
       {/* Subtle background pattern */}
-      <div className="absolute inset-0 bg-grid-small-black/[0.02] dark:bg-grid-small-white/[0.02]" />
+      <div className="absolute inset-0 bg-grid-small-black/[0.02]" />
 
       <div className="relative container mx-auto px-4 py-12 lg:py-16">
         {/* Main footer content */}
@@ -79,27 +74,16 @@ export const Footer = () => {
             {/* Logo and brand */}
             <div className="space-y-4">
               <div className="flex items-center gap-3">
-                {isDark ? (
-                  <img
-                    src={svgLinks.qocentLight}
-                    className="lg:h-10 md-6 h-5"
-                    alt="Logo"
-                  />
-                ) : (
-                  <img
-                    src={imgLinks.footerlogo}
-                    className="h-12 w-auto"
-                    alt="Qocent Logo"
-                  />
-                )}
-
+                <img
+                  src={imgLinks.footerlogo}
+                  className="h-12 w-auto"
+                  alt="Qocent Logo"
+                />
                 <div className="h-8 w-px bg-border/50" />
               </div>
 
               <p className="text-sm text-muted-foreground max-w-md leading-relaxed">
-                Transform your business with cutting-edge solutions designed for
-                the modern world. Join thousands of companies already growing
-                with Qocent.
+              Simplify multi-cloud management with Qocent. Deploy, monitor, optimize, and secure your AWS, Azure, GCP, and Huawei infrastructure from one powerful console.
               </p>
             </div>
 
@@ -140,7 +124,7 @@ export const Footer = () => {
               </div>
             </div>
 
-            {/* Social links and theme toggle */}
+            {/* Social links */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 {socialLinks.map(({ icon: Icon, href, label }, index) => (
@@ -155,17 +139,6 @@ export const Footer = () => {
                     <Icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
                   </a>
                 ))}
-                <button
-                  onClick={toggle}
-                  aria-label="Toggle Dark Mode"
-                  className="w-10 h-10 flex items-center justify-center bg-muted/50 hover:bg-primary/10 rounded-xl transition-all duration-200 hover:scale-105 group"
-                >
-                  {isDark ? (
-                    <Sun className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                  ) : (
-                    <Moon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
-                  )}
-                </button>
               </div>
             </div>
           </div>

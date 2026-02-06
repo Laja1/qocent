@@ -4,14 +4,6 @@ import { persistor, store } from "@/store";
 import { Provider } from "react-redux";
 import { PersistGate } from "redux-persist/integration/react";
 import { GoogleOAuthProvider } from "@react-oauth/google";
-import { useDarkMode } from "@/hooks/useDarkMode";
-
-// Theme Provider Component
-const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  // Initialize dark mode at the provider level
-  useDarkMode();
-  return <>{children}</>;
-};
 
 export const ProviderWrapper = ({
   children,
@@ -24,12 +16,10 @@ export const ProviderWrapper = ({
     <Provider store={store}>
       <GoogleOAuthProvider clientId={GOOGLE_CLIENT_ID}>
         <PersistGate loading={null} persistor={persistor}>
-          <ThemeProvider>
-            <ModalProvider>
-              <ToastWrapper />
-              <div>{children}</div>
-            </ModalProvider>
-          </ThemeProvider>
+          <ModalProvider>
+            <ToastWrapper />
+            <div>{children}</div>
+          </ModalProvider>
         </PersistGate>
       </GoogleOAuthProvider>
     </Provider>

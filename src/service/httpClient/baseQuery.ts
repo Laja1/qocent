@@ -5,7 +5,7 @@ import { authStore } from "@/store/authSlice";
   import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
   export const rawBaseQuery = fetchBaseQuery({
-    baseUrl: "https://iodmdiaajutj2ivdmc2knkd3xi0eaevr.lambda-url.us-east-1.on.aws/api/v1",
+    baseUrl: "https://krl7jmmklv7mrb6hxdpkcoqhzq0rmpks.lambda-url.us-east-1.on.aws/api/v1",
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState;
       const token = state.auth.token;
@@ -60,7 +60,13 @@ import { authStore } from "@/store/authSlice";
      * }
      */
   
+    // Skip logout for login/signup endpoints
+    const isAuthEndpoint = typeof args === 'string' 
+      ? args.includes('/login') || args.includes('/signup')
+      : args.url?.includes('/login') || args.url?.includes('/signup');
+  
     if (
+      !isAuthEndpoint &&
       result.error &&
       (
         result.error.status === 401 ||

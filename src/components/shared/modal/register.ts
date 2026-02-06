@@ -16,10 +16,12 @@ import { EditAccessModal } from "./edit-access";
 import { ServiceModal } from "./servicemodal";
 import { SubscriptionModal } from "./subscription-modal";
 import { InviteSiteModal } from "./join-site-modal";
+import { ManageSubscriptionModal } from "./manage-subscription-modal";
 
 export const ModalConstant = {
     DrawerModal: "DrawerModal",
     SubscriptionModal:"SubscriptionModal",
+    ManageSubscriptionModal:"ManageSubscriptionModal",
     PaymentSheet:'PaymentSheet',
     WorkspaceModal:"WorkspaceModal",
     InviteToWorkspace:"InviteToWorkspace",
@@ -54,7 +56,8 @@ const registerSheets = {
     [ModalConstant.DeleteResourceModal]:DeleteResourceModal,
     [ModalConstant.SelectSiteModal]:SelectSiteModal,
     [ModalConstant.EditAccessModal]:EditAccessModal,
-    [ModalConstant.SubscriptionModal]:SubscriptionModal
+    [ModalConstant.SubscriptionModal]:SubscriptionModal,
+    [ModalConstant.ManageSubscriptionModal]:ManageSubscriptionModal
 }
 
 Object.entries(registerSheets).forEach(([sheetId, SheetComponent]) => {

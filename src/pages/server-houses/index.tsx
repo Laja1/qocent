@@ -107,9 +107,9 @@ export const ServerHouses = () => {
               />
             </div>
           </div>
-          <div className="w-full lg:w-3/4">
+          {/* <div className="w-full lg:w-3/4">
             <Resource />
-          </div>
+          </div> */}
         </div>
       ),
     },

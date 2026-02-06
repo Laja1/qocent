@@ -1,12 +1,13 @@
-import { Hero } from "./hero";
-import { Services } from "./services";
 import { Footer } from "@/components/shared";
-import { Faq } from "./faq";
-import { HowIt } from "./how-it";
-import { HyperScalers } from "./hyperscalers";
 import Seo from "@/components/shared/seo";
 import Navbar from "@/components/shared/navbar2";
-import { PartnerNetwork } from "./partner-network";
+import { ProblemWeSolve } from "./problem-solve";
+import { Hero } from "./hero";
+import { Services } from "../services";
+import { Faq } from "./faq";
+import { PartnerNetwork } from "../partner-network";
+import QocentSolution from "./solution";
+import HowItWorks from "./how-it";
 
 const Home = () => {
   const websiteSchema = {
@@ -50,11 +51,12 @@ const Home = () => {
       {/* <NavbarDemo> */}
       <Navbar />
       <Hero />
+      <ProblemWeSolve />
       {/* <InfiniteCardCarousel /> */}
+    <QocentSolution />
+    <HowItWorks />
 
       <Services />
-      <HyperScalers />
-      <HowIt />
       <Faq />
       <PartnerNetwork />
       <Footer />

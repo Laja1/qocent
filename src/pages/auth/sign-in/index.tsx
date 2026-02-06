@@ -33,8 +33,6 @@ const SignIn = () => {
         })
       );
       console.log(res);
-      // Fix: setServices expects a string[], but res.service is Service[]
-
       navigate(RouteConstant.dashboard.console.path);
     } catch (error: any) {
       const message = ErrorHandler.extractMessage(error);
@@ -58,7 +56,10 @@ const SignIn = () => {
       title="Sign In"
       subtitle="Enter your credentials to access your cloud resources"
     >
-      <div className="flex flex-col gap-3">
+      <form onSubmit={(e) => {
+        e.preventDefault();
+        formik.handleSubmit();
+      }} className="flex flex-col gap-3">
         <Textfield
           formik={formik}
           name="user_email"
@@ -103,11 +104,11 @@ const SignIn = () => {
         <Button
           label="Sign In"
           className="w-full mt-3"
-          onClick={() => formik?.handleSubmit()}
+          type="submit"
           disabled={!formik?.isValid || isLoading}
           isLoading={isLoading}
         />
-      </div>
+      </form>
     </AuthLayout>
   );
 };

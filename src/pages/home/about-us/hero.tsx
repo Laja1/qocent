@@ -23,8 +23,8 @@ export function Hero() {
              About Us
             </h1>
             <p className="text-sm  md:text-base text-white mb-8 max-w-2xl mx-auto">
-            Learn how to build, deploy, and scale your applications on Qocent. Follow our step-by-step guide to get started.
-            </p>
+            We're on a mission to simplify multi-cloud management for developers
+            and businesses worldwide.  </p>
 
             <div>
               <div className="my-4 gap-4 justify-center flex px-4 py-1.5 text-xs lg:text-sm font-medium">
