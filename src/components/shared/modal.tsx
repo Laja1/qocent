@@ -61,7 +61,7 @@ export const ModalProvider = ({ children }: { children: ReactNode }) => {
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="min-w-xs rounded-sm bg-white dark:bg-black p-3"
+                className="min-w-xs rounded-sm bg-white p-3"
               >
                 {modal.content()} {/* 👈 Now it's reactive */}
               </DialogPanel>

@@ -91,7 +91,7 @@ export const CreateNewSite = () => {
         description="A server can have one or more server houses. A server house is provided by a provider."
       />
 
-      <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 dark:border-gray-700 rounded-t-md shadow-md">
+      <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 rounded-t-md shadow-md">
         {/* Header Section */}
         <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 rounded-t-md px-3 sm:px-5 py-5">
           <div>

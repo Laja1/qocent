@@ -6,7 +6,7 @@ import Service from "./service-modal";
 
 const ExploreServices = () => {
   return (
-    <div className="dark:bg-black h-full w-full">
+    <div className="h-full w-full">
       <Seo
         title="Qocent multi-cloud management platform solutions"
         description="Explore our multi-cloud management platform for cutting-edge solutions, from cloud management and optimization to migration and modernization."

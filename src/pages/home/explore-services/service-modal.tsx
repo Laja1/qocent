@@ -29,9 +29,9 @@ export function ServiceForm({ fields }: ServiceFormProps) {
 
 export default function Service() {
   return (
-    <div className="pt-10 dark:bg-black w-full bg-white">
+    <div className="pt-10 w-full bg-white">
       <div className=" items-center w-full flex justify-center mb-10 flex-col">
-        <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-200   text-center">
+        <h2 className="text-3xl md:text-4xl font-bold text-gray-900   text-center">
           Professional Services
         </h2>
         <p className="text-center max-w-3xl">

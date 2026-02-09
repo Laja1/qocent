@@ -105,14 +105,14 @@ export const StarterPacksGrid = () => {
             className={`group border p-3 rounded-md relative cursor-pointer transition-all hover:shadow-lg px-5 
               ${
                 selectedPack?.id === pack.id
-                  ? "border-red-400 bg-[#fee2e2]/50 dark:bg-[#1f1f1f]"
-                  : "hover:bg-[#fee2e2] dark:hover:bg-[#1f1f1f]"
+                  ? "border-red-400 bg-[#fee2e2]/50"
+                  : "hover:bg-[#fee2e2]"
               }`}
             onClick={() => setSelectedPack(pack)}
           >
             <div>
               <div className="mb-2 flex items-center justify-between">
-                <div className="rounded-lg bg-primary/10 p-3 text-primary transition-colors group-hover:bg-primary dark:group-hover:bg-[#1f1f1f] group-hover:text-[#fee2e2]">
+                <div className="rounded-lg bg-primary/10 p-3 text-primary transition-colors group-hover:bg-primary group-hover:text-[#fee2e2]">
                   {pack.icon}
                 </div>
               </div>

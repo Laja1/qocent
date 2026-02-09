@@ -49,19 +49,19 @@ export const SidebarLayout = () => {
   const sidebarItems: SidebarItem[] = [
     // {
     //   title: "Build with Qoonity AI",
-    //   icon: <Bot className="text-black dark:text-gray-800" />,
+    //   icon: <Bot className="text-black" />,
     //   href: "/identity-center",
     //   isActive: false,
     // },
     {
       title: "Switch workspace",
-      icon: <LayoutList className="text-black dark:text-red-400" />,
+      icon: <LayoutList className="text-black" />,
       href: "/console",
       isActive: false,
     },
     {
       title: "Settings",
-      icon: <Settings className="text-black dark:text-red-400" />,
+      icon: <Settings className="text-black" />,
       href: "/settings",
       isActive: false,
     },
@@ -79,40 +79,40 @@ export const SidebarLayout = () => {
           {
             title: "Server Sites",
             icon: (
-              <IconHome className="text-gray-800  dark:text-red-400 size-5" />
+              <IconHome className="text-gray-800  size-5" />
             ),
             url: RouteConstant.dashboard.serverSite.path,
           },
           // {
           //   title: "Server Houses",
           //   icon: (
-          //     <IconCarouselVertical className="text-gray-800 dark:text-red-400 size-5" />
+          //     <IconCarouselVertical className="text-gray-800 size-5" />
           //   ),
           //   url: RouteConstant.dashboard.serverHouses.path,
           // },
           // {
           //   title: "Server Rooms",
           //   icon: (
-          //     <IconBrowser className="text-gray-800 dark:text-red-400 size-5" />
+          //     <IconBrowser className="text-gray-800 size-5" />
           //   ),
           //   url: RouteConstant.dashboard.serverRooms.path,
           // },
           // {
           //   title: "Resources",
           //   icon: (
-          //     <Webhook className="text-gray-800 dark:text-red-400 size-5" />
+          //     <Webhook className="text-gray-800 size-5" />
           //   ),
           //   url: RouteConstant.dashboard.resources.path,
           // },
           // {
           //   title: "Monitoring",
-          //   icon: <Search className="text-gray-800 dark:text-red-400 size-5" />,
+          //   icon: <Search className="text-gray-800 size-5" />,
           //   url: RouteConstant.dashboard.monitoring.path,
           // },
           {
             title: "Finops",
             icon: (
-              <ChartNoAxesColumn className="text-gray-800 dark:text-red-400 size-5" />
+              <ChartNoAxesColumn className="text-gray-800 size-5" />
             ),
             url: RouteConstant.dashboard.finops.path,
           },
@@ -124,33 +124,33 @@ export const SidebarLayout = () => {
         title: "Management",
         url: "#",
         icon: (
-          <AlignHorizontalDistributeCenter className=" dark:text-white size-5" />
+          <AlignHorizontalDistributeCenter className=" size-5" />
         ),
 
         isActive: false,
         items: [
           {
             title: "Subscriptions",
-            icon: <Users className="size-4 text-gray-800 dark:text-red-400" />,
+            icon: <Users className="size-4 text-gray-800" />,
             url: RouteConstant.dashboard.subscription.path,
           },
           // {
           //   title: "Starter Packs",
           //   icon: (
-          //     <PackageOpen className="size-4 text-gray-800 dark:text-red-400" />
+          //     <PackageOpen className="size-4 text-gray-800" />
           //   ),
           //   url: RouteConstant.dashboard.starterPacks.path,
           // },
           {
             title: "Billing & Statements",
-            icon: <Wallet className="size-4 text-gray-800 dark:text-red-400" />,
+            icon: <Wallet className="size-4 text-gray-800" />,
             url: RouteConstant.dashboard.billings.path,
           },
           // account.type === "INTERNAL"
           //   ? {
           //       title: "Organization",
           //       icon: (
-          //         <Users className="size-4 text-gray-800 dark:text-red-400" />
+          //         <Users className="size-4 text-gray-800" />
           //       ),
           //       url: RouteConstant.dashboard.billings.path,
           //     }
@@ -159,7 +159,7 @@ export const SidebarLayout = () => {
             ? {
                 title: "Access",
                 icon: (
-                  <Users className="size-4 text-gray-800 dark:text-red-400" />
+                  <Users className="size-4 text-gray-800" />
                 ),
                 url: RouteConstant.dashboard.access.path,
               }
@@ -196,7 +196,7 @@ export const SidebarLayout = () => {
 
   return (
     <Sidebar className="font-brfirma">
-      <SidebarHeader className="bg-black text-gray-900 dark:text-white border-gray-200 border-b dark:border-gray-800  p-[8px]">
+      <SidebarHeader className="bg-black text-gray-900 border-gray-200 border-b  p-[8px]">
         <div className="flex items-center space-x-2 justify-between">
           <div className="flex space-x-2">
             <img src={svgLinks.logoWhite} className="h-10" />
@@ -210,7 +210,7 @@ export const SidebarLayout = () => {
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="bg-white dark:bg-black">
+      <SidebarContent className="bg-white">
         <NavMain title="Menu" items={data.serverSite} />
         <NavMain title="Others" items={data.others} />
 
@@ -232,10 +232,10 @@ export const SidebarLayout = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t flex flex-row justify-between  dark:border-gray-700 border-gray-200 px-4 py-1">
+      <SidebarFooter className="border-t flex flex-row justify-between  border-gray-200 px-4 py-1">
         <div
           onClick={handleLogout}
-          className="text-xs flex py-2 items-center text-red-600 dark:text-red-400 gap-2 cursor-pointer"
+          className="text-xs flex py-2 items-center text-red-600 gap-2 cursor-pointer"
         >
           <LogOut className="size-4" />
           <p>Logout</p>

@@ -32,7 +32,7 @@ export const SummaryTable = ({ summaryData, isLoading }: SummaryTableProps) => {
       header: "Resource Type",
       accessorKey: "groupedResourceType",
       cell: (row) => (
-        <span className="line-clamp-1 text-xs py-1 text-gray-900 dark:text-gray-100">
+        <span className="line-clamp-1 text-xs py-1 text-gray-900">
           {row.groupedResourceType}
         </span>
       ),
@@ -43,7 +43,7 @@ export const SummaryTable = ({ summaryData, isLoading }: SummaryTableProps) => {
       header: "Count",
       accessorKey: "count",
       cell: (row) => (
-        <span className="line-clamp-1 text-xs text-gray-900 dark:text-gray-100">
+        <span className="line-clamp-1 text-xs text-gray-900">
           {row.count}
         </span>
       ),

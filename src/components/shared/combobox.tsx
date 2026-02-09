@@ -79,7 +79,7 @@ export const ComboBoxField = ({
             role="combobox"
             aria-expanded={open}
             className={cn(
-              "w-full justify-between border-green-800 border dark:border-green-600 dark:text-black rounded-xs text-xs",
+              "w-full justify-between border-green-800 border rounded-xs text-xs",
               !selectedOption && "text-muted-foreground",
               error && touched && "border-red-500 focus:border-red-500"
             )}

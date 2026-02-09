@@ -32,10 +32,10 @@ export const GridItem = ({
               {icon}
             </div>
             <div className="space-y-3">
-              <p className="text-xl font-semibold text-gray-900 dark:text-white">
+              <p className="text-xl font-semibold text-gray-900">
                 {title}
               </p>
-              <p className="text-sm text-gray-700 dark:text-neutral-400">
+              <p className="text-sm text-gray-700">
                 {description}
               </p>
             </div>

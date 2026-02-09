@@ -96,9 +96,9 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
         damping: 50,
       }}
       className={cn(
-        "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-xl bg-transparent px-4 py-2 lg:flex dark:bg-transparent",
+        "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-xl bg-transparent px-4 py-2 lg:flex",
         visible &&
-          "bg-white/80 dark:bg-neutral-950/80 border border-gray-200/20",
+          "bg-white/80 border border-gray-200/20",
         className
       )}
     >
@@ -124,12 +124,12 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
           to={item.link}
           onMouseEnter={() => setHovered(idx)}
           onClick={onItemClick}
-          className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-colors"
+          className="relative px-4 py-2 text-neutral-600 hover:text-neutral-800 transition-colors"
         >
           {hovered === idx && (
             <motion.div
               layoutId="hovered"
-              className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
+              className="absolute inset-0 h-full w-full rounded-full bg-gray-100"
             />
           )}
           <span className="relative z-20">{item.name}</span>
@@ -158,7 +158,7 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
       className={cn(
         "relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between bg-transparent px-4 py-2 lg:hidden rounded-xl",
         visible &&
-          "bg-white/80 dark:bg-neutral-950/80 border border-gray-200/20",
+          "bg-white/80 border border-gray-200/20",
         className
       )}
     >
@@ -196,7 +196,7 @@ export const MobileNavMenu = ({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           className={cn(
-            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white px-4 py-8 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset] dark:bg-neutral-950",
+            "absolute inset-x-0 top-16 z-50 flex w-full flex-col items-start justify-start gap-4 rounded-lg bg-white px-4 py-8 shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
             className
           )}
         >
@@ -217,13 +217,13 @@ export const MobileNavToggle = ({
   return (
     <button
       onClick={onClick}
-      className="p-1 rounded hover:bg-gray-100 dark:hover:bg-neutral-800 transition-colors"
+      className="p-1 rounded hover:bg-gray-100 transition-colors"
       aria-label={isOpen ? "Close menu" : "Open menu"}
     >
       {isOpen ? (
-        <IconX className="text-black dark:text-white" />
+        <IconX className="text-black" />
       ) : (
-        <IconMenu2 className="text-black dark:text-white" />
+        <IconMenu2 className="text-black" />
       )}
     </button>
   );
@@ -241,7 +241,7 @@ export const NavbarLogo = () => {
         width={30}
         height={30}
       />
-      <span className="font-medium text-black dark:text-white">Startup</span>
+      <span className="font-medium text-black">Startup</span>
     </Link>
   );
 };
@@ -252,7 +252,7 @@ export const NavbarButton = React.forwardRef<
     as?: React.ElementType;
     children: React.ReactNode;
     className?: string;
-    variant?: "primary" | "secondary" | "dark" | "gradient";
+    variant?: "primary" | "secondary" | "gradient";
   } & (
     | React.ComponentPropsWithoutRef<"a">
     | React.ComponentPropsWithoutRef<"button">
@@ -268,8 +268,7 @@ export const NavbarButton = React.forwardRef<
     const variantStyles = {
       primary:
         "shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
-      secondary: "bg-transparent shadow-none dark:text-white",
-      dark: "bg-black text-white shadow-[0_0_24px_rgba(34,_42,_53,_0.06),_0_1px_1px_rgba(0,_0,_0,_0.05),_0_0_0_1px_rgba(34,_42,_53,_0.04),_0_0_4px_rgba(34,_42,_53,_0.08),_0_16px_68px_rgba(47,_48,_55,_0.05),_0_1px_0_rgba(255,_255,_255,_0.1)_inset]",
+      secondary: "bg-transparent shadow-none",
       gradient:
         "bg-gradient-to-b from-blue-500 to-blue-700 text-white shadow-[0px_2px_0px_0px_rgba(255,255,255,0.3)_inset]",
     };

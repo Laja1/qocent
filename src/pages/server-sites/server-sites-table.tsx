@@ -56,7 +56,7 @@ export const ResourceTable = ({
       cell: (row) => (
         <span
           onClick={() => navigate("/create-resource")}
-          className="hover:cursor-pointer text-gray-900 dark:text-gray-100"
+          className="hover:cursor-pointer text-gray-900"
         >
           {row.resourceId}
         </span>
@@ -69,7 +69,7 @@ export const ResourceTable = ({
       header: "RESOURCES",
       accessorKey: "resourceType",
       cell: (row) => (
-        <span className="line-clamp-1 text-gray-900 dark:text-gray-100">
+        <span className="line-clamp-1 text-gray-900">
           {row.resourceType}
         </span>
       ),
@@ -85,7 +85,7 @@ export const ResourceTable = ({
           RESOURCE_MAP[resourceType as keyof typeof RESOURCE_MAP];
 
         if (!resource) {
-          return <span className="text-gray-400 dark:text-gray-500">?</span>;
+          return <span className="text-gray-400">?</span>;
         }
 
         const Icon = resource.icon;
@@ -119,7 +119,7 @@ export const ResourceTable = ({
       header: "CODE",
       accessorKey: "resourceCode",
       cell: (row) => (
-        <span className="line-clamp-1 text-gray-900 dark:text-gray-100">
+        <span className="line-clamp-1 text-gray-900">
           {row.resourceCode}
         </span>
       ),
@@ -133,7 +133,7 @@ export const ResourceTable = ({
       accessorKey: "resourceSiteCode",
       sortable: true,
       cell: (row) => (
-        <span className="flex text-gray-900 dark:text-gray-100">
+        <span className="flex text-gray-900">
           {row.resourceSiteCode}
         </span>
       ),

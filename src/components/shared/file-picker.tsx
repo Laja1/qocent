@@ -184,7 +184,7 @@ export const FileUploader = forwardRef<FileUploaderHandle, FileUploaderProps>(
               <div className="text-center lg:max-w-xs">
                 <p className="text-red-500 text-xs">
                   Click to upload{" "}
-                  <span className="text-black dark:text-gray-500">
+                  <span className="text-black">
                     or drag and drop any file
                   </span>
                 </p>

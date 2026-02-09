@@ -11,9 +11,24 @@ import { Textfield } from "../textfield";
 import { DatePickerWithFormik } from "../date-picker";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { X } from "lucide-react";
+import { useCheckPaymentStatusQuery } from "@/service/python/subscriptionApi";
+import { useState } from "react";
 
 export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => {
   const modal = useModal();
+  const [checkPayment, setCheckPayment] = useState(false);
+  const { data: paymentStatus, isLoading, refetch } = useCheckPaymentStatusQuery(
+    paymentData?.payment_id || "",
+    { skip: !checkPayment || !paymentData?.payment_id }
+  );
+
+  const handleConfirmPayment = async () => {
+    setCheckPayment(true);
+    const result = await refetch();
+    if (result.data?.status === "completed") {
+      modal.hide();
+    }
+  };
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
   };
@@ -29,9 +44,18 @@ export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => 
 
   if (paymentData) {
     return (
-      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-        <div className="bg-black border border-slate-800 rounded-2xl max-w-2xl w-full p-8 relative">
-          <button onClick={() => modal.hide()} className="absolute top-4 right-4 text-slate-400 hover:text-white">
+      <div 
+        className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4"
+        onClick={() => modal.remove()}
+      >
+        <div 
+          className="bg-black border border-slate-800 rounded-2xl max-w-2xl w-full p-8 relative"
+          onClick={(e) => e.stopPropagation()}
+        >
+          <button 
+            onClick={() => modal.remove()} 
+            className="absolute top-4 right-4 text-slate-400 hover:text-white z-50 p-1 bg-transparent border-none cursor-pointer"
+          >
             <X className="w-6 h-6" />
           </button>
           <h2 className="text-2xl font-bold text-white mb-2">Payment Details</h2>
@@ -64,6 +88,16 @@ export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => 
               </div>
             </div>
             <p className="text-slate-400 text-xs">{paymentData.payment_instructions}</p>
+            <Button
+              onClick={handleConfirmPayment}
+              intent={'secondary'}
+              disabled={isLoading}
+              className="w-full  text-white font-semibold py-3 rounded-lg transition-colors"
+              label={isLoading ? "Verifying..." : "I've Made the Payment"}
+            />
+            {paymentStatus && paymentStatus.status !== "completed" && (
+              <p className="text-amber-400 text-sm text-center">Payment not confirmed yet. Please try again.</p>
+            )}
           </div>
         </div>
       </div>

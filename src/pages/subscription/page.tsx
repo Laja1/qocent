@@ -1,6 +1,6 @@
 import { Header } from "@/components/shared";
 import { Sparkles, Zap } from "lucide-react";
-import { useGetAllPlansQuery, useStartTrialMutation, useCreatePaidSubscriptionMutation } from "@/service/python/subscriptionApi";
+import { useGetAllWithMySubscriptionsQuery, useStartTrialMutation, useCreatePaidSubscriptionMutation } from "@/service/python/subscriptionApi";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import NiceModal from "@ebay/nice-modal-react";
@@ -8,7 +8,7 @@ import { ModalConstant } from "@/components/shared/modal/register";
 import { Button } from "@/components/ui/button";
 
 const SubscriptionCards = () => {
-  const { data: plansData, isLoading } = useGetAllPlansQuery({ include_inactive: false });
+  const { data: plansData, isLoading } = useGetAllWithMySubscriptionsQuery();
   const [startTrial, { isLoading: isStartingTrialLoading }] = useStartTrialMutation();
   const [createPaidSubscription, { isLoading: isCreatePaidSubscriptionLoading }] = useCreatePaidSubscriptionMutation();
 

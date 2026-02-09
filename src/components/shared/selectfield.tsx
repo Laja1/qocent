@@ -44,7 +44,7 @@ export const SelectField = ({
         <label
           htmlFor={name}
           className={clsx(
-            "text-sm text-gray-600 dark:text-white",
+            "text-sm text-gray-600",
             labelClassname
           )}
         >

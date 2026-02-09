@@ -27,7 +27,12 @@ export const subscriptionApi = createApi({
       }),
       providesTags: [{ type: ApiEnums.Subscription, id: "PLANS" }],
     }),
-
+    getAllWithMySubscriptions: build.query<SubscriptionPlanListResponse, void>({
+      query: () => ({
+        url: `/subscription_plans/me`,
+      }),
+      providesTags: [{ type: ApiEnums.Subscription, id: "PLANS" }],
+    }),
     startTrial: build.mutation<SubscriptionDetailResponse, StartTrialRequest>({
       query: ({ plan_id, trial_duration_days = 30 }) => ({
         url: `/subscriptions/trial/start`,
@@ -47,7 +52,7 @@ export const subscriptionApi = createApi({
     }),
 
     checkPaymentStatus: build.query<SubscriptionPaymentStatusResponse, string>({
-      query: (subscription_id) => `/subscriptions/payment-status/${subscription_id}`,
+      query: (payment_id) => `/subscriptions/payment-status/${payment_id}`,
     }),
 
     getTrialStatus: build.query<genericResponse, void>({
@@ -137,5 +142,6 @@ export const {
   useResumeSubscriptionMutation,
   useCancelSubscriptionMutation,
   useConvertTrialToPaidMutation,
+  useGetAllWithMySubscriptionsQuery,
   useTrackUsageMutation,
 } = subscriptionApi;

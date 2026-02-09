@@ -12,7 +12,7 @@ import { Card, CardContent, CardTitle } from "@/components/ui/card";
 
 export function Compute() {
   return (
-    <div className="dark:bg-black mx-auto px-8 lg:mt-20">
+    <div className="mx-auto px-8 lg:mt-20">
       <div className="mb-4 rounded-full justify-center flex px-4 py-1.5 text-xs lg:text-sm font-medium">
         <CpuIcon className="h-14 w-14 text-primary" />
       </div>

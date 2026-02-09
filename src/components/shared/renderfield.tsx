@@ -73,9 +73,9 @@ export const RenderField = ({
           suffixIcon={
             <button onClick={() => setSeePassword((prev) => !prev)}>
               {seePassword ? (
-                <EyeIcon size={16} className="dark:text-black" />
+                <EyeIcon size={16} className="text-black" />
               ) : (
-                <EyeClosed size={16} className="dark:text-black" />
+                <EyeClosed size={16} className="text-black" />
               )}
             </button>
           }

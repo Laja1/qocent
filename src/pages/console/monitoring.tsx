@@ -13,7 +13,7 @@ export const Monitoring = () => {
             <div className="bg-red-50 border border-red-500 text-[10px] rounded-full p-1">
               <Activity className="text-red-800 size-3" />
             </div>
-            <h3 className="text-sm font-semibold text-black dark:text-white">
+            <h3 className="text-sm font-semibold text-black">
               Summary Tab
             </h3>
           </div>
@@ -34,11 +34,11 @@ export const Monitoring = () => {
                       service.uptime > 0 ? "bg-green-600" : "bg-yellow-600"
                     }`}
                   />
-                  <span className="text-xs text-gray-900 dark:text-white">
+                  <span className="text-xs text-gray-900">
                     {service.service}
                   </span>
                 </div>
-                <p className="text-xs font-medium text-gray-900 dark:text-white">
+                <p className="text-xs font-medium text-gray-900">
                   {service.uptime}
                 </p>
               </div>

@@ -40,7 +40,7 @@ export const Header = ({
           <div className="flex flex-col min-w-0 flex-1">
             {title && <h1 className="text-base font-bold truncate">{title}</h1>}
             {description && (
-              <p className="text-xs text-gray-400 dark:text-gray-500 leading-tight truncate">
+              <p className="text-xs text-gray-400 leading-tight truncate">
                 {description}
               </p>
             )}

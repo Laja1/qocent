@@ -194,7 +194,7 @@ export const ServerSites = () => {
   //   //             label="Add Resource"
   //   //             prefixIcon={<PlusIcon className="size-4" />}
   //   //             size="small"
-  //   //             className="mt-2 py-0 bg-black dark:bg-white"
+  //   //             className="mt-2 py-0 bg-black"
   //   //             intent="secondary"
   //   //             onClick={() =>
   //   //               openModal({

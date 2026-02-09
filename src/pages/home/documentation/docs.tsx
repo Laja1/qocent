@@ -65,15 +65,15 @@ const Developers = () => {
   ];
 
   return (
-    <div className="min-h-screen dark:bg-black bg-white">
+    <div className="min-h-screen bg-white">
       {/* Hero Section */}
       <section className="bg-gradient-to-r  py-24 text-black">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-12">
-            <h1 className="text-4xl dark:text-gray-300 md:text-6xl font-bold mb-6">
+            <h1 className="text-4xl md:text-6xl font-bold mb-6">
               Getting Started Guide
             </h1>
-            <p className="text-lg dark:text-gray-300 text-black mb-8 max-w-3xl mx-auto">
+            <p className="text-lg text-black mb-8 max-w-3xl mx-auto">
               Follow these steps to set up your cloud infrastructure
             </p>
             <div className="flex justify-center space-x-4">
@@ -86,7 +86,7 @@ const Developers = () => {
 
           {/* Architecture Overview */}
           <div className=" bg-opacity-10 backdrop-blur-sm rounded-lg p-8">
-            <h2 className="text-2xl font-bold mb-6 text-center dark:text-white">
+            <h2 className="text-2xl font-bold mb-6 text-center">
               Qocent Infrastructure Hierarchy
             </h2>
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
@@ -94,29 +94,29 @@ const Developers = () => {
                 <div className="w-16 h-16 bg-black rounded-lg flex items-center justify-center mx-auto mb-3">
                   <Users className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="font-semibold mb-2 dark:text-white">Server Site</h3>
-                <p className="text-sm text-black dark:text-gray-300">Your cloud account</p>
+                <h3 className="font-semibold mb-2">Server Site</h3>
+                <p className="text-sm text-black">Your cloud account</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-black rounded-lg flex items-center justify-center mx-auto mb-3">
                   <Network className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="font-semibold mb-2 dark:text-white">Server House</h3>
-                <p className="text-sm text-black dark:text-gray-300">VPC environment</p>
+                <h3 className="font-semibold mb-2">Server House</h3>
+                <p className="text-sm text-black">VPC environment</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-black rounded-lg flex items-center justify-center mx-auto mb-3">
                   <Globe className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="font-semibold mb-2 dark:text-white">Server Room</h3>
-                <p className="text-sm text-black dark:text-gray-300">Network subnet</p>
+                <h3 className="font-semibold mb-2">Server Room</h3>
+                <p className="text-sm text-black">Network subnet</p>
               </div>
               <div className="text-center">
                 <div className="w-16 h-16 bg-black rounded-lg flex items-center justify-center mx-auto mb-3">
                   <Server className="h-8 w-8 text-white" />
                 </div>
-                <h3 className="font-semibold mb-2 dark:text-white">Resources</h3>
-                <p className="text-sm text-black dark:text-gray-300">Compute, storage, etc.</p>
+                <h3 className="font-semibold mb-2">Resources</h3>
+                <p className="text-sm text-black">Compute, storage, etc.</p>
               </div>
             </div>
           </div>
@@ -129,7 +129,7 @@ const Developers = () => {
           <div className="grid lg:grid-cols-4  gap-8">
             {steps.map((step) => (
               <div
-                className="bg-white border border-gray-200 dark:border-gray-800 rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                className="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition-shadow"
                 key={step.number}
               >
                 <div className="flex items-center justify-between bg-black rounded-t-lg  text-white p-6">

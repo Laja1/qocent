@@ -78,14 +78,14 @@ export const CollapsibleItem: React.FC<CollapsibleItemProps> = ({
         <div className="flex items-center gap-3 ">
           {renderIconOrImage()}
           <div className="flex-col flex">
-            <span className="text-black dark:text-white text-xs transition-colors">
+            <span className="text-black text-xs transition-colors">
               {title}
             </span>
           </div>
         </div>
         {children && (
           <div className="text-black transition-colors">
-            {isOpen ? <ChevronDown size={16} className="dark:text-white"/> : <ChevronRight size={16} className="dark:text-white"/>}
+            {isOpen ? <ChevronDown size={16} className="text-black"/> : <ChevronRight size={16} className="text-black"/>}
           </div>
         )}
       </button>
@@ -136,8 +136,8 @@ export const SubItem: React.FC<SubItemProps> = ({
     <button onClick={onClick} className="w-full">
       <div
         onClick={onClick}
-        className="group flex items-center gap-3 p-2 rounded-xs cursor-pointer  dark:hover:text-black 
-                           hover:bg-gray-50 dark:hover:bg-red-400 w-full active:bg-gray-100  transition-all duration-200
+        className="group flex items-center gap-3 p-2 rounded-xs cursor-pointer  
+                           hover:bg-gray-50 w-full active:bg-gray-100  transition-all duration-200
                            border border-transparent hover:border-gray-200  hover:ml-2"
         role="button"
         tabIndex={0}
@@ -154,13 +154,13 @@ export const SubItem: React.FC<SubItemProps> = ({
 
         {/* Icon container */}
         <div
-          className="w-8 h-8 rounded-xs bg-white  shadow-sm border border-gray-200 dark:text-black dark:hover:text-black
+          className="w-8 h-8 rounded-xs bg-white  shadow-sm border border-gray-200
                                flex items-center justify-center flex-shrink-0
                                group-hover:shadow-md  transition-shadow duration-200"
         >
           {renderIconOrImage()}
         </div>
-        <span className="text-black transition-colors text-xs dark:text-white dark:hover:text-black">{title}</span>
+        <span className="text-black transition-colors text-xs">{title}</span>
         {/* Text content */}
       </div>
     </button>

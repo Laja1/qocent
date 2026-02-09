@@ -473,7 +473,7 @@ export function DataTable<T>({
   };
 
   return (
-    <div className="bg-white dark:bg-black font-brfirma">
+    <div className="bg-white font-brfirma">
       <div className="mb-2">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 ">
           <div>
@@ -695,7 +695,7 @@ export function DataTable<T>({
                           selectedRows.has(rowId) ? "bg-blue-50" : ""
                         } ${
                           highlightedRowId === rowId
-                            ? "bg-red-100 dark:text-black"
+                            ? "bg-red-100"
                             : ""
                         }`}
                         onClick={onRowClick ? () => onRowClick(row) : undefined}

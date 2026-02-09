@@ -100,9 +100,9 @@ const ResourceNodeComponent = memo<{
         onClick={handleClick}
       >
         {resource.errors > 0 ? (
-          <Info className="size-4 text-red-500 dark:text-red-400" />
+          <Info className="size-4 text-red-500" />
         ) : (
-          <Info className="size-4 text-black dark:text-gray-500" />
+          <Info className="size-4 text-black" />
         )}
       </button>
       {config.icon}
@@ -132,7 +132,7 @@ const GridCells = memo<{ cellBorderData?: HouseCell[] }>(
           cellArray.push(
             <div
               key={index}
-              className="border border-gray-50 dark:border-gray-900"
+              className="border border-gray-50"
               style={{
                 width: cellSize,
                 height: cellSize,

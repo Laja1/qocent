@@ -53,7 +53,7 @@ import { authStore } from "@/store/authSlice";
      * {
      *   status: "fail",
      *   responseCode: 400,
-     *   message: "Could not validate credentials",
+     *   message: "Could not validate credentials: Signature has expired.",
      *   data: {
      *     status_code: 401
      *   }
@@ -71,8 +71,7 @@ import { authStore } from "@/store/authSlice";
       (
         result.error.status === 401 ||
         (result.error.status === 400 &&
-          (result.error as any)?.data?.message ===
-            "Could not validate credentials")
+          (result.error as any)?.data?.message?.includes("Could not validate credentials"))
       )
     ) {
       return triggerSessionLogout(api, result.error);

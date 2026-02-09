@@ -44,7 +44,7 @@ export const VpcLevel = ({ vpcDeployed }: { vpcDeployed: houses[] }) => {
                     >
                       <div className="rounded-full p-2 flex flex-col items-center justify-center">
                         <img src={svgLinks.igw} className="size-7" />
-                        <p className="text-xs text-black dark:text-white">
+                        <p className="text-xs text-black">
                           IGW
                         </p>
                       </div>
@@ -56,7 +56,7 @@ export const VpcLevel = ({ vpcDeployed }: { vpcDeployed: houses[] }) => {
                     >
                       <div className="px-3 flex flex-col items-center text-xs">
                         <img src={svgLinks.router} className="size-8" />
-                        <p className="text-black dark:text-white">DG</p>
+                        <p className="text-black">DG</p>
                       </div>
                     </div>
                   </div>
@@ -76,7 +76,7 @@ export const VpcLevel = ({ vpcDeployed }: { vpcDeployed: houses[] }) => {
                 </div>
               </div>
 
-              <p className="text-center text-black dark:text-white text-xs mt-2">
+              <p className="text-center text-black text-xs mt-2">
                 {item.houseCode}
               </p>
 

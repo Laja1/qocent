@@ -19,13 +19,13 @@ export const SubscriptionModal = create(() => {
           <DialogTitle className="text-base font-semibold">
             Access Required
           </DialogTitle>
-          <p className="text-sm dark:text-gray-300 text-gray-700">
+          <p className="text-sm text-gray-700">
             You haven’t subscribed to Qocent FinOps or added your cloud Access &
             Secret keys yet.
           </p>
         </DialogHeader>
 
-        <div className="text-sm dark:text-gray-300 text-gray-700 space-y-2">
+        <div className="text-sm text-gray-700 space-y-2">
           <p>To start tracking and optimizing your cloud costs, you need to:</p>
           <ul className="list-disc pl-5 space-y-1">
             <li>Subscribe to Qocent FinOps</li>

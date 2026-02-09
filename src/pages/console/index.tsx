@@ -129,15 +129,15 @@ export const Console = () => {
     },
   ];
   return (
-    <div className="relative h-screen w-full overflow-hidden bg-gray-50 dark:bg-black">
+    <div className="relative h-screen w-full overflow-hidden text-black bg-gray-50 ">
       {/* Top Header */}
-      <header className="bg-white dark:bg-black border-b border-gray-200 dark:border-gray-800 w-full text-gray-900 dark:text-white px-4 py-2 fixed top-0 z-1">
+      <header className="bg-white  border-b border-gray-200  w-full text-gray-900  px-4 py-2 fixed top-0 z-1">
         <div className="flex justify-between items-center">
           <div className="flex items-center gap-3">
             {/* Mobile Menu Button */}
             <button
               onClick={toggleSidebar}
-              className="lg:hidden p-1 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+              className="lg:hidden p-1 hover:bg-gray-100 rounded-md transition-colors"
               aria-label="Toggle sidebar"
             >
               <Menu className="size-5" />
@@ -160,7 +160,7 @@ export const Console = () => {
             />
 
             <div className="flex items-center gap-3">
-              <div className="w-6 h-6 rounded-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 flex items-center justify-center text-xs font-semibold shadow-sm">
+              <div className="w-6 h-6 rounded-full bg-gray-900  text-white  flex items-center justify-center text-xs font-semibold shadow-sm">
                 {initials}
               </div>
 
@@ -168,7 +168,7 @@ export const Console = () => {
                 <p className="text-xs font-medium">
                   {user?.userFirstName} {user?.userLastName}
                 </p>
-                <p className="text-xs text-gray-600 dark:text-gray-300">
+                <p className="text-xs text-gray-600 ">
                   {user?.userEmail}
                 </p>
               </div>
@@ -191,7 +191,7 @@ export const Console = () => {
         <aside
           className={`
             fixed lg:relative top-16 lg:top-0 left-0 h-full w-80 lg:w-1/5 xl:w-1/6 
-            bg-white dark:bg-black border-r border-gray-200 dark:border-gray-800 z-40 transform transition-transform duration-300 ease-in-out
+            bg-white  border-r border-gray-200  z-40 transform transition-transform duration-300 ease-in-out
             ${
               isSidebarOpen
                 ? "translate-x-0"
@@ -200,10 +200,10 @@ export const Console = () => {
           `}
         >
           {/* Mobile Close Button */}
-          <div className="lg:hidden flex justify-end p-4 border-b border-gray-200 dark:border-gray-800">
+          <div className="lg:hidden flex justify-end p-4 border-b border-gray-200 ">
             <button
               onClick={toggleSidebar}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors"
+              className="p-2 hover:bg-gray-100 rounded-md transition-colors"
               aria-label="Close sidebar"
             >
               <X className="size-5" />
@@ -268,7 +268,7 @@ export const Console = () => {
       {/* Floating Bot Button */}
       <div className="fixed bottom-6 right-6 z-30">
         <button
-          className="bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 p-3 rounded-full shadow-lg hover:shadow-xl 
+          className="bg-green-600 hover:bg-green-700   p-3 rounded-full shadow-lg hover:shadow-xl 
                      transition-all duration-200 transform hover:scale-105 active:scale-95"
           aria-label="Open AI Assistant"
         >

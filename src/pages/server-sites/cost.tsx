@@ -30,7 +30,7 @@ export const CostTable = () => {
         header: "ID",
         accessorKey: "id",
         cell: (row) => (
-          <span className="text-gray-900 dark:text-gray-100">{row.id}</span>
+          <span className="text-gray-900">{row.id}</span>
         ),
         sortable: false,
       },
@@ -39,7 +39,7 @@ export const CostTable = () => {
         header: "Type",
         accessorKey: "type",
         cell: (row) => (
-          <span className="font-medium text-gray-900 dark:text-gray-100">
+          <span className="font-medium text-gray-900">
             {row.type}
           </span>
         ),
@@ -52,11 +52,11 @@ export const CostTable = () => {
         cell: (row: level1CostTableType) => {
           const cost = row.costs[month as keyof typeof row.costs];
           return cost ? (
-            <span className="text-gray-900 dark:text-gray-100">
+            <span className="text-gray-900">
               ${cost.toLocaleString()}
             </span>
           ) : (
-            <span className="text-gray-500 dark:text-gray-400">-</span>
+            <span className="text-gray-500">-</span>
           );
         },
         sortable: false,
@@ -79,7 +79,7 @@ export const CostTable = () => {
   return (
     <div className="">
       <div className="flex justify-between items-center">
-        <h2 className="text-base font-semibold text-gray-900 dark:text-gray-100">
+        <h2 className="text-base font-semibold text-gray-900">
           Cost Overview
         </h2>
         <div className="flex items-center space-x-2">

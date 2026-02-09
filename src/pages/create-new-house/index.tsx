@@ -180,8 +180,8 @@ export const CreateNewHouse = () => {
           description="A server can have one or more server houses. A server house is provided by a provider."
         />
 
-        <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 dark:bg-black  dark:border-gray-700 dark:border shadow-t-md rounded-t-md">
-          <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 dark:border-gray-700 dark:border-b rounded-t-md px-3 sm:px-5 py-5">
+        <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100  shadow-t-md rounded-t-md">
+          <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 rounded-t-md px-3 sm:px-5 py-5">
             <div>
               <p className="text-base sm:text-lg text-white">
                 Create Server House
@@ -205,7 +205,7 @@ export const CreateNewHouse = () => {
                   className="flex items-center w-full py-[1px] border-b"
                   key={item.parameterSerial}
                 >
-                  <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right dark:text-white">
+                  <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
                     {item.parameterMandatory && (
                       <span className="text-red-500 ml-1">*</span>
                     )}

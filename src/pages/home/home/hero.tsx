@@ -62,7 +62,7 @@ export function Hero() {
                   opacity={0.1}
                 /> */}
               </div>
-              <p className="text-sm  z-30 md:text-xl dark:text-red-100 text-red-600 mb-4 max-w-2xl mx-auto">
+              <p className="text-sm  z-30 md:text-xl text-red-600 mb-4 max-w-2xl mx-auto">
               Deploy, manage, and optimize across AWS, GCP, Huawei, and more all from a single, powerful console that delivers.
               </p>
               {/* <p className="text-xs  md:text-xl text-red-600 mb-4 max-w-2xl mx-auto">

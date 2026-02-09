@@ -22,7 +22,7 @@ export const LatestChanges = () => {
         <div className="bg-red-50 border border-red-500 text-[10px] rounded-full p-1">
           <AlarmClockCheck className="text-red-800 size-3" />
         </div>
-        <h3 className="text-sm font-semibold text-black dark:text-white">
+        <h3 className="text-sm font-semibold text-black">
           Activity
         </h3>
       </div>
@@ -49,10 +49,10 @@ export const LatestChanges = () => {
                   }`}
                 />
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium dark:text-white truncate">
+                  <p className="text-sm font-medium truncate">
                     {activity.activityLogAction}
                   </p>
-                  <p className="text-xs text-gray-600 w-60   dark:text-gray-400 truncate">
+                  <p className="text-xs text-gray-600 w-60   truncate">
                     {activity.activityLogDescription}
                   </p>
                   <p className="text-[11px] text-gray-500 mt-0.5">

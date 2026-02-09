@@ -1,4 +1,4 @@
-import { imgLinks, svgLinks } from "@/assets/assetLink";
+import { imgLinks,  } from "@/assets/assetLink";
 import {
   IconBrandFacebook,
   IconBrandLinkedin,

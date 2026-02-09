@@ -17,29 +17,29 @@ export const SecurityTable = () => {
       id: `resource-${securityClicked?.id}`,
       content: () => (
         <div className="p-4 space-y-4">
-          <div className="text-xl font-semibold text-gray-800 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 pb-2">
+          <div className="text-xl font-semibold text-gray-800 border-b border-gray-200 pb-2">
             {securityClicked?.category}
           </div>
           <div>
-            <div className="flex gap-4 text-sm text-gray-700 dark:text-gray-300">
+            <div className="flex gap-4 text-sm text-gray-700">
               <div className="flex w-full space-x-2">
-                <span className="font-medium text-sm text-gray-600 dark:text-gray-400">
+                <span className="font-medium text-sm text-gray-600">
                   Instance Type:
                 </span>
                 <div>{securityClicked?.type}</div>
               </div>
             </div>
             <div className="my-3 space-x-2">
-              <span className="font-medium text-sm text-gray-600 dark:text-gray-400">
+              <span className="font-medium text-sm text-gray-600">
                 Risk:
               </span>
               <div
                 className={`inline-block px-2 py-1 rounded-md text-xs font-bold ${
                   securityClicked?.risk === "High"
-                    ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
+                    ? "bg-red-100 text-red-700"
                     : securityClicked?.risk === "Medium"
-                    ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400"
-                    : "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                    ? "bg-purple-100 text-purple-700"
+                    : "bg-green-100 text-green-700"
                 }`}
               >
                 {securityClicked?.risk}
@@ -47,24 +47,24 @@ export const SecurityTable = () => {
             </div>
 
             <div className="">
-              <p className="font-medium text-sm text-gray-600 dark:text-gray-400">
+              <p className="font-medium text-sm text-gray-600">
                 Description:
               </p>
-              <div className="text-xs text-gray-700 dark:text-gray-300">
+              <div className="text-xs text-gray-700">
                 {securityClicked?.description}
               </div>
             </div>
             <div className="sm:col-span-2 mt-2">
-              <span className="font-medium text-sm text-gray-600 dark:text-gray-400">
+              <span className="font-medium text-sm text-gray-600">
                 Recommendation:
               </span>
-              <div className="text-xs text-gray-700 dark:text-gray-300">
+              <div className="text-xs text-gray-700">
                 {securityClicked?.recommendation}
               </div>
             </div>
           </div>
 
-          <div className="flex justify-end pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="flex justify-end pt-4 border-t border-gray-200">
             <Button onClick={() => closeModal()} label="Close" />
           </div>
         </div>
@@ -74,13 +74,13 @@ export const SecurityTable = () => {
   const getRiskClasses = (risk: string) => {
     switch (risk) {
       case "Low":
-        return "bg-green-50 dark:bg-green-900/30 text-green-800 dark:text-green-400 border border-green-500 dark:border-green-400";
+        return "bg-green-50 text-green-800 border border-green-500";
       case "Medium":
-        return "bg-purple-50 dark:bg-purple-900/30 text-purple-800 dark:text-purple-400 border border-purple-500 dark:border-purple-400";
+        return "bg-purple-50 text-purple-800 border border-purple-500";
       case "High":
-        return "bg-red-50 dark:bg-red-900/30 text-red-800 dark:text-red-400 border border-red-500 dark:border-red-400";
+        return "bg-red-50 text-red-800 border border-red-500";
       default:
-        return "bg-gray-50 dark:bg-gray-800 text-gray-800 dark:text-gray-200 border border-gray-300 dark:border-gray-600";
+        return "bg-gray-50 text-gray-800 border border-gray-300";
     }
   };
 
@@ -101,7 +101,7 @@ export const SecurityTable = () => {
       header: "ID",
       accessorKey: "id",
       cell: (row) => (
-        <span className="text-gray-900 dark:text-gray-100">{row.id}</span>
+        <span className="text-gray-900">{row.id}</span>
       ),
       sortable: true,
     },
@@ -110,7 +110,7 @@ export const SecurityTable = () => {
       header: "Category",
       accessorKey: "category",
       cell: (row) => (
-        <span className="text-gray-900 dark:text-gray-100">{row.category}</span>
+        <span className="text-gray-900">{row.category}</span>
       ),
       sortable: true,
     },
@@ -119,7 +119,7 @@ export const SecurityTable = () => {
       header: "Type",
       accessorKey: "type",
       cell: (row) => (
-        <span className="text-gray-900 dark:text-gray-100">{row.type}</span>
+        <span className="text-gray-900">{row.type}</span>
       ),
       sortable: true,
     },
@@ -143,7 +143,7 @@ export const SecurityTable = () => {
       header: "Description",
       accessorKey: "description",
       cell: (row) => (
-        <span className="text-gray-700 dark:text-gray-300 line-clamp-2">
+        <span className="text-gray-700 line-clamp-2">
           {row.description}
         </span>
       ),

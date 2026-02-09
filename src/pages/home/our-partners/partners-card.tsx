@@ -36,7 +36,7 @@ const projects = [
 
 export function PartnersCard() {
   return (
-    <div className="dark:bg-black justify-center items-center flex flex-col mx-auto px-8 py-10 ">
+    <div className="justify-center items-center flex flex-col mx-auto px-8 py-10 ">
       <Badge
         className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium text-red-500"
         variant="secondary"
@@ -44,7 +44,7 @@ export function PartnersCard() {
         Trusted Cloud Partners
       </Badge>
 
-      <p className="text-black dark:text-gray-300 text-center md:text-3xl text-xl lg:text-4xl leading-[56px] font-bold">
+      <p className="text-black text-center md:text-3xl text-xl lg:text-4xl leading-[56px] font-bold">
         Power your infrastructure with the world’s leading cloud platforms.
       </p>
 

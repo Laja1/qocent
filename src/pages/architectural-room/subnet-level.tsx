@@ -55,7 +55,7 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
         <div className="p-2  w-full max-w-md">
           {/* Header */}
           <div className="mb-4">
-            <h2 className="text-xl font-semibold dark:text-gray-300 text-gray-900">
+            <h2 className="text-xl font-semibold text-gray-900">
               {resource.name || "Resource Detail"}
             </h2>
             <p className="text-xs text-gray-500">
@@ -67,19 +67,19 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
           <div className="space-y-3 text-xs">
             <div className="flex justify-between border-b pb-2">
               <span className="text-gray-500">Type</span>
-              <span className="font-medium text-gray-800 dark:text-gray-300">
+              <span className="font-medium text-gray-800">
                 {resource.resourceType}
               </span>
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-gray-500">Bill</span>
-              <span className="font-medium text-gray-800 dark:text-gray-300">
+              <span className="font-medium text-gray-800">
                 {resource.resourceBill}
               </span>
             </div>
             <div className="flex justify-between border-b pb-2">
               <span className="text-gray-500">Created At</span>
-              <span className="font-medium text-gray-800 dark:text-gray-300">
+              <span className="font-medium text-gray-800">
                 {resource.resourceCreatedAt}
               </span>
             </div>
@@ -137,7 +137,7 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
       >
         <p className="items-center text-[10px] flex p-1 gap-1">
           <span>{icon}</span>
-          <span className="lg:flex md:flex hidden dark:text-black">
+          <span className="lg:flex md:flex hidden">
             {serverRoom.roomCode}
           </span>
         </p>

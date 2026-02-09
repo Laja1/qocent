@@ -4,10 +4,10 @@ import { EyeIcon, TargetIcon } from "lucide-react";
 export const Vision = () => {
   return (
     <div>
-      <section className="w-full dark:bg-black  lg:pt-20 md:py-10 pt-10  items-center  justify-center flex flex-col px-5">
+      <section className="w-full  lg:pt-20 md:py-10 pt-10  items-center  justify-center flex flex-col px-5">
         <div className="flex-col text-left mb-10 max-w-4xl ">
           <p className="text-xs md:text-sm lg:text-base text-left text-muted-foreground leading-relaxed mb-6">
-            <span className="font-brfirma-bold text-black dark:text-white underline">Qocent</span> 
+            <span className="font-brfirma-bold text-black underline">Qocent</span> 
             is your unified gateway to multi-cloud infrastructure management.
 Instead of juggling separate consoles for AWS, Azure, GCP, and Huawei,
 manage everything from one powerful platform.

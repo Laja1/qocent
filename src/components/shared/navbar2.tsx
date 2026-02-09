@@ -104,7 +104,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
             transition={{ duration: 0.2, ease: "easeOut" }}
             className="fixed top-14 left-2 right-2 z-40 lg:hidden"
           >
-            <div className="bg-white rounded-xs mt-2 shadow-2xl border dark:border-0 border-gray-200 overflow-hidden">
+            <div className="bg-white rounded-xs mt-2 shadow-2xl border border-gray-200 overflow-hidden">
               {/* Navigation Links */}
               <nav className="py-2" aria-label="Mobile Navigation">
                 {navRoutes.map((item, idx) => (

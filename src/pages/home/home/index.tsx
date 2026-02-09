@@ -40,7 +40,7 @@ const Home = () => {
   };
 
   return (
-    <div className="dark:bg-black h-full w-full">
+    <div className="h-full w-full">
       <Seo
         title="Qocent - One Window, All Cloud"
         description="Deploy, manage, and optimize across AWS, GCP, Huawei, and more all from a single, powerful console that delivers speed, savings, and simplicity without compromise."

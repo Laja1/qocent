@@ -45,7 +45,7 @@ export const Finops = () => {
                 <span className="text-red-600">Cloud Costs</span>
               </h1>
 
-              <p className="text-lg dark:text-gray-300 light:text-gray-600 leading-relaxed">
+              <p className="text-lg text-gray-600 leading-relaxed">
                 Qocent FinOps helps you monitor, analyze, and optimize your
                 cloud spending across services and regions — all in one place.
                 Make data-driven decisions and reduce waste effortlessly.
@@ -55,7 +55,7 @@ export const Finops = () => {
                 {benefits.map((benefit, index) => (
                   <div key={index} className="flex items-center gap-3">
                     <CheckCircle2 className="w-5 h-5 text-green-600 flex-shrink-0" />
-                    <span className="dark:text-gray-300 light:text-gray-600">
+                    <span className="text-gray-600">
                       {benefit}
                     </span>
                   </div>
@@ -77,10 +77,10 @@ export const Finops = () => {
                 {metrics.map((metric, index) => (
                   <div key={index} className="p-4">
                     <div className="space-y-1">
-                      <p className="text-xs dark:text-gray-300 light:text-gray-600 font-medium">
+                      <p className="text-xs light:text-gray-600 font-medium">
                         {metric.label}
                       </p>
-                      <p className="text-2xl font-bold dark:text-white light:text-gray-900 ">
+                      <p className="text-2xl font-bold light:text-gray-900 ">
                         {metric.value}
                       </p>
                       <p
@@ -101,7 +101,7 @@ export const Finops = () => {
 
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="font-semibold dark:text-gray-300 light:text-gray-900">
+                  <h3 className="font-semibold light:text-gray-900">
                     Spending Trend
                   </h3>
                   <span className="text-xs text-gray-600">Last 30 days</span>

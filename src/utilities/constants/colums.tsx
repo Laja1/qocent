@@ -186,7 +186,7 @@ export const serverSiteColumns: ColumnDef<Account>[] = [
   //   accessorKey: "siteBill",
   //   headerClassName: "text-right",
   //   cell: (row) => (
-  //     <span className="block text-green-700 dark:text-green-400 text-right">
+  //     <span className="block text-green-700 text-right">
   //       {row.siteBill}
   //     </span>
   //   ),

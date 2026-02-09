@@ -48,7 +48,7 @@ export default function NavbarDemo({
             // onClick={() => navigate("signin")}
             onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
             variant="secondary"
-            className="text-red-600 dark:text-red-600"
+            className="text-red-600"
           >
             {/* Join Waitlist */}Book a demo
           </NavbarButton>
@@ -81,7 +81,7 @@ export default function NavbarDemo({
                 key={`mobile-link-${idx}`}
                 to={item.link}
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="relative text-neutral-600 dark:text-neutral-300 hover:text-neutral-800 dark:hover:text-neutral-100 transition-colors"
+                className="relative text-neutral-600 hover:text-neutral-800 transition-colors"
               >
                 <span className="block">{item.name}</span>
               </Link>
@@ -95,7 +95,7 @@ export default function NavbarDemo({
                   // onClick={() => navigate("signin")}
                   onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
                   variant="primary"
-                 className="text-red-600 dark:text-red-600 w-full"
+                 className="text-red-600 w-full"
                 >
                   {/* Join Waitlist */}Book a demo
                 </NavbarButton>

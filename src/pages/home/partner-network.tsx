@@ -3,7 +3,7 @@ import { Globe, Handshake, Headset } from "lucide-react";
 
 export function PartnerNetwork() {
   return (
-    <div className="dark:bg-black lg:py-20 flex flex-col items-center w-full mx-auto px-8 py-10">
+    <div className="lg:py-20 flex flex-col items-center w-full mx-auto px-8 py-10">
       <Badge
         className="mb-4 rounded-full px-4 py-1.5 text-xs lg:text-sm font-medium text-red-600"
         variant="secondary"
@@ -12,10 +12,10 @@ export function PartnerNetwork() {
       </Badge>
 
       <div className="max-w-4xl text-center">
-        <p className="text-black dark:text-gray-300 text-center md:text-3xl text-xl lg:text-5xl leading-[56px] font-bold">
+        <p className="text-black text-center md:text-3xl text-xl lg:text-5xl leading-[56px] font-bold">
           Partner Network & Support
         </p>
-        <p className="mt-4 md:text-base text-sm lg:text-lg leading-relaxed text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+        <p className="mt-4 md:text-base text-sm lg:text-lg leading-relaxed text-gray-600 max-w-2xl mx-auto">
           From ambitious startups to global enterprises, Qocent empowers you
           with the performance, scalability, and freedom to innovate seamlessly
           across any cloud environment.
@@ -50,13 +50,13 @@ export function PartnerNetwork() {
         ].map(({ icon, title, text }, i) => (
           <div
             key={i}
-            className="text-center border border-gray-200 dark:border-neutral-700 bg-white dark:bg-neutral-900 rounded-xl hover:shadow-lg transition-shadow duration-300 w-[300px] p-8 flex flex-col justify-center items-center gap-3"
+            className="text-center border border-gray-200 bg-white rounded-xl hover:shadow-lg transition-shadow duration-300 w-[300px] p-8 flex flex-col justify-center items-center gap-3"
           >
-            <div className="text-red-600 dark:text-red-500">{icon}</div>
-            <p className="font-bold uppercase text-gray-900 dark:text-gray-200">
+            <div className="text-red-600">{icon}</div>
+            <p className="font-bold uppercase text-gray-900">
               {title}
             </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+            <p className="text-sm text-gray-600 leading-relaxed">
               {text}
             </p>
           </div>
