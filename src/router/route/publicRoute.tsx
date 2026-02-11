@@ -1,16 +1,23 @@
+import AboutUs from "@/pages/home/about-us";
+import Documentation from "@/pages/home/documentation";
+import ExploreServices from "@/pages/home/explore-services";
+import Finops from "@/pages/home/finops";
+import Home from "@/pages/home/home";
+import Partners from "@/pages/home/our-partners";
 import { RouteConstant } from "../routes";
 import type { RouteType } from "./type";
-import ExploreServices from "@/pages/home/explore-services";
-import Documentation from "@/pages/home/documentation";
-import AboutUs from "@/pages/home/about-us";
-import Partners from "@/pages/home/our-partners";
-import Home from "@/pages/home/home";
 
 export const publicRoute: RouteType[] = [
   {
     path: RouteConstant.public.home.path,
     name: RouteConstant.public.home.name,
     component: <Home />,
+    metadata: { isAuthenticated: false },
+  },
+  {
+    path: RouteConstant.public.finops.path,
+    name: RouteConstant.public.finops.name,
+    component: <Finops />,
     metadata: { isAuthenticated: false },
   },
   {
@@ -37,5 +44,5 @@ export const publicRoute: RouteType[] = [
     component: <Partners />,
     metadata: { isAuthenticated: false },
   },
- 
+
 ];

@@ -1,24 +1,28 @@
 export const navRoutes = [
   {
-    link: "/explore",
-    name: "Professional Services",
+    id: "about-us",
+    link: "/about-us",
+    name: "About Us",
   },
-
-  // {
-  //   id: "projects",
-  //   link: "/projects",
-  //   name: "Projects",
-  // },
-
+  {
+    id: "finops",
+    link: "/finops",
+    name: "FinOps",
+  },
+  {
+    id: "pricing",
+    link: "/pricing",
+    name: "Pricing",
+  },
   {
     id: "docs",
     link: "/docs",
     name: "Documentation",
   },
   {
-    id: "about-us",
-    link: "/about-us",
-    name: "About Us",
+    id: "contact-us",
+    link: "/contact-us",
+    name: "Contact Us",
   },
 ];
 
@@ -28,9 +32,21 @@ export const RouteConstant = {
       path: "/",
       name: "home",
     },
+    finops: {
+      path: "/finops",
+      name: "FinOps",
+    },
+    pricing: {
+      path: "/pricing",
+      name: "Pricing",
+    },
     explore: {
       path: "/explore",
-      name: "explore",
+      name: "Explore",
+    },
+    contactUs: {
+      path: "/finops",
+      name: "FinOps",
     },
     documentation: {
       path: "/docs",

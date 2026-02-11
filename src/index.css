@@ -4,6 +4,9 @@
 
 @import "tw-animate-css";
 
+/* Design System tokens — inert unless <html data-ds="on"> is set */
+@import "./design-system/tokens.css";
+
 @theme {
   --font-aeonikpro: AeonikPro, "san-seriff";
   --font-brfirma: Br firma, "san-seriff";
@@ -11,7 +14,7 @@
   --font-strawford: Strawford, "san-seriff";
   --color-background: #edf2ef;
   --color-sidebar: #f7f5f1;
-  --color-primary: "#edf2ef";
+  --color-primary: #edf2ef;
 }
 
 /* Optional: Apply base light styles for body */
@@ -19,6 +22,10 @@
   body {
     @apply bg-white text-black;
   }
+
+  /* * {
+    outline: 2px solid red;
+  } */
 }
 /* Hide arrows for Firefox */
 input[type="number"] {
@@ -150,12 +157,6 @@ input[type="number"] {
 body {
   background-color: #fff;
   font-family: var(--font-brfirma);
-}
-
-@layer base {
-  body {
-    @apply bg-white text-black;
-  }
 }
 
 form {

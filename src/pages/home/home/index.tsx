@@ -1,13 +1,13 @@
 import { Footer } from "@/components/shared";
-import Seo from "@/components/shared/seo";
 import Navbar from "@/components/shared/navbar2";
-import { ProblemWeSolve } from "./problem-solve";
-import { Hero } from "./hero";
-import { Services } from "../services";
+import Seo from "@/components/shared/seo";
+import Comparison from "../services";
+import ElevateMessage from "./elevate_message";
 import { Faq } from "./faq";
-import { PartnerNetwork } from "../partner-network";
+import Hero from "./hero";
+import HowItWorksSteps from "./how-it";
+import { ProblemWeSolve } from "./problem-solve";
 import QocentSolution from "./solution";
-import HowItWorks from "./how-it";
 
 const Home = () => {
   const websiteSchema = {
@@ -47,18 +47,16 @@ const Home = () => {
         canonical="https://qocent.com"
         schemaMarkup={websiteSchema}
       />
+      {/* <div className="h-[300vh]"></div> */}
 
-      {/* <NavbarDemo> */}
       <Navbar />
       <Hero />
       <ProblemWeSolve />
-      {/* <InfiniteCardCarousel /> */}
-    <QocentSolution />
-    <HowItWorks />
-
-      <Services />
+      <QocentSolution />
+      <HowItWorksSteps />
+      <Comparison />
       <Faq />
-      <PartnerNetwork />
+      <ElevateMessage />
       <Footer />
     </div>
   );

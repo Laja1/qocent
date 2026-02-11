@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Button } from "../ui/button";
-import { X, Menu } from "lucide-react";
 import { svgLinks } from "@/assets/assetLink";
-import { Link, useNavigate } from "react-router-dom";
 import { navRoutes, RouteConstant } from "@/router/routes";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { Menu, X } from "lucide-react";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Button } from "../ui/button";
 
 export const Logo = () => {
   return (
@@ -47,7 +47,7 @@ const DesktopNavigation: React.FC = () => {
               onMouseEnter={() => setHovered(idx)}
               onMouseLeave={() => setHovered(null)}
               onClick={onItemClick}
-              className="relative text-xs hover:font-bold  hover:text-sm hover:text-red-500 hover:px-2 py-2 text-black hover:text-gray-800 transition-colors"
+              className="relative text-xs hover:font-bold  hover:text-sm hover:px-2 py-2 text-black hover:text-gray-800 transition-colors"
               aria-label={`Navigate to ${item.name}`}
             >
               {hovered === idx && (
@@ -60,16 +60,16 @@ const DesktopNavigation: React.FC = () => {
               <span className="relative z-10">{item.name}</span>
             </Link>
           ))}
-          
+
         </div>
         <Button
-            size="sm"
-            onClick={() => navigate(RouteConstant.auth.signin.path)}
-            className="hover:text-black cursor-pointer hover:bg-gray-100 text-xs"
-            aria-label="Sign in to Qocent"
-          >
-            Login
-          </Button>
+          size="sm"
+          onClick={() => navigate(RouteConstant.auth.signin.path)}
+          className="hover:text-black cursor-pointer hover:bg-gray-100 text-xs"
+          aria-label="Sign in to Qocent"
+        >
+          Login
+        </Button>
       </div>
     </nav>
   );

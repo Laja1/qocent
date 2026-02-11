@@ -1,10 +1,26 @@
-import { svgLinks } from "@/assets/assetLink"
+import { svgLinks } from "@/assets/assetLink";
+import { InfiniteSlider } from "./home/solution";
 
 export const TrustedBy = () => {
-    const logos =[svgLinks.univaciti,svgLinks.qoonity,svgLinks.qucoon,svgLinks.rubies]
+  const logos = [svgLinks.univaciti, svgLinks.tymer, svgLinks.qoonity, svgLinks.qucoon, svgLinks.rubies,]
+
   return (
-    <div className="items-center flex flex-col justify-center mt-10"><p>Trusted by big brands around the world</p>
-    <div className="flex flex-row gap-5 mt-2">{logos.map((logo)=><img src={logo} alt="logo" />)}</div>
+    <div className="">
+      <p>Trusted by big brands around the world</p>
+
+      <InfiniteSlider
+        items={logos}
+        itemWidth={200}
+        itemHeight={60}
+        duration={20}
+        renderItem={(logo) => {
+          return (
+            <div className="">
+              <img src={logo} alt="logo" />
+            </div>
+          );
+        }}
+      />
     </div>
   )
 }

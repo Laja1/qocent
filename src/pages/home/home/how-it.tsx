@@ -1,6 +1,7 @@
 import { imgLinks } from "@/assets/assetLink";
-import { ChartIcon } from "@/assets/icons/chart";
-import { Badge } from "@/components/ui/badge";
+import { HeroHeader } from "@/components/shared/hero-header";
+import { LogIn } from "lucide-react";
+import CustomSection from "./custom-section";
 
 const TEXTS = {
   badge: 'How It works',
@@ -15,36 +16,27 @@ const TEXTS = {
 };
 
 export default function HowItWorks() {
-    return (
-      <section className="relative py-16" style={{ backgroundImage: `url(${imgLinks.sectionProject})`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
-      <div className="flex flex-col items-center text-center max-w-3xl mx-auto px-4 relative z-10">
-     
-        <Badge
-          variant="secondary"
-          className="mb-4 rounded-full px-4 py-1.5 text-xs font-medium lg:text-sm"
-        >
-       <ChartIcon /> {TEXTS.badge}
-        </Badge>
- 
-
-      {/* Title with divider lines */}
-      <div className="flex items-center gap-4 mb-10 w-full">
-        <span className="hidden sm:block h-1 rounded-full  flex-1 bg-[#EBEAF6]" />
-        <h2 className=" text-center text-4xl font-semibold">
-          {TEXTS.title.prefix} <span className="text-red-600">{TEXTS.title.chaos}</span> {TEXTS.title.middle} <span className="text-red-600">{TEXTS.title.control}</span> {TEXTS.title.suffix}
+  return (
+    <CustomSection
+      className="relative py-16 px-6 md:px-20 max-w-7xl mx-auto w-full space-y-2"
+      style={{ backgroundImage: `url(${imgLinks.sectionProject})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+    >
+      <HeroHeader
+        badgeText="Signup"
+        icon={<LogIn className="text-red-500 mr-1" />}
+        hideLine={true}
+      >
+        <h2 className="self-center my-6 text-center text-4xl">
+          From <span className="font-semibold text-red-600">Chaos</span> to <span className="font-black text-red-600">Control</span> in 3 Steps
         </h2>
-        <span className="hidden sm:block h-1 rounded-full flex-1 bg-[#EBEAF6]" />
-      </div>
+      </HeroHeader>
 
-      
-    </div>
-        <div className="mx-auto max-w-7xl px-6">
-         <div className="gap-2 space-y-3"> {TEXTS.steps.map((item, index)=><div key={index} className="border items-center flex justify-center py-2 border-[#FFD5DC]  rounded-md shadow-md">{item}</div>)}
-         </div>  
-  
-     
-        </div>
-      </section>
-    );
-  }
-  
+      <p className="w-full text-center">Our Sign Up process is simplified to ensure you focus on what makes your business thrive</p>
+
+      <ul className="mx-auto max-w-3xl space-y-8 mt-18">
+        {TEXTS.steps.map((item, index) => <li key={index} className="border items-center flex justify-center py-4 border-[#FFD5DC]  rounded-md shadow-md">{item}</li>)}
+      </ul>
+    </CustomSection>
+  );
+}
+

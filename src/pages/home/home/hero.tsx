@@ -1,125 +1,166 @@
-// import { ModalConstant } from "@/components/shared/modal/register";
-import { imgLinks } from "@/assets/assetLink";
+import { imgLinks, svgLinks } from "@/assets/assetLink";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ArrowDownRight } from "lucide-react";
-// import NiceModal from "@ebay/nice-modal-react";
 import { motion } from "motion/react";
-import { TrustedBy } from "../trusted-by";
-// import { useNavigate } from "react-router-dom";
+import type { ReactNode } from "react";
+import { InfiniteSlider } from "./solution";
 
-export function Hero() {
-  // const navigate = useNavigate();
+interface HeroProps {
+  badge?: string;
+  title?: string;
+  subtitle?: string;
+  description?: string;
+  buttonText?: string;
+  buttonIcon?: ReactNode;
+  onButtonClick?: () => void;
+  showButton?: boolean;
+  logos?: string[];
+  logoSliderDuration?: number;
+  trustedByText?: string;
+  showTrustedBy?: boolean;
+  backgroundImages?: {
+    bgLayer?: string;
+    whiteOverlay?: string;
+    container?: string;
+    bgRay?: string;
+  };
+  className?: string;
+  children?: ReactNode;
+}
+
+const defaultLogos = [
+  svgLinks.univaciti,
+  svgLinks.tymer,
+  svgLinks.qoonity,
+  svgLinks.qucoon,
+  svgLinks.rubies,
+];
+
+
+export default function Hero() {
   return (
-    <div className="relative h-screen w-full overflow-hidden">
-      <div><img src={imgLinks.bgLayer} className="absolute top-0 left-0 w-full h-full object-cover"/></div>
-      <div><img src={imgLinks.whiteOverlay} className="absolute top-0 left-0 w-full h-full object-cover"/></div>
-      <div><img src={imgLinks.container} className="absolute bottom-0 left-0 w-full h-full object-cover z-20"/></div>
-      
-      <div><img src={imgLinks.bgRay} className="absolute top-0 left-0 w-full h-full object-cover"/></div>
+    <HeroComponent badge="One Window, All Cloud"
+      title="One Console for All"
+      subtitle="Cloud Solutions"
+      description="Deploy, manage, and optimize across AWS, GCP, Huawei, and more all from a single, powerful console that delivers."
+      buttonText="Learn More"
+      buttonIcon={<ArrowDownRight />}
+      showButton={true}
+      logos={defaultLogos}
+      logoSliderDuration={20}
+      className="h-full"
+      trustedByText="Trusted by big brands around the world"
+      showTrustedBy={true} />
+  )
+}
 
 
-      <div className="relative z-10 w-full h-full flex items-center justify-center px-5">
-        <div className=" w-full">
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="text-center mx-auto relative w-full"
-          >
-            <div className=" items-center relative flex flex-col justify-center  w-full">
-              <Badge
-                className="mb-4 rounded-full px-4 py-1.5 text-xs text-red-600  lg:text-sm font-medium"
-                variant="secondary"
-              >
-                One Window, All Cloud
-              </Badge>
-                <h1 className="text-4xl md:text-5xl lg:text-[80px] font-bold  tracking-tight mb-6 bg-clip-text text-[#706B6B]">
-              One Console for All 
-              </h1>
-              <h1 className="text-4xl md:text-5xl lg:text-[80px] font-bold  tracking-tight mb-6 bg-clip-text text-[#590909]">
-              Cloud Solutions
-              </h1>
-              {/* <p className="text-sm  md:text-xl text-white mb-8 max-w-2xl mx-auto">
-              Enterprise-grade infrastructure without the complexity. Deploy,
-              scale, and manage your applications with unprecedented simplicity.{" "}
-            </p> */}
-              <div
-                style={{
-                  position: "absolute",
-                  height: "500px",
-                  overflow: "hidden",
-                }}
-              >
-                {/* <RippleGrid
-                  enableRainbow={false}
-                  gridColor={isDark ? "#fff" : "#000"}
-                  rippleIntensity={0.05}
-                  gridSize={10}
-                  gridThickness={15}
-                  mouseInteraction={true}
-                  mouseInteractionRadius={1.2}
-                  opacity={0.1}
-                /> */}
-              </div>
-              <p className="text-sm  z-30 md:text-xl text-red-600 mb-4 max-w-2xl mx-auto">
-              Deploy, manage, and optimize across AWS, GCP, Huawei, and more all from a single, powerful console that delivers.
-              </p>
-              {/* <p className="text-xs  md:text-xl text-red-600 mb-4 max-w-2xl mx-auto">
-                The power of three clouds in one.
-              </p> */}
-              <div className="flex flex-col   sm:flex-row gap-4 items-center justify-center">
-                <div className="flex gap-1 items-center  text-xs">
-                 <Button><ArrowDownRight />Get started</Button>
-                  {/* <div
-                    onClick={() => NiceModal.show(ModalConstant.BookDemoModal)}
-                    className="border border-white bg-white text-black text-xs flex p-2 "
-                  >
-                    Book a demo
-                  </div> */}
-                </div>
-              </div>
-            </div>
-            {/* <div className="py-20"/> */}
-            {/* <div className=" w-full items-center justify-center flex lg:-mt-80 md:-mt-40">
-              <img src={svgLinks.hero} />
-            </div> */}
-            {/* <div className="flex items-center justify-center gap-4 mt-6 text-xs text-muted-foreground">
-              <div className="flex items-center gap-1">
-                <Check className="size-4 text-white" />
-                <span>No credit card</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Check className="size-4 text-white" />
-                <span>14-day trial</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Check className="size-4 text-white" />
-                <span>Cancel anytime</span>
-              </div>
-            </div> */}
-          </motion.div>
-          {/* <motion.div
-          initial={{ opacity: 0, y: 40 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.7, delay: 0.2 }}
-          className="relative mx-auto bg-white rounded-xl p-2  max-w-7xl"
-        >
-          <div className="rounded-lg overflow-hidden shadow-2xl ">
-            <div className="w-full aspect-video">
-              <iframe
-                src="https://www.youtube.com/embed/7T7SyMZihwo?rel=0"
-                title="YouTube video player"
-                className="w-full h-full"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              ></iframe>
-            </div>
-          </div>
-        </motion.div> */}
-        <TrustedBy />
-        </div>
+export function HeroComponent({
+  badge,
+  title,
+  subtitle,
+  description,
+  buttonText,
+  buttonIcon,
+  onButtonClick,
+  showButton,
+  logos = defaultLogos,
+  logoSliderDuration,
+  trustedByText,
+  showTrustedBy,
+  backgroundImages,
+  className = "",
+  children,
+}: HeroProps) {
+  const bgImages = {
+    bgLayer: backgroundImages?.bgLayer ?? imgLinks.bgLayer,
+    whiteOverlay: backgroundImages?.whiteOverlay ?? imgLinks.whiteOverlay,
+    container: backgroundImages?.container ?? imgLinks.container,
+    bgRay: backgroundImages?.bgRay ?? imgLinks.bgRay,
+  };
+
+  return (
+    <main className="relative min-h-[60vh] mx-auto w-full overflow-hidden px-6 md:px-20">
+      <div>
+        <img src={bgImages.bgLayer} className="absolute top-0 left-0 w-full h-full object-cover" alt="" />
       </div>
-    </div>
+      <div>
+        <img src={bgImages.whiteOverlay} className="absolute top-0 left-0 w-full h-full object-cover" alt="" />
+      </div>
+      <div>
+        <img src={bgImages.container} className="absolute bottom-0 left-0 w-full h-full object-cover z-20" alt="" />
+      </div>
+      <div>
+        <img src={bgImages.bgRay} className="absolute top-0 left-0 w-full h-full object-cover" alt="" />
+      </div>
+
+      <div className={`max-w-7xl mx-auto grid place-content-center relative z-10 w-full ${className}`}>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mx-auto relative w-full items-center flex flex-col justify-center"
+        >
+          {badge && (
+            <Badge
+              className="mb-4 rounded-full px-4 py-1.5 text-xs text-red-600 lg:text-sm font-medium"
+              variant="secondary"
+            >
+              {badge}
+            </Badge>
+          )}
+
+          {title && (
+            <h1 className="text-4xl md:text-5xl lg:text-[80px] font-bold tracking-tight mb-6 bg-clip-text text-[#706B6B]">
+              {title}
+            </h1>
+          )}
+
+          {subtitle && (
+            <h1 className="text-4xl md:text-5xl lg:text-[80px] font-bold tracking-tight mb-6 bg-clip-text text-[#590909]">
+              {subtitle}
+            </h1>
+          )}
+
+          {description && (
+            <p className="text-sm z-30 md:text-xl text-gray-600 mb-4 max-w-3xl mx-auto">
+              {description}
+            </p>
+          )}
+
+          {showButton && (
+            <div className="flex gap-1 mt-12 items-center text-xs">
+              <Button onClick={onButtonClick}>
+                {buttonIcon} {buttonText}
+              </Button>
+            </div>
+          )}
+        </motion.div>
+
+        {showTrustedBy && logos.length > 0 && (
+          <>
+            <p className="mb-6 mt-14 mx-auto w-full grid place-content-center">
+              {trustedByText}
+            </p>
+
+            <InfiniteSlider
+              items={logos}
+              itemWidth={250}
+              itemHeight={60}
+              duration={logoSliderDuration}
+              renderItem={(logo) => (
+                <div>
+                  <img src={logo} alt="logo" />
+                </div>
+              )}
+            />
+          </>
+        )}
+
+
+      </div>
+      {children}
+    </main>
   );
 }
