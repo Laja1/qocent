@@ -14,7 +14,10 @@ export function AboutHero() {
             showButton={true}
             className='h-3/5 md:h-4/5 2xl:h-3/5'
         >
-            <VideoSection />
+            {/* <VideoSection /> */}
+            <div>
+                <img src="./images/blurwhite.png" className="absolute bottom-0 left-0 w-full h-26 object-fill" alt="" />
+            </div>
         </HeroComponent>
     )
 }

@@ -1,7 +1,7 @@
 import { imgLinks } from "@/assets/assetLink";
 import { HeroHeader } from "@/components/shared/hero-header";
 import { LogIn } from "lucide-react";
-import CustomSection from "./custom-section";
+import CustomSection from "../components/custom-section";
 
 const TEXTS = {
   badge: 'How It works',
@@ -19,8 +19,9 @@ export default function HowItWorks() {
   return (
     <CustomSection
       className="relative py-16 px-6 md:px-20 max-w-7xl mx-auto w-full space-y-2"
-      style={{ backgroundImage: `url(${imgLinks.sectionProject})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
+      style={{ backgroundImage: `url(${imgLinks.successStories})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
     >
+
       <HeroHeader
         badgeText="Signup"
         icon={<LogIn className="text-red-500 mr-1" />}
@@ -34,7 +35,7 @@ export default function HowItWorks() {
       <p className="w-full text-center">Our Sign Up process is simplified to ensure you focus on what makes your business thrive</p>
 
       <ul className="mx-auto max-w-3xl space-y-8 mt-18">
-        {TEXTS.steps.map((item, index) => <li key={index} className="border items-center flex justify-center py-4 border-[#FFD5DC]  rounded-md shadow-md">{item}</li>)}
+        {TEXTS.steps.map((item, index) => <li key={index} className="border items-center flex justify-center py-4 border-red-500 rounded-md shadow-xs">{item}</li>)}
       </ul>
     </CustomSection>
   );

@@ -2,7 +2,7 @@ import { imgLinks } from "@/assets/assetLink";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Percent } from "lucide-react";
-import CustomSection from "../home/custom-section";
+import CustomSection from "../components/custom-section";
 
 const team = [
     {

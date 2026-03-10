@@ -28,7 +28,7 @@ export const imgLinks = {
   bgRay: "/images/bg-ray.png",
   sectionProject: "/images/section-project.png",
   whiteOverlay: "/images/white-overlay.png",
-
+  dashboard: "/images/dashboard.png",
   aws: "images/aws.png",
 };
 
