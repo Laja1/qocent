@@ -133,7 +133,7 @@ const Docs = () => {
                 <li key={provider.name} className="flex items-center gap-3 text-sm">
                   <span
                     className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${
-                      provider.available ? "bg-green-500" : "bg-gray-300"
+                      provider.available ? "bg-red-600" : "bg-gray-300"
                     }`}
                   />
                   <span className={provider.available ? "text-gray-700" : "text-gray-400"}>

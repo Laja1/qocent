@@ -68,7 +68,7 @@ export const EverythingYouNeed = () => {
         <HowItWorksCard
           icon={<img src={svgLinks.threed2} className="size-40" />}
           title="Code Deployment"
-          bgColor="bg-green-100"
+          bgColor="bg-red-50"
           description="Seamlessly spin up schemas and data layers for your application."
           subTitle="Deployed via AWS Lambda and API Gateway"
         />

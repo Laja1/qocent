@@ -10,11 +10,6 @@ export const navRoutes = [
     name: "FinOps",
   },
   {
-    id: "pricing",
-    link: "/pricing",
-    name: "Pricing",
-  },
-  {
     id: "docs",
     link: "/docs",
     name: "Documentation",
@@ -52,6 +47,13 @@ export const RouteConstant = {
       path: "/docs",
       name: "documentation",
     },
+    docsOverview: { path: "/docs/overview", name: "Overview" },
+    docsTerminologies: { path: "/docs/terminologies", name: "Terminologies" },
+    docsQuickStart: { path: "/docs/quick-start", name: "Quick Start Guide" },
+    docsServerSite: { path: "/docs/server-site", name: "Creating a Server Site" },
+    docsServerHouse: { path: "/docs/server-house", name: "Creating a Server House" },
+    docsServerRoom: { path: "/docs/server-room", name: "Creating a Server Room" },
+    docsInvitingAccounts: { path: "/docs/inviting-accounts", name: "Inviting Accounts" },
     aboutUs: {
       path: "/about-us",
       name: "About Us",

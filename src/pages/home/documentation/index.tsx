@@ -3,7 +3,7 @@ import { Outlet } from "react-router-dom";
 import { Footer } from "@/components/shared";
 import Navbar from "@/components/shared/navbar2";
 import Seo from "@/components/shared/seo";
-import { Hero } from "./hero";
+import Hero from "./doc-hero";
 import DocsSidebar from "./DocsSidebar";
 
 const Documentation = () => {

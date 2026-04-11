@@ -14,15 +14,14 @@ import CustomSection from "../components/custom-section";
 export const Faq = () => {
   return (
     <CustomSection
-      className="w-full mt-12 relative px-6 md:px-20 max-w-7xl mx-auto mb-8"
+      className="w-full mt-12 relative px- md:px-20 max-w-7xl mx-auto mb-8"
     >
       <img src={imgLinks.successStories} className="absolute -z-20 top-0 left-0 w-full h-full object-cover" />
+      <div className="absolute -z-10 top-0 left-0 w-full h-40 bg-gradient-to-b from-white to-transparent" />
 
-      <div className="flex space-y-4 md:space-y-0 flex-col md:flex-row justify-between items-center w-full">
-        <h3 className="font-bold text-3xl">Questions answered</h3>
-
+      <div className="flex flex-col items-center text-center w-full gap-4">
+        <h3 className="font-bold text-4xl">Questions Answered</h3>
         <p className="max-w-md text-center">We're here to help you and solve objections. Find answers to the most common questions below.</p>
-
         <Button className="bg-black text-white">Contact Sales Now</Button>
       </div>
 
@@ -31,6 +30,7 @@ export const Faq = () => {
           {[
             {
               question: "How does Qocent pricing work?",
+
               answer:
                 `(Once the pricing model has been decided upon, we’ll add that.)`,
             },
@@ -76,9 +76,9 @@ management risk-free.`,
             >
               <AccordionItem
                 value={`item-${i}`}
-                className="border borderImp border-red-500 px-6 rounded-md"
+                className="border border-red-400 px-6 rounded-md last:border-b"
               >
-                <AccordionTrigger className="text-left font-bold lg:text-md text-sm hover:no-underline">
+                <AccordionTrigger className="text-left font-bold lg:text-md text-sm hover:no-underline border-b border-red-200">
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground text-left lg:text-md text-sm">
@@ -143,9 +143,9 @@ within the first 90 days using Qocent's FinOps insights.`,
             >
               <AccordionItem
                 value={`item-${i}`}
-                className="border borderImp border-red-500 px-6 rounded-md"
+                className="border border-red-400 px-6 rounded-md last:border-b"
               >
-                <AccordionTrigger className="text-left font-bold lg:text-md text-sm hover:no-underline">
+                <AccordionTrigger className="text-left font-bold lg:text-md text-sm hover:no-underline border-b border-red-200">
                   {faq.question}
                 </AccordionTrigger>
                 <AccordionContent className="text-muted-foreground text-left lg:text-md text-sm">

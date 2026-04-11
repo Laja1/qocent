@@ -63,7 +63,7 @@ export function Compute() {
                     <TableCell>8GB-192GB</TableCell>
 
                     <TableCell>
-                      <span className="px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">
+                      <span className="px-2 py-1 rounded-full bg-red-50 text-red-900 text-xs font-medium">
                         High Perf
                       </span>
                     </TableCell>
@@ -134,7 +134,7 @@ export function Compute() {
                     <TableCell>8GB-192GB</TableCell>
 
                     <TableCell>
-                      <span className="px-2 py-1 rounded-full bg-green-100 text-green-800 text-xs font-medium">
+                      <span className="px-2 py-1 rounded-full bg-red-50 text-red-900 text-xs font-medium">
                         High Perf
                       </span>
                     </TableCell>
