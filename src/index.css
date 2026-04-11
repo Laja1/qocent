@@ -4,8 +4,6 @@
 
 @import "tw-animate-css";
 
-/* Design System tokens — inert unless <html data-ds="on"> is set */
-@import "./design-system/tokens.css";
 
 @theme {
   --font-aeonikpro: AeonikPro, "san-seriff";

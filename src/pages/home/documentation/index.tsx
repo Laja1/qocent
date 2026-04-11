@@ -1,5 +1,6 @@
 import { Footer } from "@/components/shared";
 import Developers from "./docs";
+
 import { Hero } from "./hero";
 import Seo from "@/components/shared/seo";
 import Navbar from "@/components/shared/navbar2";

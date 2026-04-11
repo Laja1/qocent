@@ -45,8 +45,8 @@ export const RouteConstant = {
       name: "Explore",
     },
     contactUs: {
-      path: "/finops",
-      name: "FinOps",
+      path: "/contact-us",
+      name: "Contact Us",
     },
     documentation: {
       path: "/docs",
