@@ -14,6 +14,8 @@ dist-ssr
 
 save_local
 
+exempt
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

@@ -1,5 +1,5 @@
 import AboutUs from "@/pages/home/about-us";
-import Documentation from "@/pages/home/documentation";
+import ContactUs from "@/pages/home/contact-us";
 import ExploreServices from "@/pages/home/explore-services";
 import Finops from "@/pages/home/finops";
 import Home from "@/pages/home/home";
@@ -27,12 +27,6 @@ export const publicRoute: RouteType[] = [
     metadata: { isAuthenticated: false },
   },
   {
-    path: RouteConstant.public.documentation.path,
-    name: RouteConstant.public.documentation.name,
-    component: <Documentation />,
-    metadata: { isAuthenticated: false },
-  },
-  {
     path: RouteConstant.public.aboutUs.path,
     name: RouteConstant.public.aboutUs.name,
     component: <AboutUs />,
@@ -44,5 +38,10 @@ export const publicRoute: RouteType[] = [
     component: <Partners />,
     metadata: { isAuthenticated: false },
   },
-
+  {
+    path: RouteConstant.public.contactUs.path,
+    name: RouteConstant.public.contactUs.name,
+    component: <ContactUs />,
+    metadata: { isAuthenticated: false },
+  },
 ];

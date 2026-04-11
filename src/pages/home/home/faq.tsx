@@ -1,3 +1,4 @@
+import { imgLinks } from "@/assets/assetLink";
 import {
   Accordion,
   AccordionContent,
@@ -7,27 +8,29 @@ import {
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
-import CustomSection from "./custom-section";
+import CustomSection from "../components/custom-section";
 
 
 export const Faq = () => {
   return (
     <CustomSection
-      className="w-full mt-12 px-6 md:px-20 max-w-7xl mx-auto mb-8"
+      className="w-full mt-12 relative px- md:px-20 max-w-7xl mx-auto mb-8"
     >
-      <div className="flex space-y-4 md:space-y-0 flex-col md:flex-row justify-between items-center w-full">
-        <h3 className="font-bold text-3xl">Questions answered</h3>
+      <img src={imgLinks.successStories} className="absolute -z-20 top-0 left-0 w-full h-full object-cover" />
+      <div className="absolute -z-10 top-0 left-0 w-full h-40 bg-gradient-to-b from-white to-transparent" />
 
+      <div className="flex flex-col items-center text-center w-full gap-4">
+        <h3 className="font-bold text-4xl">Questions Answered</h3>
         <p className="max-w-md text-center">We're here to help you and solve objections. Find answers to the most common questions below.</p>
-
         <Button className="bg-black text-white">Contact Sales Now</Button>
       </div>
 
-      <div className="w-full container grid grid-cols-1 lg:grid-cols-2 md:gap-8 gap-4 pt-12">
+      <div className="w-full container grid grid-cols-1 lg:grid-cols-2 lg:gap-8 gap-4 pt-12">
         <Accordion type="single" collapsible className="w-full space-y-4">
           {[
             {
               question: "How does Qocent pricing work?",
+
               answer:
                 `(Once the pricing model has been decided upon, we’ll add that.)`,
             },
@@ -73,12 +76,12 @@ management risk-free.`,
             >
               <AccordionItem
                 value={`item-${i}`}
-                className="border-b border-border/40 px-6 py-2 rounded-md"
+                className="border border-red-400 px-6 rounded-md last:border-b"
               >
-                <AccordionTrigger className="text-left lg:text-sm text-xs font-medium hover:no-underline">
+                <AccordionTrigger className="text-left font-bold lg:text-md text-sm hover:no-underline border-b border-red-200">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground text-left lg:text-sm text-[10px]">
+                <AccordionContent className="text-muted-foreground text-left lg:text-md text-sm">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
@@ -129,16 +132,7 @@ instances or unattached storage), and providing recommendations to
 optimize spending. Most customers reduce their cloud costs by 30-40%
 within the first 90 days using Qocent's FinOps insights.`,
             },
-            {
-              question: "Is Qocent secure? How do you handle my cloud credentials?",
-              answer:
-                `Security is our top priority. Qocent uses industry-standard OAuth 2.0 and IAM
-role-based authentication to connect to your cloud accounts—we never store
-your cloud provider passwords. All API communications are encrypted, and
-you can set permission levels (read-only or full management) based on your
-security requirements. Qocent is [SOC 2 compliant / add relevant
-certifications] and follows best practices for data protection.`,
-            },
+
           ].map((faq, i) => (
             <motion.div
               key={i}
@@ -149,12 +143,12 @@ certifications] and follows best practices for data protection.`,
             >
               <AccordionItem
                 value={`item-${i}`}
-                className="border-b border-border/40 px-6 py-2 rounded-md"
+                className="border border-red-400 px-6 rounded-md last:border-b"
               >
-                <AccordionTrigger className="text-left lg:text-sm text-xs font-medium hover:no-underline">
+                <AccordionTrigger className="text-left font-bold lg:text-md text-sm hover:no-underline border-b border-red-200">
                   {faq.question}
                 </AccordionTrigger>
-                <AccordionContent className="text-muted-foreground text-left lg:text-sm text-[10px]">
+                <AccordionContent className="text-muted-foreground text-left lg:text-md text-sm">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>
@@ -163,7 +157,7 @@ certifications] and follows best practices for data protection.`,
         </Accordion>
       </div>
 
-      <div className="rounded-md flex flex-col md:flex-row w-full space-x-4 justify-center items-center bg-white-100 shadow-md p-2 px-4 pt-8">
+      <div className="rounded-md flex mt-6 flex-col md:flex-row w-fit mx-auto space-x-4 justify-center items-center bg-white-100 shadow-md p-2 px-4 pt-8">
         <Mail size={16} className="hidden md:block" />
         <span>Feel free to mail us for any enquiries:</span>
         <div className="flex justify-center items-center gap-4 mt-2 md:mt-0">

@@ -1,3 +1,4 @@
+import { imgLinks } from "@/assets/assetLink";
 import { HeroHeader } from "@/components/shared/hero-header";
 import {
   ArrowLeftRight,
@@ -5,7 +6,7 @@ import {
   Layers,
   X,
 } from "lucide-react";
-import CustomSection from "./home/custom-section";
+import CustomSection from "./components/custom-section";
 
 const qocent = {
   src: "",
@@ -33,7 +34,9 @@ const others = {
 
 export default function Comparison() {
   return (
-    <CustomSection className="justify-center items-center flex flex-col py-10 ">
+    <CustomSection className="justify-center items-center relative flex flex-col py-10 ">
+      <img src={imgLinks.successStories} className="absolute -z-20 top-0 left-0 w-full h-full object-cover" />
+
       <HeroHeader
         description="Qocent simplifies how teams deploy, govern, and optimize cloud infrastructure across cloud providers, using automation and intelligence built for scale."
         badgeText="COMPARISON"

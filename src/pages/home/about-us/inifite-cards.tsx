@@ -28,7 +28,7 @@ think.`,
     type: "FinOps & Cost Optimization",
     title:
       `Stop overpaying for cloud resources. Qocent's FinOps tools automatically identify waste, optimize spending, and provide actionable insights to reduce your cloud bills by 30-40%—across all providers from one dashboard.`,
-    theme: "green",
+    theme: "red",
     bgColor: "bg-black",
   },
   {
@@ -159,32 +159,32 @@ export default function InfiniteCardCarousel() {
               </div>
             </>
           )}
-          {card.theme === "green" && (
+          {card.theme === "red" && (
             <div className="absolute inset-0 overflow-hidden">
               {/* Hexagonal organic patterns */}
               <div
-                className="absolute top-12 left-16 w-24 h-24 bg-gradient-to-br from-lime-400 to-green-500 transform rotate-45 opacity-70"
+                className="absolute top-12 left-16 w-24 h-24 bg-gradient-to-br from-red-400 to-red-600 transform rotate-45 opacity-70"
                 style={{
                   clipPath:
                     "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
                 }}
               />
               <div
-                className="absolute top-32 left-32 w-32 h-32 bg-gradient-to-br from-emerald-400 to-teal-600 transform rotate-12 opacity-60"
+                className="absolute top-32 left-32 w-32 h-32 bg-gradient-to-br from-rose-400 to-red-700 transform rotate-12 opacity-60"
                 style={{
                   clipPath:
                     "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
                 }}
               />
               <div
-                className="absolute top-8 right-20 w-28 h-28 bg-gradient-to-br from-yellow-400 to-amber-500 transform -rotate-30 opacity-65"
+                className="absolute top-8 right-20 w-28 h-28 bg-gradient-to-br from-red-300 to-rose-500 transform -rotate-30 opacity-65"
                 style={{
                   clipPath:
                     "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
                 }}
               />
               <div
-                className="absolute bottom-16 left-24 w-36 h-36 bg-gradient-to-br from-cyan-400 to-emerald-500 transform rotate-60 opacity-50"
+                className="absolute bottom-16 left-24 w-36 h-36 bg-gradient-to-br from-gray-300 to-gray-500 transform rotate-60 opacity-50"
                 style={{
                   clipPath:
                     "polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%)",
@@ -192,7 +192,7 @@ export default function InfiniteCardCarousel() {
               />
               {/* Leaf-like flowing shapes */}
               <div
-                className="absolute top-20 right-8 w-20 h-40 bg-gradient-to-b from-green-400 to-emerald-600 rounded-full transform rotate-45 opacity-55"
+                className="absolute top-20 right-8 w-20 h-40 bg-gradient-to-b from-red-500 to-rose-700 rounded-full transform rotate-45 opacity-55"
                 style={{ borderRadius: "50% 50% 50% 50% / 60% 60% 40% 40%" }}
               />
             </div>

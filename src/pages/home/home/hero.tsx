@@ -1,6 +1,6 @@
 import { imgLinks, svgLinks } from "@/assets/assetLink";
+import SplitTextByChar from "@/components/shared/splitText";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { ArrowDownRight } from "lucide-react";
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
@@ -9,6 +9,7 @@ import { InfiniteSlider } from "./solution";
 interface HeroProps {
   badge?: string;
   title?: string;
+  type?: string;
   subtitle?: string;
   description?: string;
   buttonText?: string;
@@ -26,6 +27,7 @@ interface HeroProps {
     bgRay?: string;
   };
   className?: string;
+  imageBanner?: boolean
   children?: ReactNode;
 }
 
@@ -43,15 +45,17 @@ export default function Hero() {
     <HeroComponent badge="One Window, All Cloud"
       title="One Console for All"
       subtitle="Cloud Solutions"
+      type="home"
       description="Deploy, manage, and optimize across AWS, GCP, Huawei, and more all from a single, powerful console that delivers."
       buttonText="Learn More"
       buttonIcon={<ArrowDownRight />}
       showButton={true}
       logos={defaultLogos}
       logoSliderDuration={20}
-      className="h-full"
+      className="h-6/8 lg:h-7/8 lg:pb-12"
       trustedByText="Trusted by big brands around the world"
-      showTrustedBy={true} />
+      showTrustedBy={true}
+      imageBanner={true} />
   )
 }
 
@@ -64,9 +68,11 @@ export function HeroComponent({
   buttonText,
   buttonIcon,
   onButtonClick,
+  type = "",
+  logoSliderDuration,
   showButton,
   logos = defaultLogos,
-  logoSliderDuration,
+  imageBanner = false,
   trustedByText,
   showTrustedBy,
   backgroundImages,
@@ -95,7 +101,7 @@ export function HeroComponent({
         <img src={bgImages.bgRay} className="absolute top-0 left-0 w-full h-full object-cover" alt="" />
       </div>
 
-      <div className={`max-w-7xl mx-auto grid place-content-center relative z-10 w-full ${className}`}>
+      <div className={`max-w-7xl mx-auto grid ${type === "home" ? "place-content-end lg:place-content-center pb-20" : "place-content-center"}  relative z-10 w-full ${className}`}>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -123,6 +129,23 @@ export function HeroComponent({
             </h1>
           )}
 
+          {/* Animated Hero Text */}
+          {/* {title && (
+            <SplitTextByChar
+              text={title}
+              className="text-4xl md:text-5xl lg:text-[80px] font-bold tracking-tight mb-6 bg-clip-text text-[#706B6B]"
+              delay={0}
+            />
+          )}
+
+          {subtitle && (
+            <SplitTextByChar
+              text={subtitle}
+              className="text-4xl md:text-5xl lg:text-[80px] font-bold tracking-tight mb-6 bg-clip-text text-[#590909]"
+              delay={0.3}
+            />
+          )} */}
+
           {description && (
             <p className="text-sm z-30 md:text-xl text-gray-600 mb-4 max-w-3xl mx-auto">
               {description}
@@ -130,37 +153,60 @@ export function HeroComponent({
           )}
 
           {showButton && (
-            <div className="flex gap-1 mt-12 items-center text-xs">
-              <Button onClick={onButtonClick}>
-                {buttonIcon} {buttonText}
-              </Button>
-            </div>
+            <CustomGlassButton onButtonClick={onButtonClick} buttonIcon={buttonIcon} buttonText={buttonText} />
           )}
         </motion.div>
-
-        {showTrustedBy && logos.length > 0 && (
-          <>
-            <p className="mb-6 mt-14 mx-auto w-full grid place-content-center">
-              {trustedByText}
-            </p>
-
-            <InfiniteSlider
-              items={logos}
-              itemWidth={250}
-              itemHeight={60}
-              duration={logoSliderDuration}
-              renderItem={(logo) => (
-                <div>
-                  <img src={logo} alt="logo" />
-                </div>
-              )}
-            />
-          </>
-        )}
-
-
       </div>
+
+      {imageBanner && <div className="p-0 relative -z-0 w-full h-24 md:h-55 lg:h-65" >
+        <img src="./images/home.png" className="w-full -mt-8 lg:-mt-26 scale-113 object-fill" alt="Image banner for qocent home page" />
+      </div>}
+
+      {showTrustedBy && logos.length > 0 && (
+        <p className="z-20 mx-auto w-full grid place-content-center">
+          {trustedByText}
+        </p>
+      )}
+
+      {showTrustedBy && logos.length > 0 &&
+        <InfiniteSlider
+          items={logos}
+          itemWidth={250}
+          itemHeight={60}
+          duration={logoSliderDuration}
+          renderItem={(logo) => (
+            <div className="grid size-full place-content-center">
+              <img src={logo} alt="logo" />
+            </div>
+          )}
+        />
+      }
+
+      {showTrustedBy && logos.length > 0 &&
+        <div>
+          <img src="./images/blurwhite.png" className="absolute bottom-0 left-0 w-full h-26 object-fill" alt="" />
+        </div>
+      }
+
       {children}
     </main>
   );
+}
+
+
+interface CustomGlassButtonProps {
+  onButtonClick?: () => void;
+  buttonText?: string;
+  buttonIcon?: ReactNode;
+  iconPos?: string
+}
+
+export function CustomGlassButton({ onButtonClick, buttonText, buttonIcon, iconPos }: CustomGlassButtonProps) {
+  return (
+    <div className="relative p-2 bg-gray-800/10 backdrop-blur-lg rounded-full">
+      <button onClick={onButtonClick} className="bg-black text-white px-6 py-3 rounded-full flex items-center gap-2 font-medium">
+        {iconPos === "left" ? (<>{buttonIcon} {buttonText}</>) : (<>{buttonText} {buttonIcon}</>)}
+      </button>
+    </div>
+  )
 }

@@ -5,7 +5,7 @@ import { ExchangeIcon } from "@/assets/icons/exchange"
 import { MoneyIcon } from "@/assets/icons/money"
 import { HeroHeader } from "@/components/shared/hero-header"
 import clsx from 'clsx'
-import CustomSection from "./custom-section"
+import CustomSection from "../components/custom-section"
 
 export const ProblemWeSolve = () => {
   const problems = [
@@ -48,7 +48,7 @@ hours/week.`, icon: <ExchangeIcon />
 
 export const DataPointCard = ({ icon, title, description, className }: { icon: React.ReactNode; title: string; description: string, className?: string }) => (
   <div className={clsx(
-    'bg-gradient-to-r from-[#F6F1FC80] to-[#FFFFFF80] border border-[#FFD5DC] rounded-xl space-y-2 flex-1',
+    'bg-gradient-to-r from-[#F6F1FC80] to-[#FFFFFF80] border border-[#FFD5DC] hover:shadow-xl shadow-xs transition-shadow duration-300 ease-out rounded-xl space-y-2 flex-1',
     className
   )}>
     <div className="border border-[#00000010] bg-[#ffffff50] inline-flex rounded-md justify-center items-center mb-6 size-12">

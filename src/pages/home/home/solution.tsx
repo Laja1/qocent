@@ -2,8 +2,11 @@ import { imgLinks } from "@/assets/assetLink";
 import { ChartIcon } from "@/assets/icons/chart";
 import { Padlock } from "@/assets/icons/padlock";
 import { HeroHeader } from "@/components/shared/hero-header";
+import clsx from "clsx";
+import { animate, motion, useInView, useMotionValue, useTransform } from 'framer-motion';
 import { Asterisk, Banknote, CirclePlus, Database, Layers, LockKeyhole, Rocket } from "lucide-react";
-import CustomSection from "./custom-section";
+import { useEffect, useRef, useState } from 'react';
+import CustomSection from "../components/custom-section";
 import { DataPointCard } from "./problem-solve";
 
 const tags = [
@@ -13,6 +16,22 @@ const tags = [
   { text: "Scalable Solutions", icon: Layers },
   { text: "Real-Time Insights", icon: CirclePlus },
 ];
+
+interface SolutionCardDetailsProps {
+  title: string;
+  description: string;
+  items?: string[];
+}
+
+interface InfiniteSliderProps<T = string> {
+  items: T[];
+  itemWidth?: number;
+  itemHeight?: number;
+  duration?: number;
+  reverse?: boolean;
+  renderItem?: (item: T, index: number) => React.ReactNode;
+  className?: string;
+}
 
 
 export default function QocentSolution() {
@@ -34,7 +53,7 @@ export default function QocentSolution() {
         {/* Grid */}
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Card 1 */}
-          <div className="rounded-2xl bg-[#FFEDEE] p-8 shadow-sm border-[#FFD5DC] border">
+          <div className="rounded-2xl bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border">
             <SolutionCardDetails
               title="Workflow Automation & Optimization. "
               description="Cut cloud costs 30–40% with AI-powered insights that show:"
@@ -60,7 +79,7 @@ export default function QocentSolution() {
           </div>
 
           {/* Card 2 */}
-          <div className="rounded-2xl h-full bg-[#FFEDEE] p-8 shadow-sm border-[#FFD5DC] border">
+          <div className="rounded-2xl h-full bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border">
             <SolutionCardDetails
               title="One Dashboard. Every Cloud"
               description="Stop switching between AWS, Azure Portal, GCP Console, and Huawei Cloud. Deploy VMs, manage VPCs, monitor resources—all from Qocent's
@@ -68,26 +87,30 @@ export default function QocentSolution() {
             />
 
             {/* Dashboard Placeholder */}
-            <div className="grid place-content-center h-69 rounded-xl bg-white text-sm text-gray-400">
-              Dashboard Screenshot Placeholder
+            <div className="relative h-34 md:h-69 overflow-hidden rounded-xl bg-white"
+            >
+              <img src={imgLinks.dashboard} className="w-full scale-112 -mt-1 md:-mt-2 lg:-mt-1 object-fill" />
             </div>
           </div>
 
           {/* Card 3 */}
-          <div className="rounded-2xl bg-[#FFEDEE] p-8 shadow-sm border-[#FFD5DC] border">
+          <div className="rounded-2xl bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border w-full">
             <SolutionCardDetails
               title="Link Accounts in 5 Minutes (Not 5 Days)"
               description="No migration. No downtime. No vendor lock-in."
             />
 
             {/* Cloud logos placeholder */}
-            <div className="flex h-48 lg:h-72 items-center justify-center rounded-xl bg-white text-sm text-gray-400">
-              Cloud Provider Logos Placeholder
+            <div className="w-full bg-[#FAFAFE] rounded-xl grid place-content-center">
+              <div className="max-w-[24rem] w-full bg-white overflow-hidden">
+                <VideoPlayer src="/videos/solution3.mp4" />
+              </div>
             </div>
+
           </div>
 
           {/* Card 4 */}
-          <div className="rounded-2xl bg-[#FFEDEE] p-8 shadow-sm border-[#FFD5DC] border">
+          <div className="rounded-2xl bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border">
             <SolutionCardDetails
               title="Security Score + Compliance"
               description="Get a real-time security score across all your clouds. Catch
@@ -96,21 +119,7 @@ export default function QocentSolution() {
             />
 
             {/* Security score placeholder */}
-            <div className="rounded-xl bg-white p-5 space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="bg-red-100 items-center  justify-center flex rounded-full size-10">
-                  <Padlock />
-                </div>
-                <span className="text-sm font-bold text-gray-700">Security Score</span>
-              </div>
-
-              <div className="flex w-full gap-4">
-                <div className="mt-2 h-20 flex-4/6 rounded-lg bg-gray-100">
-                  <div className="h-full w-[88%] rounded-lg bg-red-700" />
-                </div>
-                <div className="grid place-content-center text-4xl xl:text-5xl font-black">88%</div>
-              </div>
-            </div>
+            <AnimatedSecurityScore />
           </div>
         </div>
 
@@ -135,12 +144,62 @@ export default function QocentSolution() {
   );
 }
 
+function AnimatedSecurityScore() {
+  const scoreRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(scoreRef, { once: true, amount: 0.3 });
 
+  const targetScore = 88;
 
-interface SolutionCardDetailsProps {
-  title: string;
-  description: string;
-  items?: string[];
+  const motionValue = useMotionValue(0);
+  const rounded = useTransform(motionValue, (latest) => Math.floor(latest));
+  const [displayValue, setDisplayValue] = useState(0);
+
+  useEffect(() => {
+    if (isInView) {
+      const controls = animate(motionValue, targetScore, {
+        duration: 2,
+        ease: "easeOut"
+      });
+
+      const unsubscribe = rounded.on('change', (latest) => {
+        setDisplayValue(latest);
+      });
+
+      return () => {
+        controls.stop();
+        unsubscribe();
+      };
+    }
+  }, [isInView, motionValue, rounded]);
+
+  return (
+    <div ref={scoreRef} className="rounded-xl bg-white p-5 space-y-4">
+      <div className="flex items-center gap-4">
+        <div className="bg-red-100 items-center justify-center flex rounded-full size-10">
+          <Padlock />
+        </div>
+        <span className="text-sm font-bold text-gray-700">Security Score</span>
+      </div>
+
+      <div className="flex w-full gap-4">
+        <div className="mt-2 h-20 flex-4/6 rounded-lg bg-gray-100">
+          <div
+            className="h-full rounded-lg bg-red-700 transition-none"
+            style={{ width: `${displayValue}%` }}
+          />
+        </div>
+        <div className="grid place-content-center text-4xl xl:text-5xl font-black">
+          <motion.span
+            initial={{ opacity: 0 }}
+            animate={isInView ? { opacity: 1 } : { opacity: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            {displayValue}%
+          </motion.span>
+        </div>
+      </div>
+    </div>
+  );
 }
 
 function SolutionCardDetails({ title, description, items }: SolutionCardDetailsProps) {
@@ -153,25 +212,16 @@ function SolutionCardDetails({ title, description, items }: SolutionCardDetailsP
         {description}
       </p>
 
-      {items && items.length && <ul className="mb-8 space-y-2 text-sm text-red-600">
-        {items.map((item) => (
-          <li className="flex size-fit justify-center items-start gap-2" key={item}><Asterisk className="inline self-center mr-2" size={16} /> <span>{item}</span></li>
-        ))}
-      </ul>}
+      {items && items.length &&
+        <ul className="mb-8 space-y-2 text-sm text-red-600">
+          {items.map((item) => (
+            <li className="flex size-fit justify-center items-start gap-2" key={item}><Asterisk className="inline self-center mr-2" size={16} /> <span>{item}</span>
+            </li>
+          ))}
+        </ul>
+      }
     </>
   )
-}
-
-
-
-interface InfiniteSliderProps<T = string> {
-  items: T[];
-  itemWidth?: number;
-  itemHeight?: number;
-  duration?: number;
-  reverse?: boolean;
-  renderItem?: (item: T, index: number) => React.ReactNode;
-  className?: string;
 }
 
 export const InfiniteSlider = <T = string>({
@@ -186,7 +236,7 @@ export const InfiniteSlider = <T = string>({
   const quantity: number = items.length;
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative max-w-7xl mx-auto overflow-hidden z-10">
       <style>{`
         @keyframes autoRun {
           from { left: 100%; }
@@ -243,11 +293,22 @@ export const InfiniteSlider = <T = string>({
           ))}
         </div>
       </div>
-
-      {/* Gradient masks */}
-      <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white to-transparent pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white to-transparent pointer-events-none" />
     </div>
   );
 };
+
+
+export function VideoPlayer({ src, className }: { src: string, className?: string }) {
+  return (
+    <video
+      className={clsx("w-full h-auto", className)}
+      controls={false}
+      autoPlay
+      muted
+      loop
+    >
+      <source src={src} type="video/mp4" />
+    </video>
+  )
+}
 

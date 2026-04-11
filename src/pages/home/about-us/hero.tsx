@@ -3,6 +3,8 @@ import { ArrowDownRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { HeroComponent } from '../home/hero';
 
+const ABOUT_HERO_VIDEO_SRC = '/videos/about-placeholder.mp4';
+
 export function AboutHero() {
     return (
         <HeroComponent
@@ -14,14 +16,38 @@ export function AboutHero() {
             showButton={true}
             className='h-3/5 md:h-4/5 2xl:h-3/5'
         >
-            <VideoSection />
+            {/* <VideoSection /> */}
+            <div>
+                <img src="./images/blurwhite.png" className="absolute bottom-0 left-0 w-full h-26 object-fill" alt="" />
+            </div>
         </HeroComponent>
     )
 }
 
 const VideoSection = () => {
     const statsRef = useRef<HTMLDivElement>(null);
+    const videoWrapRef = useRef<HTMLDivElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
     const isInView = useInView(statsRef, { once: true, amount: 0.3 });
+
+    useEffect(() => {
+        const wrap = videoWrapRef.current;
+        const video = videoRef.current;
+        if (!wrap || !video) return;
+
+        const observer = new IntersectionObserver(
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    void video.play().catch(() => {});
+                } else {
+                    video.pause();
+                }
+            },
+            { rootMargin: "80px 0px", threshold: 0.12 }
+        );
+        observer.observe(wrap);
+        return () => observer.disconnect();
+    }, []);
 
     const stats = [
         { value: 70, suffix: 'k', label: 'Saved in $USD' },
@@ -66,8 +92,23 @@ const VideoSection = () => {
 
     return (
         <div className="w-full relative max-w-6xl mx-auto -mt-24">
-            <div className="bg-white rounded-4xl  p-2 md:p-4 md:h-[60vh] max-h-[540px] h-1/3 shadow-2xl mb-10 md:mb-16">
-                <div className='size-full bg-gray-400 rounded-3xl grid place-content-center text-xl text-gray-600'>Video placeholder</div>
+            <div
+                ref={videoWrapRef}
+                className="bg-white rounded-4xl  p-2 md:p-4 md:h-[60vh] max-h-[540px] h-1/3 shadow-2xl mb-10 md:mb-16"
+            >
+                <video
+                    ref={videoRef}
+                    className="size-full min-h-[200px] rounded-3xl object-cover bg-black pointer-events-none select-none"
+                    src={ABOUT_HERO_VIDEO_SRC}
+                    muted
+                    loop
+                    playsInline
+                    preload="none"
+                    disablePictureInPicture
+                    disableRemotePlayback
+                    tabIndex={-1}
+                    aria-hidden="true"
+                />
             </div>
 
             <div ref={statsRef} className="grid grid-cols-3 gap-3 md:gap-12">

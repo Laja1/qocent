@@ -3,10 +3,10 @@ import Navbar from "@/components/shared/navbar2";
 import Seo from "@/components/shared/seo";
 import ElevateMessage from "../home/elevate_message";
 import Benefits from "./benefits";
-import Customers from "./customers";
+// import Customers from "./customers";
 import { AboutHero } from "./Hero";
 import OurValue from "./our-value";
-import TeamSection from "./team";
+// import TeamSection from "./team";
 
 const AboutUs = () => {
   return (
@@ -29,9 +29,9 @@ const AboutUs = () => {
       <Navbar />
       <AboutHero />
       <OurValue />
-      <TeamSection />
+      {/* <TeamSection /> */}
       <Benefits />
-      <Customers />
+      {/* <Customers /> */}
       <ElevateMessage />
       <Footer />
     </div>

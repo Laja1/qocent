@@ -2,14 +2,14 @@ import { imgLinks } from "@/assets/assetLink";
 import { Badge } from "@/components/ui/badge";
 import { motion } from "framer-motion";
 import { Percent } from "lucide-react";
-import CustomSection from "../home/custom-section";
+import CustomSection from "../components/custom-section";
 
 const team = [
     {
         name: 'Chinelo Enechi',
         role: 'Product Developer',
         image: '/images/teamImage.png',
-        bgColor: 'from-green-100 to-blue-100'
+        bgColor: 'from-red-100 to-gray-100'
     },
     {
         name: 'Tomiwa',
@@ -41,7 +41,7 @@ export default function TeamSection() {
             <div className="mb-16 w-full">
                 <Badge
                     variant="secondary"
-                    className="md:mb-4 rounded-full font-bold px-2 py-1 md:px-4 text-xs shadow-md shadow-teal-300"
+                    className="md:mb-4 rounded-full font-bold px-2 py-1 md:px-4 text-xs shadow-md shadow-red-200"
                     style={{ color: "#1C1629" }}
                 >
                     <Percent className="mr-2" /> OUR TALENT
