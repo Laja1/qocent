@@ -1,7 +1,7 @@
 import { imgLinks } from "@/assets/assetLink";
 import { HeroHeader } from "@/components/shared/hero-header";
 import { Heart, Instagram, Linkedin, Twitter } from 'lucide-react';
-import CustomSection from "../home/custom-section";
+import CustomSection from "../components/custom-section";
 import { InfiniteSlider } from "../home/solution";
 
 const testimonials = [
@@ -59,7 +59,9 @@ export default function Customers() {
                 </h2>
             </HeroHeader>
 
-            <TestimonialsSection />
+            <div className="py-8">
+                <TestimonialsSection />
+            </div>
         </CustomSection>
     )
 }
@@ -107,7 +109,7 @@ export function TestimonialsSection() {
                 className=""
                 renderItem={(item) => {
                     return (
-                        <div className="bg-white rounded-3xl h-full flex-col space-y-8 p-6 shadow-lg hover:shadow-xl"
+                        <div className="bg-white rounded-3xl h-full flex-col space-y-8 p-6 hover:shadow-xs"
                         >
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
@@ -146,7 +148,7 @@ export function TestimonialsSection() {
                 }}
             />
 
-            <div className="flex items-center justify-center gap-4">
+            <div className="flex items-center mt-12 justify-center gap-4">
                 <div className="flex -space-x-3 ">
                     {reviewers.map((avatar, index) => (
                         <div

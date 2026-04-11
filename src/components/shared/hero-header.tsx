@@ -1,4 +1,4 @@
-import { Badge } from "../ui/badge";
+import BadgeHeader from "@/pages/home/components/Badge";
 
 interface HeroHeaderProps {
   badgeText?: string;
@@ -14,20 +14,15 @@ export const HeroHeader = ({
   description,
   icon,
   hideLine,
-  accentColor = "#1C1629",
   children,
 }: HeroHeaderProps) => {
 
   return (
     <div className="flex flex-col items-center text-center w-full mx-auto space-y-4 md:space-y-8 max-w-7xl">
       {badgeText && (
-        <Badge
-          variant="secondary"
-          className="md:mb-4 rounded-full px-2 md:px-4 text-xs font-medium lg:text-sm shadow-md shadow-teal-300"
-          style={{ color: accentColor }}
-        >
-          {icon} {badgeText}
-        </Badge>
+        <BadgeHeader title={badgeText}>
+          {icon}
+        </BadgeHeader>
       )}
 
       {/* Title with divider lines */}

@@ -41,13 +41,12 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="w-full py-6 lg:py-8 mx-auto p-12 px-6 md:p-32 md:px-28">
+    <footer className="w-full py-6 lg:py-8 mx-auto p-12 px-6 lg:p-32 lg:px-28">
       {/* Subtle background pattern */}
 
-      <div className="mx-auto space-y-8 w-full">
-
+      <div className="mx-auto w-full">
         {/* Company info - takes more space */}
-        <div className="flex flex-col md:flex-row w-full space-y-8 items-start justify-between">
+        <div className="flex flex-col md:flex-row w-full space-y-4 md:space-y-8 items-start justify-between">
           {/* Logo and brand */}
           <div className="flex items-center gap-3">
             <img
@@ -68,7 +67,7 @@ export const Footer = () => {
                 aria-label={label}
                 className="w-10 h-10 bg-muted/50 hover:bg-primary/10 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105 group"
               >
-                <Icon className="w-5 h-5 text-muted-foreground group-hover:text-primary transition-colors" />
+                <Icon className="md:size-5 size-8 text-muted-foreground group-hover:text-primary transition-colors" />
               </a>
             ))}
           </div>
@@ -76,7 +75,7 @@ export const Footer = () => {
 
         {/* Navigation links */}
         <nav aria-label="Legal Links">
-          <ul className="md:flex flex-wrap gap-6 grid gap-x-0 md:gap-x-4 gap-y-4 grid-cols-3">
+          <ul className="md:flex mt-4 md:mt-0 flex-wrap gap-y-0 gap-6 grid gap-x-0 md:gap-x-4 md:gap-y-4 grid-cols-3">
             {legalLinks.map((link, index) => (
               <li className="cursor-pointer"
               >
@@ -84,9 +83,10 @@ export const Footer = () => {
                   key={index}
                   to={link.href}
                   aria-label={link.name}
-                  className="text-sm text-muted-foreground hover:text-primary transition-colors duration-200 hover:translate-x-1 inline-block"
+                  className="text-sm text-muted-foreground hover:text-primary transition-all duration-300 inline-block hover:underline"
                 >
                   {link.name}
+
                 </Link>
               </li>
             ))}
@@ -95,13 +95,9 @@ export const Footer = () => {
       </div>
 
       {/* Bottom bar */}
-      <div className="mt-12 md:pt-8 border-t border-border/50">
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <span>© {new Date().getFullYear()} QOCENT.</span>
-            <span>All rights reserved.</span>
-          </div>
-        </div>
+      <div className="pt-2 mt-2 md:mt-6 md:pt-4 border-t border-border/80 flex items-center gap-2 text-sm text-muted-foreground">
+        <span>© {new Date().getFullYear()} QOCENT.</span>
+        <span>All rights reserved.</span>
       </div>
     </footer>
   );
