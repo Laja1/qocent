@@ -9,8 +9,20 @@ export default function AboutHowItWorks() {
                 See how we turn bold ideas into automated AI solutions carefully crafted to optimize, scale, and deliver measurable results
             </p>
 
-            <div className="w-fit flex items-center justify-center">
-                <img className="" />
+            <div className="relative w-full max-w-5xl mx-auto mt-12 mb-4 px-6">
+                {/* Main frame */}
+                <img
+                    src="/images/how-it-works-main.png"
+                    alt="How it works"
+                    className="w-full rounded-2xl"
+                />
+                {/* Login card — overlapping top-left */}
+                <img
+                    src="/images/how-it-works-login.png"
+                    alt="Login"
+                    className="absolute top-24 -left-6 w-[26%] rounded-xl"
+                    style={{ animation: "float 4s ease-in-out infinite" }}
+                />
             </div>
 
             <div className="">
