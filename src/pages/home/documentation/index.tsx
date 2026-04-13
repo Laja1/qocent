@@ -42,10 +42,15 @@ const Documentation = () => {
       {/* Sentinel: sits at the top of the docs body, watched by the observer */}
       <div ref={sentinelRef} className="h-0 w-full" />
 
+      {/* Mobile sidebar */}
+      <div className="md:hidden w-full px-4 pt-6 pb-2 border-b border-gray-100 overflow-x-auto">
+        <DocsSidebar />
+      </div>
+
       {/* Docs body */}
       <div className="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-12 flex gap-12">
 
-        {/* Sidebar */}
+        {/* Desktop Sidebar */}
         <aside className="hidden md:block w-56 flex-shrink-0">
           <div
             className={`w-56 transition-none ${
