@@ -1,5 +1,4 @@
 import { imgLinks, svgLinks } from "@/assets/assetLink";
-import SplitTextByChar from "@/components/shared/splitText";
 import { Badge } from "@/components/ui/badge";
 import { ArrowDownRight } from "lucide-react";
 import { motion } from "motion/react";

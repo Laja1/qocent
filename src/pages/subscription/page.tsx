@@ -1,5 +1,5 @@
 import { Header } from "@/components/shared";
-import { ArrowRight, Check, Loader2, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, Check, Loader2,  } from "lucide-react";
 import { useGetAllWithMySubscriptionsQuery, useStartTrialMutation, useCreatePaidSubscriptionMutation, useGetServiceAccessMutation } from "@/service/python/subscriptionApi";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
