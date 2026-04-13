@@ -13,18 +13,18 @@ export default function Benefits() {
     const [selectedIndex, setSelectedIndex] = useState(0)
     const processes = [
         {
-            title: 'Discover & Diagnose',
-            description: 'Uncover challenges, opportunities, and root causes with clarity.',
+            title: 'Connect Your Clouds',
+            description: 'Link your AWS, Azure, GCP, or Huawei accounts in minutes using secure OAuth/IAM — no migration, no downtime.',
             image: './images/block.png'
         },
         {
-            title: 'Strategize & Plan',
-            description: 'Build actionable roadmaps aligned with your business goals.',
+            title: 'Gain Full Visibility',
+            description: 'See all your cloud resources, costs, and performance across every provider from a single unified dashboard.',
             image: './images/block.png'
         },
         {
-            title: 'Execute & Optimize',
-            description: 'Build actionable roadmaps aligned with your business goals.',
+            title: 'Optimize & Scale',
+            description: 'Act on AI-driven recommendations to cut waste, reduce costs by up to 40%, and scale your infrastructure with confidence.',
             image: './images/block.png'
         }
     ];
@@ -57,7 +57,7 @@ export default function Benefits() {
                         transition={{ delay: 0.4, duration: 0.6 }}
                         className="text-gray-900 text-sm md:text-md leading-relaxed"
                     >
-                        We're not just a security provider — we're your trusted protection partner. When you choose Titan Shield Security,
+                        Qocent gives you complete control over your multi-cloud infrastructure — from deployment to cost optimization — all from one powerful console built for teams of every size.
                     </motion.p>
                 </motion.div>
 

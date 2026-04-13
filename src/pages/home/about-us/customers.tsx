@@ -9,7 +9,7 @@ const testimonials = [
         name: 'Ryan harper',
         company: 'Harper education',
         avatar: '/api/placeholder/80/80',
-        testimonial: 'Qocent is a one-stop shop for everything financial in your life.',
+        testimonial: 'Qocent transformed how we manage our cloud infrastructure. One console, full visibility across all our providers — it just works.',
         highlights: ['Qocent'],
         social: 'twitter',
         icon: <Twitter className="w-5 h-5" />,

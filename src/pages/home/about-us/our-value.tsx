@@ -8,9 +8,9 @@ import { VideoPlayer } from '../home/solution';
 
 export default function OurValue() {
   const features = [
-    'Dive into your financial analytics with us',
-    'Get timely notifications for upcoming bills',
-    'Define your aspirations goal setting features'
+    'Manage all your clouds from a single console',
+    'Get real-time alerts on cost spikes and anomalies',
+    'Reduce cloud spend by up to 40% with AI-driven insights'
   ];
 
   return (

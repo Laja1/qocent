@@ -6,7 +6,7 @@ export default function AboutHowItWorks() {
             </h2>
 
             <p className="w-full max-w-xs md:pt-6 text-sm mx-auto md:ax-w-lg text-center lg:text-base text-gray-300">
-                See how we turn bold ideas into automated AI solutions carefully crafted to optimize, scale, and deliver measurable results
+                From first login to measurable savings — in three steps.
             </p>
 
             <div className="relative w-full max-w-5xl mx-auto mt-12 mb-4 px-6">

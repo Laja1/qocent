@@ -18,7 +18,7 @@ const features = [
     {
         title: 'Real-Time Cost Visibility Across All Providers',
         subtitle: 'OUR VALUE',
-        description: 'Navigate your financial journey with our Comprehensive Debt Management system, effective debt reduction strategies.',
+        description: 'Know exactly where every dollar goes — across AWS, Azure, GCP, and Huawei — in one unified view. No more switching dashboards or waiting for end-of-month reports.',
         imageContainerUrl: "/videos/real-time-cost.mp4",
         floatImageUrl: "./images/finops/feature-1.png",
         reversed: true
@@ -26,7 +26,7 @@ const features = [
     {
         title: 'Budget Alerts Before Overspending',
         subtitle: 'OUR VALUE',
-        description: 'Navigate your financial journey with our Comprehensive Debt Management system, effective debt reduction strategies.',
+        description: 'Set spend thresholds per team, project, or provider. Get notified the moment costs spike — before they become a problem for your CFO.',
         imageContainerUrl: "/videos/budget.mp4",
         floatImageUrl: "./images/finops/feature-2.png",
         reversed: false
@@ -34,7 +34,7 @@ const features = [
     {
         title: 'One-Click Optimization Recommendations',
         subtitle: 'OUR VALUE',
-        description: 'Stay ahead with our Real-Time Investment Tracker, empowering you to monitor and optimize your portfolio.',
+        description: 'Qocent surfaces actionable cost-saving opportunities — idle instances, oversized resources, unused storage — so your team can act fast without deep manual audits.',
         imageContainerUrl: "/videos/one-click-op.mp4",
         floatImageUrl: "./images/finops/feature-3.png",
         reversed: true
@@ -42,7 +42,7 @@ const features = [
     {
         title: 'AI-Powered Waste Detection',
         subtitle: 'OUR VALUE',
-        description: 'Navigate your financial journey with our Comprehensive Debt Management system, effective debt reduction strategies.',
+        description: 'Our AI continuously scans your infrastructure for waste and inefficiency. Most teams cut cloud spend by 30–40% within 90 days — without touching a single workload.',
         imageContainerUrl: "/videos/value.mp4",
         floatImageUrl: "./images/finops/feature-4.png",
         reversed: false

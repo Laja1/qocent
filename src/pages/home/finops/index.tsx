@@ -11,17 +11,17 @@ const Finops = () => {
     return (
         <div className=" h-full w-full">
             <Seo
-                title="Qocent–About Us"
-                description="See what makes our multi-cloud management platform different from others.  "
-                canonical="https://qocent.com/about"
+                title="Qocent FinOps — Control Your Cloud Spend"
+                description="Stop overpaying for cloud. Qocent gives engineering and finance teams real-time visibility, budget alerts, and AI-powered recommendations across AWS, Azure, GCP, and Huawei."
+                canonical="https://qocent.com/finops"
                 image="https://qocent.com/og-image.jpg"
                 schemaMarkup={{
                     "@context": "https://schema.org",
                     "@type": "WebPage",
-                    name: "About Us - Qocent",
+                    name: "FinOps - Qocent",
                     description:
-                        "See what makes our multi-cloud management platform different from others.  ",
-                    url: "https://qocent.com/about",
+                        "Stop overpaying for cloud. Qocent gives engineering and finance teams real-time visibility, budget alerts, and AI-powered recommendations across AWS, Azure, GCP, and Huawei.",
+                    url: "https://qocent.com/finops",
                 }}
             />
 
