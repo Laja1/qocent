@@ -1,16 +1,17 @@
 import { Header } from "@/components/shared";
-import { Sparkles, Zap } from "lucide-react";
-import { useGetAllWithMySubscriptionsQuery, useStartTrialMutation, useCreatePaidSubscriptionMutation } from "@/service/python/subscriptionApi";
+import { ArrowRight, Check, Loader2, Sparkles, Zap } from "lucide-react";
+import { useGetAllWithMySubscriptionsQuery, useStartTrialMutation, useCreatePaidSubscriptionMutation, useGetServiceAccessMutation } from "@/service/python/subscriptionApi";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
-import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
 const SubscriptionCards = () => {
   const { data: plansData, isLoading } = useGetAllWithMySubscriptionsQuery();
   const [startTrial, { isLoading: isStartingTrialLoading }] = useStartTrialMutation();
   const [createPaidSubscription, { isLoading: isCreatePaidSubscriptionLoading }] = useCreatePaidSubscriptionMutation();
+  const [triggerServiceAccess, { isLoading: isAccessLoading }] = useGetServiceAccessMutation();
 
   const handleStartTrial = async (planId: string) => {
     try {
@@ -30,62 +31,146 @@ const SubscriptionCards = () => {
     }
   };
 
+  const handleAccessService = async (planName: string) => {
+    try {
+      const serviceName = planName.toLowerCase().replace(/\s+/g, "");
+      const res = await triggerServiceAccess({ service_name: serviceName }).unwrap();
+      const redirectUrl = new URL(res.data.redirect_url);
+      redirectUrl.protocol = "http:";
+      redirectUrl.host = "localhost:3000";
+      window.location.href = redirectUrl.toString();
+    } catch (error: any) {
+      showCustomToast(ErrorHandler.extractMessage(error) || "Failed to access service", { toastOptions: { type: "error", autoClose: 5000 } });
+    }
+  };
+
   if (isLoading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
-console.log(plansData, "plans data")
   return (
     <div className="min-h-screen">
       <Header title="Subscription Packages" description="Choose the plan that fits your needs" />
 
-      <div className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {plansData?.data?.map((plan, idx) => (
-            <div key={plan.subscription_plan_id} className="relative group" style={{ animationDelay: `${idx * 100}ms` }}>
-              <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/20 via-blue-500/20 to-purple-500/20 rounded-2xl blur-xl group-hover:blur-2xl transition-all duration-500 opacity-0 group-hover:opacity-100" />
+      <div className="relative max-w-6xl mx-auto px-6 pt-6 pb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {plansData?.data?.map((plan, idx) => {
+            const isActive = plan.subscription_plan_is_active;
 
-              <div className="relative bg-black backdrop-blur-xl border border-slate-800 rounded-2xl p-8 h-full flex flex-col hover:border-cyan-500/50 transition-all duration-300">
-                <div className="flex items-start justify-between mb-6">
-                  <div>
-                    <h3 className="text-2xl font-bold text-white mb-2">{plan.subscription_plan_name}</h3>
-                    <p className="text-slate-400 text-xs leading-relaxed">{plan.subscription_plan_description}</p>
-                  </div>
-                  <Sparkles className="w-6 h-6 text-cyan-400" />
-                </div>
-
-                <div className="mb-8">
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold text-white">{plan.subscription_plan_monthly_price}</span>
-                    <span className="text-slate-400 text-lg">{plan.subscription_plan_currency}</span>
-                  </div>
-                  <span className="text-slate-500 text-sm">per month</span>
-                </div>
-
-                {plan.subscription_plan_features && (
-                  <ul className="space-y-3 mb-8 flex-1">
-                    {Object.entries(plan.subscription_plan_features).map(([key, value]) => (
-                      <li key={key} className="flex items-start gap-3 text-slate-300">
-                        <Zap className="w-4 h-4 text-cyan-400 shrink-0 mt-1" />
-                        <span className="text-sm leading-relaxed">{value}</span>
-                      </li>
-                    ))}
-                  </ul>
+            return (
+              <motion.div
+                key={plan.subscription_plan_id}
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.15 + idx * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+                className="relative"
+              >
+                {/* Glow behind active card */}
+                {isActive && (
+                  <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-red-300/20 via-red-300/5 to-transparent blur-sm" />
                 )}
 
-                <div className="space-y-3 flex justify-between">
-                  {plan.subscription_plan_is_active ? (
-                    <>
-                    <Button disabled className="w-full">Subscribed</Button>
-
-                     </>
-                  ) : (
-                    <>
-                    <Button disabled={isStartingTrialLoading} onClick={() => handleStartTrial(plan.subscription_plan_id)}>Start Free Trial</Button>
-                    <Button variant="secondary" disabled={isCreatePaidSubscriptionLoading} onClick={() => handleSubscribe(plan.subscription_plan_id)}>Subscribe Now</Button>
-                    </>
+                <div
+                  className={`relative h-full rounded-2xl border p-7 flex flex-col transition-all duration-300 ${
+                    isActive
+                      ? "bg-[#0d0d12] border-red-300/25"
+                      : "bg-white/[0.015] border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.025]"
+                  }`}
+                >
+                  {/* Active badge */}
+                  {isActive && (
+                    <div className="absolute -top-3 left-6">
+                      <span className="inline-block px-3 py-[3px] bg-red-300 text-[#060609] text-[10px] font-bold uppercase tracking-[0.12em] rounded-full shadow-[0_0_12px_rgba(245,158,11,0.3)]">
+                        Active Plan
+                      </span>
+                    </div>
                   )}
+
+                  {/* Plan name & description */}
+                  <div className="mb-6">
+                    <h3 className="font-brfirma text-[17px] font-bold text-white mb-1.5 tracking-tight">
+                      {plan.subscription_plan_name}
+                    </h3>
+                    <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
+                      {plan.subscription_plan_description}
+                    </p>
+                  </div>
+
+                  {/* Price */}
+                  <div className="mb-6 pb-6 border-b border-white/[0.05]">
+                    <div className="flex items-end gap-1.5">
+                      <span className="font-strawford text-[2.5rem] font-bold text-white leading-none tracking-tight">
+                        {plan.subscription_plan_monthly_price}
+                      </span>
+                      <div className="flex flex-col mb-1">
+                        <span className="text-gray-500 text-xs font-medium">
+                          {plan.subscription_plan_currency}
+                        </span>
+                        <span className="text-gray-600 text-[10px]">per month</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Features */}
+                  {plan.subscription_plan_features && (
+                    <ul className="space-y-3 mb-8 flex-1">
+                      {Object.entries(plan.subscription_plan_features).map(([key, value]) => (
+                        <li key={key} className="flex items-start gap-2.5">
+                          <span
+                            className={`mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
+                              isActive
+                                ? "bg-red-300/15 text-red-300"
+                                : "bg-white/[0.06] text-gray-500"
+                            }`}
+                          >
+                            <Check className="w-2.5 h-2.5" strokeWidth={3} />
+                          </span>
+                          <span className="text-gray-400 text-[13px] leading-relaxed">{value}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+
+                  {/* CTAs */}
+                  <div className="mt-auto flex flex-col gap-2.5">
+                    {isActive ? (
+                      <button
+                        disabled={isAccessLoading}
+                        onClick={() => handleAccessService(plan.subscription_plan_name)}
+                        className="group w-full py-2.5 px-4 bg-red-300 hover:bg-red-300 active:bg-red-300 text-[#060609] text-sm font-bold rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                      >
+                        {isAccessLoading ? (
+                          <>
+                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            Redirecting...
+                          </>
+                        ) : (
+                          <>
+                            Open {plan.subscription_plan_name}
+                            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                          </>
+                        )}
+                      </button>
+                    ) : (
+                      <>
+                        <button
+                          disabled={isStartingTrialLoading}
+                          onClick={() => handleStartTrial(plan.subscription_plan_id)}
+                          className="w-full py-2.5 px-4 border border-white/10 hover:border-white/20 hover:bg-white/[0.04] text-white text-sm font-semibold rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isStartingTrialLoading ? "Starting..." : "Start Free Trial"}
+                        </button>
+                        <button
+                          disabled={isCreatePaidSubscriptionLoading}
+                          onClick={() => handleSubscribe(plan.subscription_plan_id)}
+                          className="w-full py-2.5 px-4 bg-white/[0.05] hover:bg-white/[0.08] text-gray-400 hover:text-gray-200 text-sm font-medium rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {isCreatePaidSubscriptionLoading ? "Processing..." : "Subscribe Now"}
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
       </div>
     </div>

@@ -75,3 +75,13 @@ export type SubscriptionActionResponse = {
   message: string;
   data?: SubscriptionResponse | null;
 };
+
+export type ServiceAccessResponse = {
+  status: string;
+  message: string;
+  data: {
+    redirect_url: string;
+    service: string;
+    expires_in_seconds: number;
+  };
+};
