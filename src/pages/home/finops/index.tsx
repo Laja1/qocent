@@ -27,6 +27,7 @@ const Finops = () => {
 
             <Navbar />
             <FinopsHero />
+            <div id="finops-content" />
             <FinopsFeaturesSection />
             <PricingPlan />
             <AboutHowItWorks />

@@ -49,6 +49,7 @@ export default function Hero() {
       buttonText="Learn More"
       buttonIcon={<ArrowDownRight />}
       showButton={true}
+      onButtonClick={() => document.getElementById('home-content')?.scrollIntoView({ behavior: 'smooth' })}
       logos={defaultLogos}
       logoSliderDuration={20}
       className="h-6/8 lg:h-7/8 lg:pb-12"
@@ -88,16 +89,16 @@ export function HeroComponent({
   return (
     <main className="relative min-h-[60vh] mx-auto w-full overflow-hidden px-6 md:px-20">
       <div>
-        <img src={bgImages.bgLayer} className="absolute top-0 left-0 w-full h-full object-cover" alt="" />
+        <img src={bgImages.bgLayer} className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none" alt="" />
       </div>
       <div>
-        <img src={bgImages.whiteOverlay} className="absolute top-0 left-0 w-full h-full object-cover" alt="" />
+        <img src={bgImages.whiteOverlay} className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none" alt="" />
       </div>
       <div>
-        <img src={bgImages.container} className="absolute bottom-0 left-0 w-full h-full object-cover z-20" alt="" />
+        <img src={bgImages.container} className="absolute bottom-0 left-0 w-full h-full object-cover z-20 pointer-events-none" alt="" />
       </div>
       <div>
-        <img src={bgImages.bgRay} className="absolute top-0 left-0 w-full h-full object-cover" alt="" />
+        <img src={bgImages.bgRay} className="absolute top-0 left-0 w-full h-full object-cover pointer-events-none" alt="" />
       </div>
 
       <div className={`max-w-7xl mx-auto grid ${type === "home" ? "place-content-end lg:place-content-center pb-20" : "place-content-center"}  relative z-10 w-full ${className}`}>
@@ -202,10 +203,14 @@ interface CustomGlassButtonProps {
 
 export function CustomGlassButton({ onButtonClick, buttonText, buttonIcon, iconPos }: CustomGlassButtonProps) {
   return (
-    <div className="relative p-2 bg-gray-800/10 backdrop-blur-lg rounded-full">
+    <motion.div
+      whileHover={{ scale: 1.05 }}
+      whileTap={{ scale: 0.95 }}
+      className="relative p-2 bg-gray-800/10 backdrop-blur-lg rounded-full w-fit"
+    >
       <button onClick={onButtonClick} className="bg-black text-white px-6 py-3 rounded-full flex items-center gap-2 font-medium">
         {iconPos === "left" ? (<>{buttonIcon} {buttonText}</>) : (<>{buttonText} {buttonIcon}</>)}
       </button>
-    </div>
+    </motion.div>
   )
 }

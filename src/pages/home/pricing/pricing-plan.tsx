@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 const plans = [
     {
         title: 'Monthly',
-        price: '₦145,000',
+        price: '$110',
         period: '/month',
         isPopular: true,
         features: [
@@ -22,7 +22,7 @@ const plans = [
     },
     {
         title: 'Yearly',
-        price: '₦1,740,000',
+        price: '$1,200',
         period: '/year',
         isPopular: false,
         features: [
@@ -73,8 +73,8 @@ export default function PricingPlan() {
                             </div>
 
                             <div className="flex items-baseline gap-1 mb-8">
-                                <span className="text-3xl font-bold text-gray-900">{plan.price}</span>
-                                <span className="text-md text-gray-500">{plan.period}</span>
+                                <span className="text-5xl font-bold text-gray-900">{plan.price}</span>
+                                <span className="text-xl text-gray-500 self-start mt-2">{plan.period}</span>
                             </div>
 
                             <p className="text-gray-700 text-sm font-medium mb-6 leading-relaxed">
@@ -93,7 +93,7 @@ export default function PricingPlan() {
                             </ul>
 
                             <div className="mt-6">
-                                <Button className="rounded-xl">
+                                <Button className="rounded-xl" onClick={() => window.location.href = '/signin'}>
                                     Get Started
                                     <ArrowRight className="w-4 h-4" />
                                 </Button>

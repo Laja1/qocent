@@ -28,6 +28,7 @@ const AboutUs = () => {
 
       <Navbar />
       <AboutHero />
+      <div id="about-content" />
       <OurValue />
       {/* <TeamSection /> */}
       <Benefits />
