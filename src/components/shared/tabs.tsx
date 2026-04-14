@@ -17,24 +17,23 @@ export const Tabs = ({ tabs }: TabsProps) => {
 
   return (
     <div>
-      <div className="flex  flex-wrap  gap-3 lg:gap-7 border-b border-gray-200">
+      <div className="flex flex-wrap gap-2 rounded-2xl border border-border bg-card p-2">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setCurrentTab(tab.id)}
-            className={`relative pb-2  hover:cursor-pointer transition duration-200 ease-in-out text-sm font-medium ${
-              currentTab === tab.id ? "text-red-600" : "text-gray-500"
+            className={`rounded-xl px-4 py-2 hover:cursor-pointer transition duration-200 ease-in-out text-sm font-medium ${
+              currentTab === tab.id
+                ? "bg-primary text-primary-foreground shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted"
             }`}
           >
             {tab.text}
-            {currentTab === tab.id && (
-              <span className="absolute left-0 bottom-0 w-full  h-0.5 bg-red-600  rounded"></span>
-            )}
           </button>
         ))}
       </div>
 
-      <div className="mt-2">{activeTab?.component}</div>
+      <div className="mt-4">{activeTab?.component}</div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Header } from "@/components/shared";
-import { DataTable } from "@/components/shared/datatable";
+import { DataTable } from "@/components/shared/datatabless";
 import { Edit, Eye, Trash2, PlusIcon, Plus, Users } from "lucide-react";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
@@ -227,7 +227,7 @@ export const ServerSites = () => {
   );
 
   return (
-    <div className="h-full mt-5">
+    <div className="h-full">
       <Header title="Server Sites" description="Manage your server site">
         <div className="gap-2 flex">
           <Button
@@ -248,8 +248,8 @@ export const ServerSites = () => {
         </div>{" "}
       </Header>
 
-      <div className="flex gap-4 mb-10 lg:mb-20 flex-col overflow-y-hidden h-full">
-        <Card className="mx-5 px-5 rounded-sm">
+      <div className="flex gap-4 mb-10 lg:mb-20 flex-col overflow-y-hidden h-full px-5">
+        <Card className="px-5 rounded-2xl border border-border shadow-none bg-card">
           <DataTable
             data={sitesToDisplay || []}
             columns={serverSiteColumns}
