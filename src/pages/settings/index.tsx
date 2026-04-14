@@ -1,6 +1,5 @@
 import { Header, Tabs } from "@/components/shared";
 import { Profile } from "./profile";
-import { Integrations } from "./integrations";
 import { Security } from "./secuirty";
 import { Payment } from "./payment";
 import { Subscription } from "./subscription";
@@ -23,32 +22,27 @@ export const Settings = () => {
     },
     {
       id: 3,
-      text: "Integrations",
-      component: <Integrations />,
-    },
-    {
-      id:4,
       text: "Payment Method",
       component: <Payment />,
     },
     {
-      id:5,
+      id: 4,
       text: "Subscription",
       component: <Subscription />,
     },
   ];
 
   return (
-    <div className=" h-full mt-5 w-full">
+    <div className="h-full w-full pb-6">
       <Header
         title="Settings"
         description="Manage your settings and preferences"
-      >
-        
-      </Header>
+      />
 
       <div className="px-5 w-full">
+        <div className="rounded-2xl border border-border bg-card p-4 shadow-sm">
         <Tabs tabs={tabData} />
+        </div>
       </div>
     </div>
   );

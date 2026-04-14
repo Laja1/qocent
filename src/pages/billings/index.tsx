@@ -1,5 +1,5 @@
 import {  Header, type ColumnDef } from "@/components/shared";
-import { DataTable } from "@/components/shared/datatable";
+import { DataTable } from "@/components/shared/datatabless";
 import {
   FileSpreadsheet,
   Download,

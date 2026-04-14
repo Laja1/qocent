@@ -1,4 +1,4 @@
-import { DataTable, type ColumnDef } from "@/components/shared/datatable";
+import { DataTable, type ColumnDef } from "@/components/shared/datatabless";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";

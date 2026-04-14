@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DataTable } from "@/components/shared/datatable";
+import { DataTable } from "@/components/shared/datatabless";
 import {
   FileUploader,
   type FileUploaderHandle,

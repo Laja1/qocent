@@ -18,7 +18,6 @@ import StarterPacksGrid from "@/pages/starter-packs";
 import { Access } from "@/pages/access";
 import { ProfessionalServices } from "@/pages/professional-services";
 import { CreateProfessionalService } from "@/pages/create-professional-service";
-import { Finops } from "@/pages/finops";
 import SubscriptionCards from "@/pages/subscription/page";
 
 const serverHouseAndRoomRoutes: RouteType[] = FEATURE_SERVER_HOUSE_AND_ROOM
@@ -63,13 +62,6 @@ export const dashboardRoute: RouteType[] = [
     component: <SubscriptionCards />,
     metadata: { isAuthenticated: false, hasSidebar: true },
   },
-  {
-    path: RouteConstant.dashboard.finops.path,
-    name: RouteConstant.dashboard.finops.name,
-    component: <Finops />,
-    metadata: { isAuthenticated: false, hasSidebar: true },
-  },
-
   ...serverHouseAndRoomRoutes,
 
   {

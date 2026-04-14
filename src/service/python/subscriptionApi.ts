@@ -12,6 +12,7 @@ import type {
   CreatePaidSubscriptionResponse,
   SubscriptionPaymentStatusResponse,
   SubscriptionActionResponse,
+  ServiceAccessResponse,
 } from "@/models/response/subscriptionResponse";
 import type { genericResponse } from "@/models/response";
 
@@ -126,6 +127,13 @@ export const subscriptionApi = createApi({
         params: { increment },
       }),
     }),
+
+    getServiceAccess: build.mutation<ServiceAccessResponse, { service_name: string }>({
+      query: ({ service_name }) => ({
+        url: `/services/${service_name}/access`,
+        method: "POST",
+      }),
+    }),
   }),
 });
 
@@ -144,4 +152,5 @@ export const {
   useConvertTrialToPaidMutation,
   useGetAllWithMySubscriptionsQuery,
   useTrackUsageMutation,
+  useGetServiceAccessMutation,
 } = subscriptionApi;

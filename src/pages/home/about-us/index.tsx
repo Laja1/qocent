@@ -4,8 +4,8 @@ import Seo from "@/components/shared/seo";
 import ElevateMessage from "../home/elevate_message";
 import Benefits from "./benefits";
 // import Customers from "./customers";
-import { AboutHero } from "./Hero";
 import OurValue from "./our-value";
+import { AboutHero } from "./hero";
 // import TeamSection from "./team";
 
 const AboutUs = () => {

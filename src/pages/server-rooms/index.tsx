@@ -1,5 +1,5 @@
 import { Button, Header, Tabs } from "@/components/shared";
-import { DataTable } from "@/components/shared/datatable";
+import { DataTable } from "@/components/shared/datatabless";
 import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";

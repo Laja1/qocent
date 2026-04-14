@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Header, Tabs } from "@/components/shared";
-import { DataTable } from "@/components/shared/datatable";
+import { DataTable } from "@/components/shared/datatabless";
 import { Eye, PlusIcon, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { SummaryTable } from "../server-sites/summary-table";

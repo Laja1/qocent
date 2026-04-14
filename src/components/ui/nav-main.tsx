@@ -52,7 +52,11 @@ export function NavMain({
 
   return (
     <SidebarGroup>
-      {title && <SidebarGroupLabel>{title}</SidebarGroupLabel>}
+      {title && (
+        <SidebarGroupLabel className="text-white/45 uppercase text-[10px] tracking-[0.08em] px-2">
+          {title}
+        </SidebarGroupLabel>
+      )}
       <SidebarMenu className="space-y-1">
         {items.map((item) => (
           <Collapsible
@@ -67,8 +71,8 @@ export function NavMain({
                   onClick={() => navigate(item.url)}
                   tooltip={item.title}
                 >
-                  {item.icon && <span className="shrink-0">{item.icon}</span>}
-                  <span className="text-xs">{item.title}</span>
+                  {item.icon && <span className="shrink-0 text-white/70">{item.icon}</span>}
+                  <span className="text-xs text-white/85">{item.title}</span>
                   {(item.items && item.items.length > 0) && (
                     <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                   )}
@@ -80,7 +84,7 @@ export function NavMain({
                   <SidebarMenuSub>
                     {item.items.map((subItem) => (
                       <SidebarMenuSubItem key={subItem.title}>
-                        <SidebarMenuSubButton asChild>
+                        <SidebarMenuSubButton asChild isActive={location.pathname === subItem.url}>
                           <button
                             type="button"
                             onClick={() => navigate(subItem.url)}

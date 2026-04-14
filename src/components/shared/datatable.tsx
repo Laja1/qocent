@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+"use client";
 import type React from "react";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useCallback, useRef } from "react";
 import {
   Table,
   TableBody,
@@ -9,7 +10,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { Input } from "@/components/ui/input";
 import {
   Select,
   SelectContent,
@@ -36,11 +36,13 @@ import {
   FileText,
   FileSpreadsheet,
   FileImage,
+  Columns3,
 } from "lucide-react";
-import { IconFilter2 } from "@tabler/icons-react";
+import { IconFilter2, IconEye, IconEyeOff } from "@tabler/icons-react";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
-import "jspdf-autotable";
+import autoTable from "jspdf-autotable";
+import { Textfield } from "./textfield";
 
 export type HeaderAction = {
   icon: React.ComponentType<{ className?: string }>;
@@ -58,7 +60,8 @@ export type ColumnDef<T> = {
   headerClassName?: string;
   filterOptions?: { label: string; value: string }[];
   headerAction?: HeaderAction;
-  exportable?: boolean; // New property to control if column should be included in exports
+  exportable?: boolean;
+  width?: string;
 };
 
 export type SortingState = {
@@ -67,7 +70,7 @@ export type SortingState = {
 } | null;
 
 export type ActionItem<T> = {
-  label: string;
+  label: string | ((row: T) => string);
   icon?: React.ComponentType<{ className?: string }>;
   onClick: (row: T) => void;
   variant?: "default" | "destructive";
@@ -93,6 +96,9 @@ export type DataTableProps<T> = {
   description?: string;
   searchPlaceholder?: string;
   onRowClick?: (row: T) => void;
+  buttonText?: string;
+  buttonAction?: () => void;
+  buttonShow?: boolean;
   initialSorting?: SortingState;
   filterableColumns?: string[];
   onFilterChange?: (filters: Record<string, string>) => void;
@@ -106,7 +112,9 @@ export type DataTableProps<T> = {
   isLoading?: boolean;
   skeletonRows?: number;
   exportOptions?: ExportOptions;
-  emptyComponent?: React.ReactNode; // New prop for custom empty state
+  emptyComponent?: React.ReactNode;
+  enableRowSelection?: boolean; // NEW: Enable checkbox selection
+  showPagination?: boolean;
 };
 
 // Skeleton component
@@ -184,8 +192,12 @@ export function DataTable<T>({
   showDownload = true,
   isLoading = false,
   skeletonRows = 10,
+  buttonAction,
+  buttonText,
+  buttonShow,
   exportOptions = {},
-  emptyComponent, // New prop
+  emptyComponent,
+  enableRowSelection = false, // NEW: Default to false for backwards compatibility
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -194,8 +206,68 @@ export function DataTable<T>({
   const [selectedRows, setSelectedRows] = useState<Set<string | number>>(
     new Set()
   );
+  const [hiddenColumns, setHiddenColumns] = useState<Set<string>>(new Set());
+  const [columnWidths, setColumnWidths] = useState<Record<string, number>>({});
+  const resizingRef = useRef<{ columnId: string; startX: number; startWidth: number } | null>(null);
+  const tableRef = useRef<HTMLDivElement>(null);
 
-  // Use useEffect to notify parent of filter changes after render
+  // Initialize column widths from column defs
+  useEffect(() => {
+    const widths: Record<string, number> = {};
+    columns.forEach((col) => {
+      if (col.width) {
+        const parsed = parseInt(col.width, 10);
+        if (!isNaN(parsed)) widths[col.id] = parsed;
+      }
+    });
+    setColumnWidths((prev) => ({ ...widths, ...prev }));
+  }, [columns]);
+
+  // Resize handlers
+  const handleResizeStart = useCallback(
+    (columnId: string, e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const th = (e.target as HTMLElement).closest("th");
+      if (!th) return;
+      const startWidth = th.getBoundingClientRect().width;
+      resizingRef.current = { columnId, startX: e.clientX, startWidth };
+
+      const handleMouseMove = (moveEvent: MouseEvent) => {
+        if (!resizingRef.current) return;
+        const diff = moveEvent.clientX - resizingRef.current.startX;
+        const newWidth = Math.max(50, resizingRef.current.startWidth + diff);
+        setColumnWidths((prev) => ({ ...prev, [resizingRef.current!.columnId]: newWidth }));
+      };
+
+      const handleMouseUp = () => {
+        resizingRef.current = null;
+        document.removeEventListener("mousemove", handleMouseMove);
+        document.removeEventListener("mouseup", handleMouseUp);
+        document.body.style.cursor = "";
+        document.body.style.userSelect = "";
+      };
+
+      document.body.style.cursor = "col-resize";
+      document.body.style.userSelect = "none";
+      document.addEventListener("mousemove", handleMouseMove);
+      document.addEventListener("mouseup", handleMouseUp);
+    },
+    []
+  );
+
+  const toggleColumnVisibility = useCallback((columnId: string) => {
+    setHiddenColumns((prev) => {
+      const next = new Set(prev);
+      if (next.has(columnId)) {
+        next.delete(columnId);
+      } else {
+        next.add(columnId);
+      }
+      return next;
+    });
+  }, []);
+
   useEffect(() => {
     if (onFilterChange) {
       onFilterChange(filters);
@@ -289,19 +361,46 @@ export function DataTable<T>({
     }));
   };
 
+  // NEW: Handle checkbox selection
+  const handleCheckboxChange = (
+    rowId: string | number,
+    e: React.MouseEvent
+  ) => {
+    e.stopPropagation();
+    setSelectedRows((prev) => {
+      const newSet = new Set(prev);
+      if (newSet.has(rowId)) {
+        newSet.delete(rowId);
+      } else {
+        newSet.add(rowId);
+      }
+      return newSet;
+    });
+  };
+
+  // NEW: Handle select all
+  const handleSelectAll = () => {
+    if (selectedRows.size === paginatedData.length) {
+      setSelectedRows(new Set());
+    } else {
+      const allIds = paginatedData.map((row, index) =>
+        getRowId(row, startIndex + index)
+      );
+      setSelectedRows(new Set(allIds));
+    }
+  };
+
   // Export functions
+  const baseFilename = exportOptions.filename || `${title || "data"}_${new Date().toISOString().split("T")[0]}`;
+
   const exportToCSV = () => {
-    const filename =
-      exportOptions.filename ||
-      `${title || "data"}_${new Date().toISOString().split("T")[0]}.csv`;
-    const csvContent = convertToCSV(processedData, columns, exportOptions);
+    const filename = baseFilename.endsWith(".csv") ? baseFilename : `${baseFilename}.csv`;
+    const csvContent = convertToCSV(data, columns, exportOptions);
     downloadFile(csvContent, filename, "text/csv");
   };
 
   const exportToExcel = () => {
-    const filename =
-      exportOptions.filename ||
-      `${title || "data"}_${new Date().toISOString().split("T")[0]}.xlsx`;
+    const filename = baseFilename.endsWith(".xlsx") ? baseFilename : `${baseFilename}.xlsx`;
     const exportableColumns = columns.filter(
       (col) => col.exportable !== false && col.id !== "actions"
     );
@@ -310,7 +409,7 @@ export function DataTable<T>({
       exportOptions.includeHeaders !== false
         ? exportableColumns.map((col) => col.header)
         : [],
-      ...processedData.map((row) =>
+      ...data.map((row) =>
         exportableColumns.map((col) => {
           const accessor =
             typeof col.accessorKey === "function"
@@ -340,24 +439,20 @@ export function DataTable<T>({
   };
 
   const exportToPDF = () => {
-    const filename =
-      exportOptions.filename ||
-      `${title || "data"}_${new Date().toISOString().split("T")[0]}.pdf`;
+    const filename = baseFilename.endsWith(".pdf") ? baseFilename : `${baseFilename}.pdf`;
     const exportableColumns = columns.filter(
       (col) => col.exportable !== false && col.id !== "actions"
     );
 
     const doc = new jsPDF();
 
-    // Add title if provided
     if (title) {
       doc.setFontSize(16);
       doc.text(title, 14, 20);
     }
 
-    // Prepare table data
     const tableHeaders = exportableColumns.map((col) => col.header);
-    const tableData = processedData.map((row) =>
+    const tableData = data.map((row) =>
       exportableColumns.map((col) => {
         const accessor =
           typeof col.accessorKey === "function"
@@ -368,8 +463,7 @@ export function DataTable<T>({
       })
     );
 
-    // Add table
-    (doc as any).autoTable({
+    autoTable(doc, {
       head: [tableHeaders],
       body: tableData,
       startY: title ? 30 : 20,
@@ -400,8 +494,45 @@ export function DataTable<T>({
     selectedRows.has(getRowId(row, startIndex + index))
   );
 
+  // Columns available for visibility toggling (user-defined columns only, not select/actions)
+  const toggleableColumns = useMemo(
+    () => columns.filter((col) => col.id !== "select" && col.id !== "actions"),
+    [columns]
+  );
+
   const enhancedColumns = useMemo(() => {
-    const cols = [...columns];
+    // Filter out hidden columns first
+    const visibleCols = columns.filter((col) => !hiddenColumns.has(col.id));
+    const cols = [...visibleCols];
+
+    // Add checkbox column if row selection is enabled
+    if (enableRowSelection && bulkActions.length > 0) {
+      cols.unshift({
+        id: "select",
+        header: "",
+        accessorKey: () => "",
+        exportable: false,
+        cell: (row: T, rowIndex?: number) => {
+          const rowId = getRowId(row, startIndex + (rowIndex || 0));
+          return (
+            <div
+              className="flex justify-center"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <input
+                type="checkbox"
+                checked={selectedRows.has(rowId)}
+                onChange={(e) => handleCheckboxChange(rowId, e as any)}
+                onClick={(e) => e.stopPropagation()}
+                className="w-4 h-4 rounded border-gray-300 cursor-pointer"
+              />
+            </div>
+          );
+        },
+        headerClassName: "w-12",
+      } as ColumnDef<T>);
+    }
+
     if (actions.length > 0) {
       cols.push({
         id: "actions",
@@ -416,19 +547,19 @@ export function DataTable<T>({
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className=" rounded-xs ">
+              <DropdownMenuContent align="end" className=" rounded-md ">
                 {actions.map((action, index) => (
                   <DropdownMenuItem
                     key={index}
                     onClick={() => action.onClick(row)}
-                    className={`cursor-pointer  ${
+                    className={`cursor-pointer  p-2 ${
                       action.variant === "destructive"
                         ? "text-red-600 focus:text-red-600"
                         : ""
                     }`}
                   >
-                    {action.icon && <action.icon className={`h-4 w-4 mr-2`} />}
-                    {action.label}
+                    {action.icon && <action.icon className={`h-4 w-4 mr-1`} />}
+                    {typeof action.label === "function" ? action.label(row) : action.label}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>
@@ -439,9 +570,16 @@ export function DataTable<T>({
       } as ColumnDef<T>);
     }
     return cols;
-  }, [columns, actions]);
+  }, [
+    columns,
+    actions,
+    enableRowSelection,
+    bulkActions.length,
+    selectedRows,
+    startIndex,
+    hiddenColumns,
+  ]);
 
-  // Render skeleton rows
   const renderSkeletonRows = () => {
     return Array.from({ length: skeletonRows }, (_, index) => (
       <TableRow key={`skeleton-${index}`}>
@@ -454,7 +592,6 @@ export function DataTable<T>({
     ));
   };
 
-  // Render empty state
   const renderEmptyState = () => {
     if (emptyComponent) {
       return emptyComponent;
@@ -473,7 +610,7 @@ export function DataTable<T>({
   };
 
   return (
-    <div className="bg-white font-brfirma">
+    <div className="border border-border rounded-2xl p-5 bg-card">
       <div className="mb-2">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 ">
           <div>
@@ -493,56 +630,58 @@ export function DataTable<T>({
             )}
           </div>
 
-          {(showSearch || filterColumns.length > 0 || showDownload) && (
-            <div className="flex flex-col md:flex-row gap-2">
-              {showSearch && (
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                  <Input
-                    placeholder={searchPlaceholder}
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10 rounded-xs placeholder:text-xs w-full md:w-[350px]"
-                    disabled={isLoading}
-                  />
-                </div>
-              )}
-
-              {(filterColumns.length > 0 || showDownload) && (
-                <div className="flex gap-2 ">
-                  {filterColumns.map((column) => (
-                    <Select
-                      key={column.id}
-                      value={filters[column.id] || "all"}
-                      onValueChange={(value) =>
-                        handleFilterChange(column.id, value)
-                      }
+          <div className="flex-row items-center flex gap-2">
+            {(showSearch || filterColumns.length > 0 || showDownload) && (
+              <div className="flex flex-col md:flex-row gap-2">
+                {showSearch && (
+                  <div className="relative">
+                    <Textfield
+                      name="search"
+                      placeholder={searchPlaceholder}
+                      value={searchTerm}
+                      prefixIcon={<Search className="text-gray-400 size-4 " />}
+                      onChange={(e) => setSearchTerm(e.target.value)}
+                      className="pl-10 rounded-md placeholder:text-xs w-full md:w-[350px]"
                       disabled={isLoading}
-                    >
-                      <SelectTrigger className="w-full rounded-xs text-xs">
-                        <IconFilter2 className="h-4 w-4 mr-2" />
-                        <SelectValue
-                          className="text-xs"
-                          placeholder={column.header}
-                        />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem className="text-xs" value="all">
-                          All {column.header}
-                        </SelectItem>
-                        {column.filterOptions?.map((option) => (
-                          <SelectItem
+                    />
+                  </div>
+                )}
+
+                {(filterColumns.length > 0 || showDownload) && (
+                  <div className="flex gap-2 items-center justify-center">
+                    {filterColumns.map((column) => (
+                      <Select
+                        key={column.id}
+                        value={filters[column.id] || "all"}
+                        onValueChange={(value) =>
+                          handleFilterChange(column.id, value)
+                        }
+                        disabled={isLoading}
+                      >
+                        <SelectTrigger className="w-full rounded-md text-xs">
+                          <IconFilter2 className="h-4 w-4 mr-2" />
+                          <SelectValue
                             className="text-xs"
-                            key={option.value}
-                            value={option.value}
-                          >
-                            {option.label}
+                            placeholder={column.header}
+                          />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem className="text-xs" value="all">
+                            All {column.header}
                           </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  ))}
-                  {showDownload && (
+                          {column.filterOptions?.map((option) => (
+                            <SelectItem
+                              className="text-xs"
+                              key={option.value}
+                              value={option.value}
+                            >
+                              {option.label}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    ))}
+                    {/* Column visibility toggle */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
@@ -550,44 +689,96 @@ export function DataTable<T>({
                           size="sm"
                           className="border border-sm p-2"
                           disabled={isLoading}
+                          title="Toggle columns"
                         >
-                          <Download className="h-4 w-4" />
+                          <Columns3 className="h-4 w-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="rounded-xs">
-                        <DropdownMenuItem
-                          onClick={exportToCSV}
-                          className="cursor-pointer text-xs"
-                        >
-                          <FileText className="h-2 w-2 mr-1" />
-                          Export as CSV
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={exportToExcel}
-                          className="cursor-pointer text-xs"
-                        >
-                          <FileSpreadsheet className="h-2 w-2 mr-1" />
-                          Export as Excel
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={exportToPDF}
-                          className="cursor-pointer text-xs"
-                        >
-                          <FileImage className="h-2 w-2 mr-1" />
-                          Export as PDF
-                        </DropdownMenuItem>
+                      <DropdownMenuContent align="end" className="rounded-md w-48 max-h-72 overflow-y-auto">
+                        <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">Toggle columns</div>
+                        {toggleableColumns.map((col) => {
+                          const isHidden = hiddenColumns.has(col.id);
+                          return (
+                            <DropdownMenuItem
+                              key={col.id}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                toggleColumnVisibility(col.id);
+                              }}
+                              className="cursor-pointer text-xs flex items-center gap-2"
+                            >
+                              {isHidden ? (
+                                <IconEyeOff className="h-3.5 w-3.5 text-muted-foreground" stroke={1.5} />
+                              ) : (
+                                <IconEye className="h-3.5 w-3.5 text-primary" stroke={1.5} />
+                              )}
+                              <span className={isHidden ? "text-muted-foreground" : ""}>{col.header}</span>
+                            </DropdownMenuItem>
+                          );
+                        })}
+                        {hiddenColumns.size > 0 && (
+                          <DropdownMenuItem
+                            onClick={() => setHiddenColumns(new Set())}
+                            className="cursor-pointer text-xs font-medium border-t mt-1 pt-1"
+                          >
+                            Show all columns
+                          </DropdownMenuItem>
+                        )}
                       </DropdownMenuContent>
                     </DropdownMenu>
-                  )}
-                </div>
-              )}
-            </div>
-          )}
+                    {showDownload && (
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="border rounded-md border-sm p-2"
+                            disabled={isLoading}
+                          >
+                            <Download className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end" className="rounded-md">
+                          <DropdownMenuItem
+                            onClick={exportToCSV}
+                            className="cursor-pointer text-xs"
+                          >
+                            <FileText className="h-2 w-2 mr-1" />
+                            Export as CSV
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={exportToExcel}
+                            className="cursor-pointer text-xs"
+                          >
+                            <FileSpreadsheet className="h-2 w-2 mr-1" />
+                            Export as Excel
+                          </DropdownMenuItem>
+                          <DropdownMenuItem
+                            onClick={exportToPDF}
+                            className="cursor-pointer text-xs"
+                          >
+                            <FileImage className="h-2 w-2 mr-1" />
+                            Export as PDF
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    )}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {buttonShow && (
+              <Button className=" rounded-md" onClick={buttonAction}>
+                {buttonText}
+              </Button>
+            )}
+          </div>
         </div>
 
         {showBulkActions && !isLoading && (
-          <div className="flex items-center gap-2 p-3 bg-blue-50 border border-blue-200 rounded-xs">
-            <span className="text-sm font-medium text-blue-900">
+          <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md mt-4">
+            <span className="text-sm font-medium text-red-900">
               {selectedRows.size} item
               {selectedRows.size !== 1 ? "s" : ""} selected
             </span>
@@ -599,9 +790,11 @@ export function DataTable<T>({
                     action.variant === "destructive" ? "destructive" : "outline"
                   }
                   size="sm"
-                  onClick={() => action.onClick(selectedRowsData)}
+                  onClick={() => {
+                    action.onClick(selectedRowsData);
+                  }}
                 >
-                  {action.icon && <action.icon className="h-4 w-4 mr-2" />}
+                  {action.icon && <action.icon className="h-4 w-4" />}
                   {action.label}
                 </Button>
               ))}
@@ -617,67 +810,100 @@ export function DataTable<T>({
         )}
       </div>
 
-      <CardContent>
-        <div className="rounded-xs border">
-          <Table>
+      <CardContent className="mx-0 p-0">
+        <div className="rounded-2xl border border-border overflow-x-auto" ref={tableRef}>
+          <Table className="w-full">
             <TableHeader>
-              <TableRow>
-                {enhancedColumns.map((column) => (
-                  <TableHead
-                    key={column.id}
-                    className={`font-semibold text-xs font-brfirma-bold h-8 ${
-                      column.sortable && !isLoading
-                        ? "cursor-pointer select-none"
-                        : ""
-                    } ${column.headerClassName || ""}`}
-                    onClick={
-                      column.sortable && !isLoading
-                        ? () => handleSort(column.id)
-                        : undefined
-                    }
-                  >
-                    <div
-                      className={`flex items-center w-full ${
-                        column.headerClassName?.includes("text-right")
-                          ? "justify-end"
+              <TableRow className="bg-muted/50 hover:bg-muted/50">
+                {enhancedColumns.map((column) => {
+                  const isUtilityCol = column.id === "select" || column.id === "actions";
+                  const widthStyle = columnWidths[column.id]
+                    ? { width: `${columnWidths[column.id]}px` }
+                    : column.width
+                    ? { width: column.width }
+                    : undefined;
+
+                  return (
+                    <TableHead
+                      key={column.id}
+                      style={widthStyle}
+                      className={`relative font-semibold text-xs h-10 border-b-2 border-border/60 ${
+                        column.sortable && !isLoading
+                          ? "cursor-pointer select-none"
                           : ""
-                      } ${
-                        column.headerClassName?.includes("text-center")
-                          ? "justify-center"
-                          : ""
-                      }`}
+                      } ${column.headerClassName || ""}`}
+                      onClick={
+                        column.sortable && !isLoading
+                          ? () => handleSort(column.id)
+                          : undefined
+                      }
                     >
-                      <div className="flex items-center">
-                        {column.header}
-                        {column.headerAction && !isLoading && (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="h-6 w-6 p-0 ml-1 hover:bg-gray-100"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              column.headerAction!.onClick();
-                            }}
-                            title={column.headerAction.tooltip}
-                          >
-                            <column.headerAction.icon className="h-3 w-3" />
-                          </Button>
-                        )}
-                        {column.sortable &&
-                          sorting?.id === column.id &&
-                          !isLoading && (
-                            <span className="ml-1">
-                              {sorting.desc ? (
-                                <ChevronDown className="h-4 w-4" />
-                              ) : (
-                                <ChevronUp className="h-4 w-4" />
+                      <div
+                        className={`flex items-center w-full pr-2 ${
+                          column.headerClassName?.includes("text-right")
+                            ? "justify-end"
+                            : ""
+                        } ${
+                          column.headerClassName?.includes("text-center")
+                            ? "justify-center"
+                            : ""
+                        }`}
+                      >
+                        {column.id === "select" && enableRowSelection ? (
+                          <input
+                            type="checkbox"
+                            checked={
+                              selectedRows.size === paginatedData.length &&
+                              paginatedData.length > 0
+                            }
+                            onChange={handleSelectAll}
+                            className="w-4 h-4 rounded border-gray-300 cursor-pointer"
+                            disabled={isLoading}
+                          />
+                        ) : (
+                          <div className="flex items-center">
+                            {column.header}
+                            {column.headerAction && !isLoading && (
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-6 w-6 p-0 ml-1 hover:bg-gray-100"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  column.headerAction!.onClick();
+                                }}
+                                title={column.headerAction.tooltip}
+                              >
+                                <column.headerAction.icon className="h-3 w-3" />
+                              </Button>
+                            )}
+                            {column.sortable &&
+                              sorting?.id === column.id &&
+                              !isLoading && sorting && (
+                                <span className="ml-1">
+                                  {sorting.desc ? (
+                                    <ChevronDown className="h-4 w-4" />
+                                  ) : (
+                                    <ChevronUp className="h-4 w-4" />
+                                  )}
+                                </span>
                               )}
-                            </span>
-                          )}
+                          </div>
+                        )}
                       </div>
-                    </div>
-                  </TableHead>
-                ))}
+                      {/* Resize handle */}
+                      {!isUtilityCol && (
+                        <div
+                          className="absolute right-0 top-0 h-full w-1.5 cursor-col-resize group hover:bg-primary/30 active:bg-primary/50 z-10"
+                          onMouseDown={(e) => handleResizeStart(column.id, e)}
+                          onClick={(e) => e.stopPropagation()}
+                        >
+                          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-px h-4 bg-border group-hover:bg-primary/60 transition-colors" />
+                        </div>
+                      )}
+                    </TableHead>
+                  );
+                })}
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -688,25 +914,41 @@ export function DataTable<T>({
                 : paginatedData.map((row, rowIndex) => {
                     const actualIndex = startIndex + rowIndex;
                     const rowId = getRowId(row, actualIndex);
+                    const isEven = rowIndex % 2 === 0;
                     return (
                       <tr
                         key={String(rowId)}
-                        className={` ${onRowClick ? "cursor-pointer" : ""} ${
-                          selectedRows.has(rowId) ? "bg-blue-50" : ""
+                        className={`transition-colors ${
+                          onRowClick ? "cursor-pointer" : ""
                         } ${
-                          highlightedRowId === rowId
-                            ? "bg-red-100"
-                            : ""
-                        }`}
+                          selectedRows.has(rowId)
+                            ? "bg-primary/5"
+                            : highlightedRowId === rowId
+                            ? "bg-primary/10 dark:text-black"
+                            : isEven
+                            ? ""
+                            : "bg-muted/30"
+                        } hover:bg-primary/5`}
                         onClick={onRowClick ? () => onRowClick(row) : undefined}
                       >
-                        {enhancedColumns.map((column) => (
-                          <td className="border-b px-2 text-xs truncate max-w-[130px]">
-                            {column.cell
-                              ? column.cell(row, rowIndex)
-                              : String(getAccessor(column)(row))}
-                          </td>
-                        ))}
+                        {enhancedColumns.map((column) => {
+                          const widthStyle = columnWidths[column.id]
+                            ? { width: `${columnWidths[column.id]}px` }
+                            : undefined;
+                          return (
+                            <td
+                              key={column.id}
+                              style={widthStyle}
+                              className="border-b border-border/40 px-2 py-1.5 text-xs overflow-hidden text-ellipsis whitespace-nowrap"
+                            >
+                              <div className="truncate">
+                                {column.cell
+                                  ? column.cell(row, rowIndex)
+                                  : String(getAccessor(column)(row))}
+                              </div>
+                            </td>
+                          );
+                        })}
                       </tr>
                     );
                   })}

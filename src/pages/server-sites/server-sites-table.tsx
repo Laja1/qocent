@@ -1,5 +1,5 @@
 import { type ColumnDef } from "@/components/shared";
-import { DataTable } from "@/components/shared/datatable";
+import { DataTable } from "@/components/shared/datatabless";
 import { Edit, Eye, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
