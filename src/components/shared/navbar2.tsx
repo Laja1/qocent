@@ -102,6 +102,7 @@ const DesktopNavigation: React.FC = () => {
     setActive(currentIndex !== -1 ? currentIndex : null);
   }, [location.pathname]);
 
+
   const onItemClick = (idx: number) => {
     setActive(idx);
   };
