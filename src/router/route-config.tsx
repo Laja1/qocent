@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from "react-router-dom";
-import { ScrollWrapper } from "@/components/shared/scroll-to-top";
+import { ScrollToTopOnPathChange, ScrollWrapper } from "@/components/shared/scroll-to-top";
 import { authRoute } from "./route/authRoute";
 import { dashboardRoute } from "./route/dashboardRoute";
 import { publicRoute } from "./route/publicRoute";
@@ -16,6 +16,20 @@ import DocsServerHouse from "@/pages/home/documentation/pages/DocsServerHouse";
 import DocsServerRoom from "@/pages/home/documentation/pages/DocsServerRoom";
 import DocsInvitingAccounts from "@/pages/home/documentation/pages/DocsInvitingAccounts";
 import { FEATURE_SERVER_HOUSE_AND_ROOM } from "@/config/productFeatures";
+
+const RouteShell = () => (
+  <>
+    <ScrollToTopOnPathChange />
+    <Outlet />
+  </>
+);
+
+const DocsRouteShell = () => (
+  <>
+    <ScrollToTopOnPathChange />
+    <Documentation />
+  </>
+);
 
 const publicRoutesMapped = publicRoute.map((route) => ({
   path: route.path,
@@ -35,7 +49,7 @@ const dashboardRoutesMapped = dashboardRoute.map((route) => ({
 export const routeConfig = [
   {
     path: "/",
-    element: <Outlet />,
+    element: <RouteShell />,
     children: [
       {
         path: "",
@@ -48,7 +62,7 @@ export const routeConfig = [
     path: "/",
     element: (
       <PublicOnlyRoute>
-        <Outlet />
+        <RouteShell />
       </PublicOnlyRoute>
     ),
     children: authRoutesMapped,
@@ -65,7 +79,7 @@ export const routeConfig = [
   },
   {
     path: "/docs",
-    element: <Documentation />,
+    element: <DocsRouteShell />,
     children: [
       { index: true, element: <Navigate to="/docs/overview" replace /> },
       { path: "overview", element: <DocsOverview /> },
