@@ -51,7 +51,6 @@ const Home = () => {
 
       <Navbar />
       <Hero />
-      <div id="home-content" />
       <ProblemWeSolve />
       <QocentSolution />
       <HowItWorksSteps />

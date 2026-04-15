@@ -242,17 +242,17 @@ export const InfiniteSlider = <T = string>({
           from { left: 100%; }
           to { left: calc(${itemWidth}px * -1); }
         }
-
+        
         @keyframes reversePlay {
           from { left: calc(${itemWidth}px * -1); }
           to { left: 100%; }
         }
-
+        
         .slider-container:hover .slider-item {
           animation-play-state: paused !important;
           filter: grayscale(1);
         }
-
+        
         .slider-item:hover {
           filter: grayscale(0);
         }

@@ -3,7 +3,7 @@ import { navRoutes, RouteConstant } from "@/router/routes";
 import clsx from "clsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Button } from "../ui/button";
 
@@ -77,13 +77,6 @@ const buttonVariants = {
   }
 };
 
-const scrollToPageTop = () => {
-  const previousScrollBehavior = document.documentElement.style.scrollBehavior;
-  document.documentElement.style.scrollBehavior = "auto";
-  window.scrollTo(0, 0);
-  document.documentElement.style.scrollBehavior = previousScrollBehavior;
-};
-
 export const Logo = () => {
   return (
     <div className="flex items-center relative">
@@ -101,14 +94,6 @@ const DesktopNavigation: React.FC = () => {
   const location = useLocation();
   const [active, setActive] = useState<number | null>(null);
 
-  useLayoutEffect(() => {
-    const frameId = window.requestAnimationFrame(() => {
-      scrollToPageTop();
-    });
-
-    return () => window.cancelAnimationFrame(frameId);
-  }, [location.pathname]);
-
   // Update active state based on current route
   useEffect(() => {
     const currentIndex = navRoutes.findIndex(
@@ -117,10 +102,8 @@ const DesktopNavigation: React.FC = () => {
     setActive(currentIndex !== -1 ? currentIndex : null);
   }, [location.pathname]);
 
-
   const onItemClick = (idx: number) => {
     setActive(idx);
-    scrollToPageTop();
   };
 
   return (
@@ -130,11 +113,7 @@ const DesktopNavigation: React.FC = () => {
     >
       <div className="flex items-center justify-between bg-black/10 backdrop-blur-lg border border-gray-200 rounded-3xl px-6 pr-2 py-1 w-full h-full max-w-4xl mx-4 shadow-xl">
         <div
-          onClick={() => {
-            scrollToPageTop();
-            navigate("/");
-            setActive(null);
-          }}
+          onClick={() => { navigate("/"); setActive(null); }}
           className="flex items-center justify-between gap-4 h-full"
           aria-label="Qocent Home"
         >
@@ -203,10 +182,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                 >
                   <Link
                     to={item.link}
-                    onClick={() => {
-                      scrollToPageTop();
-                      onClose();
-                    }}
+                    onClick={onClose}
                     className="text-white relative group text-4xl md:text-3xl font-medium hover:font-black hover:text-red-300 transition-colors py-2 px-4"
                     aria-label={`Navigate to ${item.name}`}
                   >
@@ -228,7 +204,6 @@ const MobileMenu: React.FC<MobileMenuProps> = ({ isOpen, onClose }) => {
                 variant="outline"
                 className="bg-white text-black hover:bg-red-500 hover:text-white border-white px-8 py-6 text-2xl rounded-full transition-all"
                 onClick={() => {
-                  scrollToPageTop();
                   navigate(RouteConstant.auth.signin.path);
                   onClose();
                 }}
@@ -262,11 +237,7 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
 }) => (
   <nav className="md:hidden fixed top-0 left-0 right-0 z-50 p-2">
     <div className="flex items-center justify-between bg-black/20 backdrop-blur-lg border border-gray-700/30 rounded-lg px-4 py-3">
-      <Link
-        to="/"
-        onClick={scrollToPageTop}
-        className="cursor-pointer"
-      >
+      <Link to="/" className="cursor-pointer">
         <Logo />
       </Link>
       <motion.button

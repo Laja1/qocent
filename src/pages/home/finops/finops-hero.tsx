@@ -10,7 +10,6 @@ export default function FinopsHero() {
             buttonText="Learn More"
             buttonIcon={<ArrowDownRight />}
             showButton={true}
-            onButtonClick={() => document.getElementById('finops-content')?.scrollIntoView({ behavior: 'smooth' })}
             className='h-full'
         />)
 }

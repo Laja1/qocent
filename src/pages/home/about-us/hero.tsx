@@ -12,7 +12,6 @@ export function AboutHero() {
             buttonText="Learn More"
             buttonIcon={<ArrowDownRight />}
             showButton={true}
-            onButtonClick={() => document.getElementById('about-content')?.scrollIntoView({ behavior: 'smooth' })}
             className='h-3/5 md:h-4/5 2xl:h-3/5'
         >
             {/* <VideoSection /> */}
