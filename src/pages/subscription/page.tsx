@@ -8,6 +8,7 @@ import { ModalConstant } from "@/components/shared/modal/register";
 import { motion } from "framer-motion";
 
 const SubscriptionCards = () => {
+  const finopsBaseUrl = import.meta.env.VITE_FINOPS_BASE_URL || "https://finops.qocent.com";
   const { data: plansData, isLoading } = useGetAllWithMySubscriptionsQuery();
   const [startTrial, { isLoading: isStartingTrialLoading }] = useStartTrialMutation();
   const [createPaidSubscription, { isLoading: isCreatePaidSubscriptionLoading }] = useCreatePaidSubscriptionMutation();
@@ -35,9 +36,12 @@ const SubscriptionCards = () => {
     try {
       const serviceName = planName.toLowerCase().replace(/\s+/g, "");
       const res = await triggerServiceAccess({ service_name: serviceName }).unwrap();
-      const redirectUrl = new URL(res.data.redirect_url);
-      redirectUrl.protocol = "http:";
-      redirectUrl.host = "localhost:3000";
+      const backendRedirectUrl = new URL(res.data.redirect_url);
+      const token = backendRedirectUrl.searchParams.get("token");
+      const redirectUrl = new URL("/", finopsBaseUrl);
+      if (token) {
+        redirectUrl.searchParams.set("token", token);
+      }
       window.location.href = redirectUrl.toString();
     } catch (error: any) {
       showCustomToast(ErrorHandler.extractMessage(error) || "Failed to access service", { toastOptions: { type: "error", autoClose: 5000 } });
