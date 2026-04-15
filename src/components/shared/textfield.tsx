@@ -37,7 +37,7 @@ export const Textfield = ({
 
   // Compute styles
   const textfieldClasses = useMemo(() => {
-    const base = `block w-full bg-white border border-white/10 text-white rounded-md py-2 px-3 text-xs focus:outline-none focus:ring-0.5 focus:ring-green-700 focus:border-green-700`;
+    const base = `block w-full bg-white border border-black/10 text-black rounded-md py-2 px-3 text-xs focus:outline-none focus:ring-0.5 focus:ring-green-700 focus:border-green-700`;
     const state = displayError
       ? "ring-red-500 border-red-500"
       : "ring-[#E8EAEB]";
