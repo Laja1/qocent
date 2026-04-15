@@ -1,4 +1,3 @@
-import { HeroHeader } from "@/components/shared/hero-header";
 import { ArrowRight, Check, Tag, Zap, Shield, BarChart3 } from "lucide-react";
 import CustomSection from "../components/custom-section";
 import { Button } from "@/components/ui/button";

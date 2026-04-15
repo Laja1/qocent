@@ -1,9 +1,7 @@
-import { imgLinks } from "@/assets/assetLink";
 import { Badge } from "@/components/ui/badge";
 import { ArrowDownRight } from "lucide-react";
 import { motion } from "motion/react";
 import type { ReactNode } from "react";
-import { InfiniteSlider } from "./solution";
 
 interface HeroProps {
   badge?: string;
@@ -66,22 +64,15 @@ export function HeroComponent({
   buttonIcon,
   onButtonClick,
   type = "",
-  logoSliderDuration,
   showButton,
   logos = defaultLogos,
   imageBanner = false,
   trustedByText,
   showTrustedBy,
-  backgroundImages,
   className = "",
   children,
 }: HeroProps) {
-  const bgImages = {
-    bgLayer: backgroundImages?.bgLayer ?? imgLinks.bgLayer,
-    whiteOverlay: backgroundImages?.whiteOverlay ?? imgLinks.whiteOverlay,
-    container: backgroundImages?.container ?? imgLinks.container,
-    bgRay: backgroundImages?.bgRay ?? imgLinks.bgRay,
-  };
+
 
   return (
     <main className="relative min-h-[60vh] mx-auto w-full overflow-hidden">
