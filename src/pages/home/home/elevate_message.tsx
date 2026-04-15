@@ -1,5 +1,6 @@
 import { HeroHeader } from "@/components/shared/hero-header";
 import { ArrowUpRight } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function ElevateMessage() {
     return (
@@ -11,10 +12,15 @@ export default function ElevateMessage() {
                     </h2>
                 </HeroHeader>
 
-                <button className="w-fit px-4 md:px-8 bg-black gap-3 text-white rounded-full text-md md:text-lg p-2 md:p-4 flex items-center justify-center">
+                <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => window.location.href = '/signin'}
+                    className="w-fit px-4 md:px-8 bg-black gap-3 text-white rounded-full text-md md:text-lg p-2 md:p-4 flex items-center justify-center"
+                >
                     <span>Sign up now</span>
                     <ArrowUpRight size={24} />
-                </button>
+                </motion.button>
             </div>
         </section>
     )
