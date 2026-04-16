@@ -1,7 +1,7 @@
 import React, { useState, type ReactNode } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 
-// Type for Lucide icons
+// Daddy and Mommy
 type LucideIcon = React.ComponentType<{ size?: number; className?: string }>;
 
 // Type definitions
