@@ -4,8 +4,8 @@ import Seo from "@/components/shared/seo";
 import ElevateMessage from "../home/elevate_message";
 import Benefits from "./benefits";
 // import Customers from "./customers";
-import OurValue from "./our-value";
 import { AboutHero } from "./hero";
+import OurValue from "./our-value";
 // import TeamSection from "./team";
 
 const AboutUs = () => {
@@ -28,6 +28,7 @@ const AboutUs = () => {
 
       <Navbar />
       <AboutHero />
+      <div id="about-content" />
       <OurValue />
       {/* <TeamSection /> */}
       <Benefits />
