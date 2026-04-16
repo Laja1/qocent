@@ -47,8 +47,6 @@ const Home = () => {
         canonical="https://qocent.com"
         schemaMarkup={websiteSchema}
       />
-      {/* <div className="h-[300vh]"></div> */}
-
       <Navbar />
       <Hero />
       <ProblemWeSolve />
