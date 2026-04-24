@@ -78,7 +78,7 @@ export default function PricingPlan() {
                             </div>
 
                             <p className="text-gray-700 text-sm font-medium mb-6 leading-relaxed">
-                                Complete FinOps toolset with tracking, optimization, alerts, and forecasts.
+                                Complete FinOps toolset with tracking, optimization, alerts, and forecasts.ss
                             </p>
 
                             <ul className="space-y-3 border-y border-gray-200 py-6">

@@ -13,6 +13,23 @@ const SubscriptionCards = () => {
   const [startTrial, { isLoading: isStartingTrialLoading }] = useStartTrialMutation();
   const [createPaidSubscription, { isLoading: isCreatePaidSubscriptionLoading }] = useCreatePaidSubscriptionMutation();
   const [triggerServiceAccess, { isLoading: isAccessLoading }] = useGetServiceAccessMutation();
+  const upcomingPlans = [
+    {
+      name: "Site Reliability",
+      description: "Proactive uptime monitoring, incident response automation, and reliability insights.",
+      features: ["SLA/SLO tracking", "Incident timeline and postmortems", "Real-time service health dashboards"],
+    },
+    {
+      name: "Operations",
+      description: "Streamline cloud operations with runbooks, automation, and centralized visibility.",
+      features: ["Operational runbook workflows", "Task automation and orchestration", "Cross-team operational reporting"],
+    },
+    {
+      name: "Security",
+      description: "Continuous cloud security posture management with threat detection and compliance checks.",
+      features: ["Security risk insights", "Compliance baseline checks", "Threat and anomaly notifications"],
+    },
+  ];
 
   const handleStartTrial = async (planId: string) => {
     try {
@@ -57,6 +74,8 @@ const SubscriptionCards = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {plansData?.data?.map((plan, idx) => {
             const isActive = plan.subscription_plan_is_active;
+            const nairaToUsdRate = 1400;
+            const usdEquivalentPrice = (Number(plan.subscription_plan_monthly_price) / nairaToUsdRate).toFixed(2);
 
             return (
               <motion.div
@@ -101,11 +120,13 @@ const SubscriptionCards = () => {
                   <div className="mb-6 pb-6 border-b border-white/[0.05]">
                     <div className="flex items-end gap-1.5">
                       <span className="font-strawford text-[2.5rem] font-bold text-white leading-none tracking-tight">
-                        {plan.subscription_plan_monthly_price}
+                        ${usdEquivalentPrice}
+                        {/* {plan.subscription_plan_monthly_price} */}
                       </span>
                       <div className="flex flex-col mb-1">
                         <span className="text-gray-500 text-xs font-medium">
-                          {plan.subscription_plan_currency}
+                          USD
+                          {/* {plan.subscription_plan_currency} */}
                         </span>
                         <span className="text-gray-600 text-[10px]">per month</span>
                       </div>
@@ -175,6 +196,58 @@ const SubscriptionCards = () => {
               </motion.div>
             );
           })}
+
+          {upcomingPlans.map((plan, idx) => (
+            <motion.div
+              key={plan.name}
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 + (plansData?.data?.length || 0) * 0.1 + idx * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
+              className="relative"
+            >
+              <div className="relative h-full rounded-2xl border p-7 flex flex-col transition-all duration-300 bg-[#0d0d12] border-white/[0.08] hover:border-white/[0.15]">
+                <div className="mb-6">
+                  <h3 className="font-brfirma text-[17px] font-bold text-white mb-1.5 tracking-tight">
+                    {plan.name}
+                  </h3>
+                  <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
+                    {plan.description}
+                  </p>
+                </div>
+
+                <div className="mb-6 pb-6 border-b border-white/[0.05]">
+                  <div className="flex items-end gap-1.5">
+                    <span className="font-strawford text-[2.5rem] font-bold text-white leading-none tracking-tight">
+                      --
+                    </span>
+                    <div className="flex flex-col mb-1">
+                      <span className="text-gray-500 text-xs font-medium">Coming Soon</span>
+                    </div>
+                  </div>
+                </div>
+
+                <ul className="space-y-3 mb-8 flex-1">
+                  {plan.features.map((feature) => (
+                    <li key={feature} className="flex items-start gap-2.5">
+                      <span className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center bg-white/[0.06] text-gray-500">
+                        <Check className="w-2.5 h-2.5" strokeWidth={3} />
+                      </span>
+                      <span className="text-gray-400 text-[13px] leading-relaxed">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+
+                <div className="mt-auto">
+                  <button
+                    disabled
+                    className="w-full py-2.5 px-4 bg-white/[0.04] text-gray-500 text-sm font-medium rounded-xl cursor-not-allowed"
+                  >
+                    Coming Soon
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </div>
