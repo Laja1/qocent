@@ -1,219 +1,118 @@
-import {  Header, type ColumnDef } from "@/components/shared";
-import { DataTable } from "@/components/shared/datatabless";
+import { Header } from "@/components/shared";
+import { showCustomToast } from "@/components/shared/toast";
+import { ErrorHandler } from "@/service/httpClient/errorHandler";
+import type { FundWalletResponse } from "@/models/response/walletBillingResponse";
 import {
-  FileSpreadsheet,
-  Download,
-  FileText,
-  Printer,
-  CheckCircle,
-  AlertTriangle,
-} from "lucide-react";
-import { useMemo, useState } from "react";
-import { BillingsChart } from "./billings-chart";
-import type { billingTableProps } from "./type";
-import { billingsData } from "./config";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Badge } from "@/components/ui/badge";
-import { MdPending } from "react-icons/md";
+  useCheckWalletFundingStatusQuery,
+  useFundWalletMutation,
+  useGetMyBillsQuery,
+  useGetSpendReportQuery,
+  useGetWalletBalanceQuery,
+  useGetWalletTransactionsQuery,
+} from "@/service/python/walletBillingApi";
+import { useState } from "react";
+import { BillsList } from "./components/bills-list";
+import { FundWalletCard } from "./components/fund-wallet-card";
+import { FundingTransferDetailsCard } from "./components/funding-transfer-details-card";
+import { FundingStatusCard } from "./components/funding-status-card";
+import { SpendReportCard } from "./components/spend-report-card";
+import { TransactionsList } from "./components/transactions-list";
+import { WalletBalanceCard } from "./components/wallet-balance-card";
+
+const TRANSACTION_LIMIT = 20;
 
 export const Billings = () => {
-  const [rowId, setRowId] = useState("january");
-  const handleExport = (format: "csv" | "pdf" | "excel") => {
-    // Mock export functionality
-    console.log(`Exporting billing data as ${format}`);
-
-    if (format === "csv") {
-      const csvContent = [
-        "Month,Amount,Discount,Amount Due,Payment Status,Due Date,Payment Date,Outstanding Amount,Payment Method",
-        ...billingsData.map(
-          (row) =>
-            `${row.month},${row.amount},${row.discount},${row.amountDue},${row.paymentStatus},${row.dueDate},${row.paymentDate},${row.outstandingAmount},${row.paymentMethod}`
-        ),
-      ].join("\n");
-
-      const blob = new Blob([csvContent], { type: "text/csv" });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "billing-data.csv";
-      a.click();
-      window.URL.revokeObjectURL(url);
-    }
-  };
-  const billingsColumns: ColumnDef<billingTableProps>[] = useMemo(
-    () => [
-      {
-        id: "month",
-        header: "Month",
-        accessorKey: "month",
-        cell: (row) => <span className="">{row.month}</span>,
-        sortable: true,
-      },
-      {
-        id: "amount",
-        header: "Amount",
-        accessorKey: "amount",
-        headerClassName: "text-right",
-        cell: (row) => (
-          <span className="text-right block justify-center text-green-700 line-clamp-1">
-            {row.amount}
-          </span>
-        ),
-        sortable: true,
-      },
-      {
-        id: "discount",
-        header: "Discount",
-        accessorKey: "discount",
-        headerClassName: "text-right",
-        cell: (row) => (
-          <span className="text-right block justify-center text-green-700 line-clamp-1">
-            {row.discount}
-          </span>
-        ),
-        sortable: true,
-      },
-      {
-        id: "amountDue",
-        header: "Amount Due",
-        headerClassName: "text-right",
-        accessorKey: "amountDue",
-        sortable: true,
-        cell: (row) => (
-          <span className="text-right block justify-center ny-1 text-green-700 line-clamp-1">
-            ${row.amountDue.toLocaleString()}
-          </span>
-        ),
-      },
-      {
-        id: "paymentStatus",
-        header: "Status",
-        accessorKey: "paymentStatus",
-        cell: (row) => (
-          <Badge
-            variant="outline"
-            className={`text-xs my-1 ${
-              row.paymentStatus === "Paid"
-                ? "bg-green-50 text-green-700 border-green-500"
-                : row.paymentStatus === "Pending"
-                ? "bg-yellow-50 text-yellow-700 border-yellow-500"
-                : "bg-red-50 text-red-700 border-red-500"
-            } `}
-          >
-            {row.paymentStatus === "Paid" && (
-              <CheckCircle className="h-3 w-3 mr-1" />
-            )}
-            {row.paymentStatus === "Overdue" && (
-              <AlertTriangle className="h-3 w-3 mr-1" />
-            )}
-            {row.paymentStatus === "Pending" && (
-              <MdPending className="h-3 w-3 mr-1" />
-            )}
-
-            <p className="text-xs">{row.paymentStatus}</p>
-          </Badge>
-        ),
-        sortable: true,
-        filterType: "select",
-        filterOptions: [
-          { label: "Paid", value: "Paid" },
-          { label: "Pending", value: "Pending" },
-          { label: "Overdue", value: "Overdue" },
-        ],
-      },
-      {
-        id: "dueDate",
-        header: "Due Date",
-        headerClassName: "",
-        accessorKey: "dueDate",
-        sortable: true,
-        cell: (row) => <span className=" block">{row.dueDate}</span>,
-      },
-      {
-        id: "outstandingAmount",
-        header: "OUSTANING BILL (USD)",
-        accessorKey: "outstandingAmount",
-        headerClassName: "text-right",
-        cell: (row) => (
-          <span className="text-green-700 text-right block ">
-            {row.outstandingAmount.toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-            })}
-          </span>
-        ),
-        sortable: true,
-      },
-      {
-        id: "paymentMethod",
-        header: "Payment Method",
-        accessorKey: "paymentMethod",
-        cell: (row) => (
-          <span className="block  ">
-            {row.paymentMethod}
-           </span>
-        ),
-        sortable: true,
-      },
-    ],
-    []
+  const [amount, setAmount] = useState("1000");
+  const [paymentId, setPaymentId] = useState("");
+  const [fundingDetails, setFundingDetails] = useState<FundWalletResponse | null>(
+    null
   );
 
-  return (
-    <div>
-      <Header title="Billings" description="Manage your server billings">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="w-full text-xs items-center  flex sm:w-auto bg-white text-black p-2 rounded-xs">
-              <Download className="h-4 w-4 mr-1" />
-              Export Bill
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="rounded-xs">
-            <DropdownMenuItem
-              onClick={() => handleExport("csv")}
-              className="text-xs"
-            >
-              <FileSpreadsheet className="h-4 w-4 mr-1 " />
-              Export as CSV
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => handleExport("excel")}
-              className="text-xs"
-            >
-              <FileText className="h-4 w-4 mr-1" />
-              Export as Excel
-            </DropdownMenuItem>
-            <DropdownMenuItem
-              onClick={() => handleExport("pdf")}
-              className="text-xs"
-            >
-              <Printer className="h-4 w-4 mr-1" />
-              Export as PDF
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </Header>
+  const { data: walletBalance, isLoading: isWalletBalanceLoading } =
+    useGetWalletBalanceQuery();
+  const { data: transactions, isLoading: isTransactionsLoading } =
+    useGetWalletTransactionsQuery({ limit: TRANSACTION_LIMIT });
+  const { data: spendReport, isLoading: isSpendReportLoading } =
+    useGetSpendReportQuery();
+  const { data: myBills, isLoading: isMyBillsLoading } = useGetMyBillsQuery();
+  const {
+    data: fundingStatus,
+    isFetching: isFundingStatusLoading,
+    isUninitialized: isFundingStatusUninitialized,
+    refetch: refetchFundingStatus,
+  } = useCheckWalletFundingStatusQuery(paymentId, { skip: !paymentId });
 
-      <div className="px-5">
-        
-        <DataTable
-          data={billingsData}
-          columns={billingsColumns}
-          pageSize={5}
-          onRowClick={(row) => setRowId(row.month.toLowerCase())}
-          showDownload={false}
-          showSearch={false}
-          getRowId={(row) => row.month}
-          highlightedRowId={rowId}
-          initialSorting={{ id: "month", desc: false }}
-        />
+  const [fundWallet, { isLoading: isFundingWallet }] = useFundWalletMutation();
+
+  const handleFundWallet = async () => {
+    try {
+      const response = await fundWallet({ amount }).unwrap();
+      setFundingDetails(response);
+      setPaymentId(response.payment_id);
+      showCustomToast("Funding account generated successfully", {
+        toastOptions: { type: "success", autoClose: 4000 },
+      });
+    } catch (error) {
+      showCustomToast(
+        ErrorHandler.extractMessage(error) ||
+          "Unable to generate funding account",
+        { toastOptions: { type: "error", autoClose: 4000 } }
+      );
+    }
+  };
+
+  return (
+    <div className="relative min-h-screen">
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute -top-40 -left-32 size-[28rem] rounded-full bg-primary/15 blur-[120px]" />
+        <div className="absolute top-1/3 -right-40 size-[32rem] rounded-full bg-blue-400/20 blur-[120px]" />
+        <div className="absolute bottom-0 left-1/3 size-[24rem] rounded-full bg-emerald-400/15 blur-[120px]" />
       </div>
-      <BillingsChart rowId={rowId}/>
+
+      <Header
+        title="Wallet & Billing"
+        description="Manage your wallet balance, fund your account, and review spend"
+      />
+
+      <div className="px-5 pb-10 space-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <WalletBalanceCard
+            isLoading={isWalletBalanceLoading}
+            balance={walletBalance?.balance}
+            currency={walletBalance?.currency}
+          />
+          <FundWalletCard
+            amount={amount}
+            isFunding={isFundingWallet}
+            onAmountChange={setAmount}
+            onFund={handleFundWallet}
+          />
+        </div>
+
+        <FundingStatusCard
+          isUninitialized={isFundingStatusUninitialized}
+          isLoading={isFundingStatusLoading}
+          data={fundingStatus}
+          onRefresh={refetchFundingStatus}
+        />
+        <FundingTransferDetailsCard details={fundingDetails} />
+
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2">
+            <TransactionsList
+              isLoading={isTransactionsLoading}
+              transactions={transactions ?? []}
+            />
+          </div>
+          <div className="space-y-4">
+            <SpendReportCard
+              isLoading={isSpendReportLoading}
+              data={spendReport}
+            />
+            <BillsList isLoading={isMyBillsLoading} data={myBills} />
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

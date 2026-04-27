@@ -9,6 +9,8 @@ export enum ApiEnums {
     Member = 'member',
     ActivityLog = 'activityLog',
     Bucket='bucket',
-    Subscription='subscription'
+    Subscription='subscription',
+    Wallet = "wallet",
+    BillingSpend = "billingSpend"
   }
   
