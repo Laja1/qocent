@@ -1,6 +1,6 @@
 // ResourceDetails.tsx
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DataTable, type ColumnDef } from "@/components/shared/datatabless";
+import { DataTable, type ColumnDef } from "@/components/shared/datatable";
 import type { resourceType } from "@/models/response/resourceResponse";
 
 interface ResourceDetailsProps {

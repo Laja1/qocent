@@ -23,6 +23,18 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['**/datatabless', '**/datatabless.tsx'],
+              message:
+                'Use @/components/shared/datatable (canonical DataTable). The datatabless path was removed.',
+            },
+          ],
+        },
+      ],
     },
   },
 )

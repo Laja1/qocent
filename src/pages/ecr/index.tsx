@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { DataTable } from "@/components/shared/datatabless";
+import { DataTable } from "@/components/shared/datatable";
 import { Card } from "@/components/ui/card";
 import {
   containerRegistryColumn,

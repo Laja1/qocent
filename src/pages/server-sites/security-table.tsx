@@ -1,5 +1,5 @@
 import { Button, Header, type ColumnDef } from "@/components/shared";
-import { DataTable } from "@/components/shared/datatabless";
+import { DataTable } from "@/components/shared/datatable";
 import { Eye } from "lucide-react";
 import { useState } from "react";
 import type { secutiyAnalysisType } from "./type";

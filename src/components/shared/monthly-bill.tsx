@@ -4,7 +4,7 @@ import type {
   billProps,
   getQueryMonthlyBillResponse,
 } from "@/models/response/costResponse";
-import { DataTable } from "./datatabless";
+import { DataTable } from "./datatable";
 import { monthlyCostTableColumn } from "@/utilities/constants/colums";
 import { useState } from "react";
 import NiceModal from "@ebay/nice-modal-react";

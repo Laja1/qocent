@@ -1,4 +1,4 @@
-import type { ColumnDef } from "@/components/shared/datatabless";
+import type { ColumnDef } from "@/components/shared/datatable";
 import { Badge } from "@/components/ui/badge";
 import type { HouseItem } from "@/models/response/houseResponse";
 import {

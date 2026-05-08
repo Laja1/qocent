@@ -1,6 +1,6 @@
-import type { billingTableProps } from "./type";
+import type { BillingTableProps } from "./type";
 
-export const billingsData: billingTableProps[] = [
+export const billingsData: BillingTableProps[] = [
   {
     month: "January",
     amount: "$2,000",

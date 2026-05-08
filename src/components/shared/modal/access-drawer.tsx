@@ -9,8 +9,7 @@ import {
 } from "@/components/ui/drawer";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { ModalConstant } from "./register";
-import { DataTable } from "../datatabless";
-import type { ColumnDef } from "../table";
+import { DataTable, type ColumnDef } from "../datatable";
 import { Badge } from "@/components/ui/badge";
 import { Edit, Trash2 } from "lucide-react";
 import { showCustomToast } from "../toast";

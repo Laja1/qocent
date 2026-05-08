@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Header } from "@/components/shared";
-import { DataTable } from "@/components/shared/datatabless";
+import { DataTable } from "@/components/shared/datatable";
 import { Edit, Eye, Trash2, PlusIcon, Plus, Users } from "lucide-react";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";

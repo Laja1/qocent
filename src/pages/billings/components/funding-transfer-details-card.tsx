@@ -75,6 +75,7 @@ const Field = ({ label, value, onCopy, copied, truncate }: FieldProps) => (
       </p>
       {onCopy && (
         <button
+          type="button"
           onClick={onCopy}
           className="text-muted-foreground hover:text-foreground transition"
           aria-label={`Copy ${label}`}

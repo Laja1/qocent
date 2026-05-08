@@ -1,5 +1,4 @@
-import { type ColumnDef } from "@/components/shared";
-import { DataTable } from "@/components/shared/datatabless";
+import { DataTable, type ColumnDef } from "@/components/shared/datatable";
 import { Eye } from "lucide-react";
 import { useState, useMemo } from "react";
 import type { level1CostTableType } from "./type";
