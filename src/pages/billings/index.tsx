@@ -1,4 +1,4 @@
-import { Header } from "@/components/shared";
+import { Header, Tabs } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import type { FundWalletResponse } from "@/models/response/walletBillingResponse";
@@ -10,7 +10,7 @@ import {
   useGetWalletBalanceQuery,
   useGetWalletTransactionsQuery,
 } from "@/service/python/walletBillingApi";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { BillsList } from "./components/bills-list";
 import { FundWalletCard } from "./components/fund-wallet-card";
 import { FundingTransferDetailsCard } from "./components/funding-transfer-details-card";
@@ -21,8 +21,20 @@ import { WalletBalanceCard } from "./components/wallet-balance-card";
 
 const TRANSACTION_LIMIT = 20;
 
+const TAB = {
+  overview: 1,
+  fund: 2,
+  activity: 3,
+  bills: 4,
+} as const;
+
+const DEFAULT_USD_TO_NGN_RATE = 1600;
+const USD_TO_NGN_RATE =
+  Number(import.meta.env.VITE_USD_TO_NGN_RATE) || DEFAULT_USD_TO_NGN_RATE;
+
 export const Billings = () => {
-  const [amount, setAmount] = useState("1000");
+  const [activeTab, setActiveTab] = useState<number>(TAB.overview);
+  const [amount, setAmount] = useState("350");
   const [paymentId, setPaymentId] = useState("");
   const [fundingDetails, setFundingDetails] = useState<FundWalletResponse | null>(
     null
@@ -44,11 +56,26 @@ export const Billings = () => {
 
   const [fundWallet, { isLoading: isFundingWallet }] = useFundWalletMutation();
 
-  const handleFundWallet = async () => {
+  const billCount = myBills?.bills?.length ?? 0;
+  const dollarAmount = Number(amount);
+  const nairaEquivalent =
+    Number.isFinite(dollarAmount) && dollarAmount > 0
+      ? dollarAmount * USD_TO_NGN_RATE
+      : 0;
+
+  const handleFundWallet = useCallback(async () => {
+    if (!nairaEquivalent) {
+      showCustomToast("Enter a valid dollar amount to fund your wallet", {
+        toastOptions: { type: "error", autoClose: 4000 },
+      });
+      return;
+    }
+
     try {
-      const response = await fundWallet({ amount }).unwrap();
+      const response = await fundWallet({ amount: nairaEquivalent }).unwrap();
       setFundingDetails(response);
       setPaymentId(response.payment_id);
+      setActiveTab(TAB.fund);
       showCustomToast("Funding account generated successfully", {
         toastOptions: { type: "success", autoClose: 4000 },
       });
@@ -59,7 +86,55 @@ export const Billings = () => {
         { toastOptions: { type: "error", autoClose: 4000 } }
       );
     }
-  };
+  }, [fundWallet, nairaEquivalent]);
+
+  const tabs = [
+    {
+      id: TAB.overview,
+      text: "Overview",
+      component: (
+        <SpendReportCard isLoading={isSpendReportLoading} data={spendReport} />
+      ),
+    },
+    {
+      id: TAB.fund,
+      text: "Fund wallet",
+      component: (
+        <div className="max-w-2xl space-y-4">
+          <FundWalletCard
+            amount={amount}
+            equivalentAmount={nairaEquivalent}
+            exchangeRate={USD_TO_NGN_RATE}
+            isFunding={isFundingWallet}
+            onAmountChange={setAmount}
+            onFund={handleFundWallet}
+          />
+          <FundingTransferDetailsCard details={fundingDetails} />
+          <FundingStatusCard
+            isUninitialized={isFundingStatusUninitialized}
+            isLoading={isFundingStatusLoading}
+            data={fundingStatus}
+            onRefresh={refetchFundingStatus}
+          />
+        </div>
+      ),
+    },
+    {
+      id: TAB.activity,
+      text: "Activity",
+      component: (
+        <TransactionsList
+          isLoading={isTransactionsLoading}
+          transactions={transactions ?? []}
+        />
+      ),
+    },
+    {
+      id: TAB.bills,
+      text: billCount > 0 ? `Bills (${billCount})` : "Bills",
+      component: <BillsList isLoading={isMyBillsLoading} data={myBills} />,
+    },
+  ];
 
   return (
     <div className="relative min-h-screen">
@@ -71,47 +146,17 @@ export const Billings = () => {
 
       <Header
         title="Wallet & Billing"
-        description="Manage your wallet balance, fund your account, and review spend"
+        description="Balance, funding, transactions, and invoices in one place"
       />
 
       <div className="px-5 pb-10 space-y-5">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <WalletBalanceCard
-            isLoading={isWalletBalanceLoading}
-            balance={walletBalance?.balance}
-            currency={walletBalance?.currency}
-          />
-          <FundWalletCard
-            amount={amount}
-            isFunding={isFundingWallet}
-            onAmountChange={setAmount}
-            onFund={handleFundWallet}
-          />
-        </div>
-
-        <FundingStatusCard
-          isUninitialized={isFundingStatusUninitialized}
-          isLoading={isFundingStatusLoading}
-          data={fundingStatus}
-          onRefresh={refetchFundingStatus}
+        <WalletBalanceCard
+          isLoading={isWalletBalanceLoading}
+          balance={walletBalance?.balance}
+          currency={walletBalance?.currency}
         />
-        <FundingTransferDetailsCard details={fundingDetails} />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-          <div className="lg:col-span-2">
-            <TransactionsList
-              isLoading={isTransactionsLoading}
-              transactions={transactions ?? []}
-            />
-          </div>
-          <div className="space-y-4">
-            <SpendReportCard
-              isLoading={isSpendReportLoading}
-              data={spendReport}
-            />
-            <BillsList isLoading={isMyBillsLoading} data={myBills} />
-          </div>
-        </div>
+        <Tabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
       </div>
     </div>
   );

@@ -7,15 +7,17 @@ type WalletBalanceCardProps = {
   isLoading: boolean;
   balance?: number;
   currency?: string;
+  className?: string;
 };
 
 export const WalletBalanceCard = ({
   isLoading,
   balance,
   currency = "NGN",
+  className,
 }: WalletBalanceCardProps) => {
   return (
-    <GlassCard className="md:col-span-2">
+    <GlassCard className={className}>
       <div className="flex items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 text-muted-foreground text-xs uppercase tracking-wider">

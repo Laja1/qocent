@@ -20,11 +20,11 @@ export const Settings = () => {
       text: "Security",
       component: <div className=""><Security /></div>,
     },
-    {
-      id: 3,
-      text: "Payment Method",
-      component: <Payment />,
-    },
+    // {
+    //   id: 3,
+    //   text: "Payment Method",
+    //   component: <Payment />,
+    // },
     {
       id: 4,
       text: "Subscription",

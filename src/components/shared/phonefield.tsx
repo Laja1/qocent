@@ -97,12 +97,12 @@ export const PhoneField = ({
 
       {/* Dropdown list */}
       {open && (
-        <div className="absolute z-20 bg-black w-full max-h-40 overflow-y-auto mt-1 border  shadow-lg">
+        <div className="absolute z-20 w-full max-h-40 overflow-y-auto mt-1 border border-gray-200 bg-white text-gray-900 shadow-lg">
           {countries.map((c, index) => (
             <div
               key={index}
               onClick={() => handleSelect(c)}
-              className="flex items-center gap-3 px-4 py-2 hover:bg-gray-800 cursor-pointer"
+              className="flex items-center gap-3 px-4 py-2 cursor-pointer hover:bg-gray-100"
             >
               <img
                 src={c.label}

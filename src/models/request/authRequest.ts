@@ -26,8 +26,8 @@ export type signInRequest = {
 };
 
 export const signInInit = {
-  user_email: "yop@yopmail.com",
-  user_password: "Ifeoluwa01.$",
+  user_email: "",
+  user_password: "",
 }
 
 export const forgotPasswordInit = {

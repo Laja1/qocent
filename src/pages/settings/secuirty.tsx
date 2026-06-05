@@ -24,7 +24,11 @@ export const Security = () => {
         placeholder="Enter your current password"
         type={seePassword ? "text" : "password"}
         suffixIcon={
-          <button onClick={() => setSeePassword((prev) => !prev)}>
+          <button
+            type="button"
+            aria-label={seePassword ? "Hide password" : "Show password"}
+            onClick={() => setSeePassword((prev) => !prev)}
+          >
             {seePassword ? <EyeIcon size={16} /> : <EyeClosed size={16} />}
           </button>
         }
@@ -41,7 +45,11 @@ export const Security = () => {
         placeholder="Enter your new password"
         type={newPassword ? "text" : "password"}
         suffixIcon={
-          <button onClick={() => setNewPasssword((prev) => !prev)}>
+          <button
+            type="button"
+            aria-label={newPassword ? "Hide password" : "Show password"}
+            onClick={() => setNewPasssword((prev) => !prev)}
+          >
             {newPassword ? <EyeIcon size={16} /> : <EyeClosed size={16} />}
           </button>
         }
@@ -57,7 +65,11 @@ export const Security = () => {
         label="Confirm Password"
         type={seeConfirmPassword ? "password" : "text"}
         suffixIcon={
-          <button onClick={() => setSeeConfirmPassword((prev) => !prev)}>
+          <button
+            type="button"
+            aria-label={seeConfirmPassword ? "Hide password" : "Show password"}
+            onClick={() => setSeeConfirmPassword((prev) => !prev)}
+          >
             {seeConfirmPassword ? (
               <EyeIcon size={16} />
             ) : (

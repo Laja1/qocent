@@ -9,6 +9,7 @@ export const imgLinks = {
   rubies: "/images/rubies.png",
   image: "/images/image.png",
   gcp: "/images/gcp.webp",
+  qocent: "/images/qocent.png",
   switch: "/images/switch.png",
   successStories: "/images/success-stories.png",
   azure: "/images/azure.png",
@@ -97,4 +98,17 @@ export const svgLinks = {
   univaciti: "/svg/univaciti.svg",
   rubies: "/svg/rubies.svg",
   tymer: "/svg/tymer.svg",
+  software: "/svg/services/software.svg",
+  ai: "/svg/services/ai.svg",
+  cloud: "/svg/services/cloud.svg",
+  consulting: "/svg/services/consulting.svg",
+  qra: "/svg/services/qra.svg",
+  tech: "/svg/services/tech.svg",
+  audit: "/svg/services/audit.svg",
+};
+
+export const competenciesLinks = {
+  genai: "/images/genai.png",
+  government: "/images/government.png",
+  ml: "/images/ml.png", 
 };

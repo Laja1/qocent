@@ -55,6 +55,7 @@ export const FundingStatusCard = ({
       action={
         !isUninitialized && onRefresh ? (
           <button
+            type="button"
             onClick={onRefresh}
             className="inline-flex items-center gap-1.5 text-[11px] text-foreground/80 px-2.5 py-1 rounded-full border border-black/10 bg-white/60 hover:bg-white transition"
           >
@@ -132,6 +133,7 @@ const Field = ({ label, value, onCopy, copied, truncate }: FieldProps) => (
       </p>
       {onCopy && (
         <button
+          type="button"
           onClick={onCopy}
           className="text-muted-foreground hover:text-foreground transition"
           aria-label={`Copy ${label}`}

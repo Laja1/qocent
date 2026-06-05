@@ -79,7 +79,11 @@ const SignIn = () => {
           prefixIcon={<Lock size={16} className="text-black" />}
           type={seePassword ? "text" : "password"}
           suffixIcon={
-            <button onClick={() => setSeePassword((prev) => !prev)}>
+            <button
+              type="button"
+              aria-label={seePassword ? "Hide password" : "Show password"}
+              onClick={() => setSeePassword((prev) => !prev)}
+            >
               {seePassword ? (
                 <EyeIcon size={16} className="text-black" />
               ) : (

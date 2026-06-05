@@ -8,19 +8,30 @@ type TabItem = {
 
 type TabsProps = {
   tabs: TabItem[];
+  activeTab?: number;
+  onTabChange?: (tabId: number) => void;
 };
 
-export const Tabs = ({ tabs }: TabsProps) => {
-  const [currentTab, setCurrentTab] = useState(tabs[0]?.id || 0);
+export const Tabs = ({ tabs, activeTab, onTabChange }: TabsProps) => {
+  const [internalTab, setInternalTab] = useState(tabs[0]?.id || 0);
+  const currentTab = activeTab ?? internalTab;
 
-  const activeTab = tabs.find((tab) => tab.id === currentTab);
+  const setCurrentTab = (tabId: number) => {
+    onTabChange?.(tabId);
+    if (activeTab === undefined) {
+      setInternalTab(tabId);
+    }
+  };
+
+  const activeTabContent = tabs.find((tab) => tab.id === currentTab);
 
   return (
     <div>
-      <div className="flex flex-wrap gap-2 rounded-2xl border border-border bg-card p-2">
+      <div className="flex flex-wrap gap-2 rounded-2xl border w-fit border-border bg-card p-2">
         {tabs.map((tab) => (
           <button
             key={tab.id}
+            type="button"
             onClick={() => setCurrentTab(tab.id)}
             className={`rounded-xl px-4 py-2 hover:cursor-pointer transition duration-200 ease-in-out text-sm font-medium ${
               currentTab === tab.id
@@ -33,7 +44,7 @@ export const Tabs = ({ tabs }: TabsProps) => {
         ))}
       </div>
 
-      <div className="mt-4">{activeTab?.component}</div>
+      <div className="mt-4">{activeTabContent?.component}</div>
     </div>
   );
 };
