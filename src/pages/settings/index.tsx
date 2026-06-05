@@ -1,7 +1,6 @@
 import { Header, Tabs } from "@/components/shared";
 import { Profile } from "./profile";
 import { Security } from "./secuirty";
-import { Payment } from "./payment";
 import { Subscription } from "./subscription";
 
 export const Settings = () => {

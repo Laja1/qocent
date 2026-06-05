@@ -6,6 +6,21 @@ import { cidrBlockRegex, houseCodeRegex, houseNameRegex, siteCodeRegex } from ".
 export const defaultValidation = (name: string) =>
   string().min(1,'cannot be empty').required(`${name} is required`).trim();
 
+/** Matches API rules for user first/last name on signup. */
+export const personNameValidation = (fieldLabel: string, minLength = 2) =>
+  string()
+    .trim()
+    .required(`${fieldLabel} is required`)
+    .min(
+      minLength,
+      `${fieldLabel} must be at least ${minLength} characters`
+    )
+    .max(50, `${fieldLabel} must not exceed 50 characters`)
+    .matches(
+      /^[a-zA-Z\s'-]+$/,
+      `${fieldLabel} can only contain letters, spaces, hyphens, or apostrophes`
+    );
+
 export const phoneValidation = (phoneNumber: string) =>
   string()
     .matches(/^(\+?234)?(\d{3})\s?\d{3}\s?\d{4}$/, "Enter valid phone number")

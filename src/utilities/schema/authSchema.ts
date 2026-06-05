@@ -1,6 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { string, object } from 'yup';
-import { codeValidatiion, defaultValidation, emailValidation, passwordValidation } from '.';
+import {
+  codeValidatiion,
+  defaultValidation,
+  emailValidation,
+  passwordValidation,
+  personNameValidation,
+} from '.';
 
 export const loginFormValidationSchema = object().shape({
   user_email: emailValidation(),
@@ -9,8 +15,8 @@ export const loginFormValidationSchema = object().shape({
 
 export const registerFormValidationSchema = object().shape({
   // Personal information
-  user_first_name: defaultValidation('First Name'),
-  user_last_name: defaultValidation('Last Name'),
+  user_first_name: personNameValidation('First name'),
+  user_last_name: personNameValidation('Last name'),
   user_email: emailValidation(),
   user_password: passwordValidation(),
   user_phone_number:defaultValidation('Phone number'),

@@ -87,20 +87,20 @@ const SubscriptionCards = () => {
               >
                 {/* Glow behind active card */}
                 {isActive && (
-                  <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-red-300/20 via-red-300/5 to-transparent blur-sm" />
+                  <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-primary/20 via-primary/5 to-transparent blur-sm" />
                 )}
 
                 <div
-                  className={`relative h-full rounded-2xl border p-7 flex flex-col transition-all duration-300 ${
+                  className={`relative h-full rounded-2xl border p-7 flex flex-col shadow-sm transition-all duration-300 ${
                     isActive
-                      ? "bg-[#0d0d12] border-red-300/25"
-                      : "bg-white/[0.015] border-white/[0.06] hover:border-white/[0.12] hover:bg-white/[0.025]"
+                      ? "bg-white border-primary/30 ring-1 ring-primary/20"
+                      : "bg-white border-gray-200 hover:border-primary/25 hover:shadow-md"
                   }`}
                 >
                   {/* Active badge */}
                   {isActive && (
                     <div className="absolute -top-3 left-6">
-                      <span className="inline-block px-3 py-[3px] bg-red-300 text-[#060609] text-[10px] font-bold uppercase tracking-[0.12em] rounded-full shadow-[0_0_12px_rgba(245,158,11,0.3)]">
+                      <span className="inline-block px-3 py-[3px] bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-[0.12em] rounded-full shadow-sm">
                         Active Plan
                       </span>
                     </div>
@@ -108,27 +108,27 @@ const SubscriptionCards = () => {
 
                   {/* Plan name & description */}
                   <div className="mb-6">
-                    <h3 className="font-brfirma text-[17px] font-bold text-white mb-1.5 tracking-tight">
+                    <h3 className="font-brfirma text-[17px] font-bold text-gray-950 mb-1.5 tracking-tight">
                       {plan.subscription_plan_name}
                     </h3>
-                    <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
+                    <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
                       {plan.subscription_plan_description}
                     </p>
                   </div>
 
                   {/* Price */}
-                  <div className="mb-6 pb-6 border-b border-white/[0.05]">
+                  <div className="mb-6 pb-6 border-b border-gray-200">
                     <div className="flex items-end gap-1.5">
-                      <span className="font-strawford text-[2.5rem] font-bold text-white leading-none tracking-tight">
+                      <span className="font-strawford text-[2.5rem] font-bold text-gray-950 leading-none tracking-tight">
                         ${usdEquivalentPrice}
                         {/* {plan.subscription_plan_monthly_price} */}
                       </span>
                       <div className="flex flex-col mb-1">
-                        <span className="text-gray-500 text-xs font-medium">
+                        <span className="text-gray-600 text-xs font-medium">
                           USD
                           {/* {plan.subscription_plan_currency} */}
                         </span>
-                        <span className="text-gray-600 text-[10px]">per month</span>
+                        <span className="text-gray-500 text-[10px]">per month</span>
                       </div>
                     </div>
                   </div>
@@ -141,13 +141,13 @@ const SubscriptionCards = () => {
                           <span
                             className={`mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
                               isActive
-                                ? "bg-red-300/15 text-red-300"
-                                : "bg-white/[0.06] text-gray-500"
+                                ? "bg-primary/10 text-primary"
+                                : "bg-gray-100 text-gray-500"
                             }`}
                           >
                             <Check className="w-2.5 h-2.5" strokeWidth={3} />
                           </span>
-                          <span className="text-gray-400 text-[13px] leading-relaxed">{value}</span>
+                          <span className="text-gray-700 text-[13px] leading-relaxed">{value}</span>
                         </li>
                       ))}
                     </ul>
@@ -157,9 +157,10 @@ const SubscriptionCards = () => {
                   <div className="mt-auto flex flex-col gap-2.5">
                     {isActive ? (
                       <button
+                        type="button"
                         disabled={isAccessLoading}
                         onClick={() => handleAccessService(plan.subscription_plan_name)}
-                        className="group w-full py-2.5 px-4 bg-red-300 hover:bg-red-300 active:bg-red-300 text-[#060609] text-sm font-bold rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="group w-full py-2.5 px-4 bg-primary hover:bg-primary/90 active:bg-primary text-primary-foreground text-sm font-bold rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                       >
                         {isAccessLoading ? (
                           <>
@@ -176,16 +177,18 @@ const SubscriptionCards = () => {
                     ) : (
                       <>
                         <button
+                          type="button"
                           disabled={isStartingTrialLoading}
                           onClick={() => handleStartTrial(plan.subscription_plan_id)}
-                          className="w-full py-2.5 px-4 border border-white/10 hover:border-white/20 hover:bg-white/[0.04] text-white text-sm font-semibold rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="w-full py-2.5 px-4 border border-primary/25 hover:border-primary/40 hover:bg-primary/5 text-primary text-sm font-semibold rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {isStartingTrialLoading ? "Starting..." : "Start Free Trial"}
                         </button>
                         <button
+                          type="button"
                           disabled={isCreatePaidSubscriptionLoading}
                           onClick={() => handleSubscribe(plan.subscription_plan_id)}
-                          className="w-full py-2.5 px-4 bg-white/[0.05] hover:bg-white/[0.08] text-gray-400 hover:text-gray-200 text-sm font-medium rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="w-full py-2.5 px-4 bg-gray-950 hover:bg-gray-800 text-white text-sm font-medium rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {isCreatePaidSubscriptionLoading ? "Processing..." : "Subscribe Now"}
                         </button>
@@ -205,19 +208,19 @@ const SubscriptionCards = () => {
               transition={{ duration: 0.5, delay: 0.2 + (plansData?.data?.length || 0) * 0.1 + idx * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="relative"
             >
-              <div className="relative h-full rounded-2xl border p-7 flex flex-col transition-all duration-300 bg-[#0d0d12] border-white/[0.08] hover:border-white/[0.15]">
+              <div className="relative h-full rounded-2xl border border-gray-200 bg-gray-50 p-7 flex flex-col shadow-sm transition-all duration-300 hover:border-gray-300">
                 <div className="mb-6">
-                  <h3 className="font-brfirma text-[17px] font-bold text-white mb-1.5 tracking-tight">
+                  <h3 className="font-brfirma text-[17px] font-bold text-gray-950 mb-1.5 tracking-tight">
                     {plan.name}
                   </h3>
-                  <p className="text-gray-500 text-xs leading-relaxed line-clamp-2">
+                  <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
                     {plan.description}
                   </p>
                 </div>
 
-                <div className="mb-6 pb-6 border-b border-white/[0.05]">
+                <div className="mb-6 pb-6 border-b border-gray-200">
                   <div className="flex items-end gap-1.5">
-                    <span className="font-strawford text-[2.5rem] font-bold text-white leading-none tracking-tight">
+                    <span className="font-strawford text-[2.5rem] font-bold text-gray-950 leading-none tracking-tight">
                       --
                     </span>
                     <div className="flex flex-col mb-1">
@@ -229,18 +232,19 @@ const SubscriptionCards = () => {
                 <ul className="space-y-3 mb-8 flex-1">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2.5">
-                      <span className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center bg-white/[0.06] text-gray-500">
+                      <span className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center bg-gray-100 text-gray-500">
                         <Check className="w-2.5 h-2.5" strokeWidth={3} />
                       </span>
-                      <span className="text-gray-400 text-[13px] leading-relaxed">{feature}</span>
+                      <span className="text-gray-700 text-[13px] leading-relaxed">{feature}</span>
                     </li>
                   ))}
                 </ul>
 
                 <div className="mt-auto">
                   <button
+                    type="button"
                     disabled
-                    className="w-full py-2.5 px-4 bg-white/[0.04] text-gray-500 text-sm font-medium rounded-xl cursor-not-allowed"
+                    className="w-full py-2.5 px-4 bg-gray-200 text-gray-500 text-sm font-medium rounded-xl cursor-not-allowed"
                   >
                     Coming Soon
                   </button>
