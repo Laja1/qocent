@@ -74,8 +74,6 @@ const SubscriptionCards = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {plansData?.data?.map((plan, idx) => {
             const isActive = plan.subscription_plan_is_active;
-            const nairaToUsdRate = 1400;
-            const usdEquivalentPrice = (Number(plan.subscription_plan_monthly_price) / nairaToUsdRate).toFixed(2);
 
             return (
               <motion.div

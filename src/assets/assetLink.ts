@@ -108,8 +108,6 @@ export const svgLinks = {
   rubies: "/svg/rubies.svg",
   tymer: "/svg/tymer.svg",
   software: "/svg/services/software.svg",
-  ai: "/svg/services/ai.svg",
-  cloud: "/svg/services/cloud.svg",
   consulting: "/svg/services/consulting.svg",
   qra: "/svg/services/qra.svg",
   tech: "/svg/services/tech.svg",
