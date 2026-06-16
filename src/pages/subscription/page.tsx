@@ -120,7 +120,7 @@ const SubscriptionCards = () => {
                   <div className="mb-6 pb-6 border-b border-gray-200">
                     <div className="flex items-end gap-1.5">
                       <span className="font-strawford text-[2.5rem] font-bold text-gray-950 leading-none tracking-tight">
-                        ${usdEquivalentPrice}
+                        $104
                         {/* {plan.subscription_plan_monthly_price} */}
                       </span>
                       <div className="flex flex-col mb-1">

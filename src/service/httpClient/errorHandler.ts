@@ -12,6 +12,19 @@ export class ErrorHandler {
       return this.parseMessage(error.data.detail);
     }
 
+    // RTK Query error format: error.data is an array of {field, message} validation errors
+    if (Array.isArray(error?.data) && error.data.length > 0 && error.data[0]?.field) {
+      return error.data
+        .map((e: any) => {
+          const label = e.field
+            .replace(/_/g, ' ')
+            .replace(/\b\w/g, (c: string) => c.toUpperCase());
+          const msg = e.message.replace(/^Value error,\s*/i, '');
+          return `${label}: ${msg}`;
+        })
+        .join('\n');
+    }
+
     // RTK Query error format: error.data.message
     if (error?.data?.message) {
       return this.parseMessage(error.data.message);
@@ -64,11 +77,21 @@ export class ErrorHandler {
 
     // Handle array of messages (including FastAPI validation errors)
     if (Array.isArray(message)) {
-      // FastAPI validation error format
       if (message.length > 0 && message[0]?.msg) {
-        return message.map(err => err.msg).join(', ');
+        return message.map(err => err.msg).join('\n');
       }
-      return message.join(', ');
+      if (message.length > 0 && message[0]?.field) {
+        return message
+          .map((e: any) => {
+            const label = e.field
+              .replace(/_/g, ' ')
+              .replace(/\b\w/g, (c: string) => c.toUpperCase());
+            const msg = e.message.replace(/^Value error,\s*/i, '');
+            return `${label}: ${msg}`;
+          })
+          .join('\n');
+      }
+      return message.join('\n');
     }
 
     // Handle object messages (validation errors, etc.)

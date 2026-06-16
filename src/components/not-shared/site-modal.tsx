@@ -51,7 +51,7 @@ export const SiteDeployModal: React.FC<DeployModalProps> = ({
               <div className="flex flex-col gap-4">
                 <div className="items-center flex flex-col w-full space-y-2">
                   <DialogTitle className="text-lg font-semibold border-b pb-2">
-                    Ready to Deploy?
+                  Ready to create your site?
                   </DialogTitle>
                 </div>
 

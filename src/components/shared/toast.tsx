@@ -7,9 +7,12 @@ interface CustomToastProps {
 }
 
 export const CustomToast = ({ message }: CustomToastProps) => {
+  const lines = message.split('\n').filter(Boolean);
   return (
-    <div className="space-y-2">
-      <p className="text-sm text-gray-800">{message}</p>
+    <div className="space-y-1">
+      {lines.map((line, i) => (
+        <p key={i} className="text-sm text-gray-800">{line}</p>
+      ))}
     </div>
   );
 };
