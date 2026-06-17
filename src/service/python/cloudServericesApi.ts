@@ -2,7 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react"
 import { ApiEnums } from "@/utilities/enums";
 import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
 import type { CreateAccountPayload, InviteAccountPayload, CompleteInvitePayload, GrantAccessPayload } from "@/models/request/cloudService";
-import type { CreateAccountResponse, InitiateInviteResponse } from "@/models/response/cloudServiceResponse";
+import type { CreateAccountResponse, GenerateLoginUrlEmailResponse, InitiateInviteResponse } from "@/models/response/cloudServiceResponse";
 import type { baseResponse } from "@/models/response";
 
 export const cloudServicesApi = createApi({
@@ -42,7 +42,7 @@ export const cloudServicesApi = createApi({
       }),
     }),
     
-    generateProviderLoginUrl: build.mutation<baseResponse, {csp:string,account_id:string}>({
+    generateProviderLoginUrl: build.mutation<GenerateLoginUrlEmailResponse, {csp:string,account_id:string}>({
       query: ({csp,account_id}) => ({
         url: `/${csp}/generate-provider-login-url?account_id=${account_id}`,
         method: "POST",

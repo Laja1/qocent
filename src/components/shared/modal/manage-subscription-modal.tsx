@@ -2,20 +2,62 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/shared";
 import { create, useModal } from "@ebay/nice-modal-react";
 import { ModalConstant } from "./register";
-import { useGetMySubscriptionQuery, usePauseSubscriptionMutation, useResumeSubscriptionMutation, useCancelSubscriptionMutation, useConvertTrialToPaidMutation } from "@/service/python/subscriptionApi";
+import { useGetMySubscriptionQuery, usePauseSubscriptionMutation, useResumeSubscriptionMutation, useCancelSubscriptionMutation, useConvertTrialToPaidMutation, subscriptionApi, useLazyCheckPaymentStatusQuery } from "@/service/python/subscriptionApi";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useState } from "react";
 import { X, Zap, Pause, Play, XCircle, CreditCard, Clock, Activity } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { ApiEnums } from "@/utilities/enums";
 
 export const ManageSubscriptionModal = create(() => {
   const modal = useModal(ModalConstant.ManageSubscriptionModal);
+  const dispatch = useDispatch();
   const { data: subscriptionData, isLoading } = useGetMySubscriptionQuery();
   const [pauseSubscription] = usePauseSubscriptionMutation();
   const [resumeSubscription] = useResumeSubscriptionMutation();
   const [cancelSubscription] = useCancelSubscriptionMutation();
   const [convertTrial] = useConvertTrialToPaidMutation();
+  const [checkPaymentStatus, { isFetching: isVerifyingPayment }] =
+    useLazyCheckPaymentStatusQuery();
   const [paymentModal, setPaymentModal] = useState<{ open: boolean; data: any }>({ open: false, data: null });
+
+  const invalidateSubscriptionState = () => {
+    dispatch(
+      subscriptionApi.util.invalidateTags([
+        { type: ApiEnums.Subscription, id: "PLANS" },
+        { type: ApiEnums.Subscription, id: "LIST" },
+        { type: ApiEnums.Subscription, id: "TRIAL" },
+        { type: ApiEnums.Subscription, id: "PAYMENT" },
+      ])
+    );
+  };
+
+  const handleConfirmPayment = async () => {
+    if (!paymentModal.data?.payment_id) return;
+
+    try {
+      const result = await checkPaymentStatus(paymentModal.data.payment_id).unwrap();
+
+      if (result.active) {
+        invalidateSubscriptionState();
+        showCustomToast(result.message || "Payment confirmed. Your subscription is now active.", {
+          toastOptions: { type: "success", autoClose: 5000 },
+        });
+        setPaymentModal({ open: false, data: null });
+        return;
+      }
+
+      showCustomToast(
+        result.message || "Payment not confirmed yet. Please try again shortly.",
+        { toastOptions: { type: "warning", autoClose: 5000 } }
+      );
+    } catch {
+      showCustomToast("Unable to verify payment right now. Please try again.", {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
+    }
+  };
 
   const subscription = subscriptionData?.data?.[0];
 
@@ -209,6 +251,12 @@ export const ManageSubscriptionModal = create(() => {
                   <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-4">
                     <p className="text-gray-300 text-sm leading-relaxed font-strawford">{paymentModal.data.payment_instructions}</p>
                   </div>
+                  <Button
+                    label={isVerifyingPayment ? "Verifying..." : "I've Made the Payment"}
+                    onClick={handleConfirmPayment}
+                    disabled={isVerifyingPayment}
+                    className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white shadow-lg shadow-amber-500/25 border-none"
+                  />
                 </div>
               )}
             </div>

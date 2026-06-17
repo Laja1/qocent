@@ -9,12 +9,14 @@ import type {
   signInRequest,
   signupRequest,
   updateProfessionalServiceRequest,
+  UpdatePasswordRequest,
 } from "@/models/request/authRequest";
 import type {
 
   AccountResponse,
   signInResponse,
   signUpResponse,
+  UpdatePasswordResponse,
 } from "@/models/response/authResponse";
 import type { baseResponse, genericResponse } from "@/models/response";
 import { ApiEnums } from "@/utilities/enums";
@@ -75,11 +77,11 @@ export const authApi = createApi({
       }),
       invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
     }),
-    changePassword:build.mutation<genericResponse,{oldPassword:string,userPassword:string}>({
+    updatePassword: build.mutation<UpdatePasswordResponse, UpdatePasswordRequest>({
       query: (body) => ({
-        url: "/authentication/change-password",
+        url: "/update-password",
         method: "POST",
-        body: body,
+        body,
       }),
     }),
     completePasswordReset: build.mutation<
@@ -135,4 +137,5 @@ export const {
   useGetUserAccountsQuery,
   useGetIAMRolesQuery,
   useUpdateProfessionalServiceMutation,
+  useUpdatePasswordMutation,
 } = authApi;

@@ -212,6 +212,10 @@ export const RouteConstant = {
       path: "/create-new-site",
       name: "Create New Site",
     },
+    siteCredentials: {
+      path: "/site-credentials",
+      name: "Site Credentials",
+    },
     security: {
       path: "/security",
       name: "Cloud Certificate Manager",

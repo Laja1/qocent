@@ -7,7 +7,7 @@ interface AuthState {
   userEmail: string | null;
   userFirstName: string | null;
   userLastName: string | null;
-  userId: number | null;
+  userId: string | null;
 }
 
 const initialState: AuthState = {

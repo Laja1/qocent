@@ -8,8 +8,11 @@ export type SubscriptionPlanResponse = {
   subscription_plan_currency: string;
   subscription_plan_features: Record<string, string> | null;
   subscription_plan_is_active: boolean;
-  subscription_plan_created_at: string;
-  subscription_plan_updated_at: string;
+  subscription_plan_created_at?: string;
+  subscription_plan_updated_at?: string;
+  subscription_started_at?: string | null;
+  subscription_ends_at?: string | null;
+  subscription_type?: string | null;
 };
 
 export type SubscriptionPlanListResponse = {
@@ -46,7 +49,6 @@ export type SubscriptionListResponse = {
 };
 
 export type CreatePaidSubscriptionResponse = {
-  subscription_id: string;
   payment_id: string;
   payment_reference: string;
   account_number: string;
@@ -62,7 +64,7 @@ export type CreatePaidSubscriptionResponse = {
 };
 
 export type SubscriptionPaymentStatusResponse = {
-  subscription_id: string;
+  payment_id: string;
   active: boolean;
   subscription_status: string;
   payment_status: string | null;

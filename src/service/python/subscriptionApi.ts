@@ -32,7 +32,10 @@ export const subscriptionApi = createApi({
       query: () => ({
         url: `/subscription_plans/me`,
       }),
-      providesTags: [{ type: ApiEnums.Subscription, id: "PLANS" }],
+      providesTags: [
+        { type: ApiEnums.Subscription, id: "PLANS" },
+        { type: ApiEnums.Subscription, id: "LIST" },
+      ],
     }),
     startTrial: build.mutation<SubscriptionDetailResponse, StartTrialRequest>({
       query: ({ plan_id, trial_duration_days = 30 }) => ({
@@ -40,7 +43,10 @@ export const subscriptionApi = createApi({
         method: "POST",
         params: { plan_id, trial_duration_days },
       }),
-      invalidatesTags: [{ type: ApiEnums.Subscription, id: "LIST" }],
+      invalidatesTags: [
+        { type: ApiEnums.Subscription, id: "LIST" },
+        { type: ApiEnums.Subscription, id: "PLANS" },
+      ],
     }),
 
     createPaidSubscription: build.mutation<CreatePaidSubscriptionResponse, CreatePaidSubscriptionRequest>({
@@ -49,11 +55,15 @@ export const subscriptionApi = createApi({
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.Subscription, id: "LIST" }],
+      invalidatesTags: [
+        { type: ApiEnums.Subscription, id: "LIST" },
+        { type: ApiEnums.Subscription, id: "PLANS" },
+      ],
     }),
 
     checkPaymentStatus: build.query<SubscriptionPaymentStatusResponse, string>({
       query: (payment_id) => `/subscriptions/payment-status/${payment_id}`,
+      providesTags: [{ type: ApiEnums.Subscription, id: "PAYMENT" }],
     }),
 
     getTrialStatus: build.query<genericResponse, void>({
@@ -142,6 +152,7 @@ export const {
   useStartTrialMutation,
   useCreatePaidSubscriptionMutation,
   useCheckPaymentStatusQuery,
+  useLazyCheckPaymentStatusQuery,
   useGetTrialStatusQuery,
   useGetMySubscriptionQuery,
   useCheckSubscriptionAccessQuery,

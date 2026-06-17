@@ -62,6 +62,13 @@ export type forgotPasswordpRequest = {
  token: string,
 }
 
+export type UpdatePasswordRequest = {
+  user_id: string;
+  current_password: string;
+  new_password: string;
+  confirm_password: string;
+};
+
 export const completePasswordResetInit = {
   token: "",
   email:"",

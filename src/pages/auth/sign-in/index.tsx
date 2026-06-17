@@ -29,7 +29,7 @@ const SignIn = () => {
           userEmail: res?.data?.user.user_email,
           userFirstName: res?.data?.user?.user_first_name,
           userLastName: res?.data?.user?.user_last_name,
-          userId: Number(res?.data?.user?.user_id),
+          userId: res?.data?.user?.user_id ?? null,
         })
       );
       console.log(res);

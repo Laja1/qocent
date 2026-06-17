@@ -15,4 +15,9 @@ export type InitiateInviteResponse = {
     handshake_id: string;
     message?: string;
 };
+
+export type GenerateLoginUrlEmailResponse = {
+  status: string;
+  message: string;
+};
   

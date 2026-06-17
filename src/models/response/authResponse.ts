@@ -1,3 +1,8 @@
+export type UpdatePasswordResponse = {
+  status: string;
+  message: string;
+};
+
 export interface signInResponse {
   status: string;
   message: string;

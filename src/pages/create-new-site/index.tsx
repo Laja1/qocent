@@ -38,7 +38,7 @@ export const CreateNewSite = () => {
         // Show indeterminate progress (e.g., 30% while waiting)
         setProgress(30);
 
-        await createSite({
+        const created = await createSite({
           body: payload,
           csp: dahsboard?.provider,
         }).unwrap();
@@ -54,7 +54,12 @@ export const CreateNewSite = () => {
 
         setIsDeployModalOpen(false);
         setProgress(0);
-        navigate(RouteConstant.dashboard.serverSite.path);
+        navigate(RouteConstant.dashboard.siteCredentials.path, {
+          state: {
+            accountId: created.data.account_id,
+            accountName: created.data.account_name,
+          },
+        });
       } catch (error: any) {
         const message = ErrorHandler.extractMessage(error);
         showCustomToast(message, {

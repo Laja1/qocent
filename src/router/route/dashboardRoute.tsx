@@ -16,6 +16,7 @@ import { Console } from "@/pages/console";
 import AcceptInvite from "@/pages/accept-invite";
 import StarterPacksGrid from "@/pages/starter-packs";
 import { Access } from "@/pages/access";
+import { SiteCredentials } from "@/pages/site-credentials";
 import { ProfessionalServices } from "@/pages/professional-services";
 import { CreateProfessionalService } from "@/pages/create-professional-service";
 import SubscriptionCards from "@/pages/subscription/page";
@@ -98,6 +99,12 @@ export const dashboardRoute: RouteType[] = [
     path: RouteConstant.dashboard.createnewsite.path,
     name: RouteConstant.dashboard.createnewsite.name,
     component: <CreateNewSite />,
+    metadata: { isAuthenticated: false, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.siteCredentials.path,
+    name: RouteConstant.dashboard.siteCredentials.name,
+    component: <SiteCredentials />,
     metadata: { isAuthenticated: false, hasSidebar: true },
   },
   {

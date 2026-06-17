@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Header } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
-import { Edit, Eye, Trash2, PlusIcon, Plus, Users } from "lucide-react";
+import { Edit, Eye, Trash2, PlusIcon, Plus, Users, KeyRound } from "lucide-react";
 import { useState } from "react";
 import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
+import { RouteConstant } from "@/router/routes";
 
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
@@ -68,6 +69,17 @@ export const ServerSites = () => {
       label: "View",
       icon: Eye,
       onClick: (row: Account) => NiceModal.show(ModalConstant.DrawerModal, row),
+    },
+    {
+      label: "Console Access",
+      icon: KeyRound,
+      onClick: (row: Account) =>
+        navigate(RouteConstant.dashboard.siteCredentials.path, {
+          state: {
+            accountId: row.account_id,
+            accountName: row.account_name,
+          },
+        }),
     },
     {
       label: "Edit",
