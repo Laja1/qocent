@@ -19,7 +19,6 @@ import {
   useGetUserAccountsByProviderQuery,
 } from "@/service/python/organizationApi";
 import { useGetMySubscriptionQuery } from "@/service/python/subscriptionApi";
-
 import { Profile } from "./profile";
 import { Security } from "./secuirty";
 import { Subscription } from "./subscription";

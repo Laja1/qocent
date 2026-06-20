@@ -19,7 +19,7 @@ const controller = 'account'
 export const accountsApi = createApi({
   reducerPath: "accountsApi",
   baseQuery: baseQueryWithAuthGuard,
-  tagTypes:[ApiEnums.Auth,ApiEnums.Member],
+  tagTypes:[ApiEnums.Auth, ApiEnums.Member, ApiEnums.Site],
   endpoints: (build) => ({
     searchAccounts: build.query<AccountListResponse, {q:string, include_inactive?:boolean}>({
       query: ({q, include_inactive = false}) => `/${controller}/search?q=${q}&include_inactive=${include_inactive}`,
@@ -78,7 +78,10 @@ export const accountsApi = createApi({
         url: `/${controller}/${account_id}/close`,
         method: "POST",
       }),
-      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
+      invalidatesTags: [
+        { type: ApiEnums.Member, id: "LIST" },
+        { type: ApiEnums.Site, id: "LIST" },
+      ],
     }),
     
     reactivateAccount: build.mutation<AccountStatusResponse, string>({

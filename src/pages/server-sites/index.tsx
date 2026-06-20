@@ -93,10 +93,10 @@ export const ServerSites = () => {
       onClick: () => setIsOpen(true),
     },
     {
-      label: "Delete",
+      label: "Close Account",
       icon: Trash2,
       onClick: (row: Account) =>
-        NiceModal.show(ModalConstant.DeleteSiteModal, row),
+        NiceModal.show(ModalConstant.CloseAccountModal, row),
       variant: "destructive" as const,
     },
   ];

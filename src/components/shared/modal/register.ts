@@ -8,6 +8,7 @@ import { BookDemoModal } from "./book-demo-modal";
 import { DeploymentDialog } from "./deplyment-modal";
 import { ApplyForCertificate } from "./apply-for-certificate";
 import { DeleteSiteModal } from "./delete-site-modal";
+import { CloseAccountModal } from "./close-account-modal";
 import { DeleteHouseModal } from "./delete-house-modal";
 import { DeleteRoomModal } from "./delete-room-modal";
 import { DeleteResourceModal } from "./delete-resource-modal";
@@ -31,6 +32,7 @@ export const ModalConstant = {
     DeploymentDialog:'DeploymentDialog',
     ApplyForCertificate:'ApplyForCertificate'   ,
     DeleteSiteModal:'DeleteSiteModal',
+    CloseAccountModal:'CloseAccountModal',
     DeleteHouseModal:'DeleteHouseModal',
     DeleteRoomModal:'DeleteRoomModal',
     DeleteResourceModal:'DeleteResourceModal',
@@ -51,6 +53,7 @@ const registerSheets = {
     [ModalConstant.DeploymentDialog]:DeploymentDialog,
     [ModalConstant.ApplyForCertificate]:ApplyForCertificate,
     [ModalConstant.DeleteSiteModal]:DeleteSiteModal,
+    [ModalConstant.CloseAccountModal]:CloseAccountModal,
     [ModalConstant.DeleteHouseModal]:DeleteHouseModal,
     [ModalConstant.DeleteRoomModal]:DeleteRoomModal,
     [ModalConstant.DeleteResourceModal]:DeleteResourceModal,
