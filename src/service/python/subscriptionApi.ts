@@ -7,37 +7,27 @@ import type {
 } from "@/models/request/subscriptionRequest";
 import type {
   SubscriptionPlanListResponse,
-  SubscriptionDetailResponse,
   SubscriptionListResponse,
   CreatePaidSubscriptionResponse,
   SubscriptionPaymentStatusResponse,
   SubscriptionActionResponse,
   ServiceAccessResponse,
 } from "@/models/response/subscriptionResponse";
-import type { genericResponse } from "@/models/response";
 
 export const subscriptionApi = createApi({
   reducerPath: "subscriptionApi",
   baseQuery: baseQueryWithAuthGuard,
   tagTypes: [ApiEnums.Subscription],
   endpoints: (build) => ({
-    getAllPlans: build.query<SubscriptionPlanListResponse, { include_inactive?: boolean }>({
-      query: ({ include_inactive = false }) => ({
-        url: `/subscription_plans`,
-        params: { include_inactive },
-      }),
-      providesTags: [{ type: ApiEnums.Subscription, id: "PLANS" }],
-    }),
     getAllWithMySubscriptions: build.query<SubscriptionPlanListResponse, void>({
-      query: () => ({
-        url: `/subscription_plans/me`,
-      }),
+      query: () => ({ url: `/subscription_plans/me` }),
       providesTags: [
         { type: ApiEnums.Subscription, id: "PLANS" },
         { type: ApiEnums.Subscription, id: "LIST" },
       ],
     }),
-    startTrial: build.mutation<SubscriptionDetailResponse, StartTrialRequest>({
+
+    startTrial: build.mutation<void, StartTrialRequest>({
       query: ({ plan_id, trial_duration_days = 30 }) => ({
         url: `/subscriptions/trial/start`,
         method: "POST",
@@ -66,23 +56,9 @@ export const subscriptionApi = createApi({
       providesTags: [{ type: ApiEnums.Subscription, id: "PAYMENT" }],
     }),
 
-    getTrialStatus: build.query<genericResponse, void>({
-      query: () => `/subscriptions/trial/status`,
-      providesTags: [{ type: ApiEnums.Subscription, id: "TRIAL" }],
-    }),
-
     getMySubscription: build.query<SubscriptionListResponse, void>({
       query: () => `/subscriptions/me`,
       providesTags: [{ type: ApiEnums.Subscription, id: "LIST" }],
-    }),
-
-    checkSubscriptionAccess: build.query<genericResponse, void>({
-      query: () => `/subscriptions/access/check`,
-    }),
-
-    getSubscription: build.query<SubscriptionDetailResponse, string>({
-      query: (subscription_id) => `/subscriptions/${subscription_id}`,
-      providesTags: [{ type: ApiEnums.Subscription, }],
     }),
 
     pauseSubscription: build.mutation<SubscriptionActionResponse, string>({
@@ -91,7 +67,7 @@ export const subscriptionApi = createApi({
         method: "POST",
       }),
       invalidatesTags: [
-        { type: ApiEnums.Subscription,},
+        { type: ApiEnums.Subscription },
         { type: ApiEnums.Subscription, id: "LIST" },
       ],
     }),
@@ -102,18 +78,18 @@ export const subscriptionApi = createApi({
         method: "POST",
       }),
       invalidatesTags: [
-        { type: ApiEnums.Subscription, },
+        { type: ApiEnums.Subscription },
         { type: ApiEnums.Subscription, id: "LIST" },
       ],
     }),
 
-    cancelSubscription: build.mutation<genericResponse, string>({
+    cancelSubscription: build.mutation<void, string>({
       query: (subscription_id) => ({
         url: `/subscriptions/${subscription_id}/cancel`,
         method: "POST",
       }),
       invalidatesTags: [
-        { type: ApiEnums.Subscription, },
+        { type: ApiEnums.Subscription },
         { type: ApiEnums.Subscription, id: "LIST" },
       ],
     }),
@@ -124,18 +100,10 @@ export const subscriptionApi = createApi({
         method: "POST",
         params: { payment_valid_minutes },
       }),
-      invalidatesTags:[
-        { type: ApiEnums.Subscription,  },
+      invalidatesTags: [
+        { type: ApiEnums.Subscription },
         { type: ApiEnums.Subscription, id: "LIST" },
       ],
-    }),
-
-    trackUsage: build.mutation<SubscriptionActionResponse, { subscription_id: string; increment?: number }>({
-      query: ({ subscription_id, increment = 1 }) => ({
-        url: `/subscriptions/${subscription_id}/usage/track`,
-        method: "POST",
-        params: { increment },
-      }),
     }),
 
     getServiceAccess: build.mutation<ServiceAccessResponse, { service_name: string }>({
@@ -148,20 +116,15 @@ export const subscriptionApi = createApi({
 });
 
 export const {
-  useGetAllPlansQuery,
+  useGetAllWithMySubscriptionsQuery,
   useStartTrialMutation,
   useCreatePaidSubscriptionMutation,
   useCheckPaymentStatusQuery,
   useLazyCheckPaymentStatusQuery,
-  useGetTrialStatusQuery,
   useGetMySubscriptionQuery,
-  useCheckSubscriptionAccessQuery,
-  useGetSubscriptionQuery,
   usePauseSubscriptionMutation,
   useResumeSubscriptionMutation,
   useCancelSubscriptionMutation,
   useConvertTrialToPaidMutation,
-  useGetAllWithMySubscriptionsQuery,
-  useTrackUsageMutation,
   useGetServiceAccessMutation,
 } = subscriptionApi;

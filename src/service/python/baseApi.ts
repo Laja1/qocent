@@ -5,6 +5,6 @@ import { ApiEnums } from "@/utilities/enums";
 export const pythonBaseApi = createApi({
   reducerPath: "pythonBaseApi",
   baseQuery: baseQueryWithAuthGuard,
-  tagTypes: [ApiEnums.Wallet, ApiEnums.BillingSpend],
+  tagTypes: [ApiEnums.Wallet, ApiEnums.BillingSpend, ApiEnums.Subscription, ApiEnums.Context, ApiEnums.BusinessInvite],
   endpoints: () => ({}),
 });

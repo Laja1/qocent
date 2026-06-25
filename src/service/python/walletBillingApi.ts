@@ -1,18 +1,20 @@
 import { ApiEnums } from "@/utilities/enums";
 import type {
   FundWalletRequest,
-  SetPostpaidConfigRequest,
 } from "@/models/request/walletBillingRequest";
 import type {
-  DailySpendSyncResponse,
   FundWalletResponse,
   MyBillsResponse,
-  SetPostpaidConfigResponse,
   SpendReportResponse,
   WalletBalanceResponse,
   WalletFundingStatusResponse,
   WalletTransactionResponse,
 } from "@/models/response/walletBillingResponse";
+import type { CreatePaidSubscriptionRequest } from "@/models/request/subscriptionRequest";
+import type {
+  CreatePaidSubscriptionResponse,
+  SubscriptionPaymentStatusResponse,
+} from "@/models/response/subscriptionResponse";
 import { pythonBaseApi } from "./baseApi";
 
 export const walletBillingApi = pythonBaseApi.injectEndpoints({
@@ -64,18 +66,6 @@ export const walletBillingApi = pythonBaseApi.injectEndpoints({
       providesTags: [{ type: ApiEnums.BillingSpend, id: "REPORT" }],
     }),
 
-    syncDailySpend: build.mutation<
-      DailySpendSyncResponse,
-      { account_id: string; hyperscaler?: string | null }
-    >({
-      query: ({ account_id, hyperscaler }) => ({
-        url: "/billing/sync-daily-spend",
-        method: "POST",
-        params: { account_id, hyperscaler },
-      }),
-      invalidatesTags: [{ type: ApiEnums.BillingSpend, id: "REPORT" }],
-    }),
-
     getMyBills: build.query<MyBillsResponse, void>({
       query: () => ({
         url: "/billing/my-bills",
@@ -83,17 +73,115 @@ export const walletBillingApi = pythonBaseApi.injectEndpoints({
       providesTags: [{ type: ApiEnums.BillingSpend, id: "BILLS" }],
     }),
 
-    setPostpaidConfig: build.mutation<
-      SetPostpaidConfigResponse,
-      { user_id: string; account_id: string; body: SetPostpaidConfigRequest }
+    getWalletDetails: build.query<WalletBalanceResponse, void>({
+      query: () => ({
+        url: "/wallet/me",
+      }),
+      providesTags: [{ type: ApiEnums.Wallet, id: "DETAILS" }],
+    }),
+
+    startPersonalTrial: build.mutation<
+      void,
+      { plan_id: string; trial_duration_days?: number }
     >({
-      query: ({ user_id, account_id, body }) => ({
-        url: `/billing/users/${user_id}/postpaid-config`,
+      query: ({ plan_id, trial_duration_days = 30 }) => ({
+        url: "/wallet/subscribe/trial",
         method: "POST",
-        params: { account_id },
+        params: { plan_id, trial_duration_days },
+      }),
+      invalidatesTags: [
+        { type: ApiEnums.Subscription, id: "LIST" },
+        { type: ApiEnums.Subscription, id: "PLANS" },
+      ],
+    }),
+
+    createPersonalPaidSubscription: build.mutation<
+      CreatePaidSubscriptionResponse,
+      CreatePaidSubscriptionRequest
+    >({
+      query: (body) => ({
+        url: "/wallet/subscribe/paid",
+        method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.BillingSpend, id: "BILLS" }],
+      invalidatesTags: [
+        { type: ApiEnums.Subscription, id: "LIST" },
+        { type: ApiEnums.Subscription, id: "PLANS" },
+      ],
+    }),
+
+    convertPersonalTrialToPaid: build.mutation<
+      CreatePaidSubscriptionResponse,
+      { subscription_id: string; payment_valid_minutes?: number }
+    >({
+      query: (body) => ({
+        url: "/wallet/subscribe/convert-trial",
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [{ type: ApiEnums.Subscription, id: "LIST" }],
+    }),
+
+    checkPersonalPaymentStatus: build.query<
+      SubscriptionPaymentStatusResponse,
+      string
+    >({
+      query: (payment_id) => ({
+        url: `/wallet/subscribe/payment-status/${payment_id}`,
+      }),
+      providesTags: [{ type: ApiEnums.Subscription, id: "PAYMENT" }],
+    }),
+
+    startBusinessTrial: build.mutation<
+      void,
+      { business_id: string; plan_id: string; trial_duration_days?: number }
+    >({
+      query: ({ business_id, plan_id, trial_duration_days }) => ({
+        url: `/wallet/business/${business_id}/subscribe/trial`,
+        method: "POST",
+        params: { plan_id, ...(trial_duration_days ? { trial_duration_days } : {}) },
+      }),
+      invalidatesTags: [
+        { type: ApiEnums.Subscription, id: "LIST" },
+        { type: ApiEnums.Subscription, id: "PLANS" },
+      ],
+    }),
+
+    createBusinessPaidSubscription: build.mutation<
+      CreatePaidSubscriptionResponse,
+      { business_id: string; body: CreatePaidSubscriptionRequest }
+    >({
+      query: ({ business_id, body }) => ({
+        url: `/wallet/business/${business_id}/subscribe/paid`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: [
+        { type: ApiEnums.Subscription, id: "LIST" },
+        { type: ApiEnums.Subscription, id: "PLANS" },
+      ],
+    }),
+
+    convertBusinessTrialToPaid: build.mutation<
+      CreatePaidSubscriptionResponse,
+      { business_id: string; subscription_id: string; payment_valid_minutes?: number }
+    >({
+      query: ({ business_id, subscription_id, payment_valid_minutes }) => ({
+        url: `/wallet/business/${business_id}/subscribe/convert-trial`,
+        method: "POST",
+        body: { subscription_id, ...(payment_valid_minutes ? { payment_valid_minutes } : {}) },
+      }),
+      invalidatesTags: [{ type: ApiEnums.Subscription, id: "LIST" }],
+    }),
+
+    checkBusinessPaymentStatus: build.query<
+      SubscriptionPaymentStatusResponse,
+      { business_id: string; payment_id: string }
+    >({
+      query: ({ business_id, payment_id }) => ({
+        url: `/wallet/business/${business_id}/subscribe/payment-status/${payment_id}`,
+      }),
+      providesTags: [{ type: ApiEnums.Subscription, id: "PAYMENT" }],
     }),
   }),
 });
@@ -104,7 +192,14 @@ export const {
   useFundWalletMutation,
   useCheckWalletFundingStatusQuery,
   useGetSpendReportQuery,
-  useSyncDailySpendMutation,
   useGetMyBillsQuery,
-  useSetPostpaidConfigMutation,
+  useGetWalletDetailsQuery,
+  useStartPersonalTrialMutation,
+  useCreatePersonalPaidSubscriptionMutation,
+  useConvertPersonalTrialToPaidMutation,
+  useCheckPersonalPaymentStatusQuery,
+  useStartBusinessTrialMutation,
+  useCreateBusinessPaidSubscriptionMutation,
+  useConvertBusinessTrialToPaidMutation,
+  useCheckBusinessPaymentStatusQuery,
 } = walletBillingApi;

@@ -236,5 +236,17 @@ export const RouteConstant = {
       path: "/obs",
       name: "obs",
     },
+    inviteInbox: {
+      path: "/invite-inbox",
+      name: "Invite Inbox",
+    },
+    inviteManagement: {
+      path: "/invite-management",
+      name: "Invite Management",
+    },
+    joinBusiness: {
+      path: "/join-business",
+      name: "Join Business",
+    },
   },
 };

@@ -1,20 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import type { waitlistFormPayload } from "@/models/request/waitlistRequest";
 import type { genericResponse } from "@/models/response";
+import { kotlinBaseApi } from "./baseApi";
+import { KotlinWaitlistEndpoints } from "./endpoints";
 
-
-
-export const waitlistApi = createApi({
-  reducerPath: "waitlistApi",
-  baseQuery: kotlinBaseQueryWithResponseCodeHandling,
+export const waitlistApi = kotlinBaseApi.injectEndpoints({
   endpoints: (build) => ({
-     
-
 createWaitlist: build.mutation<genericResponse, waitlistFormPayload>({
   query: (body) => ({
-    url: `/waitlist/add`,
+    url: KotlinWaitlistEndpoints.addwaitlist,
     method: "POST",
     body:body
   }),

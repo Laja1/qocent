@@ -20,6 +20,9 @@ import { SiteCredentials } from "@/pages/site-credentials";
 import { ProfessionalServices } from "@/pages/professional-services";
 import { CreateProfessionalService } from "@/pages/create-professional-service";
 import SubscriptionCards from "@/pages/subscription/page";
+import { InviteInbox } from "@/pages/invite-inbox";
+import { InviteManagement } from "@/pages/invite-management";
+import JoinBusiness from "@/pages/join-business";
 
 const serverHouseAndRoomRoutes: RouteType[] = FEATURE_SERVER_HOUSE_AND_ROOM
   ? [
@@ -141,6 +144,24 @@ export const dashboardRoute: RouteType[] = [
     path: RouteConstant.dashboard.billings.path,
     name: RouteConstant.dashboard.billings.name,
     component: <Billings />,
+    metadata: { isAuthenticated: false, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.inviteInbox.path,
+    name: RouteConstant.dashboard.inviteInbox.name,
+    component: <InviteInbox />,
+    metadata: { isAuthenticated: false, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.inviteManagement.path,
+    name: RouteConstant.dashboard.inviteManagement.name,
+    component: <InviteManagement businessId="" />,
+    metadata: { isAuthenticated: false, hasSidebar: true },
+  },
+  {
+    path: RouteConstant.dashboard.joinBusiness.path,
+    name: RouteConstant.dashboard.joinBusiness.name,
+    component: <JoinBusiness />,
     metadata: { isAuthenticated: false, hasSidebar: true },
   },
 ];

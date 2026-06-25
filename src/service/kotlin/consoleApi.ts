@@ -1,17 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { ApiEnums } from "@/utilities/enums";
-import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import {  createActivityLogTags } from "@/utilities/tagHelpers"
 import type { activityLogResponse } from "@/models/response/consoleResponse";
+import { kotlinBaseApi } from "./baseApi";
+import { KotlinActivityLogEndpoints } from "./endpoints";
 
-export const consoleApi = createApi({
-  reducerPath: "consoleApi",
-  baseQuery: kotlinBaseQueryWithResponseCodeHandling,
-  tagTypes: [ApiEnums.ActivityLog],
+export const consoleApi = kotlinBaseApi.injectEndpoints({
   endpoints: (build) => ({
     getActivityLog: build.query<activityLogResponse,void>({
-      query: () => `/activity-log/read`, 
+      query: () => KotlinActivityLogEndpoints.read, 
       providesTags: (result) => createActivityLogTags(result,  "activityLogId"),
     }),
 

@@ -11,6 +11,8 @@ export enum ApiEnums {
     Bucket='bucket',
     Subscription='subscription',
     Wallet = "wallet",
-    BillingSpend = "billingSpend"
+    BillingSpend = "billingSpend",
+    Context = "context",
+    BusinessInvite = "businessInvite"
   }
   

@@ -1,30 +1,41 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createApi } from "@reduxjs/toolkit/query/react";
 import { ApiEnums } from "@/utilities/enums";
 import type {ConfigResponse, consoleSummaryResponse, createResourceResponse, resourceResponse, } from "@/models/response/resourceResponse";
-import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
 import type { ParameterResponse } from "@/models/response/siteResponse";
 import type { createResourceRequest, createStaterPackRequest } from "@/models/request/resourceRequest";
 import { createConfigTags, createResourceProviderTags } from "@/utilities/tagHelpers";
 import type { genericResponse } from "@/models/response";
+import { kotlinBaseApi } from "./baseApi";
+import {
+  KotlinConfigEndpoints,
+  KotlinResourceEndpoints,
+  kotlinPath,
+} from "./endpoints";
 
-
-export const kotlinResourceApi = createApi({
-  reducerPath: "kotlinResourceApi",
-  baseQuery: kotlinBaseQueryWithResponseCodeHandling,
-  tagTypes: [ApiEnums.Resource,ApiEnums.Config,ApiEnums.House,ApiEnums.Room,ApiEnums.ActivityLog,ApiEnums.Site],
+export const kotlinResourceApi = kotlinBaseApi.injectEndpoints({
   endpoints: (build) => ({
      
 
 getConfig: build.query<ConfigResponse, { serviceId: string, configProvider: string }>({
-  query: ({ serviceId, configProvider }) => `/configs/read/${configProvider}/${serviceId}`,
+  query: ({ serviceId, configProvider }) =>
+    kotlinPath(KotlinConfigEndpoints.getconfigbyproviderandservicecode, {
+      configProvider,
+      configServiceCode: serviceId,
+    }),
   providesTags: (result) => createConfigTags({ data: result ? [result as any] : [] }, "configId"),
 }), 
 getResourceTemplate: build.query<ParameterResponse, { resource: string, provider: string }>({
-    query: ({ resource, provider }) => `/resource/template/${provider}/${resource}`,
+    query: ({ resource, provider }) =>
+      kotlinPath(KotlinResourceEndpoints.readresourcetemplate, {
+        provider,
+        parameterObject: resource,
+      }),
     }),
     getAllResources: build.query<resourceResponse, { accountCode: string,provider:string, type: 'INTERNAL' | 'EXTERNAL' }>({
-      query: ({ accountCode,provider, type }) => ({url: `/resource/read-all-resources/${accountCode}/${provider}`,params: { requestType: type } }),
+      query: ({ accountCode,provider, type }) => ({
+        url: kotlinPath(KotlinResourceEndpoints.readallresources, { accountCode, provider }),
+        params: { requestType: type },
+      }),
       providesTags: (result) =>
         createResourceProviderTags(
           result,
@@ -33,7 +44,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
     }),
     createStaterPack:build.mutation<{responseCode:string,responseMessage:string,data:Record<any, any>}, createStaterPackRequest>({
       query: (body) => ({
-        url: "/resource/create-starter-pack",
+        url: KotlinResourceEndpoints.createstarterpack,
         method: "POST",
         body,
       }),
@@ -41,7 +52,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
     }),
     createResource: build.mutation<createResourceResponse, createResourceRequest>({
       query: (body) => ({
-        url: "/resource/create-resource",
+        url: KotlinResourceEndpoints.create,
         method: "POST",
         body,
       }),
@@ -49,7 +60,7 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
     }),
     deleteResource:build.mutation<genericResponse,{resourceId:number}>({
       query:({resourceId})=>({
-        url: `/resource/delete-resource/${resourceId}`,
+        url: kotlinPath(KotlinResourceEndpoints.deleteresource, { resourceId }),
         method: "POST",
        
       }),
@@ -57,14 +68,14 @@ getResourceTemplate: build.query<ParameterResponse, { resource: string, provider
     }),
     deleteResourceByCode:build.mutation<genericResponse,{resourceCode:string}>({
       query:({resourceCode})=>({
-        url: `/resource/delete-resource-by-code/${resourceCode}`,
+        url: kotlinPath(KotlinResourceEndpoints.deleteresourcebyresourcecode, { resourceCode }),
         method: "POST",
        
       }),
       invalidatesTags: [{ type: ApiEnums.Resource, id: "LIST" },{ type: ApiEnums.ActivityLog, id: "LIST" },{ type: ApiEnums.Room, id: "LIST" }],
     }),
     consoleSummary:build.query<consoleSummaryResponse,void>({
-      query:()=>`/resource/console-summary`,
+      query:()=> KotlinResourceEndpoints.getconsolesummary,
     }),
   }),
 });
