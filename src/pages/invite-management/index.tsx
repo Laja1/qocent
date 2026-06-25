@@ -44,8 +44,11 @@ function RespondModal({ invite, onConfirm, onCancel, isLoading }: RespondModalPr
       <div className="bg-white rounded-lg shadow-2xl p-6 w-full max-w-sm">
         <h3 className="text-base font-semibold text-gray-900 mb-2">Accept Join Request</h3>
         <p className="text-sm text-gray-500 mb-4">
-          Assign a role for this user before accepting.
+          Assign a role for <span className="font-medium">{invite.user_id}</span> before accepting.
         </p>
+        {invite.message && (
+          <p className="text-xs text-gray-500 mb-4 italic">&ldquo;{invite.message}&rdquo;</p>
+        )}
         <div className="mb-3">
           <label className="block text-sm font-medium text-gray-700 mb-1">Role</label>
           <select

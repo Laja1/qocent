@@ -20,8 +20,6 @@ export const Resources = () => {
   const navigate = useNavigate();
   const account = useSelector((state: RootState) => state.account);
   const dashboard = useSelector((state: RootState) => state.dashboard);
-  const [selectedType, setSelectedType] = useState("");
-
   const { data: resourceData, isLoading } = useGetAllResourcesQuery(
     {
       accountCode: account?.accountCode,
@@ -69,12 +67,7 @@ export const Resources = () => {
 
   const handleRowClick = (row: resourceType) => {
     setRowId(row.resourceId);
-    setSelectedType(row.resourceType);
   };
-
-  const selectedData = resourceData?.data.find(
-    (item) => item.resourceId === rowId
-  );
 
   return (
     <div className="h-full">

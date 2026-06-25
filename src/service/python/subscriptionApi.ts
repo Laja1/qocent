@@ -11,6 +11,7 @@ import type {
   CreatePaidSubscriptionResponse,
   SubscriptionPaymentStatusResponse,
   SubscriptionActionResponse,
+  SubscriptionDetailResponse,
   ServiceAccessResponse,
 } from "@/models/response/subscriptionResponse";
 
@@ -27,7 +28,7 @@ export const subscriptionApi = createApi({
       ],
     }),
 
-    startTrial: build.mutation<void, StartTrialRequest>({
+    startTrial: build.mutation<SubscriptionDetailResponse, StartTrialRequest>({
       query: ({ plan_id, trial_duration_days = 30 }) => ({
         url: `/subscriptions/trial/start`,
         method: "POST",
