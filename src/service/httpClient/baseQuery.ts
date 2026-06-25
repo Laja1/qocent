@@ -8,16 +8,13 @@ import { authStore } from "@/store/authSlice";
     baseUrl: "https://krl7jmmklv7mrb6hxdpkcoqhzq0rmpks.lambda-url.us-east-1.on.aws/api/v1",
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState;
-      const token = state.auth.token;
-  
+      // Use context token when active (post-context-switch), fall back to auth token
+      const token = (state as any).context?.tokenContextClaim || state.auth.token;
+
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
       }
-  
-      // Don't override X-Key if it's already set by the query
-      // prepareHeaders runs AFTER the query's headers, so this should work
-      // But let's ensure we don't accidentally remove it
-      
+
       return headers;
     },
   });

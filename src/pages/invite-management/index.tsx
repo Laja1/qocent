@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +14,7 @@ import {
   useBusinessRespondToRequestMutation,
 } from "@/service/python/businessInviteApi";
 import type { BusinessInviteResponse, Csp, ProposedRole } from "@/models/response/businessInviteResponse";
+import type { RootState } from "@/store";
 
 const statusBadgeClass: Record<string, string> = {
   PENDING: "bg-yellow-100 text-yellow-800 border-yellow-200",
@@ -91,11 +93,9 @@ function RespondModal({ invite, onConfirm, onCancel, isLoading }: RespondModalPr
   );
 }
 
-interface InviteManagementProps {
-  businessId: string;
-}
-
-export const InviteManagement = ({ businessId }: InviteManagementProps) => {
+export const InviteManagement = () => {
+  const activeContext = useSelector((state: RootState) => (state as any).context?.activeContext);
+  const businessId: string = activeContext?.context_type === "business" ? activeContext.entity_id : "";
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
   const [inviteRole, setInviteRole] = useState<ProposedRole>("VIEWER");

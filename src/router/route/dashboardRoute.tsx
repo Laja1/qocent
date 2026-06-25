@@ -155,7 +155,7 @@ export const dashboardRoute: RouteType[] = [
   {
     path: RouteConstant.dashboard.inviteManagement.path,
     name: RouteConstant.dashboard.inviteManagement.name,
-    component: <InviteManagement businessId="" />,
+    component: <InviteManagement />,
     metadata: { isAuthenticated: false, hasSidebar: true },
   },
   {

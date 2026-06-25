@@ -2,9 +2,11 @@ import {
   LogOut,
   Settings,
   Users,
-  LayoutList,
   Wallet,
+  Mail,
+  UserPlus,
 } from "lucide-react";
+import { ContextSwitcher } from "./context-switcher";
 import {
   Sidebar,
   SidebarContent,
@@ -76,9 +78,15 @@ export const SidebarLayout = () => {
         ]
       : []),
     {
-      title: "Switch workspace",
-      icon: <LayoutList className="size-4 text-white/70" />,
-      href: RouteConstant.dashboard.console.path,
+      title: "Invite Inbox",
+      icon: <Mail className="size-4 text-white/70" />,
+      href: RouteConstant.dashboard.inviteInbox.path,
+      isActive: false,
+    },
+    {
+      title: "Invite Management",
+      icon: <UserPlus className="size-4 text-white/70" />,
+      href: RouteConstant.dashboard.inviteManagement.path,
       isActive: false,
     },
     {
@@ -116,13 +124,11 @@ export const SidebarLayout = () => {
         <div className="flex items-center space-x-2 justify-between">
           <div className="flex space-x-2">
             <img src={svgLinks.logoWhite} className="h-8" />
-            <div>
-              {/* <p className="text-xs text-gray-400 line-clamp-1">
-                {user?.userEmail}
-              </p> */}
-            </div>
           </div>
           {Icon()}
+        </div>
+        <div className="mt-2">
+          <ContextSwitcher />
         </div>
       </SidebarHeader>
 
