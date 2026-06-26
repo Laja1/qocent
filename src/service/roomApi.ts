@@ -6,14 +6,14 @@ import type { genericResponse } from "@/models/response";
 import type { createResourceResponse } from "@/models/response/resourceResponse";
 import type { createResourceRequest } from "@/models/request/resourceRequest";
 import type { getResourcesResponse } from "@/models/response/siteResponse";
-import { kotlinBaseApi } from "./baseApi";
+import { kotlinBaseApi } from "./kotlinBaseApi";
 import { KotlinResourceEndpoints, kotlinPath } from "./endpoints";
 
 export const roomApi = kotlinBaseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllRoom: build.query<getAllRoomResponse,{ accountCode: string,provider:string, type: 'INTERNAL' | 'EXTERNAL' }>({
       query: ({accountCode,provider, type}) => ({
-        url: kotlinPath(KotlinResourceEndpoints.readroombyaccountcode, { accountCode, provider }),
+        url: kotlinPath(KotlinResourceEndpoints.readRoomByAccountCode, { accountCode, provider }),
         params: { requestType: type },
       }),
       providesTags: (result) => createRoomTags(result,  "roomId"),
@@ -28,12 +28,12 @@ export const roomApi = kotlinBaseApi.injectEndpoints({
     }),
     getResourceInRoom: build.query<getResourcesResponse,{ roomCode: string }>({
       query: ({roomCode}) =>
-        kotlinPath(KotlinResourceEndpoints.readresourcebyroomcode, { roomCode }), 
+        kotlinPath(KotlinResourceEndpoints.readResourceByRoomCode, { roomCode }), 
       providesTags: (result) => createResourceProviderTags(result,  "resourceId") as Array<{ type: ApiEnums.Resource; id: string | number | "LIST" }>,
   }),
     deleteRoom:build.mutation<genericResponse,{roomId:number}>({
       query:({roomId})=>({
-        url: kotlinPath(KotlinResourceEndpoints.deleteroom, { roomId }),
+        url: kotlinPath(KotlinResourceEndpoints.deleteRoom, { roomId }),
         method: "POST",
        
       }),

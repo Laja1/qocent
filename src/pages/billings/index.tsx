@@ -9,7 +9,7 @@ import {
   useGetSpendReportQuery,
   useGetWalletBalanceQuery,
   useGetWalletTransactionsQuery,
-} from "@/service/python/walletBillingApi";
+} from "@/service/walletBillingApi";
 import { useCallback, useState } from "react";
 import { BillsList } from "./components/bills-list";
 import { FundWalletCard } from "./components/fund-wallet-card";

@@ -11,7 +11,7 @@ import type {
   InviteActionResponse,
   InviteStatus,
 } from "@/models/response/businessInviteResponse";
-import { pythonBaseApi } from "./baseApi";
+import { pythonBaseApi } from "./pythonBaseApi";
 
 export const businessInviteApi = pythonBaseApi.injectEndpoints({
   endpoints: (build) => ({

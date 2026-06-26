@@ -1,5 +1,5 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
+import { baseQueryWithAuthGuard } from "./httpClient/baseQuery";
 import { ApiEnums } from "@/utilities/enums";
 
 export const pythonBaseApi = createApi({

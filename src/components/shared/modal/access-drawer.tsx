@@ -17,7 +17,7 @@ import type { Account } from "@/models/response/organizationResponse";
 import {
   useGetAccountMembersQuery,
   useRemoveAccountMemberMutation,
-} from "@/service/python/accountsApi";
+} from "@/service/accountsApi";
 import type { AccountMemberResponse } from "@/models/response/accountResponse";
 
 export const AccessDrawer = NiceModal.create<{ site: Account }>(({ site }) => {

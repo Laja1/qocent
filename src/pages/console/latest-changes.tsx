@@ -1,6 +1,6 @@
 import { CardContent } from "@/components/ui/card";
 import { AlarmClockCheck, Loader2 } from "lucide-react";
-import { useGetActivityLogQuery } from "@/service/kotlin/consoleApi";
+import { useGetActivityLogQuery } from "@/service/consoleApi";
 import type { activityLogData } from "@/models/response/consoleResponse";
 
 const statusColorMap: Record<string, string> = {

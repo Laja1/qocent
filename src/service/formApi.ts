@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
+import { baseQueryWithAuthGuard } from "./httpClient/baseQuery";
 import type { fileResponse } from "@/models/response/bucketResponse";
 import { ApiEnums } from "@/utilities/enums";
 

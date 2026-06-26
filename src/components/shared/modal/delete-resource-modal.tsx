@@ -11,7 +11,7 @@ import { create, useModal } from "@ebay/nice-modal-react";
 import { ModalConstant } from "./register";
 import { showCustomToast } from "../toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useDeleteResourceMutation } from "@/service/kotlin/resourceApi";
+import { useDeleteResourceMutation } from "@/service/resourceApi";
 import type { resourceType } from "@/models/response/resourceResponse";
 
 export const DeleteResourceModal = create<resourceType>(() => {

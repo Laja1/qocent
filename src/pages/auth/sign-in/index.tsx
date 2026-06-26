@@ -5,7 +5,7 @@ import { showCustomToast } from "@/components/shared/toast";
 import { signInInit } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useSignInMutation } from "@/service/python/authApi";
+import { useSignInMutation } from "@/service/authApi";
 import { authStore } from "@/store/authSlice";
 import { loginFormValidationSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";

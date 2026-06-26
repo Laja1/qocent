@@ -14,7 +14,7 @@ import { X } from "lucide-react";
 import {
   subscriptionApi,
   useLazyCheckPaymentStatusQuery,
-} from "@/service/python/subscriptionApi";
+} from "@/service/subscriptionApi";
 import { useDispatch } from "react-redux";
 import { ApiEnums } from "@/utilities/enums";
 import { showCustomToast } from "../toast";

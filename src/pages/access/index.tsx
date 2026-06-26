@@ -31,11 +31,11 @@ import { ModalConstant } from "@/components/shared/modal/register";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 
-import { useGetUserAccountsByProviderQuery } from "@/service/python/organizationApi";
+import { useGetUserAccountsByProviderQuery } from "@/service/organizationApi";
 import {
   useGetAccountMembersQuery,
   useRemoveAccountMemberMutation,
-} from "@/service/python/accountsApi";
+} from "@/service/accountsApi";
 import type { Account } from "@/models/response/organizationResponse";
 import type { AccountMemberResponse } from "@/models/response/accountResponse";
 import type { RootState } from "@/store";

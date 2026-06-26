@@ -11,7 +11,7 @@ import {
   useUserRespondToInviteMutation,
   useCancelJoinRequestMutation,
   useGenerateCloudLoginUrlMutation,
-} from "@/service/python/businessInviteApi";
+} from "@/service/businessInviteApi";
 import type { BusinessInviteResponse, Csp } from "@/models/response/businessInviteResponse";
 
 type TabType = "received" | "sent";
@@ -165,39 +165,39 @@ export const InviteInbox = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-3xl mx-auto">
-        <div className="mb-6">
-          <h1 className="text-2xl font-bold text-gray-900">Invite Inbox</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage your business invitations and join requests.</p>
+      <div className="w-full">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900">Invite Inbox</h1>
+          <p className="text-base text-gray-500 mt-2">Manage your business invitations and join requests.</p>
         </div>
 
         {/* Tabs */}
-        <div className="flex border-b border-gray-200 mb-6">
+        <div className="flex border-b border-gray-200 mb-8">
           <button
             onClick={() => setActiveTab("received")}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            className={`flex items-center gap-2.5 px-5 py-3 text-base font-medium border-b-2 transition-colors ${
               activeTab === "received"
                 ? "border-black text-black"
                 : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
-            <Inbox className="w-4 h-4" />
+            <Inbox className="w-5 h-5" />
             Received
             {received.filter((i) => i.status === "PENDING").length > 0 && (
-              <span className="bg-yellow-100 text-yellow-800 text-xs font-semibold px-1.5 py-0.5 rounded-full">
+              <span className="bg-yellow-100 text-yellow-800 text-xs font-semibold px-2 py-0.5 rounded-full">
                 {received.filter((i) => i.status === "PENDING").length}
               </span>
             )}
           </button>
           <button
             onClick={() => setActiveTab("sent")}
-            className={`flex items-center gap-2 px-4 py-2 text-sm font-medium border-b-2 transition-colors ${
+            className={`flex items-center gap-2.5 px-5 py-3 text-base font-medium border-b-2 transition-colors ${
               activeTab === "sent"
                 ? "border-black text-black"
                 : "border-transparent text-gray-500 hover:text-gray-700"
             }`}
           >
-            <Send className="w-4 h-4" />
+            <Send className="w-5 h-5" />
             Sent
           </button>
         </div>
@@ -238,9 +238,9 @@ export const InviteInbox = () => {
 
         {/* Empty state */}
         {!isLoading && !isFetching && displayList.length === 0 && (
-          <div className="text-center py-16 text-gray-400">
-            <Inbox className="w-10 h-10 mx-auto mb-3 opacity-40" />
-            <p className="text-sm">No {activeTab === "received" ? "received invitations" : "sent join requests"} yet.</p>
+          <div className="text-left py-20 text-gray-400">
+            <Inbox className="w-14 h-14 mb-4 opacity-40" />
+            <p className="text-base">No {activeTab === "received" ? "received invitations" : "sent join requests"} yet.</p>
           </div>
         )}
 

@@ -11,7 +11,7 @@ import { create, useModal } from "@ebay/nice-modal-react";
 import { ModalConstant } from "./register";
 import { showCustomToast } from "../toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useDeleteSiteMutation } from "@/service/kotlin/siteApi";
+import { useDeleteSiteMutation } from "@/service/siteApi";
 import type { SiteData } from "@/models/response/siteResponse";
 
 export const DeleteSiteModal = create<SiteData>(() => {

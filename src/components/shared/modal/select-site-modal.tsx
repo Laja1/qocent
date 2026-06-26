@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import { useSelector } from "react-redux";
 import { type RootState } from "@/store";
 import { Loader2 } from "lucide-react";
-import { useGetUserAccountsByProviderQuery } from "@/service/python/organizationApi";
+import { useGetUserAccountsByProviderQuery } from "@/service/organizationApi";
 import type { Account } from "@/models/response/organizationResponse";
 
 export const SelectSiteModal = NiceModal.create(() => {

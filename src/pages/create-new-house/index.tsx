@@ -17,12 +17,12 @@ import type { ParameterData } from "../create-new-site/type";
 import {
   useGetConfigQuery,
   useGetResourceTemplateQuery,
-} from "@/service/kotlin/resourceApi";
+} from "@/service/resourceApi";
 import type { createResourceRequest } from "@/models/request/resourceRequest";
 import { replaceConfigPlaceholders } from "@/utilities/helper";
 import type { ConfigResponse } from "@/models/response/resourceResponse";
-import { useCreateHouseMutation } from "@/service/kotlin/houseApi";
-import { useGetSiteByProviderQuery } from "@/service/kotlin/siteApi";
+import { useCreateHouseMutation } from "@/service/houseApi";
+import { useGetSiteByProviderQuery } from "@/service/siteApi";
 
 export const CreateNewHouse = () => {
   const navigate = useNavigate();

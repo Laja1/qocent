@@ -8,7 +8,7 @@ import { ResourceModal } from "../create-new-resource/resource-modal";
 import type { resourceType } from "@/models/response/resourceResponse";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
-import { useGetAllResourcesQuery } from "@/service/kotlin/resourceApi";
+import { useGetAllResourcesQuery } from "@/service/resourceApi";
 import { Card } from "@/components/ui/card";
 import { RouteConstant } from "@/router/routes";
 import { resourcesColumns } from "@/utilities/constants/colums";

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {  createActivityLogTags } from "@/utilities/tagHelpers"
 import type { activityLogResponse } from "@/models/response/consoleResponse";
-import { kotlinBaseApi } from "./baseApi";
+import { kotlinBaseApi } from "./kotlinBaseApi";
 import { KotlinActivityLogEndpoints } from "./endpoints";
 
 export const consoleApi = kotlinBaseApi.injectEndpoints({

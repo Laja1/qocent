@@ -2,9 +2,9 @@
 import { useState, useCallback, useEffect } from "react";
 import { type FormikProps } from "formik";
 import { SelectField } from "../shared";
-import { useGetFormOptionsMutation } from "@/service/kotlin/serviceApi";
+import { useGetFormOptionsMutation } from "@/service/serviceApi";
 import { IconRefresh } from "@tabler/icons-react";
-import { useGetApiOptionsMutation } from "@/service/python/formApi";
+import { useGetApiOptionsMutation } from "@/service/formApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 
 type ResourceSelectFieldProps = {

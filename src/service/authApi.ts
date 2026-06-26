@@ -17,7 +17,7 @@ import type {
 import type { baseResponse, genericResponse } from "@/models/response";
 import { ApiEnums } from "@/utilities/enums";
 import type { getAccountResponse } from "@/models/response/siteResponse";
-import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
+import { baseQueryWithAuthGuard } from "./httpClient/baseQuery";
 
 export const authApi = createApi({
   reducerPath: "authApi",

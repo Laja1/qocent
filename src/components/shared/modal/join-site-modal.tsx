@@ -20,7 +20,7 @@ import { ModalConstant } from "./register";
 import {
   useCompleteInviteAccountMutation,
   useInitiateInviteAccountMutation,
-} from "@/service/python/cloudServericesApi";
+} from "@/service/cloudServericesApi";
 import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import type { InviteAccountPayload } from "@/models/request/cloudService";

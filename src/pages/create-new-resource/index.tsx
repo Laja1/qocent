@@ -19,10 +19,10 @@ import {
   useCreateResourceMutation,
   useGetConfigQuery,
   useGetResourceTemplateQuery,
-} from "@/service/kotlin/resourceApi";
+} from "@/service/resourceApi";
 import { replaceConfigPlaceholders } from "@/utilities/helper";
 import { useResourceMap } from "@/utilities/constants/icons";
-import { useGetSiteByProviderQuery } from "@/service/kotlin/siteApi";
+import { useGetSiteByProviderQuery } from "@/service/siteApi";
 
 export const CreateNewResource = () => {
   const navigate = useNavigate();

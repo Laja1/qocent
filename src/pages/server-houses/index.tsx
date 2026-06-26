@@ -14,7 +14,7 @@ import type { RootState } from "@/store";
 import {
   useGetAllHouseQuery,
   useGetResourceInHouseQuery,
-} from "@/service/kotlin/houseApi";
+} from "@/service/houseApi";
 import type { HouseItem } from "@/models/response/houseResponse";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";

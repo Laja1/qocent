@@ -20,31 +20,32 @@ import { showCustomToast } from "../toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useEffect } from "react";
 import type { Account } from "@/models/response/organizationResponse";
-import { useCreateInvitationMutation } from "@/service/python/invitationApi";
-import type { createInviteRequest } from "@/models/request/inviteRequest";
+import { useInviteUserToSiteMutation } from "@/service/authKotlinApi";
+import type { invitationRequest } from "@/models/request/authRequest";
+import { useSelector } from "react-redux";
+import type { RootState } from "@/store";
 import { SelectField } from "../selectfield";
 
 
 
 export const InviteToWorkspace = NiceModal.create<Account>(({account_id}) => {
-  const [inviteToWorkspace, { isLoading }] = useCreateInvitationMutation();
+  const [inviteToWorkspace, { isLoading }] = useInviteUserToSiteMutation();
   const modal = useModal("InviteToWorkspace");
   const values = modal.args as unknown as SiteData;
-  const handleSubmit = async (formValues: createInviteRequest) => {
+  const userId = useSelector((state: RootState) => state.auth.userId);
+
+  const handleSubmit = async (formValues: { recipient_identifier: string; role: string }) => {
     try {
-      const requestData = {
-        body:{
-          recipient_identifier: formValues.recipient_identifier,
-          role: formValues.role,
-          expires_in_hours: 72
-        },
-        accountId: account_id,
+      const requestData: invitationRequest = {
+        inviteeEmail: formValues.recipient_identifier,
+        inviterUserCode: userId ?? "",
+        privileges: [formValues.role],
+        siteCode: account_id,
       };
 
       const res = await inviteToWorkspace(requestData).unwrap();
-      console.log(res, "creating");
 
-      showCustomToast(res.message, {
+      showCustomToast(res.responseMessage, {
         toastOptions: { type: "success", autoClose: 5000 },
       });
       modal.hide();
@@ -58,11 +59,10 @@ export const InviteToWorkspace = NiceModal.create<Account>(({account_id}) => {
     }
   };
 
-  const formik = useFormik<createInviteRequest>({
+  const formik = useFormik<{ recipient_identifier: string; role: string }>({
     initialValues: {
       recipient_identifier: '',
       role: "",
-      expires_in_hours:72
     },
     onSubmit: handleSubmit,
     enableReinitialize: true,

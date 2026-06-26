@@ -1,6 +1,6 @@
 import { Header } from "@/components/shared";
 import { ArrowRight, Check, Loader2,  } from "lucide-react";
-import { useGetAllWithMySubscriptionsQuery, useStartTrialMutation, useCreatePaidSubscriptionMutation, useGetServiceAccessMutation } from "@/service/python/subscriptionApi";
+import { useGetAllWithMySubscriptionsQuery, useStartTrialMutation, useCreatePaidSubscriptionMutation, useGetServiceAccessMutation } from "@/service/subscriptionApi";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import NiceModal from "@ebay/nice-modal-react";

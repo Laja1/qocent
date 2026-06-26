@@ -13,7 +13,7 @@ import { ResourceModal } from "../create-new-resource/resource-modal";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { serverSiteColumns } from "@/utilities/constants/colums";
-import { useGetUserAccountsByProviderQuery } from "@/service/python/organizationApi";
+import { useGetUserAccountsByProviderQuery } from "@/service/organizationApi";
 import type { Account } from "@/models/response/organizationResponse";
 
 export const ServerSites = () => {

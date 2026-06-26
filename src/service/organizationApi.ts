@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { ApiEnums } from "@/utilities/enums";
-import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
+import { baseQueryWithAuthGuard } from "./httpClient/baseQuery";
 import type { OrganizationResponse, OrganizationWithAccountsResponse } from "@/models/response/organizationResponse";
 
 const controller = 'org'

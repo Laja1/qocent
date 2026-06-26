@@ -11,7 +11,7 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import type { RootState } from "@/store";
-import { useGetMyOrganizationsQuery } from "@/service/python/organizationApi";
+import { useGetMyOrganizationsQuery } from "@/service/organizationApi";
 
 type InfoRowProps = {
   icon: typeof User;

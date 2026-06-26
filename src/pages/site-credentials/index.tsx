@@ -8,7 +8,7 @@ import { Card } from "@/components/ui/card";
 import { showCustomToast } from "@/components/shared/toast";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useGenerateProviderLoginUrlMutation } from "@/service/python/cloudServericesApi";
+import { useGenerateProviderLoginUrlMutation } from "@/service/cloudServericesApi";
 import type { RootState } from "@/store";
 
 type SiteCredentialsState = {

@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { ApiEnums } from "@/utilities/enums";
-import { kotlinBaseQueryWithResponseCodeHandling } from "../httpClient/baseQueryKotlin";
+import { kotlinBaseQueryWithResponseCodeHandling } from "./httpClient/baseQueryKotlin";
 
 export const kotlinBaseApi = createApi({
   reducerPath: "kotlinBaseApi",

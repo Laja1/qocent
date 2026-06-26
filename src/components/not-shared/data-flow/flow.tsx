@@ -5,10 +5,10 @@ import { Info, Server, Play } from "lucide-react";
 import { useModal } from "@/components/shared/modal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/shared";
-import { useDeploySiteResourcesMutation } from "@/service/kotlin/siteApi";
+import { useDeploySiteResourcesMutation } from "@/service/siteApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { showCustomToast } from "@/components/shared/toast";
-import { useDeleteResourceByCodeMutation } from "@/service/kotlin/resourceApi";
+import { useDeleteResourceByCodeMutation } from "@/service/resourceApi";
 import type {
   Connection,
   HouseCell,

@@ -6,26 +6,26 @@ import { createHouseProviderTags, createResourceProviderTags } from "@/utilities
 import type { createResourceResponse } from "@/models/response/resourceResponse";
 import type { createResourceRequest } from "@/models/request/resourceRequest";
 import type { getResourcesResponse } from "@/models/response/siteResponse";
-import { kotlinBaseApi } from "./baseApi";
+import { kotlinBaseApi } from "./kotlinBaseApi";
 import { KotlinResourceEndpoints, kotlinPath } from "./endpoints";
 
 export const kotlinHouseApi = kotlinBaseApi.injectEndpoints({
   endpoints: (build) => ({
     getAllHouse: build.query<houseResponse,{ accountCode: string,provider:string, type: 'INTERNAL' | 'EXTERNAL' }>({
       query: ({accountCode,provider, type}) => ({
-        url: kotlinPath(KotlinResourceEndpoints.readhousebyaccountcode, { accountCode, provider }),
+        url: kotlinPath(KotlinResourceEndpoints.readHouseByAccountCode, { accountCode, provider }),
         params: { requestType: type },
       }),
       providesTags: (result) => createHouseProviderTags(result,  "houseId"),
     }),
     getResourceInHouse: build.query<getResourcesResponse,{ houseCode: string }>({
       query: ({houseCode}) =>
-        kotlinPath(KotlinResourceEndpoints.readresourcebyhousecode, { houseCode }), 
+        kotlinPath(KotlinResourceEndpoints.readResourceByHouseCode, { houseCode }), 
       providesTags: (result) => createResourceProviderTags(result,  "resourceId") as Array<{ type: ApiEnums.Resource; id: string | number | "LIST" }>,
   }),
     deleteHouse:build.mutation<genericResponse,{houseId:number}>({
       query:({houseId})=>({
-        url: kotlinPath(KotlinResourceEndpoints.deletehouse, { houseId }),
+        url: kotlinPath(KotlinResourceEndpoints.deleteHouse, { houseId }),
         method: "POST",
        
       }),

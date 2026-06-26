@@ -17,7 +17,7 @@ import {
 import { useNavigate, } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useAcceptInviteMutation, useRejectInviteMutation } from "@/service/python/invitationApi";
+import { useAcceptInviteMutation, useRejectInviteMutation } from "@/service/invitationApi";
 
 export default function AcceptInvite() {
   const navigate = useNavigate();

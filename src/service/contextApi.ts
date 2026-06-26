@@ -7,7 +7,7 @@ import type {
   ServiceRedirectResponse,
   ServiceListResponse,
 } from "@/models/response/contextResponse";
-import { pythonBaseApi } from "./baseApi";
+import { pythonBaseApi } from "./pythonBaseApi";
 
 export const contextApi = pythonBaseApi.injectEndpoints({
   endpoints: (build) => ({

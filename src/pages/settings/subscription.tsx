@@ -2,7 +2,7 @@ import { Button } from "@/components/shared";
 import { ModalConstant } from "@/components/shared/modal/register";
 import { Badge } from "@/components/ui/badge";
 import NiceModal from "@ebay/nice-modal-react";
-import { useGetMySubscriptionQuery } from "@/service/python/subscriptionApi";
+import { useGetMySubscriptionQuery } from "@/service/subscriptionApi";
 import {
   ArrowUpRight,
   Calendar,

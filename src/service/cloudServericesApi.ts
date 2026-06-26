@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react"
 import { ApiEnums } from "@/utilities/enums";
-import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
+import { baseQueryWithAuthGuard } from "./httpClient/baseQuery";
 import type { CompleteInvitePayload, CreateAccountPayload, InviteAccountPayload } from "@/models/request/cloudService";
 import type { CreateAccountResponse, GenerateLoginUrlEmailResponse, InitiateInviteResponse } from "@/models/response/cloudServiceResponse";
 

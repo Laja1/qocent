@@ -1,12 +1,6 @@
 import type { resourceType } from "./resourceResponse";
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-export type genericResponse = {
-    responseCode: number,
-    responseMessage: string
-}
-  
-
 
 export type Parameter = {
   parameterId: number;
@@ -271,14 +265,3 @@ export interface BusinessService {
 
 
 
-export interface getIAMRolesResponse {
-  data: IAMRole[];
-  responseCode: string;
-  responseMessage: string;
-}
-
-export interface IAMRole {
-  availableActions: string[];
-  moduleDescription: string;
-  moduleName: string;
-}

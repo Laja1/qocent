@@ -13,7 +13,7 @@ import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { svgLinks } from "@/assets/assetLink";
 import { SelectField } from "../selectfield";
 import { waitlistInit } from "@/models/request/waitlistRequest";
-import { useCreateWaitlistMutation } from "@/service/kotlin/waitlistApi";
+import { useCreateWaitlistMutation } from "@/service/waitlistApi";
 import { showCustomToast } from "../toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { waitlistSchema } from "@/utilities/schema/waitlistSchema";

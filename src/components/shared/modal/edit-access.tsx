@@ -16,7 +16,7 @@ import { showCustomToast } from "../toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useEffect } from "react";
 import { ModalConstant } from "./register";
-import { useUpdateAccountMembershipMutation } from "@/service/python/accountsApi";
+import { useUpdateAccountMembershipMutation } from "@/service/accountsApi";
 import { SelectField } from "../selectfield";
 import type { Account } from "@/models/response/organizationResponse";
 import type { AccountMemberResponse } from "@/models/response/accountResponse";

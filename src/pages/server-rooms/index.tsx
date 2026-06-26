@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 import {
   useGetAllRoomQuery,
   useGetResourceInRoomQuery,
-} from "@/service/kotlin/roomApi";
+} from "@/service/roomApi";
 import type { RootState } from "@/store";
 import type { roomData } from "@/models/response/roomResponse";
 import NiceModal from "@ebay/nice-modal-react";

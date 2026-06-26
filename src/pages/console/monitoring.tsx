@@ -1,5 +1,5 @@
 import { Activity } from "lucide-react";
-import { useConsoleSummaryQuery } from "@/service/kotlin/resourceApi";
+import { useConsoleSummaryQuery } from "@/service/resourceApi";
 
 export const Monitoring = () => {
   const { data: summaryData } = useConsoleSummaryQuery();

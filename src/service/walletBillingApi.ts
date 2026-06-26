@@ -15,7 +15,7 @@ import type {
   CreatePaidSubscriptionResponse,
   SubscriptionPaymentStatusResponse,
 } from "@/models/response/subscriptionResponse";
-import { pythonBaseApi } from "./baseApi";
+import { pythonBaseApi } from "./pythonBaseApi";
 
 export const walletBillingApi = pythonBaseApi.injectEndpoints({
   endpoints: (build) => ({

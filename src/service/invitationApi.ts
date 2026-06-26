@@ -1,8 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import type { baseResponse } from "@/models/response";
 import { ApiEnums } from "@/utilities/enums";
-import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
-import type { createInviteRequest } from "@/models/request/inviteRequest";
+import { baseQueryWithAuthGuard } from "./httpClient/baseQuery";
 
 const controller = 'invitations'
 export const invitationApi = createApi({
@@ -10,15 +9,6 @@ export const invitationApi = createApi({
   baseQuery: baseQueryWithAuthGuard,
   tagTypes:[ApiEnums.Auth,ApiEnums.Member],
   endpoints: (build) => ({
-    createInvitation: build.mutation<baseResponse, {body:createInviteRequest,accountId:string}>({
-      query: ({body,accountId}) => ({
-        url: `/${controller}/${accountId}/create`,
-        method: "POST",
-        body: body,
-      }),
-      invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
-    }),
-
     acceptInvite: build.mutation<baseResponse, {invite_id:string}>({
       query: (body) => ({
         url: `/${controller}/accept`,
@@ -40,7 +30,6 @@ export const invitationApi = createApi({
 });
 
 export const {
-  useCreateInvitationMutation,
   useAcceptInviteMutation,
   useRejectInviteMutation,
 } = invitationApi;

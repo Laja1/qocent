@@ -10,7 +10,7 @@ import { create, useModal } from "@ebay/nice-modal-react";
 import { ModalConstant } from "./register";
 import { showCustomToast } from "../toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useDeleteRoomMutation } from "@/service/kotlin/roomApi";
+import { useDeleteRoomMutation } from "@/service/roomApi";
 import type { roomData } from "@/models/response/roomResponse";
 
 export const DeleteRoomModal = create<roomData>(() => {

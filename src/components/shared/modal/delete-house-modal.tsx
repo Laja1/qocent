@@ -11,7 +11,7 @@ import { create, useModal } from "@ebay/nice-modal-react";
 import { ModalConstant } from "./register";
 import { showCustomToast } from "../toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useDeleteHouseMutation } from "@/service/kotlin/houseApi";
+import { useDeleteHouseMutation } from "@/service/houseApi";
 import type { HouseItem } from "@/models/response/houseResponse";
 
 export const DeleteHouseModal = create<HouseItem>(() => {

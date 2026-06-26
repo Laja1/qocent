@@ -15,7 +15,7 @@ import { AlertTriangle, Cloud, ShieldAlert } from "lucide-react";
 import { ModalConstant } from "./register";
 import { showCustomToast } from "../toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useCloseAccountMutation } from "@/service/python/accountsApi";
+import { useCloseAccountMutation } from "@/service/accountsApi";
 import type { Account } from "@/models/response/organizationResponse";
 
 const ACKNOWLEDGMENTS = [

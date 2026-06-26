@@ -1,6 +1,6 @@
 import { Button, Textfield } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
-import { useUpdatePasswordMutation } from "@/service/python/authApi";
+import { useUpdatePasswordMutation } from "@/service/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import type { RootState } from "@/store";
 import { changePasswordFormValidationSchema } from "@/utilities/schema/authSchema";

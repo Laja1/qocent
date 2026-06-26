@@ -14,7 +14,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from "@/components/ui/accordion";
-import { useGetQueryDailyBillQuery } from "@/service/python/costApi";
+import { useGetQueryDailyBillQuery } from "@/service/costApi";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Calendar, DollarSign, Package } from "lucide-react";
 

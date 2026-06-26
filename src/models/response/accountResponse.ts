@@ -10,12 +10,6 @@ export type AccountResponse = {
     account_updated_at: string;
 };
 
-export type AccountListResponse = {
-    data: AccountResponse[];
-    message: string;
-    status: string;
-};
-
 export type AccountStatusResponse = {
     message: string;
     data: AccountResponse;

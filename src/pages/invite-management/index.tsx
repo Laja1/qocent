@@ -12,7 +12,7 @@ import {
   useInviteUserMutation,
   useCancelInviteMutation,
   useBusinessRespondToRequestMutation,
-} from "@/service/python/businessInviteApi";
+} from "@/service/businessInviteApi";
 import type { BusinessInviteResponse, Csp, ProposedRole } from "@/models/response/businessInviteResponse";
 import type { RootState } from "@/store";
 

@@ -8,7 +8,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { signUpInit, type signupRequest } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useSignUpMutation } from "@/service/python/authApi";
+import { useSignUpMutation } from "@/service/authApi";
 import { countryOptions } from "@/utilities/constants/config";
 import { registerFormValidationSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";

@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { Loader2, Building2, CheckCircle } from "lucide-react";
-import { useRequestJoinBusinessMutation } from "@/service/python/businessInviteApi";
+import { useRequestJoinBusinessMutation } from "@/service/businessInviteApi";
 import type { BusinessInviteResponse } from "@/models/response/businessInviteResponse";
 
 export default function JoinBusiness() {

@@ -18,7 +18,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { waitlistInit } from "@/models/request/waitlistRequest";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { useCreateWaitlistMutation } from "@/service/kotlin/waitlistApi";
+import { useCreateWaitlistMutation } from "@/service/waitlistApi";
 import { waitlistSchema } from "@/utilities/schema/waitlistSchema";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { useFormik } from "formik";

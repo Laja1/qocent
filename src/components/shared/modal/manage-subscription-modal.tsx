@@ -2,7 +2,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/shared";
 import { create, useModal } from "@ebay/nice-modal-react";
 import { ModalConstant } from "./register";
-import { useGetMySubscriptionQuery, usePauseSubscriptionMutation, useResumeSubscriptionMutation, useCancelSubscriptionMutation, useConvertTrialToPaidMutation, subscriptionApi, useLazyCheckPaymentStatusQuery } from "@/service/python/subscriptionApi";
+import { useGetMySubscriptionQuery, usePauseSubscriptionMutation, useResumeSubscriptionMutation, useCancelSubscriptionMutation, useConvertTrialToPaidMutation, subscriptionApi, useLazyCheckPaymentStatusQuery } from "@/service/subscriptionApi";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useState } from "react";

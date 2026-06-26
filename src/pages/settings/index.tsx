@@ -17,8 +17,8 @@ import type { RootState } from "@/store";
 import {
   useGetMyOrganizationsQuery,
   useGetUserAccountsByProviderQuery,
-} from "@/service/python/organizationApi";
-import { useGetMySubscriptionQuery } from "@/service/python/subscriptionApi";
+} from "@/service/organizationApi";
+import { useGetMySubscriptionQuery } from "@/service/subscriptionApi";
 import { Profile } from "./profile";
 import { Security } from "./secuirty";
 import { Subscription } from "./subscription";

@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { useGetContextsQuery, useSelectContextMutation } from "@/service/python/contextApi";
+import { useGetContextsQuery, useSelectContextMutation } from "@/service/contextApi";
 import { contextStore } from "@/store/contextSlice";
 import { showCustomToast } from "./toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";

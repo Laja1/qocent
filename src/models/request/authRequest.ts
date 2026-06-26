@@ -98,7 +98,3 @@ export type updateProfessionalServiceRequest = {
   serviceType: string;
 }
 
-export const updateProfessionalServiceInit:updateProfessionalServiceRequest = {
-  serviceBookingDate: "",
-  serviceType: "",
-}

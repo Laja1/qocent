@@ -8,7 +8,7 @@ import { RouteConstant } from "@/router/routes";
 import {
   useCompleteEnrollmentMutation,
   useSendOtpMutation,
-} from "@/service/python/authApi";
+} from "@/service/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { confirmAccountSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";

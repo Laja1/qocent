@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { ApiEnums } from "@/utilities/enums";
-import { baseQueryWithAuthGuard } from "../httpClient/baseQuery";
+import { baseQueryWithAuthGuard } from "./httpClient/baseQuery";
 import type { AccountMembershipPayload, DeleteMemberPayload } from "@/models/request/accountRequest";
 import type { AccountMembersListResponse, AccountStatusResponse } from "@/models/response/accountResponse";
 import type { baseResponse } from "@/models/response";

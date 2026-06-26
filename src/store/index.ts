@@ -4,22 +4,20 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage"; 
 import { authStore } from "./authSlice";
 import { dashboardStore } from "./dashboardSlice";
-import { authApi } from "@/service/python/authApi";
+import { authApi } from "@/service/authApi";
 import { accountStore } from "./accountSlice";
-import { formApi } from "@/service/python/formApi";
+import { formApi } from "@/service/formApi";
 import { siteStore } from "./siteSlice";
-import { costApi } from "@/service/python/costApi";
-import { organizationApi } from "@/service/python/organizationApi";
-import { cloudServicesApi } from "@/service/python/cloudServericesApi";
-import { invitationApi } from "@/service/python/invitationApi";
-import { accountsApi } from "@/service/python/accountsApi";
-import { subscriptionApi } from "@/service/python/subscriptionApi";
-import { pythonBaseApi } from "@/service/python/baseApi";
+import { costApi } from "@/service/costApi";
+import { organizationApi } from "@/service/organizationApi";
+import { cloudServicesApi } from "@/service/cloudServericesApi";
+import { invitationApi } from "@/service/invitationApi";
+import { accountsApi } from "@/service/accountsApi";
+import { subscriptionApi } from "@/service/subscriptionApi";
+import { pythonBaseApi } from "@/service/pythonBaseApi";
 import { contextStore } from "./contextSlice";
-import "@/service/python/businessInviteApi";
-import "@/service/python/contextApi";
-import { kotlinBaseApi } from "@/service/kotlin/baseApi";
-import "@/service/kotlin/registerApis";
+import { kotlinBaseApi } from "@/service/kotlinBaseApi";
+import "@/service/registerApis";
 
 // Combine all your reducers
 const rootReducer = combineReducers({
