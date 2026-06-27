@@ -13,6 +13,7 @@ export const kotlinBaseApi = createApi({
     ApiEnums.Service,
     ApiEnums.Config,
     ApiEnums.ActivityLog,
+    ApiEnums.Member,
   ],
   endpoints: () => ({}),
 });
