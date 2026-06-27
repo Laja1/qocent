@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Header } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { Loader2, UserPlus, X, Check, Users, Inbox } from "lucide-react";
@@ -179,22 +180,22 @@ export const InviteManagement = () => {
   const loading = isLoading || isFetching;
 
   return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-3xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Invite Management</h1>
-            <p className="text-sm text-gray-500 mt-1">Manage invitations for your business.</p>
-          </div>
-          <Button
-            className="bg-black hover:bg-gray-800 text-white h-8 text-sm"
-            onClick={() => setShowInviteForm((v) => !v)}
-          >
-            <UserPlus className="w-4 h-4 mr-1" />
-            Invite User
-          </Button>
-        </div>
+    <div className="h-full">
+      <Header
+        title="Invite Management"
+        description="Manage invitations for your business."
+      >
+        <Button
+          className="bg-black hover:bg-gray-800 text-white h-8 text-sm"
+          onClick={() => setShowInviteForm((v) => !v)}
+        >
+          <UserPlus className="w-4 h-4 mr-1" />
+          Invite User
+        </Button>
+      </Header>
 
+      <div className="flex gap-4 mb-10 lg:mb-20 flex-col overflow-y-hidden h-full px-5">
+        <Card className="px-5 py-5 rounded-2xl border border-border shadow-none bg-card">
         {/* Invite Form */}
         {showInviteForm && (
           <Card className="mb-6 border border-gray-200">
@@ -380,6 +381,7 @@ export const InviteManagement = () => {
             )}
           </section>
         )}
+        </Card>
       </div>
 
       {respondTarget && (
