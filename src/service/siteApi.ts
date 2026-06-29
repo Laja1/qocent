@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import type {
-  deploySiteResourceType,
   getResourcesResponse,
   getSiteArchitectureResponse,
   getSiteResponse,
@@ -15,7 +14,6 @@ import { siteStore } from "@/store/siteSlice";
 import { kotlinBaseApi } from "./kotlinBaseApi";
 import {
   KotlinDashboardEndpoints,
-  KotlinResourceEndpoints,
   KotlinSiteEndpoints,
   kotlinPath,
 } from "./endpoints";
@@ -104,18 +102,6 @@ export const siteApi = kotlinBaseApi.injectEndpoints({
           id: string | number | "LIST";
         }>,
     }),
-    deploySiteResources: build.mutation<deploySiteResourceType, { siteCode: string }>({
-      query: ({ siteCode }) => ({
-        url: kotlinPath(KotlinResourceEndpoints.deployResources, { siteCode }),
-        method: "POST",
-      }),
-      invalidatesTags: [
-        { type: ApiEnums.House, id: "LIST" },
-        { type: ApiEnums.Room, id: "LIST" },
-        { type: ApiEnums.Resource, id: "LIST" },
-        { type: ApiEnums.ActivityLog, id: "LIST" },
-      ],
-    }),
   }),
 });
 
@@ -125,7 +111,6 @@ export const {
   useAddSiteKeyMutation,
   useCreateHuaweiAccountMutation,
   useGenerateHuaweiOtpMutation,
-  useDeploySiteResourcesMutation,
   useGetSiteByProviderQuery,
   useGetResourcesInSiteQuery,
   useGetSiteDataFlowQuery,

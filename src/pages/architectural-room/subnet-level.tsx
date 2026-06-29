@@ -6,7 +6,6 @@ import { Badge } from "@/components/ui/badge";
 import type { ServerRoom } from "@/models/response/siteResponse";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useDeleteResourceMutation } from "@/service/resourceApi";
-import { useDeploySiteResourcesMutation } from "@/service/siteApi";
 import { useResourceMap } from "@/utilities/constants/icons";
 import { getStatusClassName } from "@/utilities/helper";
 import { Globe, Lock } from "lucide-react";
@@ -19,7 +18,6 @@ interface SubnetLevelProps {
 export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
   const [deleteResources, { isLoading: isDeleting }] =
     useDeleteResourceMutation();
-  const [deploySiteResources, { isLoading }] = useDeploySiteResourcesMutation();
   const { openModal, closeModal } = useModal();
   const RESOURCE_MAP = useResourceMap();
   const handleDelete = async ({
@@ -33,7 +31,6 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
       const res = await deleteResources({
         resourceId: Number(resourceId),
       }).unwrap();
-      await deploySiteResources({ siteCode: resourceSiteCode }).unwrap();
       closeModal();
       showCustomToast(res.responseMessage, {
         toastOptions: { type: "success", autoClose: 5000 },
@@ -104,7 +101,7 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
                   resourceId: resource.resourceId,
                 })
               }
-              isLoading={isDeleting || isLoading}
+              isLoading={isDeleting}
             />
             <Button onClick={closeModal} label="Close" />
           </div>

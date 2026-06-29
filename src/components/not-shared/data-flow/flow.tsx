@@ -5,7 +5,6 @@ import { Info, Server, Play } from "lucide-react";
 import { useModal } from "@/components/shared/modal";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/shared";
-import { useDeploySiteResourcesMutation } from "@/service/siteApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { showCustomToast } from "@/components/shared/toast";
 import { useDeleteResourceByCodeMutation } from "@/service/resourceApi";
@@ -188,7 +187,6 @@ export const FlowGrid = ({
 }: FlowGridProps) => {
   const { openModal, closeModal } = useModal();
   const RESOURCE_MAP = useResourceMap();
-  const [deploySiteResources,{isLoading}] = useDeploySiteResourcesMutation();
   const [deleteResources, { isLoading: isDeleting }] =
     useDeleteResourceByCodeMutation();
 
@@ -201,7 +199,6 @@ export const FlowGrid = ({
       const res = await deleteResources({
         resourceCode: resourceCode,
       }).unwrap();
-      await deploySiteResources({ siteCode: siteCode }).unwrap();
       closeModal();
       showCustomToast(res.responseMessage, {
         toastOptions: { type: "success", autoClose: 5000 },
@@ -364,23 +361,6 @@ export const FlowGrid = ({
     );
   }
 
-  const handleSubmit = async () => {
-    console.log(siteCode);
-    try {
-      const res = await deploySiteResources({ siteCode }).unwrap();
-      console.log(res);
-      showCustomToast(res.responseMessage, {
-        toastOptions: { type: "success", autoClose: 5000 },
-      });
-    } catch (error: any) {
-      console.error("Deploy Site Error:", error);
-      const message = ErrorHandler.extractMessage(error);
-      showCustomToast(message, {
-        toastOptions: { type: "error", autoClose: 5000 },
-      });
-    }
-  };
-
   return (
     <div className="w-full">
       <div className="overflow-x-auto overflow-y-hidden">
@@ -392,12 +372,6 @@ export const FlowGrid = ({
               onClick={animateConnections}
               prefixIcon={<Play className="size-4" />}
               disabled={sortedConnections.length === 0}
-            />
-            <Button
-              label="Deploy Resources"
-              isLoading={isLoading}
-              onClick={handleSubmit}
-              disabled={isLoading}
             />
           </div>
         </div>
