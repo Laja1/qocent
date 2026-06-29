@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { TermsAndConditionsModal } from "@/components/auth/terms-and-conditions-modal";
 import AuthLayout from "@/components/layouts/authLayout";
 import { Button, SelectField } from "@/components/shared";
 import { PhoneField } from "@/components/shared/phonefield";
@@ -49,6 +50,7 @@ const SignUp = () => {
   const [step, setStep] = useState<SignUpStep>("select-type");
   const [seePassword, setSeePassword] = useState(false);
   const [agreedToTerms, setAgreedToTerms] = useState(false);
+  const [termsModalOpen, setTermsModalOpen] = useState(false);
   const navigate = useNavigate();
   const [signUp, { isLoading: isSigningUp }] = useSignUpMutation();
   const [initBusiness, { isLoading: isInitBusiness }] = useInitBusinessMutation();
@@ -285,14 +287,20 @@ const SignUp = () => {
           />
           <p className="text-sm">
             I agree to the{" "}
-            <a
-              href="https://drive.google.com/uc?export=download&id=1gbUBF4PuRxnvAw5F6EKRBWoYKO4TN3Il"
-              download
+            <button
+              type="button"
+              onClick={() => setTermsModalOpen(true)}
+              className="text-green-700 underline hover:text-green-800"
             >
               Terms and Conditions
-            </a>
+            </button>
           </p>
         </div>
+
+        <TermsAndConditionsModal
+          open={termsModalOpen}
+          onOpenChange={setTermsModalOpen}
+        />
 
         <Button
           label="Sign Up"
