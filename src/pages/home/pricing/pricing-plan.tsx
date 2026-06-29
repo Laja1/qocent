@@ -13,9 +13,7 @@ const plans = [
             'Full inventory of your cloud assets',
             'Get recommendations to save',
             'Set & manage cloud spend limits',
-            'Get notified when costs spike',
             'Breakdown of usage & costs',
-            'View your holistic landing zone architecture',
             'View costs by service, region, and more',
             'Predict & plan your cloud spend'
         ]
@@ -29,9 +27,7 @@ const plans = [
             'Full inventory of your cloud assets',
             'Get recommendations to save',
             'Set & manage cloud spend limits',
-            'Get notified when costs spike',
             'Breakdown of usage & costs',
-            'View your holistic landing zone architecture',
             'View costs by service, region, and more',
             'Predict & plan your cloud spend'
         ]

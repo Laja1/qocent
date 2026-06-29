@@ -26,7 +26,7 @@ const features = [
     {
         title: 'Budget Alerts Before Overspending',
         subtitle: 'OUR VALUE',
-        description: 'Set spend thresholds per team, project, or provider. Get notified the moment costs spike — before they become a problem for your CFO.',
+        description: 'Set spend thresholds per team, project, or provider.',
         imageContainerUrl: "/videos/budget.mp4",
         floatImageUrl: "./images/finops/feature-2.png",
         reversed: false
