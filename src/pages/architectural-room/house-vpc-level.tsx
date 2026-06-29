@@ -11,7 +11,7 @@ export const HouseVpcLevel = ({ vpcDeployed }: { vpcDeployed: houses }) => {
     <div className="w-full">
       <div className="grid grid-cols-1 gap-10 w-full">
         <div key={vpcDeployed.houseCode} className="relative">
-          <div className="border flex flex-col relative p-10 rounded-sm border-green-700 px-5 py-3 mx-3 gap-10">
+          <div className="border flex flex-col relative p-10 rounded-md border-green-700 px-5 py-3 mx-3 gap-10">
             <div
               id={`igw-${vpcDeployed.houseCode}`}
               className="absolute -top-5 left-1/2 -translate-x-1/2 flex items-center justify-center"
@@ -42,7 +42,7 @@ export const HouseVpcLevel = ({ vpcDeployed }: { vpcDeployed: houses }) => {
                   id={`dg-${vpcDeployed.houseCode}`}
                   className="justify-center flex items-center"
                 >
-                  <div className="rounded-sm px-4 py-2 w-fit flex items-center justify-center">
+                  <div className="rounded-md px-4 py-2 w-fit flex items-center justify-center">
                     <div className="flex flex-col items-center text-xs">
                       <img src={svgLinks.router} className="size-8" />
                       <p>DG</p>

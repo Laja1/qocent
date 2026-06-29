@@ -32,7 +32,7 @@ export const SelectField2 = ({
   const selectedValue =
     value || (formik ? getIn(formik.values, name) : "") || "";
   const selectfieldClasses = clsx(
-    "block w-full py-[9px] text-[12px] bg-white font-normal items-center border border-green-800 px-2 focus:ring-1 focus:ring-green-800 shadow-sm disabled:text-gray-400 disabled:cursor-not-allowed rounded-xs cursor-pointer",
+    "block w-full py-[9px] text-[12px] bg-white font-normal items-center border border-green-800 px-2 focus:ring-1 focus:ring-green-800 shadow-sm disabled:text-gray-400 disabled:cursor-not-allowed rounded-md cursor-pointer",
     selectedValue === "" ? "text-gray-500" : "text-black", // <- dynamic text color
     className
   );

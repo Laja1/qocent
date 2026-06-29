@@ -66,7 +66,7 @@ export default function TeamSection() {
                         transition={{ delay: 0.1 * index, duration: 0.5 }}
                         className="group cursor-pointer"
                     >
-                        <div className="relative overflow-hidden rounded-3xl mb-4">
+                        <div className="relative overflow-hidden rounded-md mb-4">
                             {/* Gradient background */}
                             <div className={`absolute inset-0 bg-gradient-to-br ${member.bgColor}`} />
 

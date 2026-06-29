@@ -86,7 +86,7 @@ export const CostTable = () => {
             value={viewType}
             onValueChange={(value: "all" | "categories") => setViewType(value)}
           >
-            <SelectTrigger className="w-full rounded-xs text-xs h-[8px]">
+            <SelectTrigger className="w-full rounded-md text-xs h-[8px]">
               <SelectValue placeholder="Select view" />
             </SelectTrigger>
             <SelectContent className="text-xs">

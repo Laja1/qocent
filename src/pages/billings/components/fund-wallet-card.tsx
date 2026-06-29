@@ -40,7 +40,7 @@ export const FundWalletCard = ({
               onAmountChange(e.target.value.replace(/[^\d.]/g, ""))
             }
             placeholder="0.00"
-            className="w-full pl-12 pr-3 py-2.5 rounded-xl bg-white/70 border border-black/10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
+            className="w-full pl-12 pr-3 py-2.5 rounded-md bg-white/70 border border-black/10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
           />
         </div>
 
@@ -57,7 +57,7 @@ export const FundWalletCard = ({
           ))}
         </div>
 
-        <div className="rounded-2xl border border-primary/15 bg-primary/5 p-3">
+        <div className="rounded-md border border-primary/15 bg-primary/5 p-3">
           <div className="flex items-start justify-between gap-3">
             <div>
               <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
@@ -72,7 +72,7 @@ export const FundWalletCard = ({
             </span>
           </div>
 
-          <div className="mt-3 rounded-xl border border-black/5 bg-white/60 px-3 py-2">
+          <div className="mt-3 rounded-md border border-black/5 bg-white/60 px-3 py-2">
             <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
               Exchange rate applied
             </p>
@@ -86,7 +86,7 @@ export const FundWalletCard = ({
           type="button"
           onClick={onFund}
           disabled={isFunding || !amount}
-          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed transition"
+          className="w-full inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-md bg-primary text-primary-foreground text-sm font-medium hover:opacity-90 disabled:opacity-60 disabled:cursor-not-allowed transition"
         >
           {isFunding ? (
             <>

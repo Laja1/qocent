@@ -50,14 +50,14 @@ export const AdsOverviewCard = ({ closeModall }: AdsOverviewCardProps) => {
           <div className="flex flex-row gap-3">
             <div
               onClick={() => handleClick("aws")}
-              className="bg-gray-100 p-3 rounded-sm w-full tex-center justify-center flex flex-col items-center"
+              className="bg-gray-100 p-3 rounded-md w-full tex-center justify-center flex flex-col items-center"
             >
               <img src={imgLinks.awsdark} className="size-6" />
               <p className="text-[10px]">AWS</p>
             </div>
             <div
               onClick={() => handleClick("huawei")}
-              className="bg-gray-100 p-3 rounded-smc w-full justify-center flex flex-col items-center"
+              className="bg-gray-100 p-3 rounded-md w-full justify-center flex flex-col items-center"
             >
               <img src={imgLinks.huawei} className="size-6" />
               <p className="text-[10px]">Huawei</p>
@@ -67,7 +67,7 @@ export const AdsOverviewCard = ({ closeModall }: AdsOverviewCardProps) => {
       ),
     });
   return (
-    <div className="h-fit border rounded-xs py-3">
+    <div className="h-fit border rounded-md py-3">
       <CardHeader>
         <CardTitle className="text-custom-white">
           Join GitHub Education!
@@ -84,7 +84,7 @@ export const AdsOverviewCard = ({ closeModall }: AdsOverviewCardProps) => {
         <img
           src={imgLinks.image}
           alt="GitHub Education"
-          className="w-full object-center rounded-sm"
+          className="w-full object-center rounded-md"
         />
       </CardContent>
 

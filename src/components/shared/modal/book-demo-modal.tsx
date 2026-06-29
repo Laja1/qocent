@@ -192,7 +192,7 @@ export const BookDemoModal = NiceModal.create(() => {
               disabled={!formik.isValid || isLoading || formik.isSubmitting}
               onClick={() => formik.handleSubmit()}
               label="Book Demo"
-              className="bg-red-600 hover:bg-red-700 text-white rounded-xs"
+              className="bg-red-600 hover:bg-red-700 text-white rounded-md"
             />
           </div>
         </div>

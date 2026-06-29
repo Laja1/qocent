@@ -176,7 +176,7 @@ export const DataFlow: React.FC = () => {
                 <div
                   id={id}
                   className={`
-                    bg-white border-2 border-gray-300 rounded-lg shadow-md 
+                    bg-white border-2 border-gray-300 rounded-md shadow-md 
                     px-2 py-3 flex items-center gap-3
                     hover:shadow-lg transition-shadow duration-200
                     ${
@@ -236,7 +236,7 @@ export const DataFlow: React.FC = () => {
                   (item) => item.connectedTo && item.connectedTo.length > 0
                 )
                 .map((item) => (
-                  <div key={item.id} className="bg-gray-50 rounded-lg p-2">
+                  <div key={item.id} className="bg-gray-50 rounded-md p-2">
                     <div className="text-xs font-medium text-gray-700 mb-1">
                       {item.id} ({item.resourceType})
                     </div>

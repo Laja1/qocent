@@ -2,7 +2,7 @@ import { PuffLoader } from "react-spinners";
 
 export const DataFlowLoader = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[400px]  rounded-lg p-8">
+    <div className="flex flex-col items-center justify-center min-h-[400px]  rounded-md p-8">
       {/* Main loader container */}
       <PuffLoader
         color="red"

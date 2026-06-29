@@ -81,7 +81,7 @@ export const Resources = () => {
         />
       </Header>
 
-      <Card className="mx-5 px-5 mt-5 rounded-sm">
+      <Card className="mx-5 px-5 mt-5 rounded-md">
         <DataTable
           data={resourceData?.data || []}
           columns={resourcesColumns}

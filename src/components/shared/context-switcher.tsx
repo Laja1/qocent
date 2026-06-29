@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   Building2,
@@ -20,7 +20,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
-import { useGetContextsQuery, useSelectContextMutation } from "@/service/contextApi";
+import { useGetContextsQuery, useGetActiveContextQuery, useSelectContextMutation } from "@/service/contextApi";
 import { contextStore } from "@/store/contextSlice";
 import { showCustomToast } from "./toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
@@ -54,9 +54,20 @@ export function ContextSwitcher() {
   const [switchingId, setSwitchingId] = useState<string | null>(null);
 
   const { data: contextsData, isLoading } = useGetContextsQuery();
+  const { data: activeContextData } = useGetActiveContextQuery();
   const [selectContext] = useSelectContextMutation();
 
   const contexts = contextsData?.data ?? [];
+
+  useEffect(() => {
+    if (activeContextData?.active_context && !activeContext) {
+      dispatch(
+        contextStore.action.setActiveContext({
+          context: activeContextData.active_context,
+        })
+      );
+    }
+  }, [activeContextData, activeContext, dispatch]);
 
   const handleSelect = async (ctx: ContextItem) => {
     // Business owners cannot switch to personal context

@@ -147,7 +147,7 @@ export const FileUploader = forwardRef<FileUploaderHandle, FileUploaderProps>(
 
         <div
           className={`
-            border border-dashed rounded-sm p-5 lg:p-5 
+            border border-dashed rounded-md p-5 lg:p-5 
             transition-all duration-200 cursor-pointer
             ${
               isDragActive

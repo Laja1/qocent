@@ -97,7 +97,7 @@ export function AboutHero() {
 //             >
 //                 <video
 //                     ref={videoRef}
-//                     className="size-full min-h-[200px] rounded-3xl object-cover bg-black pointer-events-none select-none"
+//                     className="size-full min-h-[200px] rounded-md object-cover bg-black pointer-events-none select-none"
 //                     src={ABOUT_HERO_VIDEO_SRC}
 //                     muted
 //                     loop

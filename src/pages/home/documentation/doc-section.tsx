@@ -149,7 +149,7 @@ const documentationData: DocumentationData = {
 
 // Skeleton Loader Component
 const ImageSkeleton = () => (
-    <div className="w-full aspect-video bg-gray-200 rounded-2xl animate-pulse flex items-center justify-center">
+    <div className="w-full aspect-video bg-gray-200 rounded-md animate-pulse flex items-center justify-center">
         <svg
             className="w-16 h-16 text-gray-400"
             fill="none"
@@ -172,7 +172,7 @@ const ImageWithSkeleton = ({ src, alt, caption }: ImageWithSkeletonProps) => {
 
     return (
         <div className="space-y-4">
-            <div className="relative rounded-2xl overflow-hidden border border-red-500">
+            <div className="relative rounded-md overflow-hidden border border-red-500">
                 {!isLoaded && <ImageSkeleton />}
                 <img
                     src={src}

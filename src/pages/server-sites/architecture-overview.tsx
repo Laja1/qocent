@@ -13,18 +13,18 @@ export const ServerSiteArchitectureOverview = ({ id }: { id?: string }) => {
   return (
     <div>
       <div
-        className={` w-full  bg-black h-fit  flex  rounded-xl p-4 lg:p-5  gap-4`}
+        className={` w-full  bg-black h-fit  flex  rounded-md p-4 lg:p-5  gap-4`}
       >
         {filteredData.map((item) => (
           <div
             onClick={() => navigate(`/architecture/${item.houseId}`)}
-            className="flex cursor-pointer w-full flex-col gap-4 border  rounded-sm border-dashed"
+            className="flex cursor-pointer w-full flex-col gap-4 border  rounded-md border-dashed"
           >
             <p className="text-white text-start text-base pl-2 pt-2 font-bold">
               {item.provider === "AWS" && <AwsLogo />}
               {item.provider === "Huawei" && <HuaweiLogo />}
             </p>
-            <div className="border border-white rounded-sm items-center   mx-5 flex flex-col justify-center p-5">
+            <div className="border border-white rounded-md items-center   mx-5 flex flex-col justify-center p-5">
               <p className="text-white text-start text-base p-2 font-bold">
                 {item.houseName}
               </p>

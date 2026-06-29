@@ -72,7 +72,7 @@ const DocsOverview = () => {
           ].map((value) => (
             <div
               key={value}
-              className="border border-gray-200 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50"
+              className="border border-gray-200 rounded-md px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50"
             >
               {value}
             </div>

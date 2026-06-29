@@ -19,10 +19,10 @@ export const GlassCard = ({
   return (
     <div
       className={cn(
-        "relative overflow-hidden rounded-2xl border border-black/5",
+        "relative overflow-hidden rounded-md border border-black/5",
         "bg-white/60 backdrop-blur-xl",
         "shadow-[0_8px_32px_rgba(15,23,42,0.06)]",
-        "before:pointer-events-none before:absolute before:inset-0 before:rounded-2xl",
+        "before:pointer-events-none before:absolute before:inset-0 before:rounded-md",
         "before:bg-gradient-to-br before:from-white/60 before:via-transparent before:to-white/20",
         className
       )}

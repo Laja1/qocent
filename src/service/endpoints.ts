@@ -5,28 +5,6 @@
  * Paths exclude the leading `/api/{stage}` prefix (handled by VITE_KOTLIN_BASE_URL).
  */
 
-export const KotlinAuthEndpoints = {
-  acceptInvitation: '/authentication/accept-invitation',
-  accountMembers: '/authentication/account-members/{accountCode}',
-  activateAccount: '/authentication/activate-account/{accountCode}',
-  availableModules: '/authentication/iam/available-modules',
-  changePassword: '/authentication/change-password',
-  completeEnrollment: '/authentication/complete-enrollment',
-  completePasswordReset: '/authentication/complete-password-reset',
-  createAccount: '/authentication/create-account',
-  deactivateAccount: '/authentication/deactivate-account/{accountCode}',
-  initiateEnrollment: '/authentication/initiate-enrollment',
-  initiatePasswordReset: '/authentication/initiate-password-reset',
-  inviteUser: '/authentication/invite-user',
-  loadConfig: '/authentication/load-config',
-  login: '/authentication/login',
-  removeSiteMember: '/authentication/remove-site-member',
-  resendOtp: '/authentication/resend-otp',
-  siteMembers: '/authentication/site-members/{siteCode}',
-  updateSiteMember: '/authentication/update-site-member',
-  userDetails: '/authentication/user-details',
-} as const;
-
 export const KotlinBusinessEndpoints = {
   assignBusiness: '/business/assign-business',
   bulkCreate: '/business/bulk-create',
@@ -93,7 +71,6 @@ export const KotlinResourceEndpoints = {
   deleteResourceByCode: '/resource/delete-resource-by-code/{resourceCode}',
   deleteResource: '/resource/delete-resource/{resourceId}',
   deleteRoom: '/resource/delete-room/{roomId}',
-  deployResources: '/resource/deploy-resources/{siteCode}',
   readAllResources: '/resource/read-all-resources/{accountCode}/{provider}',
   readHouseByAccountCode: '/resource/read-house-by-account-code/{accountCode}/{provider}',
   readResourceByHouseCode: '/resource/read-resource-by-house-code/{houseCode}',

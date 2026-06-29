@@ -39,7 +39,7 @@ const DocsTerminologies = () => {
               "Logical groupings that help you organise multiple cloud provider accounts within Qocent.",
           },
         ].map(({ term, definition }) => (
-          <div key={term} className="border border-gray-200 rounded-lg px-5 py-4 bg-white space-y-1">
+          <div key={term} className="border border-gray-200 rounded-md px-5 py-4 bg-white space-y-1">
             <p className="text-sm font-semibold text-gray-900">{term}</p>
             <p className="text-sm text-gray-600 leading-relaxed">{definition}</p>
           </div>
@@ -56,7 +56,7 @@ const DocsTerminologies = () => {
           { term: "House Code", definition: "A unique identifier for a Server House." },
           { term: "Room Code", definition: "A unique identifier for a Server Room." },
         ].map(({ term, definition }) => (
-          <div key={term} className="border border-gray-200 rounded-lg px-5 py-4 bg-white space-y-1">
+          <div key={term} className="border border-gray-200 rounded-md px-5 py-4 bg-white space-y-1">
             <p className="text-sm font-semibold text-gray-900">{term}</p>
             <p className="text-sm text-gray-600 leading-relaxed">{definition}</p>
           </div>
@@ -69,7 +69,7 @@ const DocsTerminologies = () => {
           Configuration &amp; Lifecycle
         </p>
 
-        <div className="border border-gray-200 rounded-lg px-5 py-4 bg-white space-y-1">
+        <div className="border border-gray-200 rounded-md px-5 py-4 bg-white space-y-1">
           <p className="text-sm font-semibold text-gray-900">Site Expiry Date</p>
           <p className="text-sm text-gray-600 leading-relaxed">
             A user-defined date that marks the end of a Server Site's active lifecycle. Once
@@ -77,7 +77,7 @@ const DocsTerminologies = () => {
           </p>
         </div>
 
-        <div className="border border-gray-200 rounded-lg px-5 py-4 bg-white space-y-3">
+        <div className="border border-gray-200 rounded-md px-5 py-4 bg-white space-y-3">
           <p className="text-sm font-semibold text-gray-900">Site EOL Action</p>
           <p className="text-sm text-gray-600 leading-relaxed">
             Defines what happens to your Server Site after it expires. Options:
@@ -114,7 +114,7 @@ const DocsTerminologies = () => {
             definition: "The specific availability zone within your House Location where your Server Room is deployed. Spreading rooms across zones builds resilience into your application.",
           },
         ].map(({ term, definition }) => (
-          <div key={term} className="border border-gray-200 rounded-lg px-5 py-4 bg-white space-y-1">
+          <div key={term} className="border border-gray-200 rounded-md px-5 py-4 bg-white space-y-1">
             <p className="text-sm font-semibold text-gray-900">{term}</p>
             <p className="text-sm text-gray-600 leading-relaxed">{definition}</p>
           </div>

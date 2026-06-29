@@ -30,7 +30,7 @@ export const Subscription = () => {
 
   if (!subscription) {
     return (
-      <div className="text-center py-12 rounded-xl border border-dashed border-gray-200 bg-gray-50/50">
+      <div className="text-center py-12 rounded-md border border-dashed border-gray-200 bg-gray-50/50">
         <div className="size-12 rounded-full bg-gray-100 flex items-center justify-center mx-auto mb-4">
           <CreditCard className="size-5 text-gray-500" />
         </div>
@@ -55,10 +55,10 @@ export const Subscription = () => {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-2xl border border-gray-200 overflow-hidden">
+      <div className="rounded-md border border-gray-200 overflow-hidden">
         <div className="bg-gradient-to-r from-gray-900 to-gray-800 px-5 py-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="size-10 rounded-xl bg-white/10 flex items-center justify-center">
+            <div className="size-10 rounded-md bg-white/10 flex items-center justify-center">
               <Zap className="size-5 text-amber-400" />
             </div>
             <div>
@@ -137,7 +137,7 @@ export const Subscription = () => {
         <button
           type="button"
           onClick={() => NiceModal.show(ModalConstant.ManageSubscriptionModal)}
-          className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+          className="inline-flex items-center gap-2 rounded-md border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
         >
           <Settings className="size-4" />
           Manage subscription
@@ -145,7 +145,7 @@ export const Subscription = () => {
         <button
           type="button"
           onClick={() => navigate(RouteConstant.dashboard.subscription.path)}
-          className="inline-flex items-center gap-2 rounded-xl border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
+          className="inline-flex items-center gap-2 rounded-md border border-gray-200 bg-white px-4 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-50 transition-colors"
         >
           View all plans
           <ArrowUpRight className="size-4" />

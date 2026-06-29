@@ -10,7 +10,7 @@ export const CallToAction = () => {
   return (
     <div id="join-waitlist">
       <div className="lg:px-10 w-full mx-auto pt-10 flex">
-        <div className="bg-muted/50 items-center flex flex-col space-y-5 text-center w-full rounded-sm p-5 lg:p-20">
+        <div className="bg-muted/50 items-center flex flex-col space-y-5 text-center w-full rounded-md p-5 lg:p-20">
           <p className="bg-gradient-to-r text-xl lg:text-3xl font-poppins from-primary to-primary/70 inline-block text-transparent bg-clip-text">
             Everything You Need, Nothing You Don't
           </p>

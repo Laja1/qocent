@@ -12,9 +12,10 @@ import { DatePickerWithFormik } from "../date-picker";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { X } from "lucide-react";
 import {
-  subscriptionApi,
-  useLazyCheckPaymentStatusQuery,
-} from "@/service/subscriptionApi";
+  walletBillingApi,
+  useLazyCheckPersonalPaymentStatusQuery,
+} from "@/service/walletBillingApi";
+import { subscriptionApi } from "@/service/subscriptionApi";
 import { useDispatch } from "react-redux";
 import { ApiEnums } from "@/utilities/enums";
 import { showCustomToast } from "../toast";
@@ -22,7 +23,8 @@ import { showCustomToast } from "../toast";
 export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => {
   const modal = useModal();
   const dispatch = useDispatch();
-  const [checkPaymentStatus, { isFetching }] = useLazyCheckPaymentStatusQuery();
+  const [checkPaymentStatus, { isFetching }] =
+    useLazyCheckPersonalPaymentStatusQuery();
 
   const invalidateSubscriptionState = () => {
     dispatch(
@@ -30,6 +32,12 @@ export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => 
         { type: ApiEnums.Subscription, id: "PLANS" },
         { type: ApiEnums.Subscription, id: "LIST" },
         { type: ApiEnums.Subscription, id: "TRIAL" },
+        { type: ApiEnums.Subscription, id: "PAYMENT" },
+      ])
+    );
+    dispatch(
+      walletBillingApi.util.invalidateTags([
+        { type: ApiEnums.Subscription, id: "LIST" },
         { type: ApiEnums.Subscription, id: "PAYMENT" },
       ])
     );
@@ -81,7 +89,7 @@ export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => 
         onClick={() => modal.remove()}
       >
         <div
-          className="bg-black border border-slate-800 rounded-2xl max-w-2xl w-full p-8 relative"
+          className="bg-black border border-slate-800 rounded-md max-w-2xl w-full p-8 relative"
           onClick={(e) => e.stopPropagation()}
         >
           <button
@@ -95,7 +103,7 @@ export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => 
             Complete your payment to activate subscription
           </p>
           <div className="space-y-6 text-sm">
-            <div className="bg-slate-950/50 border border-slate-800 rounded-xl p-6 space-y-4">
+            <div className="bg-slate-950/50 border border-slate-800 rounded-md p-6 space-y-4">
               <div className="flex justify-between">
                 <span className="text-slate-400">Bank Name</span>
                 <span className="text-white font-semibold">
@@ -138,7 +146,7 @@ export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => 
               onClick={handleConfirmPayment}
               intent={"secondary"}
               disabled={isFetching}
-              className="w-full text-white font-semibold py-3 rounded-lg transition-colors"
+              className="w-full text-white font-semibold py-3 rounded-md transition-colors"
               label={isFetching ? "Verifying..." : "I've Made the Payment"}
             />
           </div>
@@ -196,7 +204,7 @@ export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => 
             <Button
               type="submit"
               label=" Add Payment Method"
-              className="bg-black hover:bg-gray-800 text-white rounded-xs"
+              className="bg-black hover:bg-gray-800 text-white rounded-md"
             />
           </div>
         </form>

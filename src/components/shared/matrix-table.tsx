@@ -165,8 +165,8 @@ export function MatrixTable({
         </CardHeader>
       )}
       <CardContent className="p-0">
-        <div className="overflow-auto border rounded-xs" style={{ maxHeight }}>
-          <Table className="rounded-sm">
+        <div className="overflow-auto border rounded-md" style={{ maxHeight }}>
+          <Table className="rounded-md">
             <TableHeader className={stickyHeaders ? "sticky top-0 z-10" : ""}>
               {/* First header row */}
               <TableRow className="bg-gray-00 border-b-2">

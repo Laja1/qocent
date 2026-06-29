@@ -14,7 +14,7 @@
 //   return (
 //     <div>
 //       <div
-//         className={` w-full  bg-black h-fit  flex  rounded-xl p-4 lg:p-5  gap-4`}
+//         className={` w-full  bg-black h-fit  flex  rounded-md p-4 lg:p-5  gap-4`}
 //       >
 //         <div className={`border border-white m-2 ${rowsToRender(filteredData)} w-full rounded-md`}>
 //           {filteredData.map((item) => {
@@ -25,12 +25,12 @@
 //             return (
 //               <div
                
-//                 className={`flex cursor-pointer w-full flex-col gap-4  rounded-sm  `}
+//                 className={`flex cursor-pointer w-full flex-col gap-4  rounded-md  `}
 //                 key={item.roomId}
 //               >
                
 //                 <div
-//                   className={`border ${containerClass} mt-4 relative rounded-sm items-center mx-5 flex flex-col justify-center p-5`}
+//                   className={`border ${containerClass} mt-4 relative rounded-md items-center mx-5 flex flex-col justify-center p-5`}
 //                 >
 //                    <div className="absolute top-0 left-0 text-start text-base pl-2 pt-2 font-bold">
 //                   {item.provider === "AWS" && <AwsLogo />}

@@ -55,7 +55,7 @@ export const Integrations=() =>{
             {repositoryProviders.map((provider) => (
               <div
                 key={provider.name}
-                className={`border rounded-xl p-5 w-[310px]  bg-white transition-all duration-200 `}
+                className={`border rounded-md p-5 w-[310px]  bg-white transition-all duration-200 `}
               >
                 <div
                   style={{ display: "flex" }}

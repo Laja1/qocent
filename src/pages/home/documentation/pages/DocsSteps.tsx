@@ -14,7 +14,7 @@ export const StepList = ({ steps }: { steps: Step[] }) => (
         <div className={index === steps.length - 1 ? "pb-0" : "pb-8"}>
           <p className="text-sm font-semibold text-gray-900 mt-1.5 mb-1">{step.title}</p>
           <p className="text-sm text-gray-600 leading-relaxed">{step.description}</p>
-          <img src={step.image} alt={step.alt} className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+          <img src={step.image} alt={step.alt} className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
         </div>
       </li>
     ))}

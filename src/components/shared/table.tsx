@@ -311,13 +311,13 @@ export function EditableDataTable<T extends Record<string, any>>({
               {isEditing ? (
                 <>
                   <button
-                    className="m-1 rounded-sm text-[8px]"
+                    className="m-1 rounded-md text-[8px]"
                     onClick={() => handleSave(rowId)}
                   >
                     <Save className="size-4" />
                   </button>
                   <button
-                    className="m-1 rounded-sm text-[8px]"
+                    className="m-1 rounded-md text-[8px]"
                     onClick={() => handleCancel(rowId)}
                   >
                     <X className="size-4" />
@@ -325,7 +325,7 @@ export function EditableDataTable<T extends Record<string, any>>({
                 </>
               ) : (
                 <button
-                  className="m-1 rounded-sm text-[8px]"
+                  className="m-1 rounded-md text-[8px]"
                   onClick={() => handleEdit(rowId)}
                 >
                   <Edit className="size-4" />
@@ -398,7 +398,7 @@ export function EditableDataTable<T extends Record<string, any>>({
         </div>
       </div>
 
-      <div className="border border-gray-200 rounded-xs overflow-hidden">
+      <div className="border border-gray-200 rounded-md overflow-hidden">
         <Table>
           {showTableHeader && (
             <TableHeader>

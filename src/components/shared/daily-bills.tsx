@@ -44,14 +44,14 @@ export default function DailyBillingView({
     return (
       <div className="space-y-6 p-6">
         <div className="flex items-center gap-3">
-          <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center">
+          <div className="h-8 w-8 rounded-md bg-primary/10 flex items-center justify-center">
             <DollarSign className="h-5 w-5 text-primary" />
           </div>
           <h2 className="text-2xl font-bold">Daily Billing Overview</h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {Array.from({ length: 6 }).map((_, i) => (
-            <Skeleton key={i} className="h-64 w-full rounded-lg" />
+            <Skeleton key={i} className="h-64 w-full rounded-md" />
           ))}
         </div>
       </div>
@@ -87,7 +87,7 @@ export default function DailyBillingView({
       {/* Header with summary */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 pb-4 border-b">
         <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center">
+          <div className="h-10 w-10 rounded-md bg-primary/10 flex items-center justify-center">
             <DollarSign className="h-4 w-4 text-primary" />
           </div>
           <div>
@@ -97,7 +97,7 @@ export default function DailyBillingView({
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-xs border border-primary/20">
+        <div className="flex items-center gap-2 px-4 py-2 bg-primary/5 rounded-md border border-primary/20">
           <span className="text-xs font-medium text-muted-foreground">
             Period Total:
           </span>

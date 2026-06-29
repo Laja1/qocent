@@ -78,7 +78,7 @@ export const SiteCredentials = () => {
           description="Generate provider console login access for a site"
         />
         <div className="px-5 mt-6 max-w-2xl">
-          <Card className="p-8 rounded-2xl border border-gray-200 text-center">
+          <Card className="p-8 rounded-md border border-gray-200 text-center">
             <p className="text-sm text-gray-600 mb-4">
               No site was selected. Choose a site from Server Sites to generate
               access credentials.
@@ -102,9 +102,9 @@ export const SiteCredentials = () => {
       />
 
       <div className="px-5 mt-6 max-w-3xl mx-auto space-y-6">
-        <Card className="rounded-2xl border border-gray-200 bg-white p-6 shadow-none">
+        <Card className="rounded-md border border-gray-200 bg-white p-6 shadow-none">
           <div className="flex items-start gap-4">
-            <div className="size-12 rounded-xl bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
+            <div className="size-12 rounded-md bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
               <KeyRound className="size-5" />
             </div>
             <div className="flex-1 min-w-0">
@@ -119,7 +119,7 @@ export const SiteCredentials = () => {
           </div>
         </Card>
 
-        <Card className="rounded-2xl border border-gray-200 bg-white p-6 shadow-none space-y-5">
+        <Card className="rounded-md border border-gray-200 bg-white p-6 shadow-none space-y-5">
           <div className="space-y-4">
             <div className="flex items-start gap-3">
               <Mail className="size-4 text-gray-500 mt-0.5" />

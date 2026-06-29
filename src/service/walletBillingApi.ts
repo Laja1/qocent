@@ -19,20 +19,29 @@ import { pythonBaseApi } from "./pythonBaseApi";
 
 export const walletBillingApi = pythonBaseApi.injectEndpoints({
   endpoints: (build) => ({
-    getWalletBalance: build.query<WalletBalanceResponse, void>({
-      query: () => ({
+    getWalletBalance: build.query<
+      WalletBalanceResponse,
+      { force_recalculate?: boolean } | void
+    >({
+      query: (arg) => ({
         url: "/wallet/balance",
+        params: arg?.force_recalculate
+          ? { force_recalculate: arg.force_recalculate }
+          : undefined,
       }),
       providesTags: [{ type: ApiEnums.Wallet, id: "BALANCE" }],
     }),
 
     getWalletTransactions: build.query<
       WalletTransactionResponse[],
-      { limit?: number } | void
+      { limit?: number; offset?: number } | void
     >({
       query: (arg) => ({
         url: "/wallet/transactions",
-        params: { limit: arg?.limit ?? 50 },
+        params: {
+          limit: arg?.limit ?? 50,
+          ...(arg?.offset != null ? { offset: arg.offset } : {}),
+        },
       }),
       providesTags: [{ type: ApiEnums.Wallet, id: "TRANSACTIONS" }],
     }),
@@ -198,6 +207,7 @@ export const {
   useCreatePersonalPaidSubscriptionMutation,
   useConvertPersonalTrialToPaidMutation,
   useCheckPersonalPaymentStatusQuery,
+  useLazyCheckPersonalPaymentStatusQuery,
   useStartBusinessTrialMutation,
   useCreateBusinessPaidSubscriptionMutation,
   useConvertBusinessTrialToPaidMutation,

@@ -59,10 +59,10 @@ export const Payment = () => {
             {paymentMethods.map((method) => (
               <div
                 key={method.id}
-                className="flex items-center justify-between p-4 border border-gray-200 rounded-xs  bg-white shadow-xs hover:shadow-xs transition-shadow"
+                className="flex items-center justify-between p-4 border border-gray-200 rounded-md  bg-white shadow-xs hover:shadow-xs transition-shadow"
               >
                 <div className="flex items-center space-x-4">
-                  <div className="h-10 w-10 bg-gray-50 rounded-lg flex items-center justify-center flex-shrink-0">
+                  <div className="h-10 w-10 bg-gray-50 rounded-md flex items-center justify-center flex-shrink-0">
                     <CreditCard className="h-5 w-5 text-gray-600" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -133,7 +133,7 @@ export const Payment = () => {
             </CardDescription>
           </div>
 
-          <div className="bg-gray-50 rounded-xs p-6">
+          <div className="bg-gray-50 rounded-md p-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <div>
                 <p className="text-sm font-medium text-gray-900 mb-1">

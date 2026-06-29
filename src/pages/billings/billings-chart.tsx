@@ -61,17 +61,17 @@ export function BillingsChart({rowId}:{rowId:string}) {
       <CardHeader className="flex items-center gap-2 space-y-0  pt-5 justify-between flex-row">
         <div></div>
         <Select value={timeRange} onValueChange={setTimeRange}>
-        <SelectTrigger className="w-fit rounded-xs text-xs h-[8px]">
+        <SelectTrigger className="w-fit rounded-md text-xs h-[8px]">
             <SelectValue placeholder="Last 3 months" />
           </SelectTrigger>
-          <SelectContent className="rounded-xl">
-            <SelectItem value="90d"  className="rounded-sm text-xs">
+          <SelectContent className="rounded-md">
+            <SelectItem value="90d"  className="rounded-md text-xs">
               Last 3 months
             </SelectItem>
-            <SelectItem value="30d" className="rounded-sm text-xs">
+            <SelectItem value="30d" className="rounded-md text-xs">
               Last 30 days
             </SelectItem>
-            <SelectItem value="7d" className="rounded-sm text-xs">
+            <SelectItem value="7d" className="rounded-md text-xs">
               Last 7 days
             </SelectItem>
           </SelectContent>

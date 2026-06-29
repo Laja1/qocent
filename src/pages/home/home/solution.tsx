@@ -53,7 +53,7 @@ export default function QocentSolution() {
         {/* Grid */}
         <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Card 1 */}
-          <div className="rounded-2xl bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border">
+          <div className="rounded-md bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border">
             <SolutionCardDetails
               title="Workflow Automation & Optimization. "
               description="Cut cloud costs 30–40% with AI-powered insights that show:"
@@ -79,7 +79,7 @@ export default function QocentSolution() {
           </div>
 
           {/* Card 2 */}
-          <div className="rounded-2xl h-full bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border">
+          <div className="rounded-md h-full bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border">
             <SolutionCardDetails
               title="One Dashboard. Every Cloud"
               description="Stop switching between AWS, Azure Portal, GCP Console, and Huawei Cloud. Deploy VMs, manage VPCs, monitor resources—all from Qocent's
@@ -87,21 +87,21 @@ export default function QocentSolution() {
             />
 
             {/* Dashboard Placeholder */}
-            <div className="relative h-34 md:h-69 overflow-hidden rounded-xl bg-white"
+            <div className="relative h-34 md:h-69 overflow-hidden rounded-md bg-white"
             >
               <img src={imgLinks.dashboard} className="w-full scale-112 -mt-1 md:-mt-2 lg:-mt-1 object-fill" />
             </div>
           </div>
 
           {/* Card 3 */}
-          <div className="rounded-2xl bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border w-full">
+          <div className="rounded-md bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border w-full">
             <SolutionCardDetails
               title="Link Accounts in 5 Minutes (Not 5 Days)"
               description="No migration. No downtime. No vendor lock-in."
             />
 
             {/* Cloud logos placeholder */}
-            <div className="w-full bg-[#FAFAFE] rounded-xl grid place-content-center">
+            <div className="w-full bg-[#FAFAFE] rounded-md grid place-content-center">
               <div className="max-w-[24rem] w-full bg-white overflow-hidden">
                 <VideoPlayer src="/videos/solution3.mp4" />
               </div>
@@ -110,7 +110,7 @@ export default function QocentSolution() {
           </div>
 
           {/* Card 4 */}
-          <div className="rounded-2xl bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border">
+          <div className="rounded-md bg-gradient-to-b from-[#FFEDEE] to-[#fbf8f9] p-8 shadow-sm border-[#FFD5DC] border">
             <SolutionCardDetails
               title="Security Score + Compliance"
               description="Get a real-time security score across all your clouds. Catch
@@ -173,7 +173,7 @@ function AnimatedSecurityScore() {
   }, [isInView, motionValue, rounded]);
 
   return (
-    <div ref={scoreRef} className="rounded-xl bg-white p-5 space-y-4">
+    <div ref={scoreRef} className="rounded-md bg-white p-5 space-y-4">
       <div className="flex items-center gap-4">
         <div className="bg-red-100 items-center justify-center flex rounded-full size-10">
           <Padlock />
@@ -182,9 +182,9 @@ function AnimatedSecurityScore() {
       </div>
 
       <div className="flex w-full gap-4">
-        <div className="mt-2 h-20 flex-4/6 rounded-lg bg-gray-100">
+        <div className="mt-2 h-20 flex-4/6 rounded-md bg-gray-100">
           <div
-            className="h-full rounded-lg bg-red-700 transition-none"
+            className="h-full rounded-md bg-red-700 transition-none"
             style={{ width: `${displayValue}%` }}
           />
         </div>

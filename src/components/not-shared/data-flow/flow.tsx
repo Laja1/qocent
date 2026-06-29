@@ -87,7 +87,7 @@ const ResourceNodeComponent = memo<{
   return (
     <div
       id={`node-${resource.resourceCode}`}
-      className={`absolute flex flex-col items-center justify-center text-[10px] rounded-sm p-1 bg-transparent`}
+      className={`absolute flex flex-col items-center justify-center text-[10px] rounded-md p-1 bg-transparent`}
       style={{
         top: (resource.row - 1) * cellSize,
         left: (resource.col - 1) * cellSize,

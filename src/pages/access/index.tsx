@@ -179,7 +179,7 @@ export const Access = () => {
       <div className="px-5 mt-6 max-w-7xl mx-auto w-full space-y-6">
         {/* Site selector + stats */}
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
-          <Card className="lg:col-span-1 p-5 rounded-2xl border border-gray-200 shadow-none bg-white">
+          <Card className="lg:col-span-1 p-5 rounded-md border border-gray-200 shadow-none bg-white">
             <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-500 mb-2">
               Site
             </p>
@@ -253,7 +253,7 @@ export const Access = () => {
         </div>
 
         {/* Members list */}
-        <Card className="rounded-2xl border border-gray-200 shadow-none bg-white">
+        <Card className="rounded-md border border-gray-200 shadow-none bg-white">
           <div className="p-5 border-b border-gray-100 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
             <div>
               <h3 className="font-brfirma text-base font-bold text-gray-950 tracking-tight">
@@ -383,13 +383,13 @@ const StatCard = ({
     emerald: "bg-emerald-50 text-emerald-700",
   };
   return (
-    <Card className="p-5 rounded-2xl border border-gray-200 shadow-none bg-white">
+    <Card className="p-5 rounded-md border border-gray-200 shadow-none bg-white">
       <div className="flex items-center justify-between">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-gray-500">
           {label}
         </p>
         <span
-          className={`size-7 rounded-lg flex items-center justify-center ${toneClasses[tone]}`}
+          className={`size-7 rounded-md flex items-center justify-center ${toneClasses[tone]}`}
         >
           {icon}
         </span>
@@ -432,7 +432,7 @@ const MemberCard = ({
   );
 
   return (
-    <div className="group relative h-full rounded-2xl border border-gray-200 bg-white p-5 hover:border-primary/30 hover:shadow-md transition-all duration-200 flex flex-col">
+    <div className="group relative h-full rounded-md border border-gray-200 bg-white p-5 hover:border-primary/30 hover:shadow-md transition-all duration-200 flex flex-col">
       <div className="flex items-start gap-3">
         <div
           className={`size-11 rounded-full ${avatarColor} text-white flex items-center justify-center text-sm font-semibold flex-shrink-0 shadow-sm`}
@@ -498,7 +498,7 @@ const MemberCard = ({
 };
 
 const MemberSkeleton = () => (
-  <div className="rounded-2xl border border-gray-200 bg-white p-5 animate-pulse">
+  <div className="rounded-md border border-gray-200 bg-white p-5 animate-pulse">
     <div className="flex items-start gap-3">
       <div className="size-11 rounded-full bg-gray-100" />
       <div className="flex-1 space-y-2">

@@ -31,7 +31,7 @@ export const Textfield2 = ({
 
   // Memoize the textfield classes
   const textfieldClasses = useMemo(() => {
-    const textfieldBaseClass = `block w-full bg-white text-black rounded-xs  py-2  px-3 text-xs inset-ring inset-ring-green-800 focus:ring-1 focus:ring-green-900 focus:border-black`;
+    const textfieldBaseClass = `block w-full bg-white text-black rounded-md  py-2  px-3 text-xs inset-ring inset-ring-green-800 focus:ring-1 focus:ring-green-900 focus:border-black`;
     const textfieldState = error ? "ring-red-500" : "ring-[#E8EAEB]";
 
     return clsx(
@@ -66,7 +66,7 @@ export const Textfield2 = ({
         {label}
       </label>
 
-      <div className=" relative rounded-lg w-full">
+      <div className=" relative rounded-md w-full">
         {!!computedPrefixIcon && (
           <div className="pointer-events-none absolute  inset-y-0 left-0 flex items-center pl-3">
             {computedPrefixIcon}

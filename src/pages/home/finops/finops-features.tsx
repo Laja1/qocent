@@ -109,13 +109,13 @@ const FeatureCard = ({
             </motion.div>
 
             {/* Dashboard Mockup */}
-            <div className='relative rounded-xl'>
+            <div className='relative rounded-md'>
                 <motion.div
                     initial={{ opacity: 0, x: reversed ? -50 : 50 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.6, delay: 0.2 }}
-                    className={`${reversed ? 'lg:col-start-1 lg:row-start-1' : ''} relative bg-white rounded-3xl shadow-2xl overflow-hidden border-red-500 border  w-full md:mb-6`}
+                    className={`${reversed ? 'lg:col-start-1 lg:row-start-1' : ''} relative bg-white rounded-md shadow-2xl overflow-hidden border-red-500 border  w-full md:mb-6`}
                 >
 
                     <VideoPlayer src={imageContainerUrl} />

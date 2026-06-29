@@ -182,7 +182,7 @@ export const ServerHouses = () => {
         />
       </Header>
 
-      <Card className="mx-5 px-5 mt-5 rounded-sm">
+      <Card className="mx-5 px-5 mt-5 rounded-md">
         <DataTable
           data={data?.data ?? []}
           columns={serverHouseColumn}

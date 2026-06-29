@@ -128,7 +128,7 @@ export const Console = () => {
                 transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                 className="flex items-center gap-4"
               >
-                <div className="w-12 h-12 rounded-xl bg-white/15 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
+                <div className="w-12 h-12 rounded-md bg-white/15 backdrop-blur-sm flex items-center justify-center flex-shrink-0">
                   <feature.icon className="h-6 w-6 text-white" />
                 </div>
                 <span className="text-lg text-white/90">{feature.text}</span>
@@ -166,16 +166,16 @@ export const Console = () => {
             </div>
             <button
               onClick={handleLogout}
-              className="inline-flex items-center gap-2 rounded-xl border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
+              className="inline-flex items-center gap-2 rounded-md border border-border px-3 py-2 text-sm text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
             >
               <IconLogout className="h-4 w-4" />
               Logout
             </button>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-4">
+          <div className="rounded-md border border-border bg-card p-4">
             <div className="flex items-center gap-3 pb-4 border-b border-border">
-              <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center">
+              <div className="w-10 h-10 rounded-md bg-muted flex items-center justify-center">
                 <IconCloud className="h-5 w-5 text-muted-foreground" />
               </div>
               <div>
@@ -195,7 +195,7 @@ export const Console = () => {
                   <button
                     key={providerId}
                     onClick={() => setSelectedProvider(providerId)}
-                    className={`w-full rounded-xl border p-3 text-left transition-all ${
+                    className={`w-full rounded-md border p-3 text-left transition-all ${
                       isActive
                         ? "border-primary bg-primary/5 shadow-sm"
                         : "border-border hover:border-primary/40 hover:bg-muted/30"
@@ -203,7 +203,7 @@ export const Console = () => {
                   >
                     <div className="flex items-center justify-between gap-3">
                       <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 rounded-lg bg-white border border-border flex items-center justify-center">
+                        <div className="w-11 h-11 rounded-md bg-white border border-border flex items-center justify-center">
                           <img
                             src={config.logo}
                             alt={config.name}
@@ -227,7 +227,7 @@ export const Console = () => {
             </div>
           </div>
 
-          <div className="rounded-2xl border border-border bg-card p-4 flex items-center gap-3">
+          <div className="rounded-md border border-border bg-card p-4 flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-primary text-primary-foreground flex items-center justify-center text-xs font-bold">
               {initials || "U"}
             </div>
@@ -243,7 +243,7 @@ export const Console = () => {
           <Button
             onClick={handleContinue}
             disabled={!selectedConfig.available}
-            className="w-fit h-10 text-xs rounded-xl"
+            className="w-fit h-10 text-xs rounded-md"
             style={{ background: '#C12C27' }}
           >
             Continue to {selectedConfig.name}

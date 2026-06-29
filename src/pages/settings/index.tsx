@@ -107,11 +107,11 @@ export const Settings = () => {
       <div className="px-5 max-w-6xl mx-auto mt-2">
         <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr] gap-6 items-start">
           {/* User summary sidebar */}
-          <Card className="rounded-2xl border border-gray-200 bg-white shadow-none overflow-hidden lg:sticky lg:top-24">
+          <Card className="rounded-md border border-gray-200 bg-white shadow-none overflow-hidden lg:sticky lg:top-24">
             <div className="h-20 bg-black" />
             <div className="px-5 pb-5 -mt-10">
               <div
-                className={`size-16 bg-black rounded-2xl ${avatarColor} text-white flex items-center justify-center text-xl font-bold shadow-lg ring-4 ring-white`}
+                className={`size-16 bg-black rounded-md ${avatarColor} text-white flex items-center justify-center text-xl font-bold shadow-lg ring-4 ring-white`}
               >
                 {initials}
               </div>
@@ -185,7 +185,7 @@ export const Settings = () => {
 
           {/* Main settings panel */}
           <div className="space-y-4">
-            <Card className="rounded-2xl border border-gray-200 bg-white shadow-none p-2">
+            <Card className="rounded-md border border-gray-200 bg-white shadow-none p-2">
               <nav className="flex flex-wrap gap-1">
                 {tabs.map((tab) => {
                   const Icon = tab.icon;
@@ -195,7 +195,7 @@ export const Settings = () => {
                       key={tab.id}
                       type="button"
                       onClick={() => setActiveTab(tab.id)}
-                      className={`flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-medium transition-all ${
+                      className={`flex items-center gap-2 rounded-md px-4 py-2.5 text-sm font-medium transition-all ${
                         isActive
                           ? "bg-primary text-primary-foreground shadow-sm"
                           : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
@@ -209,7 +209,7 @@ export const Settings = () => {
               </nav>
             </Card>
 
-            <Card className="rounded-2xl border border-gray-200 bg-white shadow-none p-6">
+            <Card className="rounded-md border border-gray-200 bg-white shadow-none p-6">
               <div className="mb-6 pb-5 border-b border-gray-100">
                 <h3 className="font-brfirma text-base font-bold text-gray-950 tracking-tight">
                   {activeTabMeta.label}

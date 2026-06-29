@@ -31,7 +31,7 @@ export const CreateResource = () => {
       />
 
       <div className="flex gap-3 mx-5 my-5">
-        <div className="w-full flex flex-col gap-4 rounded-sm p-4 ">
+        <div className="w-full flex flex-col gap-4 rounded-md p-4 ">
           {formik.values.nestedFields.map((field, index) => (
             <RenderField
               key={index}

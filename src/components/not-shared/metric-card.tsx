@@ -33,7 +33,7 @@ export function MetricCard({
   };
 
   return (
-    <Card className="metric-card rounded-xs px-3 shadow-none bg-transparent">
+    <Card className="metric-card rounded-md px-3 shadow-none bg-transparent">
       <div className="flex flex-row items-center justify-between space-y-0 ">
         <CardTitle className="text-sm font-medium text-muted-foreground">
           {title}
@@ -57,7 +57,7 @@ export function MetricCard({
             {trend.map((value, index) => (
               <div
                 key={index}
-                className="flex-1 bg-red-500 opacity-60 rounded-sm"
+                className="flex-1 bg-red-500 opacity-60 rounded-md"
                 style={{ height: `${(value / Math.max(...trend)) * 100}%` }}
               />
             ))}

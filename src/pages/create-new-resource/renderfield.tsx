@@ -56,7 +56,7 @@ export default function RenderField({
 
   return (
     <div className="w-full ">
-      <div className="w-full  rounded-sm mb-1  gap-4 items-start">
+      <div className="w-full  rounded-md mb-1  gap-4 items-start">
         <label className="text-sm font-medium text-gray-700 block">
           {field.fieldName}
         </label>

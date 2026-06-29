@@ -119,7 +119,7 @@ export const ProfessionalServices = () => {
                 navigate(RouteConstant.dashboard.createProfessionalService.path)
               }
               prefixIcon={<Plus className="w-5 h-5" />}
-              className="w-fit py-2 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+              className="w-fit py-2 px-4 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
             />
           </div>
 
@@ -150,7 +150,7 @@ export const ProfessionalServices = () => {
               navigate(RouteConstant.dashboard.createProfessionalService.path)
             }
             prefixIcon={<Plus className="w-5 h-5" />}
-            className="w-fit py-2 px-4 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
+            className="w-fit py-2 px-4 bg-blue-600 text-white rounded-md font-medium hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
           />
         </div>
       )}
@@ -163,7 +163,7 @@ function EnrolledServiceCard({ enrollment }: { enrollment: EnrolledService }) {
   const status = statusConfig[enrollment.status];
 
   return (
-    <div className="p-4 rounded-lg border-2 border-gray-200">
+    <div className="p-4 rounded-md border-2 border-gray-200">
       <div className="flex items-start justify-between">
         <div className="flex items-start gap-3 flex-1">
           <div className="text-blue-500 mt-1">{serviceInfo?.triggerIcon}</div>

@@ -49,7 +49,7 @@ export const TransactionsList = ({
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div
-                    className={`size-9 rounded-xl flex items-center justify-center border ${
+                    className={`size-9 rounded-md flex items-center justify-center border ${
                       credit
                         ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-700"
                         : "bg-red-500/10 border-red-500/30 text-red-700"

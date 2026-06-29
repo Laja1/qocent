@@ -82,7 +82,7 @@ export const CreateResource = () => {
         description="A server Room can have one or more server centres. A server centre is provided by a provider."
       />
 
-      <div className="flex-col p-5 mt-5  space-y-5 rounded-sm">
+      <div className="flex-col p-5 mt-5  space-y-5 rounded-md">
         <div className="grid grid-cols-4 flex w-full gap-3  space-y-5">
           <SelectField2
             name="resourceType"
@@ -118,7 +118,7 @@ export const CreateResource = () => {
       </div>
 
       <div className="flex w-full gap-3">
-        <div className=" flex flex-col gap-4 rounded-sm p-4 w-[400px]">
+        <div className=" flex flex-col gap-4 rounded-md p-4 w-[400px]">
           {/* Show message when dropdowns are not selected */}
           {/* {!shouldShowNestedFields && (
             <div className="text-gray-500 text-center p-8 border-2 border-dashed border-gray-300 rounded-md">

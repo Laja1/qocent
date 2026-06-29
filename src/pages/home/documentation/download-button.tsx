@@ -67,7 +67,7 @@ export const DownloadButton = ({
             disabled={isDownloading || isComplete}
             className={`
                 relative w-full max-w-2xl mx-auto
-                rounded-xl p-2 px-4 lg:p-4 flex items-center gap-6
+                rounded-md p-2 px-4 lg:p-4 flex items-center gap-6
                 border-2 border-dashed border-red-300
                 transition-all duration-300
                 hover:border-red-600

@@ -59,7 +59,7 @@ export const BillsList = ({ isLoading, data }: BillsListProps) => {
           {bills.map((bill, idx) => (
             <div
               key={bill.bill_id ?? idx}
-              className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl bg-white/60 border border-black/[0.06]"
+              className="flex items-center justify-between gap-3 px-3 py-2.5 rounded-md bg-white/60 border border-black/[0.06]"
             >
               <div className="min-w-0">
                 <div className="flex items-center gap-2">

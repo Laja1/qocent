@@ -27,13 +27,13 @@ export const Tabs = ({ tabs, activeTab, onTabChange }: TabsProps) => {
 
   return (
     <div>
-      <div className="flex flex-wrap gap-2 rounded-2xl border w-fit border-border bg-card p-2">
+      <div className="flex flex-wrap gap-2 rounded-md border w-fit border-border bg-card p-2">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             type="button"
             onClick={() => setCurrentTab(tab.id)}
-            className={`rounded-xl px-4 py-2 hover:cursor-pointer transition duration-200 ease-in-out text-sm font-medium ${
+            className={`rounded-md px-4 py-2 hover:cursor-pointer transition duration-200 ease-in-out text-sm font-medium ${
               currentTab === tab.id
                 ? "bg-primary text-primary-foreground shadow-sm"
                 : "text-muted-foreground hover:text-foreground hover:bg-muted"

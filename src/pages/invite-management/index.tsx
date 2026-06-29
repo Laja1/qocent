@@ -44,7 +44,7 @@ function RespondModal({ invite, onConfirm, onCancel, isLoading }: RespondModalPr
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-2xl p-6 w-full max-w-sm">
+      <div className="bg-white rounded-md shadow-2xl p-6 w-full max-w-sm">
         <h3 className="text-base font-semibold text-gray-900 mb-2">Accept Join Request</h3>
         <p className="text-sm text-gray-500 mb-4">
           Assign a role for <span className="font-medium">{invite.user_id}</span> before accepting.
@@ -195,7 +195,7 @@ export const InviteManagement = () => {
       </Header>
 
       <div className="flex gap-4 mb-10 lg:mb-20 flex-col overflow-y-hidden h-full px-5">
-        <Card className="px-5 py-5 rounded-2xl border border-border shadow-none bg-card">
+        <Card className="px-5 py-5 rounded-md border border-border shadow-none bg-card">
         {/* Invite Form */}
         {showInviteForm && (
           <Card className="mb-6 border border-gray-200">
@@ -268,7 +268,7 @@ export const InviteManagement = () => {
               <span className="text-xs text-gray-400">({sentInvites.length})</span>
             </div>
             {sentInvites.length === 0 ? (
-              <div className="text-center py-8 text-gray-400 border border-dashed border-gray-200 rounded-lg">
+              <div className="text-center py-8 text-gray-400 border border-dashed border-gray-200 rounded-md">
                 <p className="text-sm">No pending invites sent.</p>
               </div>
             ) : (
@@ -326,7 +326,7 @@ export const InviteManagement = () => {
               <span className="text-xs text-gray-400">({joinRequests.length})</span>
             </div>
             {joinRequests.length === 0 ? (
-              <div className="text-center py-8 text-gray-400 border border-dashed border-gray-200 rounded-lg">
+              <div className="text-center py-8 text-gray-400 border border-dashed border-gray-200 rounded-md">
                 <p className="text-sm">No pending join requests.</p>
               </div>
             ) : (

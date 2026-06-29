@@ -76,13 +76,13 @@ export const ResourceList = ({
     },
   ];
   return (
-    <div className="space-y-8 bg-white shadow-md rounded-xl p-5 m-5 border ">
+    <div className="space-y-8 bg-white shadow-md rounded-md p-5 m-5 border ">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {resourceConfig.map(
           ({ label, key, icon, bg, border, textColor, titleColor }) => (
             <div
               key={key}
-              className={`${bg} ${border} border w-full rounded-lg`}
+              className={`${bg} ${border} border w-full rounded-md`}
             >
               <div className="p-4">
                 <div className="flex items-center justify-between">

@@ -39,6 +39,14 @@ export const cloudServicesApi = createApi({
         method: "POST",
       }),
     }),
+
+    grantAdminAccess: build.mutation<GenerateLoginUrlEmailResponse, { csp: string; account_id: string }>({
+      query: ({ csp, account_id }) => ({
+        url: `/${csp}/grant-admin-access`,
+        method: "POST",
+        params: { account_id },
+      }),
+    }),
   }),
 });
 
@@ -47,4 +55,5 @@ export const {
   useInitiateInviteAccountMutation,
   useCompleteInviteAccountMutation,
   useGenerateProviderLoginUrlMutation,
+  useGrantAdminAccessMutation,
 } = cloudServicesApi;

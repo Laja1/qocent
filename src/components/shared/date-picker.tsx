@@ -42,7 +42,7 @@ export const DatePicker = ({
   const [open, setOpen] = useState(false);
 
   const defaultTriggerClasses = clsx(
-    "w-full justify-start text-left font-normal py-1 bg-white rounded-xs px-3 py-2 flex items-center text-black border justify-center border-green-800  text-xs cursor-pointer",
+    "w-full justify-start text-left font-normal py-1 bg-white rounded-md px-3 py-2 flex items-center text-black border justify-center border-green-800  text-xs cursor-pointer",
     disabled && "opacity-50 cursor-not-allowed",
     triggerClassName
   );
@@ -89,7 +89,7 @@ export const DatePicker = ({
               mode="single"
               selected={value}
               onSelect={handleDateSelect}
-              className={clsx("rounded-xs border ", calendarClassName)}
+              className={clsx("rounded-md border ", calendarClassName)}
               disabled={disabled}
               captionLayout="dropdown"
               fromYear={yearRange.start}

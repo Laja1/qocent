@@ -133,7 +133,7 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
     <div className="gap-2 flex flex-col">
       <div
         id={id}
-        className={`border-2 ${containerClass} gap-4 rounded-sm w-full items-center justify-center`}
+        className={`border-2 ${containerClass} gap-4 rounded-md w-full items-center justify-center`}
       >
         <p className="items-center text-[10px] flex p-1 gap-1">
           <span>{icon}</span>

@@ -12,7 +12,7 @@ export const SiteLevel = ({ sitesData }: { sitesData: SiteArchitecture }) => {
   return (
     <div className="w-full flex ">
       <div
-        className="w-1/8 justify-center rounded-l-sm items-center relative flex
+        className="w-1/8 justify-center rounded-l-md items-center relative flex
        border-dashed bg-red-50 
       "
       >

@@ -67,7 +67,7 @@ export default function MonthlyBill({ data }: MonthlyBillProps) {
         </CardContent>
       </div>
 
-      <Card className="p-3 rounded-xs">
+      <Card className="p-3 rounded-md">
         <DataTable
           data={data?.data?.bills || []}
           columns={monthlyCostTableColumn}

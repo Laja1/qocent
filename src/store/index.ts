@@ -11,7 +11,6 @@ import { siteStore } from "./siteSlice";
 import { costApi } from "@/service/costApi";
 import { organizationApi } from "@/service/organizationApi";
 import { cloudServicesApi } from "@/service/cloudServericesApi";
-import { invitationApi } from "@/service/invitationApi";
 import { accountsApi } from "@/service/accountsApi";
 import { subscriptionApi } from "@/service/subscriptionApi";
 import { pythonBaseApi } from "@/service/pythonBaseApi";
@@ -26,7 +25,6 @@ const rootReducer = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   [organizationApi.reducerPath]: organizationApi.reducer,
   [cloudServicesApi.reducerPath]: cloudServicesApi.reducer,
-  [invitationApi.reducerPath]: invitationApi.reducer,
 [accountsApi.reducerPath]:accountsApi.reducer,
   [subscriptionApi.reducerPath]: subscriptionApi.reducer,
   [pythonBaseApi.reducerPath]: pythonBaseApi.reducer,
@@ -67,7 +65,6 @@ export const store = configureStore({
       },
     }).concat(
       authApi.middleware,
-      invitationApi.middleware,
       accountsApi.middleware,
       cloudServicesApi.middleware,
       costApi.middleware,

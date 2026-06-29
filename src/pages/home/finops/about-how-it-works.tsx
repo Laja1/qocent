@@ -14,13 +14,13 @@ export default function AboutHowItWorks() {
                 <img
                     src="/images/how-it-works-main.png"
                     alt="How it works"
-                    className="w-full rounded-2xl"
+                    className="w-full rounded-md"
                 />
                 {/* Login card — overlapping top-left */}
                 <img
                     src="/images/how-it-works-login.png"
                     alt="Login"
-                    className="absolute top-24 -left-6 w-[26%] rounded-xl"
+                    className="absolute top-24 -left-6 w-[26%] rounded-md"
                     style={{ animation: "float 4s ease-in-out infinite" }}
                 />
             </div>

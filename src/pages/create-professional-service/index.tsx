@@ -89,7 +89,7 @@ export const CreateProfessionalService = () => {
                   key={s.value}
                   type="button"
                   onClick={() => toggleService(s.value)}
-                  className={`p-4 rounded-lg border-2 transition-all text-left ${
+                  className={`p-4 rounded-md border-2 transition-all text-left ${
                     selectedServices.includes(s.value)
                       ? "border-red-400 bg-red-50"
                       : "border-gray-200 hover:border-gray-300"

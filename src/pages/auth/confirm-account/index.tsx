@@ -3,7 +3,10 @@ import AuthLayout from "@/components/layouts/authLayout";
 import { getMaskedEmail } from "@/components/not-shared/masked-email";
 import { Button, Textfield } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
-import { completeEnrollmentInit } from "@/models/request/authRequest";
+import {
+  completeEnrollmentInit,
+  type OtpFlowState,
+} from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
 import {
   useCompleteEnrollmentMutation,
@@ -18,28 +21,46 @@ import { useLocation, useNavigate } from "react-router-dom";
 const ConfirmAccount = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const state = location.state;
+  const flowState = location.state as OtpFlowState | string | undefined;
+  const email = typeof flowState === "string" ? flowState : flowState?.email;
+  const accountType =
+    typeof flowState === "object" && flowState?.accountType
+      ? flowState.accountType
+      : "INDIVIDUAL";
 
   const [completeEnrollment, { isLoading }] = useCompleteEnrollmentMutation();
   const [resendOtp] = useSendOtpMutation();
-  const onSubmit = async (values: any) => {
+
+  const onSubmit = async (values: { otp: string }) => {
+    if (!email) {
+      showCustomToast("Missing email for verification. Please sign up again.", {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
+      navigate(RouteConstant.auth.signup.path);
+      return;
+    }
+
     const payload = {
-      email: state,
-      code: String(values?.otp),
+      email,
+      code: String(values.otp),
     };
-    console.log(payload);
+
     try {
       const res = await completeEnrollment(payload).unwrap();
-      showCustomToast(res?.message, {
+      showCustomToast(res?.message ?? "Account verified successfully", {
         toastOptions: {
           type: "success",
           autoClose: 5000,
         },
       });
-      navigate(RouteConstant.auth.signin.path);
+
+      if (accountType === "BUSINESS") {
+        navigate(RouteConstant.auth.completeBusiness.path);
+      } else {
+        navigate(RouteConstant.auth.signin.path);
+      }
     } catch (error) {
       const message = ErrorHandler.extractMessage(error);
-
       showCustomToast(message, {
         toastOptions: {
           type: "error",
@@ -49,22 +70,25 @@ const ConfirmAccount = () => {
     }
   };
 
-  const ResendOtp = async () => {
-    const payload = {
-      email: state,
-    };
+  const handleResendOtp = async () => {
+    if (!email) {
+      showCustomToast("Missing email for verification. Please sign up again.", {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
+      return;
+    }
+
     try {
-      const res = await resendOtp(payload).unwrap();
-      console.log(res);
-      showCustomToast("OTP sent successfully", {
+      const res = await resendOtp({ email }).unwrap();
+      showCustomToast(res?.responseMessage ?? "OTP sent successfully", {
         toastOptions: {
           type: "success",
           autoClose: 5000,
         },
       });
     } catch (error) {
-      console.log(error);
-      showCustomToast("Failed to resend OTP", {
+      const message = ErrorHandler.extractMessage(error);
+      showCustomToast(message || "Failed to resend OTP", {
         toastOptions: {
           type: "error",
           autoClose: 5000,
@@ -82,11 +106,12 @@ const ConfirmAccount = () => {
   useEffect(() => {
     formik.validateForm();
   }, []);
+
   return (
     <AuthLayout
       title="Confirm Your OTP"
       subtitle={`Enter the one-time password (OTP) sent to ${getMaskedEmail(
-        state
+        email ?? ""
       )} to verify and activate your account.`}
     >
       <div className="flex flex-col gap-3">
@@ -111,7 +136,7 @@ const ConfirmAccount = () => {
         <p className="text-center mt-2 text-xs text-gray-700">
           Didn't get a code?{" "}
           <span
-            onClick={() => ResendOtp()}
+            onClick={handleResendOtp}
             className="text-red-700 hover:cursor-pointer"
           >
             Resend OTP

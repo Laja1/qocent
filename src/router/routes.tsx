@@ -80,6 +80,10 @@ export const RouteConstant = {
       path: "/confirm-account",
       name: "confirm-account",
     },
+    completeBusiness: {
+      path: "/complete-business",
+      name: "complete-business",
+    },
     confirmPasswordReset: {
       path: "/confirm-password-reset",
       name: "confirm-password-reset",

@@ -27,9 +27,9 @@ export const HeroHeader = ({
 
       {/* Title with divider lines */}
       <div className={`flex items-center gap-44 mb-3 w-full ${hideLine ? "justify-center" : "justify-between"}`}>
-        {!hideLine && <span className="hidden rounded-sm sm:block h-1 flex-1 bg-[#EBEAF6]" />}
+        {!hideLine && <span className="hidden rounded-md sm:block h-1 flex-1 bg-[#EBEAF6]" />}
         {children}
-        {!hideLine && <span className="hidden rounded-sm sm:block h-1 flex-1 bg-[#EBEAF6]" />}
+        {!hideLine && <span className="hidden rounded-md sm:block h-1 flex-1 bg-[#EBEAF6]" />}
       </div>
 
       {description && (

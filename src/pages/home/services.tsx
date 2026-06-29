@@ -71,7 +71,7 @@ export default function Comparison() {
 
 function ComparisonComponent({ selection, children }: { selection: typeof qocent | typeof others; children?: React.ReactNode }) {
   return (
-    <div className="bg-white rounded-2xl p-6 shadow-lg w-full">
+    <div className="bg-white rounded-md p-6 shadow-lg w-full">
       {children}
 
       <div className="space-y-4 w-full">

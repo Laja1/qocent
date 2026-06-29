@@ -185,7 +185,7 @@ export const Dashboard = () => {
         </div>
 
         {selectedResource && (
-          <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+          <div className="mt-8 p-4 bg-blue-50 border border-blue-200 rounded-md">
             <p className="text-blue-800">
               <strong>Selected:</strong>{" "}
               {cloudResources.find((r) => r.id === selectedResource)?.name}

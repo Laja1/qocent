@@ -164,7 +164,7 @@ export const DrawerModal = NiceModal.create(() => {
 
           <div className="px-4 pb-6 overflow-y-auto max-h-[60vh]">
             {details ? (
-              <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
+              <div className="bg-white rounded-md border border-gray-200 overflow-hidden">
                 <table className="w-full">
                   <thead>
                     <tr className="bg-gray-50">

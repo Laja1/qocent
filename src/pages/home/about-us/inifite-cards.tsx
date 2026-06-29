@@ -125,7 +125,7 @@ export default function InfiniteCardCarousel() {
       <div
         key={`${card.id}-${arrayIndex}`}
         className={`
-          relative flex-shrink-0 w-[300px]   h-[310px] rounded-3xl overflow-hidden cursor-pointer
+          relative flex-shrink-0 w-[300px]   h-[310px] rounded-md overflow-hidden cursor-pointer
           transition-all duration-500 ease-out
           ${
             isActive
@@ -152,10 +152,10 @@ export default function InfiniteCardCarousel() {
                 }}
               />
               <div className="absolute inset-0 overflow-hidden">
-                <div className="absolute top-16 left-32 w-32 h-16 bg-purple-500 rounded-lg transform rotate-12 opacity-80" />
-                <div className="absolute top-24 left-40 w-40 h-20 bg-purple-600 rounded-lg transform -rotate-6 opacity-70" />
-                <div className="absolute top-32 left-52 w-20 h-20 bg-purple-400 rounded-lg transform rotate-45 opacity-60" />
-                <div className="absolute top-12 right-16 w-16 h-16 bg-purple-500 rounded-lg transform -rotate-12 opacity-75" />
+                <div className="absolute top-16 left-32 w-32 h-16 bg-purple-500 rounded-md transform rotate-12 opacity-80" />
+                <div className="absolute top-24 left-40 w-40 h-20 bg-purple-600 rounded-md transform -rotate-6 opacity-70" />
+                <div className="absolute top-32 left-52 w-20 h-20 bg-purple-400 rounded-md transform rotate-45 opacity-60" />
+                <div className="absolute top-12 right-16 w-16 h-16 bg-purple-500 rounded-md transform -rotate-12 opacity-75" />
               </div>
             </>
           )}
@@ -285,7 +285,7 @@ export default function InfiniteCardCarousel() {
 
           {/* Content */}
           <div className="relative z-10 h-full flex flex-col">
-            <div className="inline-block bg-black/30 text-white text-xs px-3 py-2 rounded-lg mb-6 w-fit">
+            <div className="inline-block bg-black/30 text-white text-xs px-3 py-2 rounded-md mb-6 w-fit">
               {card.type}
             </div>
 

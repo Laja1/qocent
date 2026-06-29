@@ -26,7 +26,7 @@ export function Storage() {
         designed for every scale and workload type.
       </p>
       <div className="grid  grid-cols-1 lg:grid-cols-2 gap-4 w-full">
-        <Card className="shadow-lg rounded-sm mt-4 text-left px-5">
+        <Card className="shadow-lg rounded-md mt-4 text-left px-5">
           <CardContent>
             <CardTitle className="text-lg ">Virtual Machines (VMs)</CardTitle>
 
@@ -96,7 +96,7 @@ export function Storage() {
             </div>
           </CardContent>
         </Card>
-        <Card className="shadow-lg rounded-sm mt-4 text-left px-5">
+        <Card className="shadow-lg rounded-md mt-4 text-left px-5">
           <CardContent>
             <CardTitle className="text-lg ">Virtual Machines (VMs)</CardTitle>
 

@@ -27,7 +27,7 @@ export const SelectField = ({
   const displayError = touched && fieldError;
 
   const selectfieldClasses = clsx(
-    "block w-full bg-white text-black border border-gray-300 rounded-xs py-3 px-3 text-xs focus:outline-none focus:ring-0.5 focus:ring-green-700 focus:border-green-700",
+    "block w-full bg-white text-black border border-gray-300 rounded-md py-3 px-3 text-xs focus:outline-none focus:ring-0.5 focus:ring-green-700 focus:border-green-700",
     className,
     { "border-red-500": displayError }
   );

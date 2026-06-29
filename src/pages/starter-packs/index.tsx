@@ -81,7 +81,7 @@ export const StarterPacksGrid = () => {
                 <div className="flex flex-col mt-2">
                   <img
                     src={tierImages[selectedPack.id] || imgLinks.awstier1}
-                    className="rounded-sm"
+                    className="rounded-md"
                     alt={`${selectedPack.title} diagram`}
                   />
                 </div>
@@ -112,7 +112,7 @@ export const StarterPacksGrid = () => {
           >
             <div>
               <div className="mb-2 flex items-center justify-between">
-                <div className="rounded-lg bg-primary/10 p-3 text-primary transition-colors group-hover:bg-primary group-hover:text-[#fee2e2]">
+                <div className="rounded-md bg-primary/10 p-3 text-primary transition-colors group-hover:bg-primary group-hover:text-[#fee2e2]">
                   {pack.icon}
                 </div>
               </div>

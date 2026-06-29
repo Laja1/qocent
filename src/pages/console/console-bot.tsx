@@ -4,7 +4,7 @@ import { SendHorizonal } from 'lucide-react'
 export const ConsoleBot = () => {
   return (
     <div>
-      <div className={'!py-3 gap-2 border !bg-transparent rounded-sm '}>
+      <div className={'!py-3 gap-2 border !bg-transparent rounded-md '}>
                         <CardHeader className={'!px-3 '}>
                             <CardTitle className={'text-custom-white'}>Home</CardTitle>
                         </CardHeader>

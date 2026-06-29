@@ -23,8 +23,8 @@ const DocsQuickStart = () => {
               available.
             </p>
             <div className="flex flex-col gap-3 mt-3">
-              <img src={img("quickstart-step1-login-button.png")} alt="Login button on the Qocent homepage" className="rounded-lg border border-gray-200 w-full max-w-xl" />
-              <img src={img("quickstart-step1-signup-form.png")} alt="Sign Up link on the login page" className="rounded-lg border border-gray-200 w-full max-w-xl" />
+              <img src={img("quickstart-step1-login-button.png")} alt="Login button on the Qocent homepage" className="rounded-md border border-gray-200 w-full max-w-xl" />
+              <img src={img("quickstart-step1-signup-form.png")} alt="Sign Up link on the login page" className="rounded-md border border-gray-200 w-full max-w-xl" />
             </div>
           </div>
         </li>
@@ -40,7 +40,7 @@ const DocsQuickStart = () => {
               Fill in your personal registration details in the form provided. Once all required
               fields are complete, click the Continue button to proceed.
             </p>
-            <img src={img("quickstart-step2-registration-form.png")} alt="Registration form with personal details" className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+            <img src={img("quickstart-step2-registration-form.png")} alt="Registration form with personal details" className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
           </div>
         </li>
 
@@ -55,7 +55,7 @@ const DocsQuickStart = () => {
               Double-check that all your details are correct, then click the Create Account button
               to continue.
             </p>
-            <img src={img("quickstart-step3-review-account.png")} alt="Review and submit registration details" className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+            <img src={img("quickstart-step3-review-account.png")} alt="Review and submit registration details" className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
           </div>
         </li>
 
@@ -71,7 +71,7 @@ const DocsQuickStart = () => {
               verification code, enter it in the field provided, and click Verify OTP to complete
               verification.
             </p>
-            <img src={img("quickstart-step4-otp-verification.png")} alt="OTP verification screen" className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+            <img src={img("quickstart-step4-otp-verification.png")} alt="OTP verification screen" className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
           </div>
         </li>
 
@@ -87,8 +87,8 @@ const DocsQuickStart = () => {
               access to all platform features.
             </p>
             <div className="flex flex-col gap-3 mt-3">
-              <img src={img("quickstart-step5-login-screen.png")} alt="Sign in screen after email verification" className="rounded-lg border border-gray-200 w-full max-w-xl" />
-              <img src={img("quickstart-step5-dashboard.png")} alt="Qocent dashboard after signing in" className="rounded-lg border border-gray-200 w-full max-w-xl" />
+              <img src={img("quickstart-step5-login-screen.png")} alt="Sign in screen after email verification" className="rounded-md border border-gray-200 w-full max-w-xl" />
+              <img src={img("quickstart-step5-dashboard.png")} alt="Qocent dashboard after signing in" className="rounded-md border border-gray-200 w-full max-w-xl" />
             </div>
           </div>
         </li>

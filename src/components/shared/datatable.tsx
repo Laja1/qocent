@@ -610,7 +610,7 @@ export function DataTable<T>({
   };
 
   return (
-    <div className="border border-border rounded-2xl p-5 bg-card">
+    <div className="border border-border rounded-md p-5 bg-card">
       <div className="mb-2">
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 ">
           <div>
@@ -811,7 +811,7 @@ export function DataTable<T>({
       </div>
 
       <CardContent className="mx-0 p-0">
-        <div className="rounded-2xl border border-border overflow-x-auto" ref={tableRef}>
+        <div className="rounded-md border border-border overflow-x-auto" ref={tableRef}>
           <Table className="w-full">
             <TableHeader>
               <TableRow className="bg-muted/50 hover:bg-muted/50">

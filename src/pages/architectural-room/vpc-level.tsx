@@ -21,7 +21,7 @@ export const VpcLevel = ({ vpcDeployed }: { vpcDeployed: houses[] }) => {
 
           return (
             <div key={item.houseCode} className="relative">
-              <div className="border flex flex-col relative pb-5 rounded-sm border-red-500 px-5 mx-3 gap-10">
+              <div className="border flex flex-col relative pb-5 rounded-md border-red-500 px-5 mx-3 gap-10">
                 <div className={`${layoutClass} w-full`}>
                   {/* Left Subnets */}
                   <div className="flex flex-col pt-10 w-full gap-3">

@@ -33,7 +33,7 @@ const HowItWorksCard = ({
           {description}
         </p>
 
-        <div className="bg-[#1C1D1F] my-2 text-[8px] text-xs text-[#CFCFCF] p-3 rounded-lg border border-[#ffffff14] w-full">
+        <div className="bg-[#1C1D1F] my-2 text-[8px] text-xs text-[#CFCFCF] p-3 rounded-md border border-[#ffffff14] w-full">
           <span className="text-white">{subTitle}</span>
         </div>
       </div>

@@ -6,6 +6,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import {
+  useGetMyInvitesQuery,
+  useUserRespondToInviteMutation,
+} from "@/service/businessInviteApi";
+import type { Csp } from "@/models/response/businessInviteResponse";
+import {
   Check,
   X,
   Users,
@@ -14,103 +19,114 @@ import {
   Shield,
   Star,
 } from "lucide-react";
-import { useNavigate, } from "react-router-dom";
-import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
-import { useAcceptInviteMutation, useRejectInviteMutation } from "@/service/invitationApi";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
 
 export default function AcceptInvite() {
   const navigate = useNavigate();
-  const [acceptInvite, { isLoading: isAccepting }] = useAcceptInviteMutation();
-  const [rejectInvite, { isLoading: isRejecting }] = useRejectInviteMutation();
+  const [searchParams] = useSearchParams();
+  const inviteId = searchParams.get("invite_id");
+
+  const { data, isLoading: isLoadingInvites } = useGetMyInvitesQuery();
+  const [userRespond, { isLoading: isResponding }] =
+    useUserRespondToInviteMutation();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
+  const [selectedCsp, setSelectedCsp] = useState<Csp>("aws");
+  const [showCspPicker, setShowCspPicker] = useState(false);
 
-  const [searchParams] = useSearchParams();
-  const inviteId = searchParams.get("invite_id");
-  // Animation effect on mount
+  const invite = useMemo(
+    () => data?.data?.find((item) => item.invite_id === inviteId),
+    [data?.data, inviteId]
+  );
+
   useEffect(() => {
     const timer = setTimeout(() => setShowAnimation(true), 100);
     return () => clearTimeout(timer);
   }, []);
 
-  const handleAccept = async () => {
-    if (isAccepting || isProcessing) return;
+  const respond = async (
+    action: "ACCEPT" | "REJECT",
+    csp?: Csp
+  ) => {
+    if (!inviteId || isResponding || isProcessing) return;
 
     setIsProcessing(true);
-
     try {
-      const res = await acceptInvite({
-        invite_id: inviteId || "",
-       
+      const res = await userRespond({
+        invite_id: inviteId,
+        body: { action, ...(csp ? { csp } : {}) },
+        ...(csp ? { csp } : {}),
       }).unwrap();
 
       showCustomToast(res.message, {
-        toastOptions: { type: "success", autoClose: 5000 },
+        toastOptions: {
+          type: action === "ACCEPT" ? "success" : "info",
+          autoClose: 5000,
+        },
       });
 
-      // Add slight delay for better UX
       setTimeout(() => {
-        navigate(RouteConstant.dashboard.console.path);
-      }, 1500);
+        navigate(
+          action === "ACCEPT"
+            ? RouteConstant.dashboard.console.path
+            : "/console"
+        );
+      }, 1200);
     } catch (error: any) {
-      console.log(error, "error");
-      const message = ErrorHandler.extractMessage(error);
-      showCustomToast(message, {
+      showCustomToast(ErrorHandler.extractMessage(error), {
         toastOptions: { type: "error", autoClose: 5000 },
       });
       setIsProcessing(false);
+      setShowCspPicker(false);
     }
   };
 
-  const handleDecline = async() => {
-   
-    try {
-      const res = await rejectInvite({
-        invite_id: inviteId || "",
-       
-      }).unwrap();
-
-      showCustomToast(res?.message, {
-        toastOptions: { type: "info", autoClose: 3000 },
-      });
-      navigate("/console");
-    } catch (error: any) {
-      console.log(error, "error");
-      const message = ErrorHandler.extractMessage(error);
-      showCustomToast(message, {
-        toastOptions: { type: "error", autoClose: 5000 },
-      });
+  const handleAccept = () => {
+    if (invite?.proposed_role === "MEMBER") {
+      setShowCspPicker(true);
+      return;
     }
+    respond("ACCEPT");
+  };
 
-   
+  const handleDecline = () => {
+    respond("REJECT");
   };
 
   const handleGoBack = () => {
     navigate("/console");
   };
 
-  if (isAccepting) {
+  if (isLoadingInvites) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4">
-        <div className="animate-pulse space-y-4">
-          <div className="w-20 h-10 bg-gray-200 rounded"></div>
-          <div className="w-80 h-96 bg-white rounded-xl shadow-lg"></div>
-        </div>
+        <Loader2 className="h-8 w-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
+
+  if (!inviteId || (!isLoadingInvites && !invite)) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4">
+        <Card className="max-w-md w-full p-6 text-center">
+          <p className="text-sm text-gray-600 mb-4">
+            This invitation is invalid or no longer available.
+          </p>
+          <Button onClick={handleGoBack}>Back to Console</Button>
+        </Card>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 flex flex-col items-center justify-center p-4 relative overflow-hidden">
-      {/* Background Decorative Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-gradient-to-br from-blue-200/30 to-purple-200/30 blur-3xl"></div>
         <div className="absolute -bottom-40 -left-40 w-80 h-80 rounded-full bg-gradient-to-br from-green-200/30 to-blue-200/30 blur-3xl"></div>
       </div>
 
-      {/* Back Button */}
       <button
         onClick={handleGoBack}
         className="absolute top-8 left-8 flex items-center gap-2 text-gray-600 hover:text-gray-800 transition-colors group"
@@ -119,7 +135,6 @@ export default function AcceptInvite() {
         <span className="text-sm font-medium">Back to Console</span>
       </button>
 
-      {/* Logo */}
       <div
         className={`mb-8 transition-all duration-700 ${
           showAnimation
@@ -134,7 +149,6 @@ export default function AcceptInvite() {
         />
       </div>
 
-      {/* Main Card */}
       <Card
         className={`w-full max-w-lg bg-white/80 backdrop-blur-sm border-0 shadow-2xl transition-all duration-700 ${
           showAnimation
@@ -143,9 +157,7 @@ export default function AcceptInvite() {
         }`}
       >
         <CardContent className="p-0">
-          {/* Header Section */}
           <div className="bg-black p-2 text-center text-white relative overflow-hidden">
-            <div className="absolute inset-0 bg-black/10"></div>
             <div className="relative z-10">
               <div className="w-16 h-16 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-4 border border-white/30">
                 <Users className="w-8 h-8 text-white" />
@@ -154,22 +166,16 @@ export default function AcceptInvite() {
                 You're Invited!
               </h1>
               <p className="text-blue-100 text-sm">
-                Join an amazing team workspace
+                {invite?.proposed_role
+                  ? `Join as ${invite.proposed_role}`
+                  : "Join a business workspace"}
               </p>
             </div>
-            {/* Decorative stars */}
             <Star className="absolute top-4 right-4 w-4 h-4 text-white/30" />
-            <Star className="absolute bottom-4 left-4 w-3 h-3 text-white/20" />
           </div>
 
-          {/* Content Section */}
           <div className="p-8 space-y-6">
-            {/* Invitation Details */}
-
-           
-
-            {/* Benefits Section */}
-            <div className="bg-green-50 rounded-xs p-4 border border-green-100">
+            <div className="bg-green-50 rounded-md p-4 border border-green-100">
               <div className="flex items-center gap-2 mb-3">
                 <Shield className="w-5 h-5 text-green-600" />
                 <span className="font-medium text-green-800">
@@ -192,14 +198,13 @@ export default function AcceptInvite() {
               </ul>
             </div>
 
-            {/* Action Buttons */}
             <div className="flex gap-3 pt-2">
               <Button
                 className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 h-8 text-sm font-semibold"
                 onClick={handleAccept}
-                disabled={isAccepting || isProcessing}
+                disabled={isResponding || isProcessing}
               >
-                {isAccepting || isProcessing ? (
+                {isResponding || isProcessing ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Accepting...
@@ -216,35 +221,49 @@ export default function AcceptInvite() {
                 variant="outline"
                 className="flex-1 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 text-gray-700 h-8 text-sm font-semibold transition-all duration-200"
                 onClick={handleDecline}
-                disabled={isProcessing || isRejecting}
+                disabled={isProcessing || isResponding}
               >
                 <X className="w-5 h-5 mr-2" />
                 Decline
               </Button>
             </div>
-
-            {/* Footer Note */}
-            <div className="text-center pt-4 border-t border-gray-100">
-              <p className="text-xs text-gray-500 leading-relaxed">
-                By accepting, you agree to join this workspace and gain access
-                to shared resources.
-                <br />
-                You can leave the workspace at any time from your settings.
-              </p>
-            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Success Animation Overlay */}
-      {(isAccepting || isProcessing) && (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-sm flex items-center justify-center z-50">
-          <div className="bg-white rounded-xs p-6 shadow-2xl">
-            <div className="flex flex-col items-center gap-4">
-              <Loader2 className="w-8 h-8 animate-spin text-red-600" />
-              <p className="text-gray-700 font-medium text-sm">
-                Processing your invitation...
-              </p>
+      {showCspPicker && (
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-md shadow-2xl p-6 w-full max-w-sm">
+            <h3 className="text-base font-semibold text-gray-900 mb-2">
+              Select Cloud Provider
+            </h3>
+            <p className="text-sm text-gray-500 mb-4">
+              Member access requires a cloud provider.
+            </p>
+            <select
+              value={selectedCsp}
+              onChange={(e) => setSelectedCsp(e.target.value as Csp)}
+              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm mb-4"
+            >
+              <option value="aws">AWS</option>
+              <option value="huawei">Huawei</option>
+            </select>
+            <div className="flex gap-3">
+              <Button
+                className="flex-1"
+                onClick={() => respond("ACCEPT", selectedCsp)}
+                disabled={isResponding || isProcessing}
+              >
+                Confirm
+              </Button>
+              <Button
+                variant="outline"
+                className="flex-1"
+                onClick={() => setShowCspPicker(false)}
+                disabled={isResponding || isProcessing}
+              >
+                Cancel
+              </Button>
             </div>
           </div>
         </div>

@@ -11,7 +11,7 @@ import "./roomApi";
 import "./serviceApi";
 import "./consoleApi";
 import "./waitlistApi";
-import "./authKotlinApi";
+import "./walletBillingApi";
 import "./dashboardApi";
 import "./businessApi";
 import "./configApi";

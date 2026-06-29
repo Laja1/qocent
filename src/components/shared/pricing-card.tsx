@@ -33,7 +33,7 @@ export const PricingCard = ({
   return (
     <motion.div
       whileHover={{ scale: 1.03 }}
-      className={`border border-[#FFFFFF24] flex flex-grow flex-col max-w-sm h-[600px] lg:h-[564px] p-5 rounded-3xl ${cardStyle}`}
+      className={`border border-[#FFFFFF24] flex flex-grow flex-col max-w-sm h-[600px] lg:h-[564px] p-5 rounded-md ${cardStyle}`}
     >
       <div className="flex-1">
         <div className="h-[180px] lg:h-[256px]">

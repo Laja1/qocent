@@ -12,7 +12,6 @@ import type {
   SubscriptionPaymentStatusResponse,
   SubscriptionActionResponse,
   SubscriptionDetailResponse,
-  ServiceAccessResponse,
 } from "@/models/response/subscriptionResponse";
 
 export const subscriptionApi = createApi({
@@ -62,6 +61,21 @@ export const subscriptionApi = createApi({
       providesTags: [{ type: ApiEnums.Subscription, id: "LIST" }],
     }),
 
+    getTrialStatus: build.query<SubscriptionDetailResponse, void>({
+      query: () => `/subscriptions/trial/status`,
+      providesTags: [{ type: ApiEnums.Subscription, id: "TRIAL" }],
+    }),
+
+    checkSubscriptionAccess: build.query<{ has_access: boolean; message?: string }, void>({
+      query: () => `/subscriptions/access/check`,
+      providesTags: [{ type: ApiEnums.Subscription, id: "ACCESS" }],
+    }),
+
+    getSubscriptionById: build.query<SubscriptionDetailResponse, string>({
+      query: (subscription_id) => `/subscriptions/${subscription_id}`,
+      providesTags: (_result, _error, id) => [{ type: ApiEnums.Subscription, id }],
+    }),
+
     pauseSubscription: build.mutation<SubscriptionActionResponse, string>({
       query: (subscription_id) => ({
         url: `/subscriptions/${subscription_id}/pause`,
@@ -106,13 +120,6 @@ export const subscriptionApi = createApi({
         { type: ApiEnums.Subscription, id: "LIST" },
       ],
     }),
-
-    getServiceAccess: build.mutation<ServiceAccessResponse, { service_name: string }>({
-      query: ({ service_name }) => ({
-        url: `/services/${service_name}/access`,
-        method: "POST",
-      }),
-    }),
   }),
 });
 
@@ -123,9 +130,13 @@ export const {
   useCheckPaymentStatusQuery,
   useLazyCheckPaymentStatusQuery,
   useGetMySubscriptionQuery,
+  useGetTrialStatusQuery,
+  useCheckSubscriptionAccessQuery,
+  useGetSubscriptionByIdQuery,
   usePauseSubscriptionMutation,
   useResumeSubscriptionMutation,
   useCancelSubscriptionMutation,
   useConvertTrialToPaidMutation,
-  useGetServiceAccessMutation,
 } = subscriptionApi;
+
+export { useGetServiceAccessMutation } from "./contextApi";

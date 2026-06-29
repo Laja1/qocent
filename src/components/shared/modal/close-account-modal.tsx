@@ -122,7 +122,7 @@ export const CloseAccountModal = create<Account>(() => {
 
         {step === 0 && (
           <div className="space-y-4">
-            <div className="rounded-lg border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
+            <div className="rounded-md border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
               <p className="font-medium mb-2">What happens when you close this account?</p>
               <ul className="space-y-2 text-xs leading-relaxed list-disc pl-4">
                 <li>
@@ -140,7 +140,7 @@ export const CloseAccountModal = create<Account>(() => {
               </ul>
             </div>
 
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm">
+            <div className="rounded-md border border-gray-200 bg-gray-50 p-3 text-sm">
               <p className="text-gray-500 text-xs uppercase tracking-wide mb-1">
                 Account to close
               </p>
@@ -161,7 +161,7 @@ export const CloseAccountModal = create<Account>(() => {
             {ACKNOWLEDGMENTS.map((text, index) => (
               <label
                 key={text}
-                className="flex items-start gap-3 rounded-lg border border-gray-200 p-3 cursor-pointer hover:bg-gray-50"
+                className="flex items-start gap-3 rounded-md border border-gray-200 p-3 cursor-pointer hover:bg-gray-50"
               >
                 <Checkbox
                   checked={checked[index]}
@@ -176,7 +176,7 @@ export const CloseAccountModal = create<Account>(() => {
 
         {step === 2 && (
           <div className="space-y-4">
-            <div className="rounded-lg border border-red-200 bg-red-50 p-4 text-sm text-red-900">
+            <div className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-900">
               <p className="font-semibold">Final confirmation</p>
               <p className="text-xs mt-1 leading-relaxed">
                 This will permanently close{" "}

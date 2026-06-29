@@ -2,7 +2,18 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/shared";
 import { create, useModal } from "@ebay/nice-modal-react";
 import { ModalConstant } from "./register";
-import { useGetMySubscriptionQuery, usePauseSubscriptionMutation, useResumeSubscriptionMutation, useCancelSubscriptionMutation, useConvertTrialToPaidMutation, subscriptionApi, useLazyCheckPaymentStatusQuery } from "@/service/subscriptionApi";
+import {
+  subscriptionApi,
+  useGetMySubscriptionQuery,
+  usePauseSubscriptionMutation,
+  useResumeSubscriptionMutation,
+  useCancelSubscriptionMutation,
+} from "@/service/subscriptionApi";
+import {
+  walletBillingApi,
+  useConvertPersonalTrialToPaidMutation,
+  useLazyCheckPersonalPaymentStatusQuery,
+} from "@/service/walletBillingApi";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useState } from "react";
@@ -17,9 +28,9 @@ export const ManageSubscriptionModal = create(() => {
   const [pauseSubscription] = usePauseSubscriptionMutation();
   const [resumeSubscription] = useResumeSubscriptionMutation();
   const [cancelSubscription] = useCancelSubscriptionMutation();
-  const [convertTrial] = useConvertTrialToPaidMutation();
+  const [convertTrial] = useConvertPersonalTrialToPaidMutation();
   const [checkPaymentStatus, { isFetching: isVerifyingPayment }] =
-    useLazyCheckPaymentStatusQuery();
+    useLazyCheckPersonalPaymentStatusQuery();
   const [paymentModal, setPaymentModal] = useState<{ open: boolean; data: any }>({ open: false, data: null });
 
   const invalidateSubscriptionState = () => {
@@ -28,6 +39,12 @@ export const ManageSubscriptionModal = create(() => {
         { type: ApiEnums.Subscription, id: "PLANS" },
         { type: ApiEnums.Subscription, id: "LIST" },
         { type: ApiEnums.Subscription, id: "TRIAL" },
+        { type: ApiEnums.Subscription, id: "PAYMENT" },
+      ])
+    );
+    dispatch(
+      walletBillingApi.util.invalidateTags([
+        { type: ApiEnums.Subscription, id: "LIST" },
         { type: ApiEnums.Subscription, id: "PAYMENT" },
       ])
     );
@@ -114,7 +131,7 @@ export const ManageSubscriptionModal = create(() => {
 
           {subscription ? (
             <div className="space-y-5">
-              <div className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-2xl p-6 shadow-xl border border-amber-500/20">
+              <div className="relative overflow-hidden bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-md p-6 shadow-xl border border-amber-500/20">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-amber-500/5 rounded-full blur-3xl" />
                 <div className="relative space-y-4">
                   <div className="flex justify-between items-center pb-3 border-b border-white/10">
@@ -201,8 +218,8 @@ export const ManageSubscriptionModal = create(() => {
 
       {paymentModal.open && (
         <div className="fixed inset-0 bg-gradient-to-br from-black/90 via-gray-900/95 to-black/90 backdrop-blur-md flex items-center justify-center z-50 p-4 animate-in fade-in duration-300">
-          <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-black border border-amber-500/30 rounded-3xl max-w-2xl w-full p-8 relative shadow-2xl shadow-amber-500/10 animate-in zoom-in-95 duration-300">
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5 rounded-3xl" />
+          <div className="bg-gradient-to-br from-gray-900 via-gray-800 to-black border border-amber-500/30 rounded-md max-w-2xl w-full p-8 relative shadow-2xl shadow-amber-500/10 animate-in zoom-in-95 duration-300">
+            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 via-transparent to-orange-500/5 rounded-md" />
             <button 
               onClick={() => setPaymentModal({ open: false, data: null })} 
               className="absolute top-5 right-5 text-gray-400 hover:text-white transition-colors duration-200 hover:rotate-90 "
@@ -211,7 +228,7 @@ export const ManageSubscriptionModal = create(() => {
             </button>
             <div className="relative">
               <div className="flex items-center gap-3 mb-2">
-                <div className="p-2 bg-amber-500/20 rounded-xl border border-amber-500/30">
+                <div className="p-2 bg-amber-500/20 rounded-md border border-amber-500/30">
                   <CreditCard className="w-6 h-6 text-amber-400" />
                 </div>
                 <h2 className="text-3xl font-brfirma-bold text-white tracking-tight">Payment Details</h2>
@@ -219,7 +236,7 @@ export const ManageSubscriptionModal = create(() => {
               <p className="text-gray-400 mb-8 ml-14 font-strawford">Complete payment to activate your subscription</p>
               {paymentModal.data && (
                 <div className="space-y-5">
-                  <div className="bg-black/40 border border-white/10 rounded-2xl p-6 space-y-4 backdrop-blur-sm">
+                  <div className="bg-black/40 border border-white/10 rounded-md p-6 space-y-4 backdrop-blur-sm">
                     <div className="flex justify-between items-center pb-3 border-b border-white/10">
                       <span className="text-gray-400 text-sm font-strawford">Bank Name</span>
                       <span className="text-white font-semibold text-lg">{paymentModal.data.bank_name}</span>
@@ -238,7 +255,7 @@ export const ManageSubscriptionModal = create(() => {
                     </div>
                     <div className="flex justify-between items-center pt-3">
                       <span className="text-gray-400 text-sm">Reference</span>
-                      <span className="text-gray-200 font-mono text-sm bg-white/5 px-3 py-1 rounded-lg">{paymentModal.data.payment_reference}</span>
+                      <span className="text-gray-200 font-mono text-sm bg-white/5 px-3 py-1 rounded-md">{paymentModal.data.payment_reference}</span>
                     </div>
                     <div className="flex justify-between items-center bg-red-500/10 -mx-6 px-6 py-3 border-y border-red-500/20">
                       <div className="flex items-center gap-2">
@@ -248,7 +265,7 @@ export const ManageSubscriptionModal = create(() => {
                       <span className="text-red-200 font-semibold">{new Date(paymentModal.data.valid_until).toLocaleString()}</span>
                     </div>
                   </div>
-                  <div className="bg-amber-500/5 border border-amber-500/20 rounded-xl p-4">
+                  <div className="bg-amber-500/5 border border-amber-500/20 rounded-md p-4">
                     <p className="text-gray-300 text-sm leading-relaxed font-strawford">{paymentModal.data.payment_instructions}</p>
                   </div>
                   <Button

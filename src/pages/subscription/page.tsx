@@ -1,18 +1,26 @@
 import { Header } from "@/components/shared";
 import { ArrowRight, Check, Loader2,  } from "lucide-react";
-import { useGetAllWithMySubscriptionsQuery, useStartTrialMutation, useCreatePaidSubscriptionMutation, useGetServiceAccessMutation } from "@/service/subscriptionApi";
+import { useGetAllWithMySubscriptionsQuery } from "@/service/subscriptionApi";
+import {
+  useCreatePersonalPaidSubscriptionMutation,
+  useStartPersonalTrialMutation,
+} from "@/service/walletBillingApi";
+import { useGetServiceAccessMutation } from "@/service/contextApi";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
+import { buildServiceRedirectUrl } from "@/utilities/serviceAccess";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
 import { motion } from "framer-motion";
 
 const SubscriptionCards = () => {
-  const finopsBaseUrl = import.meta.env.VITE_FINOPS_BASE_URL || "https://finops.qocent.com";
   const { data: plansData, isLoading } = useGetAllWithMySubscriptionsQuery();
-  const [startTrial, { isLoading: isStartingTrialLoading }] = useStartTrialMutation();
-  const [createPaidSubscription, { isLoading: isCreatePaidSubscriptionLoading }] = useCreatePaidSubscriptionMutation();
-  const [triggerServiceAccess, { isLoading: isAccessLoading }] = useGetServiceAccessMutation();
+  const [startTrial, { isLoading: isStartingTrialLoading }] =
+    useStartPersonalTrialMutation();
+  const [createPaidSubscription, { isLoading: isCreatePaidSubscriptionLoading }] =
+    useCreatePersonalPaidSubscriptionMutation();
+  const [triggerServiceAccess, { isLoading: isAccessLoading }] =
+    useGetServiceAccessMutation();
   const upcomingPlans = [
     {
       name: "Site Reliability",
@@ -33,10 +41,14 @@ const SubscriptionCards = () => {
 
   const handleStartTrial = async (planId: string) => {
     try {
-      const res = await startTrial({ plan_id: planId }).unwrap();
-      showCustomToast(res.message, { toastOptions: { type: "success", autoClose: 5000 } });
+      await startTrial({ plan_id: planId }).unwrap();
+      showCustomToast("Trial started successfully", {
+        toastOptions: { type: "success", autoClose: 5000 },
+      });
     } catch (error: any) {
-      showCustomToast(error?.data?.message || "Failed to start trial", { toastOptions: { type: "error", autoClose: 5000 } });
+      showCustomToast(ErrorHandler.extractMessage(error), {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
     }
   };
 
@@ -53,15 +65,11 @@ const SubscriptionCards = () => {
     try {
       const serviceName = planName.toLowerCase().replace(/\s+/g, "");
       const res = await triggerServiceAccess({ service_name: serviceName }).unwrap();
-      const backendRedirectUrl = new URL(res.data.redirect_url);
-      const token = backendRedirectUrl.searchParams.get("token");
-      const redirectUrl = new URL("/", finopsBaseUrl);
-      if (token) {
-        redirectUrl.searchParams.set("token", token);
-      }
-      window.location.href = redirectUrl.toString();
+      window.location.href = buildServiceRedirectUrl(res.data.redirect_url);
     } catch (error: any) {
-      showCustomToast(ErrorHandler.extractMessage(error) || "Failed to access service", { toastOptions: { type: "error", autoClose: 5000 } });
+      showCustomToast(ErrorHandler.extractMessage(error) || "Failed to access service", {
+        toastOptions: { type: "error", autoClose: 5000 },
+      });
     }
   };
 
@@ -85,11 +93,11 @@ const SubscriptionCards = () => {
               >
                 {/* Glow behind active card */}
                 {isActive && (
-                  <div className="absolute -inset-px rounded-2xl bg-gradient-to-b from-primary/20 via-primary/5 to-transparent blur-sm" />
+                  <div className="absolute -inset-px rounded-md bg-gradient-to-b from-primary/20 via-primary/5 to-transparent blur-sm" />
                 )}
 
                 <div
-                  className={`relative h-full rounded-2xl border p-7 flex flex-col shadow-sm transition-all duration-300 ${
+                  className={`relative h-full rounded-md border p-7 flex flex-col shadow-sm transition-all duration-300 ${
                     isActive
                       ? "bg-white border-primary/30 ring-1 ring-primary/20"
                       : "bg-white border-gray-200 hover:border-primary/25 hover:shadow-md"
@@ -158,7 +166,7 @@ const SubscriptionCards = () => {
                         type="button"
                         disabled={isAccessLoading}
                         onClick={() => handleAccessService(plan.subscription_plan_name)}
-                        className="group w-full py-2.5 px-4 bg-primary hover:bg-primary/90 active:bg-primary text-primary-foreground text-sm font-bold rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        className="group w-full py-2.5 px-4 bg-primary hover:bg-primary/90 active:bg-primary text-primary-foreground text-sm font-bold rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                       >
                         {isAccessLoading ? (
                           <>
@@ -178,7 +186,7 @@ const SubscriptionCards = () => {
                           type="button"
                           disabled={isStartingTrialLoading}
                           onClick={() => handleStartTrial(plan.subscription_plan_id)}
-                          className="w-full py-2.5 px-4 border border-primary/25 hover:border-primary/40 hover:bg-primary/5 text-primary text-sm font-semibold rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="w-full py-2.5 px-4 border border-primary/25 hover:border-primary/40 hover:bg-primary/5 text-primary text-sm font-semibold rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {isStartingTrialLoading ? "Starting..." : "Start Free Trial"}
                         </button>
@@ -186,7 +194,7 @@ const SubscriptionCards = () => {
                           type="button"
                           disabled={isCreatePaidSubscriptionLoading}
                           onClick={() => handleSubscribe(plan.subscription_plan_id)}
-                          className="w-full py-2.5 px-4 bg-gray-950 hover:bg-gray-800 text-white text-sm font-medium rounded-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                          className="w-full py-2.5 px-4 bg-gray-950 hover:bg-gray-800 text-white text-sm font-medium rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                           {isCreatePaidSubscriptionLoading ? "Processing..." : "Subscribe Now"}
                         </button>
@@ -206,7 +214,7 @@ const SubscriptionCards = () => {
               transition={{ duration: 0.5, delay: 0.2 + (plansData?.data?.length || 0) * 0.1 + idx * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
               className="relative"
             >
-              <div className="relative h-full rounded-2xl border border-gray-200 bg-gray-50 p-7 flex flex-col shadow-sm transition-all duration-300 hover:border-gray-300">
+              <div className="relative h-full rounded-md border border-gray-200 bg-gray-50 p-7 flex flex-col shadow-sm transition-all duration-300 hover:border-gray-300">
                 <div className="mb-6">
                   <h3 className="font-brfirma text-[17px] font-bold text-gray-950 mb-1.5 tracking-tight">
                     {plan.name}
@@ -242,7 +250,7 @@ const SubscriptionCards = () => {
                   <button
                     type="button"
                     disabled
-                    className="w-full py-2.5 px-4 bg-gray-200 text-gray-500 text-sm font-medium rounded-xl cursor-not-allowed"
+                    className="w-full py-2.5 px-4 bg-gray-200 text-gray-500 text-sm font-medium rounded-md cursor-not-allowed"
                   >
                     Coming Soon
                   </button>

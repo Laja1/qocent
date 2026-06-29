@@ -126,7 +126,7 @@ type FieldProps = {
 };
 
 const Field = ({ label, value, onCopy, copied, truncate }: FieldProps) => (
-  <div className="rounded-xl border border-black/5 bg-white/50 px-3 py-2.5">
+  <div className="rounded-md border border-black/5 bg-white/50 px-3 py-2.5">
     <div className="flex items-center justify-between gap-2">
       <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
         {label}

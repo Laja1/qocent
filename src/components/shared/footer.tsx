@@ -65,7 +65,7 @@ export const Footer = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={label}
-                className="w-10 h-10 bg-muted/50 hover:bg-primary/10 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-105 group"
+                className="w-10 h-10 bg-muted/50 hover:bg-primary/10 rounded-md flex items-center justify-center transition-all duration-200 hover:scale-105 group"
               >
                 <Icon className="md:size-5 size-8 text-muted-foreground group-hover:text-primary transition-colors" />
               </a>

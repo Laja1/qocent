@@ -59,7 +59,7 @@ export default function PricingPlan() {
                     {plans.map((plan, index) => (
                         <div
                             key={index}
-                            className={`border rounded-2xl p-8 bg-white ${
+                            className={`border rounded-md p-8 bg-white ${
                                 plan.isPopular ? "border-primary" : "border-gray-200"
                             }`}
                         >
@@ -93,7 +93,7 @@ export default function PricingPlan() {
                             </ul>
 
                             <div className="mt-6">
-                                <Button className="rounded-xl" onClick={() => window.location.href = '/signin'}>
+                                <Button className="rounded-md" onClick={() => window.location.href = '/signin'}>
                                     Get Started
                                     <ArrowRight className="w-4 h-4" />
                                 </Button>

@@ -44,7 +44,7 @@ function AcceptModal({ invite, onConfirm, onCancel, isLoading }: AcceptModalProp
 
   return (
     <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg shadow-2xl p-6 w-full max-w-sm">
+      <div className="bg-white rounded-md shadow-2xl p-6 w-full max-w-sm">
         <h3 className="text-base font-semibold text-gray-900 mb-2">Accept Invitation</h3>
         <p className="text-sm text-gray-500 mb-4">
           You are accepting a <span className="font-medium">{invite.proposed_role}</span> role.
@@ -172,7 +172,7 @@ export const InviteInbox = () => {
       />
 
       <div className="flex gap-4 mb-10 lg:mb-20 flex-col overflow-y-hidden h-full px-5">
-        <Card className="px-5 py-5 rounded-2xl border border-border shadow-none bg-card">
+        <Card className="px-5 py-5 rounded-md border border-border shadow-none bg-card">
         {/* Tabs */}
         <div className="flex border-b border-gray-200 mb-6">
           <button
@@ -206,7 +206,7 @@ export const InviteInbox = () => {
 
         {/* Cloud account result banner */}
         {respondedInviteResult?.cloud_account_id && (
-          <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-lg flex items-center justify-between">
+          <div className="mb-4 p-4 bg-green-50 border border-green-200 rounded-md flex items-center justify-between">
             <div>
               <p className="text-sm font-medium text-green-800">Invitation accepted successfully!</p>
               <p className="text-xs text-green-600 mt-0.5">

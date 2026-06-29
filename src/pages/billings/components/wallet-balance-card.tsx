@@ -37,7 +37,7 @@ export const WalletBalanceCard = ({
             )}
           </div>
         </div>
-        <div className="hidden sm:flex size-14 items-center justify-center rounded-2xl bg-primary/10 border border-primary/15">
+        <div className="hidden sm:flex size-14 items-center justify-center rounded-md bg-primary/10 border border-primary/15">
           <Wallet className="size-6 text-primary" />
         </div>
       </div>

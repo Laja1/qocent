@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-// workspace-modal.tsx
 import {
   Dialog,
   DialogClose,
@@ -12,7 +11,7 @@ import {
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { Button } from "../button";
 import { Textfield } from "../textfield";
-import {  Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 import { useFormik } from "formik";
 import type { SiteData } from "@/models/response/siteResponse";
 import { InviteToWorkspaceSchema } from "@/utilities/schema/workspaceSchema";
@@ -20,38 +19,27 @@ import { showCustomToast } from "../toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useEffect } from "react";
 import type { Account } from "@/models/response/organizationResponse";
-import { useInviteUserToSiteMutation } from "@/service/authKotlinApi";
-import type { invitationRequest } from "@/models/request/authRequest";
-import { useSelector } from "react-redux";
-import type { RootState } from "@/store";
+import { useInitiateInviteAccountMutation } from "@/service/cloudServericesApi";
 import { SelectField } from "../selectfield";
 
-
-
-export const InviteToWorkspace = NiceModal.create<Account>(({account_id}) => {
-  const [inviteToWorkspace, { isLoading }] = useInviteUserToSiteMutation();
+export const InviteToWorkspace = NiceModal.create<Account>(({ account_provider }) => {
+  const [inviteToWorkspace, { isLoading }] = useInitiateInviteAccountMutation();
   const modal = useModal("InviteToWorkspace");
   const values = modal.args as unknown as SiteData;
-  const userId = useSelector((state: RootState) => state.auth.userId);
 
   const handleSubmit = async (formValues: { recipient_identifier: string; role: string }) => {
     try {
-      const requestData: invitationRequest = {
-        inviteeEmail: formValues.recipient_identifier,
-        inviterUserCode: userId ?? "",
-        privileges: [formValues.role],
-        siteCode: account_id,
-      };
+      const res = await inviteToWorkspace({
+        body: { member_identifier: formValues.recipient_identifier },
+        csp: account_provider,
+      }).unwrap();
 
-      const res = await inviteToWorkspace(requestData).unwrap();
-
-      showCustomToast(res.responseMessage, {
+      showCustomToast(res?.message ?? "Invite sent successfully", {
         toastOptions: { type: "success", autoClose: 5000 },
       });
       modal.hide();
       formik.resetForm();
     } catch (error: any) {
-      console.error("Create Resource Error:", error);
       const message = ErrorHandler.extractMessage(error);
       showCustomToast(message, {
         toastOptions: { type: "error", autoClose: 5000 },
@@ -61,7 +49,7 @@ export const InviteToWorkspace = NiceModal.create<Account>(({account_id}) => {
 
   const formik = useFormik<{ recipient_identifier: string; role: string }>({
     initialValues: {
-      recipient_identifier: '',
+      recipient_identifier: "",
       role: "",
     },
     onSubmit: handleSubmit,
@@ -74,7 +62,6 @@ export const InviteToWorkspace = NiceModal.create<Account>(({account_id}) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
- 
   return (
     <Dialog open={modal.visible} onOpenChange={() => modal.hide()}>
       <DialogContent className="sm:max-w-[500px]">
@@ -95,7 +82,8 @@ export const InviteToWorkspace = NiceModal.create<Account>(({account_id}) => {
                 prefixIcon={<Mail size={16} />}
                 placeholder="Enter email address"
                 error={
-                  formik?.touched.recipient_identifier && formik?.errors.recipient_identifier
+                  formik?.touched.recipient_identifier &&
+                  formik?.errors.recipient_identifier
                     ? formik?.errors.recipient_identifier
                     : ""
                 }
@@ -106,13 +94,13 @@ export const InviteToWorkspace = NiceModal.create<Account>(({account_id}) => {
                 label="Role"
                 name="role"
                 formik={formik}
-                options={[{label:'Member',value:'Member'},{label:'Viewer',value:'Viewer'}]}
+                options={[
+                  { label: "Member", value: "Member" },
+                  { label: "Viewer", value: "Viewer" },
+                ]}
                 placeholder="Select role"
-               
               />
             </div>
-
-           
           </div>
 
           <DialogFooter>
@@ -126,9 +114,7 @@ export const InviteToWorkspace = NiceModal.create<Account>(({account_id}) => {
             <Button
               type="submit"
               label="Invite To Workspace"
-              disabled={
-                !formik.isValid || isLoading
-              }
+              disabled={!formik.isValid || isLoading}
             />
           </DialogFooter>
         </form>

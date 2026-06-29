@@ -46,7 +46,7 @@ export default function Benefits() {
                     transition={{ duration: 0.6 }}
                     className="relative space-y-4 md:space-y-8"
                 >
-                    <div className="rounded-3xl relative overflow-hidden shadow-xs max-h-[26rem] border border-red-500 grid place-content-center">
+                    <div className="rounded-md relative overflow-hidden shadow-xs max-h-[26rem] border border-red-500 grid place-content-center">
                         <VideoPlayer src="/videos/benefit.mp4" />
                     </div>
 

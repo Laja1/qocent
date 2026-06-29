@@ -46,7 +46,7 @@ export const SiteDeployModal: React.FC<DeployModalProps> = ({
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="w-full max-w-xs rounded-lg bg-white text-black p-6 shadow-xl"
+              className="w-full max-w-xs rounded-md bg-white text-black p-6 shadow-xl"
             >
               <div className="flex flex-col gap-4">
                 <div className="items-center flex flex-col w-full space-y-2">
@@ -73,7 +73,7 @@ export const SiteDeployModal: React.FC<DeployModalProps> = ({
                   <motion.div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
-                    className="mb-4 p-4 bg-blue-50 rounded-lg"
+                    className="mb-4 p-4 bg-blue-50 rounded-md"
                   >
                     <div className="flex items-center space-x-2 mb-2">
                       <div className="animate-spin w-4 h-4 border-2 border-gray-800 border-t-transparent rounded-full"></div>

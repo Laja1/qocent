@@ -48,7 +48,7 @@ export const SpendReportCard = ({ isLoading, data }: SpendReportCardProps) => {
                 {spendEntries.map(([key, value]) => (
                   <div
                     key={key}
-                    className="flex items-center justify-between text-xs px-3 py-2 rounded-lg bg-white/60 border border-black/[0.06]"
+                    className="flex items-center justify-between text-xs px-3 py-2 rounded-md bg-white/60 border border-black/[0.06]"
                   >
                     <span className="text-foreground/80 capitalize">
                       {key.replace(/_/g, " ")}
@@ -74,7 +74,7 @@ type StatProps = {
 };
 
 const Stat = ({ icon, label, value }: StatProps) => (
-  <div className="rounded-xl border border-black/5 bg-white/50 px-3 py-3">
+  <div className="rounded-md border border-black/5 bg-white/50 px-3 py-3">
     <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground">
       {icon}
       {label}

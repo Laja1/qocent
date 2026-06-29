@@ -136,7 +136,7 @@ export const SubItem: React.FC<SubItemProps> = ({
     <button onClick={onClick} className="w-full">
       <div
         onClick={onClick}
-        className="group flex items-center gap-3 p-2 rounded-xs cursor-pointer  
+        className="group flex items-center gap-3 p-2 rounded-md cursor-pointer  
                            hover:bg-gray-50 w-full active:bg-gray-100  transition-all duration-200
                            border border-transparent hover:border-gray-200  hover:ml-2"
         role="button"
@@ -154,7 +154,7 @@ export const SubItem: React.FC<SubItemProps> = ({
 
         {/* Icon container */}
         <div
-          className="w-8 h-8 rounded-xs bg-white  shadow-sm border border-gray-200
+          className="w-8 h-8 rounded-md bg-white  shadow-sm border border-gray-200
                                flex items-center justify-center flex-shrink-0
                                group-hover:shadow-md  transition-shadow duration-200"
         >

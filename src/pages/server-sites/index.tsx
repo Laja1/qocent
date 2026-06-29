@@ -1,15 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button, Header } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
-import { Edit, Eye, Trash2, PlusIcon, Plus, Users, KeyRound } from "lucide-react";
+  import { Edit, Eye, Trash2, PlusIcon, Users, KeyRound } from "lucide-react";
 import { useState } from "react";
-import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { RouteConstant } from "@/router/routes";
 
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
-import { ResourceModal } from "../create-new-resource/resource-modal";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { serverSiteColumns } from "@/utilities/constants/colums";
@@ -25,7 +23,6 @@ export const ServerSites = () => {
       provider: String(dashboard?.provider) || "",
     });
 
-  const [isOpen, setIsOpen] = useState(false);
   const [selectedRowId, setSelectedRowId] = useState("");
   // const [selectedSiteCode, setSelectedSiteCode] = useState("");
 
@@ -86,11 +83,6 @@ export const ServerSites = () => {
       icon: Edit,
       onClick: (row: Account) =>
         console.log("Edit server room:", row.account_id),
-    },
-    {
-      label: "Deploy Resource",
-      icon: Plus,
-      onClick: () => setIsOpen(true),
     },
     {
       label: "Close Account",
@@ -261,7 +253,6 @@ export const ServerSites = () => {
       </Header>
 
       <div className="flex gap-4 mb-10 lg:mb-20 flex-col overflow-y-hidden h-full px-5">
-        <Card className="px-5 rounded-2xl border border-border shadow-none bg-card">
           <DataTable
             data={sitesToDisplay || []}
             columns={serverSiteColumns}
@@ -282,7 +273,6 @@ export const ServerSites = () => {
             highlightedRowId={selectedRowId}
             initialSorting={{ id: "siteCreatedAt", desc: false }}
           />
-        </Card>
 
         {/* {tabShow && (
           <div className="mx-5 mt-5">
@@ -291,15 +281,6 @@ export const ServerSites = () => {
         )} */}
       </div>
 
-      <ResourceModal
-        isOpen={isOpen}
-        closeModal={() => setIsOpen(false)}
-        onProceed={() => navigate("/create-new-resource")}
-        onNavigate={(path, state) => navigate(path, { state })}
-        onClose={() => setIsOpen(false)}
-        id=""
-        siteCodeId={undefined}
-      />
     </div>
   );
 };

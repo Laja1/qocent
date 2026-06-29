@@ -4,6 +4,7 @@ import type { RouteType } from "./type";
 import SignIn from "@/pages/auth/sign-in";
 import SignUp from "@/pages/auth/sign-up";
 import ConfirmAccount from "@/pages/auth/confirm-account";
+import CompleteBusiness from "@/pages/auth/complete-business";
 import CompletePasswordReset from "@/pages/auth/complete-password-reset";
 
 export const authRoute: RouteType[] = [
@@ -31,6 +32,12 @@ export const authRoute: RouteType[] = [
     path: RouteConstant.auth.otp.path,
     name: RouteConstant.auth.otp.name,
     component: <ConfirmAccount />,
+    metadata: { isAuthenticated: false },
+  },
+  {
+    path: RouteConstant.auth.completeBusiness.path,
+    name: RouteConstant.auth.completeBusiness.name,
+    component: <CompleteBusiness />,
     metadata: { isAuthenticated: false },
   },
   {

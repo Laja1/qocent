@@ -108,7 +108,7 @@ function ContactUsCard() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="bg-white grid lg:grid-cols-2 gap-12 mb-12 place-items-end shadow-sm w-full p-2 md:p-8 rounded-3xl border border-gray-300"
+            className="bg-white grid lg:grid-cols-2 gap-12 mb-12 place-items-end shadow-sm w-full p-2 md:p-8 rounded-md border border-gray-300"
         >
             {/* Left Column - Info */}
             <div>
@@ -159,7 +159,7 @@ function ContactUsCard() {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.6, delay: 0.2 }}
-                className="bg-gray-50 rounded-2xl p-6 md:p-8 border w-full border-gray-200"
+                className="bg-gray-50 rounded-md p-6 md:p-8 border w-full border-gray-200"
             >
                 <form onSubmit={handleSubmit} className="space-y-5">
                     <FormInput

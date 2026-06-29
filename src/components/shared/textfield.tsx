@@ -66,7 +66,7 @@ export const Textfield = ({
         )}
       </div>
 
-      <div className="mt-1 relative rounded-lg w-full">
+      <div className="mt-1 relative rounded-md w-full">
         {computedPrefixIcon && (
           <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
             {computedPrefixIcon}

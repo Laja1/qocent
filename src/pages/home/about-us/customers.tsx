@@ -109,11 +109,11 @@ export function TestimonialsSection() {
                 className=""
                 renderItem={(item) => {
                     return (
-                        <div className="bg-white rounded-3xl h-full flex-col space-y-8 p-6 hover:shadow-xs"
+                        <div className="bg-white rounded-md h-full flex-col space-y-8 p-6 hover:shadow-xs"
                         >
                             <div className="flex items-center justify-between">
                                 <div className="flex items-center gap-4">
-                                    <div className="size-20 rounded-2xl overflow-hidden flex-shrink-0">
+                                    <div className="size-20 rounded-md overflow-hidden flex-shrink-0">
                                         <img
                                             src={item.avatar}
                                             alt={item.name}
@@ -130,12 +130,12 @@ export function TestimonialsSection() {
                                     </div>
                                 </div>
 
-                                <div className={`w-10 h-10 rounded-xl ${item.iconBg} flex items-center justify-center ${item.iconColor} flex-shrink-0 transition-transform hover:scale-110`}>
+                                <div className={`w-10 h-10 rounded-md ${item.iconBg} flex items-center justify-center ${item.iconColor} flex-shrink-0 transition-transform hover:scale-110`}>
                                     {item.icon}
                                 </div>
                             </div>
 
-                            <div className="h-px w-full bg-gray-300 rounded-3xl" />
+                            <div className="h-px w-full bg-gray-300 rounded-md" />
 
                             <p className="text-gray-700 pt-2 leading-relaxed">
                                 <HighlightedText

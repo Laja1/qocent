@@ -111,14 +111,14 @@ const DesktopNavigation: React.FC = () => {
       className="hidden md:flex items-center justify-center pt-5 fixed top-0 left-0 right-0 z-50"
       aria-label="Main Navigation"
     >
-      <div className="flex items-center justify-between bg-black/10 backdrop-blur-lg border border-gray-200 rounded-3xl px-6 pr-2 py-1 w-full h-full max-w-4xl mx-4 shadow-xl">
+      <div className="flex items-center justify-between bg-black/10 backdrop-blur-lg border border-gray-200 rounded-md px-6 pr-2 py-1 w-full h-full max-w-4xl mx-4 shadow-xl">
         <div
           onClick={() => { navigate("/"); setActive(null); }}
           className="flex items-center justify-between gap-4 h-full"
           aria-label="Qocent Home"
         >
           <Logo />
-          <div className="w-[2px] h-10 rounded-3xl bg-gray-500" />
+          <div className="w-[2px] h-10 rounded-md bg-gray-500" />
         </div>
 
         <div className="flex items-center justify-center gap-8 relative" role="list">
@@ -143,7 +143,7 @@ const DesktopNavigation: React.FC = () => {
 
         <button
           onClick={() => navigate(RouteConstant.auth.signin.path)}
-          className="hover:text-black cursor-pointer rounded-3xl h-10 px-6 text-white bg-black grid place-content-center hover:bg-gray-100 text-xs"
+          className="hover:text-black cursor-pointer rounded-md h-10 px-6 text-white bg-black grid place-content-center hover:bg-gray-100 text-xs"
           aria-label="Sign in to Qocent"
         >
           Get Started
@@ -236,14 +236,14 @@ const MobileNavbar: React.FC<MobileNavbarProps> = ({
   isMenuOpen,
 }) => (
   <nav className="md:hidden fixed top-0 left-0 right-0 z-50 p-2">
-    <div className="flex items-center justify-between bg-black/20 backdrop-blur-lg border border-gray-700/30 rounded-lg px-4 py-3">
+    <div className="flex items-center justify-between bg-black/20 backdrop-blur-lg border border-gray-700/30 rounded-md px-4 py-3">
       <Link to="/" className="cursor-pointer">
         <Logo />
       </Link>
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={onMenuToggle}
-        className="p-2 text-white hover:text-gray-300 transition-colors rounded-lg hover:bg-white/10"
+        className="p-2 text-white hover:text-gray-300 transition-colors rounded-md hover:bg-white/10"
         aria-label={isMenuOpen ? "Close menu" : "Open menu"}
       >
         <motion.div

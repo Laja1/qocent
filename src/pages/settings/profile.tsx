@@ -22,7 +22,7 @@ type InfoRowProps = {
 
 const InfoRow = ({ icon: Icon, label, value, mono }: InfoRowProps) => (
   <div className="flex items-start gap-3 py-3 border-b border-gray-100 last:border-0">
-    <div className="size-9 rounded-lg bg-gray-50 flex items-center justify-center flex-shrink-0">
+    <div className="size-9 rounded-md bg-gray-50 flex items-center justify-center flex-shrink-0">
       <Icon className="size-4 text-gray-500" />
     </div>
     <div className="flex-1 min-w-0">
@@ -67,7 +67,7 @@ export const Profile = () => {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-xl border border-gray-200 bg-gray-50/50 p-4">
+      <div className="rounded-md border border-gray-200 bg-gray-50/50 p-4">
         <p className="text-sm text-gray-600 leading-relaxed">
           This is your Qocent account profile. Account details are managed
           through your registration. Contact support if you need to update your
@@ -80,7 +80,7 @@ export const Profile = () => {
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">
             Personal Information
           </p>
-          <div className="rounded-xl border border-gray-200 bg-white px-4">
+          <div className="rounded-md border border-gray-200 bg-white px-4">
             <InfoRow icon={User} label="Full name" value={fullName} />
             <InfoRow icon={Mail} label="Email address" value={auth.userEmail ?? ""} />
             <InfoRow
@@ -96,7 +96,7 @@ export const Profile = () => {
           <p className="text-xs font-semibold uppercase tracking-wider text-gray-400 mb-1">
             Workspace & Account
           </p>
-          <div className="rounded-xl border border-gray-200 bg-white px-4">
+          <div className="rounded-md border border-gray-200 bg-white px-4">
             <InfoRow icon={Cloud} label="Active workspace" value={providerLabel} />
             <InfoRow
               icon={Building2}

@@ -158,7 +158,7 @@ const Docs = () => {
               ].map((value) => (
                 <div
                   key={value}
-                  className="border border-gray-200 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50"
+                  className="border border-gray-200 rounded-md px-4 py-3 text-sm font-medium text-gray-700 bg-gray-50"
                 >
                   {value}
                 </div>
@@ -229,7 +229,7 @@ const Docs = () => {
             ].map(({ term, definition }) => (
               <div
                 key={term}
-                className="border border-gray-200 rounded-lg px-5 py-4 bg-white space-y-1"
+                className="border border-gray-200 rounded-md px-5 py-4 bg-white space-y-1"
               >
                 <p className="text-sm font-semibold text-gray-900">{term}</p>
                 <p className="text-sm text-gray-600 leading-relaxed">{definition}</p>
@@ -249,7 +249,7 @@ const Docs = () => {
             ].map(({ term, definition }) => (
               <div
                 key={term}
-                className="border border-gray-200 rounded-lg px-5 py-4 bg-white space-y-1"
+                className="border border-gray-200 rounded-md px-5 py-4 bg-white space-y-1"
               >
                 <p className="text-sm font-semibold text-gray-900">{term}</p>
                 <p className="text-sm text-gray-600 leading-relaxed">{definition}</p>
@@ -264,7 +264,7 @@ const Docs = () => {
             </p>
 
             {/* Site Expiry Date */}
-            <div className="border border-gray-200 rounded-lg px-5 py-4 bg-white space-y-1">
+            <div className="border border-gray-200 rounded-md px-5 py-4 bg-white space-y-1">
               <p className="text-sm font-semibold text-gray-900">Site Expiry Date</p>
               <p className="text-sm text-gray-600 leading-relaxed">
                 A user-defined date that marks the end of a Server Site's active lifecycle. Once
@@ -273,7 +273,7 @@ const Docs = () => {
             </div>
 
             {/* Site EOL Action — with nested sub-options */}
-            <div className="border border-gray-200 rounded-lg px-5 py-4 bg-white space-y-3">
+            <div className="border border-gray-200 rounded-md px-5 py-4 bg-white space-y-3">
               <p className="text-sm font-semibold text-gray-900">Site EOL Action</p>
               <p className="text-sm text-gray-600 leading-relaxed">
                 Defines what happens to your Server Site after it expires. Options:
@@ -331,7 +331,7 @@ const Docs = () => {
             ].map(({ term, definition }) => (
               <div
                 key={term}
-                className="border border-gray-200 rounded-lg px-5 py-4 bg-white space-y-1"
+                className="border border-gray-200 rounded-md px-5 py-4 bg-white space-y-1"
               >
                 <p className="text-sm font-semibold text-gray-900">{term}</p>
                 <p className="text-sm text-gray-600 leading-relaxed">{definition}</p>
@@ -360,8 +360,8 @@ const Docs = () => {
                   From the Qocent website, click the Login button on the homepage. On the login page, click Sign Up to access the registration form. A Continue with Google option is also available.
                 </p>
                 <div className="flex flex-col gap-3 mt-3">
-                  <img src={img("quickstart-step1-login-button.png")} alt="Login button on the Qocent homepage" className="rounded-lg border border-gray-200 w-full max-w-xl" />
-                  <img src={img("quickstart-step1-signup-form.png")} alt="Sign Up link on the login page" className="rounded-lg border border-gray-200 w-full max-w-xl" />
+                  <img src={img("quickstart-step1-login-button.png")} alt="Login button on the Qocent homepage" className="rounded-md border border-gray-200 w-full max-w-xl" />
+                  <img src={img("quickstart-step1-signup-form.png")} alt="Sign Up link on the login page" className="rounded-md border border-gray-200 w-full max-w-xl" />
                 </div>
               </div>
             </li>
@@ -377,7 +377,7 @@ const Docs = () => {
                 <p className="text-sm text-gray-600 leading-relaxed">
                   Fill in your personal registration details in the form provided. Once all required fields are complete, click the Continue button to proceed.
                 </p>
-                <img src={img("quickstart-step2-registration-form.png")} alt="Registration form with personal details" className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+                <img src={img("quickstart-step2-registration-form.png")} alt="Registration form with personal details" className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
               </div>
             </li>
 
@@ -392,7 +392,7 @@ const Docs = () => {
                 <p className="text-sm text-gray-600 leading-relaxed">
                   Double-check that all your details are correct, then click the Create Account button to continue.
                 </p>
-                <img src={img("quickstart-step3-review-account.png")} alt="Review and submit registration details" className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+                <img src={img("quickstart-step3-review-account.png")} alt="Review and submit registration details" className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
               </div>
             </li>
 
@@ -407,7 +407,7 @@ const Docs = () => {
                 <p className="text-sm text-gray-600 leading-relaxed">
                   You will be directed to the OTP verification screen. Check your email for the verification code, enter it in the field provided, and click Verify OTP to complete verification.
                 </p>
-                <img src={img("quickstart-step4-otp-verification.png")} alt="OTP verification screen" className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+                <img src={img("quickstart-step4-otp-verification.png")} alt="OTP verification screen" className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
               </div>
             </li>
 
@@ -422,8 +422,8 @@ const Docs = () => {
                   Once your email is verified, you will be redirected to the login page. Enter your email address and password to access your Qocent dashboard. You will now have full access to all platform features.
                 </p>
                 <div className="flex flex-col gap-3 mt-3">
-                  <img src={img("quickstart-step5-login-screen.png")} alt="Sign in screen after email verification" className="rounded-lg border border-gray-200 w-full max-w-xl" />
-                  <img src={img("quickstart-step5-dashboard.png")} alt="Qocent dashboard after signing in" className="rounded-lg border border-gray-200 w-full max-w-xl" />
+                  <img src={img("quickstart-step5-login-screen.png")} alt="Sign in screen after email verification" className="rounded-md border border-gray-200 w-full max-w-xl" />
+                  <img src={img("quickstart-step5-dashboard.png")} alt="Qocent dashboard after signing in" className="rounded-md border border-gray-200 w-full max-w-xl" />
                 </div>
               </div>
             </li>
@@ -485,7 +485,7 @@ const Docs = () => {
                 <div className={index === arr.length - 1 ? "pb-0" : "pb-8"}>
                   <p className="text-sm font-semibold text-gray-900 mt-1.5 mb-1">{step.title}</p>
                   <p className="text-sm text-gray-600 leading-relaxed">{step.description}</p>
-                  <img src={step.image} alt={step.alt} className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+                  <img src={step.image} alt={step.alt} className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
                 </div>
               </li>
             ))}
@@ -546,7 +546,7 @@ const Docs = () => {
                 <div className={index === arr.length - 1 ? "pb-0" : "pb-8"}>
                   <p className="text-sm font-semibold text-gray-900 mt-1.5 mb-1">{step.title}</p>
                   <p className="text-sm text-gray-600 leading-relaxed">{step.description}</p>
-                  <img src={step.image} alt={step.alt} className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+                  <img src={step.image} alt={step.alt} className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
                 </div>
               </li>
             ))}
@@ -607,7 +607,7 @@ const Docs = () => {
                 <div className={index === arr.length - 1 ? "pb-0" : "pb-8"}>
                   <p className="text-sm font-semibold text-gray-900 mt-1.5 mb-1">{step.title}</p>
                   <p className="text-sm text-gray-600 leading-relaxed">{step.description}</p>
-                  <img src={step.image} alt={step.alt} className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+                  <img src={step.image} alt={step.alt} className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
                 </div>
               </li>
             ))}
@@ -641,8 +641,8 @@ const Docs = () => {
                   the menu.
                 </p>
                 <div className="flex flex-col gap-3 mt-3">
-                  <img src={img("invite-step1-three-dots-menu.png")} alt="Three dots menu next to a Server Site" className="rounded-lg border border-gray-200 w-full max-w-xl" />
-                  <img src={img("invite-step1-invite-option.png")} alt="Invite to Site option in the dropdown menu" className="rounded-lg border border-gray-200 w-full max-w-xl" />
+                  <img src={img("invite-step1-three-dots-menu.png")} alt="Three dots menu next to a Server Site" className="rounded-md border border-gray-200 w-full max-w-xl" />
+                  <img src={img("invite-step1-invite-option.png")} alt="Invite to Site option in the dropdown menu" className="rounded-md border border-gray-200 w-full max-w-xl" />
                 </div>
               </div>
             </li>
@@ -667,8 +667,8 @@ const Docs = () => {
                   created and sent successfully."
                 </p>
                 <div className="flex flex-col gap-3 mt-3">
-                  <img src={img("invite-step2-invite-popup.png")} alt="Invite to Workspace popup with email and role fields" className="rounded-lg border border-gray-200 w-full max-w-xl" />
-                  <img src={img("invite-step2-success-message.png")} alt="Green success message after invitation is sent" className="rounded-lg border border-gray-200 w-full max-w-xl" />
+                  <img src={img("invite-step2-invite-popup.png")} alt="Invite to Workspace popup with email and role fields" className="rounded-md border border-gray-200 w-full max-w-xl" />
+                  <img src={img("invite-step2-success-message.png")} alt="Green success message after invitation is sent" className="rounded-md border border-gray-200 w-full max-w-xl" />
                 </div>
               </div>
             </li>
@@ -693,8 +693,8 @@ const Docs = () => {
                   on that page to confirm.
                 </p>
                 <div className="flex flex-col gap-3 mt-3">
-                  <img src={img("invite-step3-email.png")} alt="Invitation email received by the invitee" className="rounded-lg border border-gray-200 w-full max-w-xl" />
-                  <img src={img("invite-step3-accept-page.png")} alt="Qocent accept invitation confirmation page" className="rounded-lg border border-gray-200 w-full max-w-xl" />
+                  <img src={img("invite-step3-email.png")} alt="Invitation email received by the invitee" className="rounded-md border border-gray-200 w-full max-w-xl" />
+                  <img src={img("invite-step3-accept-page.png")} alt="Qocent accept invitation confirmation page" className="rounded-md border border-gray-200 w-full max-w-xl" />
                 </div>
               </div>
             </li>
@@ -714,7 +714,7 @@ const Docs = () => {
                   immediately appear on their dashboard, and they can begin monitoring it based on
                   the role assigned.
                 </p>
-                <img src={img("invite-step4-success-dashboard.png")} alt="Dashboard showing the newly shared Server Site after accepting" className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+                <img src={img("invite-step4-success-dashboard.png")} alt="Dashboard showing the newly shared Server Site after accepting" className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
               </div>
             </li>
           </ol>

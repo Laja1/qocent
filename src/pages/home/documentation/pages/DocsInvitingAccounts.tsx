@@ -24,8 +24,8 @@ const DocsInvitingAccounts = () => (
             <span className="font-medium text-gray-800">Invite to Site</span> from the menu.
           </p>
           <div className="flex flex-col gap-3 mt-3">
-            <img src={img("invite-step1-three-dots-menu.png")} alt="Three dots menu next to a Server Site" className="rounded-lg border border-gray-200 w-full max-w-xl" />
-            <img src={img("invite-step1-invite-option.png")} alt="Invite to Site option in the dropdown menu" className="rounded-lg border border-gray-200 w-full max-w-xl" />
+            <img src={img("invite-step1-three-dots-menu.png")} alt="Three dots menu next to a Server Site" className="rounded-md border border-gray-200 w-full max-w-xl" />
+            <img src={img("invite-step1-invite-option.png")} alt="Invite to Site option in the dropdown menu" className="rounded-md border border-gray-200 w-full max-w-xl" />
           </div>
         </div>
       </li>
@@ -47,8 +47,8 @@ const DocsInvitingAccounts = () => (
             successfully."
           </p>
           <div className="flex flex-col gap-3 mt-3">
-            <img src={img("invite-step2-invite-popup.png")} alt="Invite to Workspace popup with email and role fields" className="rounded-lg border border-gray-200 w-full max-w-xl" />
-            <img src={img("invite-step2-success-message.png")} alt="Green success message after invitation is sent" className="rounded-lg border border-gray-200 w-full max-w-xl" />
+            <img src={img("invite-step2-invite-popup.png")} alt="Invite to Workspace popup with email and role fields" className="rounded-md border border-gray-200 w-full max-w-xl" />
+            <img src={img("invite-step2-success-message.png")} alt="Green success message after invitation is sent" className="rounded-md border border-gray-200 w-full max-w-xl" />
           </div>
         </div>
       </li>
@@ -70,8 +70,8 @@ const DocsInvitingAccounts = () => (
             page to confirm.
           </p>
           <div className="flex flex-col gap-3 mt-3">
-            <img src={img("invite-step3-email.png")} alt="Invitation email received by the invitee" className="rounded-lg border border-gray-200 w-full max-w-xl" />
-            <img src={img("invite-step3-accept-page.png")} alt="Qocent accept invitation confirmation page" className="rounded-lg border border-gray-200 w-full max-w-xl" />
+            <img src={img("invite-step3-email.png")} alt="Invitation email received by the invitee" className="rounded-md border border-gray-200 w-full max-w-xl" />
+            <img src={img("invite-step3-accept-page.png")} alt="Qocent accept invitation confirmation page" className="rounded-md border border-gray-200 w-full max-w-xl" />
           </div>
         </div>
       </li>
@@ -87,7 +87,7 @@ const DocsInvitingAccounts = () => (
             to the account." The shared Server Site will immediately appear on their dashboard, and
             they can begin monitoring it based on the role assigned.
           </p>
-          <img src={img("invite-step4-success-dashboard.png")} alt="Dashboard showing the newly shared Server Site after accepting" className="mt-3 rounded-lg border border-gray-200 w-full max-w-xl" />
+          <img src={img("invite-step4-success-dashboard.png")} alt="Dashboard showing the newly shared Server Site after accepting" className="mt-3 rounded-md border border-gray-200 w-full max-w-xl" />
         </div>
       </li>
     </ol>

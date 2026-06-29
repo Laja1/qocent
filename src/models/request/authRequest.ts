@@ -1,24 +1,83 @@
-
+export type SignupAccountType = "INDIVIDUAL" | "BUSINESS";
 
 export type signupRequest = {
-  user_first_name:string,
-  user_last_name:string,
-  user_email:string,
-  user_phone_number:string
-  user_country:string
-  user_password:string,
+  user_first_name: string;
+  user_last_name: string;
+  user_email: string;
+  user_phone_number: string;
+  user_country: string;
+  user_password: string;
 };
-    
-export const signUpInit = {
+
+export type businessInitRequest = {
+  business_name: string;
+  business_email: string;
+  business_phone: string;
+  business_country: string;
+};
+
+export type businessCompleteRequest = {
+  business_display_name: string;
+};
+
+export type SignupFormValues = {
+  accountType: SignupAccountType | "";
+  user_first_name: string;
+  user_last_name: string;
+  user_email: string;
+  user_phone_number: string;
+  user_phone_number_full: string;
+  phone_code: string;
+  user_country: string;
+  user_password: string;
+  business_name: string;
+  business_email: string;
+  business_phone: string;
+  business_phone_full: string;
+  business_country: string;
+};
+
+export const signupFormInit: SignupFormValues = {
+  accountType: "",
   user_first_name: "",
   user_last_name: "",
   user_email: "",
-  user_phone_number:"",
-  user_country:'',
+  user_phone_number: "",
+  user_phone_number_full: "",
+  phone_code: "+1",
+  user_country: "",
   user_password: "",
+  business_name: "",
+  business_email: "",
+  business_phone: "",
+  business_phone_full: "",
+  business_country: "",
 };
 
+export function buildIndividualSignupPayload(
+  values: SignupFormValues
+): signupRequest {
+  return {
+    user_first_name: values.user_first_name,
+    user_last_name: values.user_last_name,
+    user_email: values.user_email,
+    user_country: values.user_country,
+    user_password: values.user_password,
+    user_phone_number:
+      values.user_phone_number_full || values.user_phone_number,
+  };
+}
 
+export function buildBusinessInitPayload(
+  values: SignupFormValues
+): businessInitRequest {
+  return {
+    business_name: values.business_name,
+    business_email: values.business_email,
+    business_country: values.business_country,
+    business_phone: values.business_phone_full || values.business_phone,
+  };
+}
 
 export type signInRequest = {
   user_email?: string;
@@ -28,39 +87,36 @@ export type signInRequest = {
 export const signInInit = {
   user_email: "",
   user_password: "",
-}
+};
 
 export const forgotPasswordInit = {
-    email: "",
-}
-
-
-  
+  email: "",
+};
 
 export type completeEnrollmentRequest = {
-  code: string,
-   email: string
- }
- 
- export const completeEnrollmentInit = {
-    otp: "",
-   email: ""
- }
- 
- export type resendOtpRequest = {
- email: string
-}
+  code: string;
+  email: string;
+};
+
+export const completeEnrollmentInit = {
+  otp: "",
+  email: "",
+};
+
+export type resendOtpRequest = {
+  email: string;
+};
 
 export type forgotPasswordpRequest = {
-  email: string
- }
+  email: string;
+};
 
- export type completePasswordResetRequest = {
-  email:string
-  new_password: string,
- confirm_password?: string,
- token: string,
-}
+export type completePasswordResetRequest = {
+  email: string;
+  new_password: string;
+  confirm_password?: string;
+  token: string;
+};
 
 export type UpdatePasswordRequest = {
   user_id: string;
@@ -71,30 +127,16 @@ export type UpdatePasswordRequest = {
 
 export const completePasswordResetInit = {
   token: "",
-  email:"",
- new_password: "",
-}
-
-
-
-export type invitationRequest = {
-  siteCode: string;
-  inviteeEmail: string;
-  inviterUserCode: string;
-  privileges: string[];
+  email: "",
+  new_password: "",
 };
-
-export type acceptInvitationRequest = {
-  siteCode: string;
-  userEmail: string;
-  userFirstName: string;
-  userLastName: string;
-  userRoleId: number;
-}
-
 
 export type updateProfessionalServiceRequest = {
   serviceBookingDate: string;
   serviceType: string;
-}
+};
 
+export type OtpFlowState = {
+  email: string;
+  accountType: SignupAccountType;
+};

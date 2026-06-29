@@ -16,17 +16,17 @@ export default function OurValue() {
   return (
     <CustomSection className="md:py-20 py-12 grid lg:grid-cols-2 gap-28 2xl:gap-42 items-center">
       {/* Left side - Product visual */}
-      <div className='relative rounded-xl'>
+      <div className='relative rounded-md'>
         <motion.div
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="relative bg-white rounded-xl md:rounded-3xl border-red-500 border shadow-2xl w-full overflow-hidden md:mb-6"
+          className="relative bg-white rounded-md md:rounded-md border-red-500 border shadow-2xl w-full overflow-hidden md:mb-6"
         >
           <VideoPlayer src="/videos/value.mp4" />
         </motion.div>
-        <div className="max-w-[24rem] bg-white overflow-hidden w-36 h-30 md:w-58 md:h-48 absolute grid place-content-start -right-2 -bottom-12 md::-right-12 rounded-3xl md:-bottom-6 z-20 shadow-md">
+        <div className="max-w-[24rem] bg-white overflow-hidden w-36 h-30 md:w-58 md:h-48 absolute grid place-content-start -right-2 -bottom-12 md::-right-12 rounded-md md:-bottom-6 z-20 shadow-md">
           <VideoPlayer className="scale-140 h-60 w-64 scale-x-160" src="/videos/save-time.mp4" />
         </div>
       </div>

@@ -1,5 +1,7 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import type {
+  businessCompleteRequest,
+  businessInitRequest,
   completeEnrollmentRequest,
   completePasswordResetRequest,
   forgotPasswordpRequest,
@@ -22,54 +24,65 @@ import { baseQueryWithAuthGuard } from "./httpClient/baseQuery";
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: baseQueryWithAuthGuard,
-  tagTypes:[ApiEnums.Auth,ApiEnums.Member],
+  tagTypes: [ApiEnums.Auth, ApiEnums.Member],
   endpoints: (build) => ({
     signUp: build.mutation<signUpResponse, signupRequest>({
       query: (body) => ({
         url: "/signup",
         method: "POST",
-        body: body,
+        body,
+      }),
+    }),
+    initBusiness: build.mutation<baseResponse, businessInitRequest>({
+      query: (body) => ({
+        url: "/business/init",
+        method: "POST",
+        body,
+      }),
+    }),
+    completeBusiness: build.mutation<baseResponse, businessCompleteRequest>({
+      query: (body) => ({
+        url: "/business/complete",
+        method: "POST",
+        body,
       }),
     }),
     signIn: build.mutation<signInResponse, signInRequest>({
       query: (body) => ({
         url: "/login",
         method: "POST",
-        body: body,
+        body,
       }),
     }),
-    completeEnrollment: build.mutation<
-    baseResponse,
-      completeEnrollmentRequest
-    >({
+    completeEnrollment: build.mutation<baseResponse, completeEnrollmentRequest>({
       query: (body) => ({
         url: "/verify-otp",
         method: "POST",
-        body: body,
+        body,
       }),
     }),
     sendOtp: build.mutation<genericResponse, resendOtpRequest>({
       query: (body) => ({
         url: "/send-verification",
         method: "POST",
-        body: body,
+        body,
       }),
     }),
-    forgotPassword: build.mutation<
-      baseResponse,
-      forgotPasswordpRequest
-    >({
+    forgotPassword: build.mutation<baseResponse, forgotPasswordpRequest>({
       query: (body) => ({
         url: "/forgot-password",
         method: "POST",
-        body: body,
+        body,
       }),
     }),
-    updateProfessionalService:build.mutation<genericResponse,updateProfessionalServiceRequest[]>({
+    updateProfessionalService: build.mutation<
+      genericResponse,
+      updateProfessionalServiceRequest[]
+    >({
       query: (body) => ({
         url: "/authentication/business/professional-services/update",
         method: "POST",
-        body: body,
+        body,
       }),
       invalidatesTags: [{ type: ApiEnums.Member, id: "LIST" }],
     }),
@@ -87,18 +100,20 @@ export const authApi = createApi({
       query: (body) => ({
         url: "/reset-password",
         method: "POST",
-        body: body,
+        body,
       }),
-    }), 
-    getUserAccounts: build.query<getAccountResponse, {userCode:string}>({
-      query: ({userCode}) => `/authentication/user-accounts/${userCode}`,
-      providesTags:[{type:ApiEnums.Member,id:'LIST'}]
-  }),
+    }),
+    getUserAccounts: build.query<getAccountResponse, { userCode: string }>({
+      query: ({ userCode }) => `/authentication/user-accounts/${userCode}`,
+      providesTags: [{ type: ApiEnums.Member, id: "LIST" }],
+    }),
   }),
 });
 
 export const {
   useSignUpMutation,
+  useInitBusinessMutation,
+  useCompleteBusinessMutation,
   useCompleteEnrollmentMutation,
   useSendOtpMutation,
   useSignInMutation,

@@ -405,7 +405,7 @@ export const ResourceSelectField = ({
             bg-white hover:bg-green-50 active:bg-green-100
             text-slate-700 hover:text-green-700
             border border-slate-200 hover:border-green-300
-            rounded-xs shadow-xs
+            rounded-md shadow-xs
             transition-all duration-200 ease-out
             min-w-[70px] h-7
             disabled:opacity-40 disabled:cursor-not-allowed
