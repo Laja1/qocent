@@ -21,7 +21,6 @@ export const SubnetLevel = ({ serverRoom, id }: SubnetLevelProps) => {
   const { openModal, closeModal } = useModal();
   const RESOURCE_MAP = useResourceMap();
   const handleDelete = async ({
-    resourceSiteCode,
     resourceId,
   }: {
     resourceSiteCode: string;
