@@ -78,7 +78,7 @@ export const SiteDeployModal: React.FC<DeployModalProps> = ({
                     <div className="flex items-center space-x-2 mb-2">
                       <div className="animate-spin w-4 h-4 border-2 border-gray-800 border-t-transparent rounded-full"></div>
                       <span className="font-medium text-xs">
-                        Deploying your application...
+                        Creating site...
                       </span>
                     </div>
                     <Progress value={progress} className="w-full" />
@@ -97,7 +97,7 @@ export const SiteDeployModal: React.FC<DeployModalProps> = ({
                     size="small"
                   />
                   <Button
-                    label={isLoading ? "Deploying..." : "Deploy Now"}
+                    label={isLoading ? "Creating..." : "Create Now"}
                     isLoading={isLoading}
                     disabled={isLoading}
                     onClick={onDeploy}
