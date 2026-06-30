@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Header } from "@/components/shared";
+import { Button, Header, PageContent } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -9,7 +9,6 @@ import type { resourceType } from "@/models/response/resourceResponse";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { useGetAllResourcesQuery } from "@/service/resourceApi";
-import { Card } from "@/components/ui/card";
 import { RouteConstant } from "@/router/routes";
 import { resourcesColumns } from "@/utilities/constants/colums";
 import NiceModal from "@ebay/nice-modal-react";
@@ -81,13 +80,12 @@ export const Resources = () => {
         />
       </Header>
 
-      <Card className="mx-5 px-5 mt-5 rounded-md">
+      <PageContent>
         <DataTable
           data={resourceData?.data || []}
           columns={resourcesColumns}
           searchPlaceholder="Search server resources..."
           pageSize={5}
-          title="RESOURCES"
           actions={actions}
           highlightedRowId={rowId}
           isLoading={isLoading}
@@ -95,7 +93,7 @@ export const Resources = () => {
           getRowId={(row) => row.resourceId}
           initialSorting={{ id: "resourceId", desc: false }}
         />
-      </Card>
+      </PageContent>
 
       <ResourceModal
         isOpen={isOpen}

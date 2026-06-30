@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { ArrowRight, Info } from "lucide-react";
 import { IconMichelinStar } from "@tabler/icons-react";
-import { Button, Header, RenderField } from "@/components/shared";
+import { Button, Header, RenderField, FormPageCard, PageContent } from "@/components/shared";
 import { useModal } from "@/components/shared/modal";
 import { showCustomToast } from "@/components/shared/toast";
 import { SiteDeployModal } from "@/components/not-shared/site-modal";
@@ -191,114 +191,62 @@ export const CreateNewRoom = () => {
           description="A server can have one or more server rooms. A server room is provided by a provider."
         />
 
-        <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100  shadow-t-md rounded-t-md">
-          <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 rounded-t-md px-3 sm:px-5 py-5">
-            <div>
-              <p className="text-base sm:text-lg text-white">
-                Create Server Room
-              </p>
-              <p className="text-xs text-gray-400 leading-tight">
-                A server can have one or more server rooms. A server room is
-                provided by a provider.
-              </p>
-            </div>
-            <IconMichelinStar color="white" size={40} />
-          </div>
-
-          <div className="flex mt-5 flex-col">
-            {/* <div className="flex items-center w-full py-[1px] border-b">
-              <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-                <span className="text-red-500 ml-1">*</span>
-                Server Site
-              </p>
-              <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-                <RenderField
-                  name="serverSite"
-                  formik={formik}
-                  placeholder={`Select your Server Site`}
-                  parameterLookup={"serverSite"}
-                  type={"ListBox"}
-                  autoComplete="off"
-                />
-                <button
-                  // onClick={() => descriptionModal(item)}
-                  className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                  title="View more info"
-                >
-                  <Info size={16} />
-                </button>
-              </div>
-            </div>
-            <div className="flex items-center w-full py-[1px] border-b">
-              <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-                <span className="text-red-500 ml-1">*</span>
-                Server House
-              </p>
-              <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-                <RenderField
-                  name="serverHouse"
-                  formik={formik}
-                  placeholder={`Select your Server House`}
-                  parameterLookup={"serverHouse"}
-                  type={"ListBox"}
-                  autoComplete="off"
-                />
-                <button
-                  // onClick={() => descriptionModal(item)}
-                  className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                  title="View more info"
-                >
-                  <Info size={16} />
-                </button>
-              </div>
-            </div> */}
-            {serverRoomTemplate.data
-              .slice()
-              .sort(
-                (a, b) => Number(a.parameterSerial) - Number(b.parameterSerial)
-              )
-              .map((item) => (
-                <div
-                  className="flex items-center w-full py-[1px] border-b"
-                  key={item.parameterId}
-                >
-                  <p className="text-xs lg:w-1/6 w-1/2 pr-3 text-right">
-                    {item.parameterMandatory && (
-                      <span className="text-red-500 ml-1">*</span>
-                    )}
-                    {item.parameterLabel}
-                  </p>
-                  <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-                    <RenderField
-                      name={item.parameterField}
-                      formik={formik}
-                      parameterLookup={item.parameterLookup}
-                      options={item.parameterOptions}
-                      placeholder={`Enter your ${item.parameterLabel}`}
-                      type={item.parameterInputType || "text"}
-                      autoComplete="off"
-                    />
-                    <button
-                      onClick={() => descriptionModal(item)}
-                      className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                      title="View more info"
-                    >
-                      <Info size={16} />
-                    </button>
+        <PageContent>
+          <FormPageCard
+            className="max-w-4xl"
+            title="Create Server Room"
+            subtitle="A server can have one or more server rooms. A server room is provided by a provider."
+            icon={<IconMichelinStar className="size-8" />}
+            footer={
+              <Button
+                label="Proceed"
+                disabled={!formik.isValid || isCreatingLoading}
+                onClick={() => setIsDeployModalOpen(true)}
+                surfixIcon={<ArrowRight className="size-3" />}
+              />
+            }
+          >
+            <div className="flex flex-col divide-y divide-border">
+              {serverRoomTemplate.data
+                .slice()
+                .sort(
+                  (a, b) => Number(a.parameterSerial) - Number(b.parameterSerial)
+                )
+                .map((item) => (
+                  <div
+                    className="flex w-full items-center gap-3 py-3 first:pt-0 last:pb-0"
+                    key={item.parameterId}
+                  >
+                    <p className="w-1/3 shrink-0 text-right text-xs text-muted-foreground">
+                      {item.parameterMandatory && (
+                        <span className="mr-1 text-primary">*</span>
+                      )}
+                      {item.parameterLabel}
+                    </p>
+                    <div className="flex min-w-0 flex-1 items-center gap-1">
+                      <RenderField
+                        name={item.parameterField}
+                        formik={formik}
+                        parameterLookup={item.parameterLookup}
+                        options={item.parameterOptions}
+                        placeholder={`Enter your ${item.parameterLabel}`}
+                        type={item.parameterInputType || "text"}
+                        autoComplete="off"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => descriptionModal(item)}
+                        className="flex cursor-pointer items-center justify-center rounded-full p-1.5 text-muted-foreground hover:bg-muted"
+                        title="View more info"
+                      >
+                        <Info size={16} />
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
-          </div>
-
-          <div className="flex m-3 sm:m-5 justify-end">
-            <Button
-              label="Proceed"
-              disabled={!formik.isValid || isCreatingLoading}
-              onClick={() => setIsDeployModalOpen(true)}
-              surfixIcon={<ArrowRight className="size-3" />}
-            />
-          </div>
-        </div>
+                ))}
+            </div>
+          </FormPageCard>
+        </PageContent>
       </div>
 
       <SiteDeployModal

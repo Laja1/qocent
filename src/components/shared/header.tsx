@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { SidebarTrigger, useSidebar } from "../ui/sidebar";
+import { SidebarTrigger } from "../ui/sidebar";
 import { ArrowLeftCircle } from "lucide-react";
 
 type HeaderProps = {
@@ -16,38 +16,38 @@ export const Header = ({
   navigateBack,
 }: HeaderProps) => {
   const navigate = useNavigate();
-  const { state } = useSidebar();
 
   return (
-    <header className="sticky top-4 z-20 px-5 pt-1 pb-4">
-      <div
-        className={`relative z-10 flex items-center justify-between w-full  px-4 py-3  transition-all duration-300 ease-in-out ${
-          state === "expanded" ? "md:ml-0" : ""
-        }`}
-      >
-        <div className="flex items-start gap-3 min-w-0 flex-1">
+    <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center border-b border-border bg-[#fafafa] px-5">
+      <div className="flex w-full items-center justify-between gap-4">
+        <div className="flex min-w-0 flex-1 items-center gap-3">
           {navigateBack ? (
             <button
+              type="button"
               onClick={() => navigate(-1)}
-              className="flex items-center space-x-2 text-muted-foreground hover:text-foreground flex-shrink-0"
+              className="flex shrink-0 items-center text-muted-foreground transition-colors hover:text-foreground"
             >
               <ArrowLeftCircle className="size-6" />
             </button>
           ) : (
-            <SidebarTrigger className="flex-shrink-0 text-muted-foreground hover:text-foreground" />
+            <SidebarTrigger className="shrink-0 text-muted-foreground hover:text-foreground" />
           )}
 
-          <div className="flex flex-col min-w-0 flex-1">
-            {title && <h1 className="text-base font-semibold truncate">{title}</h1>}
+          <div className="min-w-0">
+            {title && (
+              <h1 className="truncate text-sm font-semibold text-foreground">
+                {title}
+              </h1>
+            )}
             {description && (
-              <p className="text-xs text-muted-foreground leading-tight truncate">
+              <p className="truncate text-xs text-muted-foreground">
                 {description}
               </p>
             )}
           </div>
         </div>
 
-        <div className="flex-shrink-0 ml-4">{children}</div>
+        {children && <div className="shrink-0">{children}</div>}
       </div>
     </header>
   );

@@ -1,5 +1,9 @@
-import { Header } from "@/components/shared";
-import { ArrowRight, Check, Loader2,  } from "lucide-react";
+import { Header, PageContent } from "@/components/shared";
+import {
+  PageLoader,
+  SubscriptionPlansSkeleton,
+} from "@/components/shared/page-loader";
+import { ArrowRight, Check, Loader2 } from "lucide-react";
 import { useGetAllWithMySubscriptionsQuery } from "@/service/subscriptionApi";
 import {
   useCreatePersonalPaidSubscriptionMutation,
@@ -11,7 +15,40 @@ import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { buildServiceRedirectUrl } from "@/utilities/serviceAccess";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
-import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
+
+const upcomingPlans = [
+  {
+    name: "Site Reliability",
+    description:
+      "Proactive uptime monitoring, incident response automation, and reliability insights.",
+    features: [
+      "SLA/SLO tracking",
+      "Incident timeline and postmortems",
+      "Real-time service health dashboards",
+    ],
+  },
+  {
+    name: "Operations",
+    description:
+      "Streamline cloud operations with runbooks, automation, and centralized visibility.",
+    features: [
+      "Operational runbook workflows",
+      "Task automation and orchestration",
+      "Cross-team operational reporting",
+    ],
+  },
+  {
+    name: "Security",
+    description:
+      "Continuous cloud security posture management with threat detection and compliance checks.",
+    features: [
+      "Security risk insights",
+      "Compliance baseline checks",
+      "Threat and anomaly notifications",
+    ],
+  },
+];
 
 const SubscriptionCards = () => {
   const { data: plansData, isLoading } = useGetAllWithMySubscriptionsQuery();
@@ -21,23 +58,6 @@ const SubscriptionCards = () => {
     useCreatePersonalPaidSubscriptionMutation();
   const [triggerServiceAccess, { isLoading: isAccessLoading }] =
     useGetServiceAccessMutation();
-  const upcomingPlans = [
-    {
-      name: "Site Reliability",
-      description: "Proactive uptime monitoring, incident response automation, and reliability insights.",
-      features: ["SLA/SLO tracking", "Incident timeline and postmortems", "Real-time service health dashboards"],
-    },
-    {
-      name: "Operations",
-      description: "Streamline cloud operations with runbooks, automation, and centralized visibility.",
-      features: ["Operational runbook workflows", "Task automation and orchestration", "Cross-team operational reporting"],
-    },
-    {
-      name: "Security",
-      description: "Continuous cloud security posture management with threat detection and compliance checks.",
-      features: ["Security risk insights", "Compliance baseline checks", "Threat and anomaly notifications"],
-    },
-  ];
 
   const handleStartTrial = async (planId: string) => {
     try {
@@ -45,7 +65,7 @@ const SubscriptionCards = () => {
       showCustomToast("Trial started successfully", {
         toastOptions: { type: "success", autoClose: 5000 },
       });
-    } catch (error: any) {
+    } catch (error: unknown) {
       showCustomToast(ErrorHandler.extractMessage(error), {
         toastOptions: { type: "error", autoClose: 5000 },
       });
@@ -54,129 +74,124 @@ const SubscriptionCards = () => {
 
   const handleSubscribe = async (planId: string) => {
     try {
-      const result = await createPaidSubscription({ plan_id: planId, billing_cycle: "MONTHLY" }).unwrap();
+      const result = await createPaidSubscription({
+        plan_id: planId,
+        billing_cycle: "MONTHLY",
+      }).unwrap();
       NiceModal.show(ModalConstant.PaymentSheet, { paymentData: result });
-    } catch (error: any) {
-      showCustomToast(ErrorHandler.extractMessage(error) || "Failed to create subscription", { toastOptions: { type: "error", autoClose: 5000 } });
+    } catch (error: unknown) {
+      showCustomToast(
+        ErrorHandler.extractMessage(error) || "Failed to create subscription",
+        { toastOptions: { type: "error", autoClose: 5000 } }
+      );
     }
   };
 
   const handleAccessService = async (planName: string) => {
     try {
       const serviceName = planName.toLowerCase().replace(/\s+/g, "");
-      const res = await triggerServiceAccess({ service_name: serviceName }).unwrap();
+      const res = await triggerServiceAccess({
+        service_name: serviceName,
+      }).unwrap();
       window.location.href = buildServiceRedirectUrl(res.data.redirect_url);
-    } catch (error: any) {
-      showCustomToast(ErrorHandler.extractMessage(error) || "Failed to access service", {
-        toastOptions: { type: "error", autoClose: 5000 },
-      });
+    } catch (error: unknown) {
+      showCustomToast(
+        ErrorHandler.extractMessage(error) || "Failed to access service",
+        { toastOptions: { type: "error", autoClose: 5000 } }
+      );
     }
   };
 
-  if (isLoading) return <div className="flex justify-center items-center h-screen">Loading...</div>;
   return (
     <div className="min-h-screen">
-      <Header title="Subscription Packages" description="Choose the plan that fits your needs" />
+      <Header
+        title="Subscription Packages"
+        description="Choose the plan that fits your needs"
+      />
 
-      <div className="relative max-w-6xl mx-auto px-6 pt-6 pb-24">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {plansData?.data?.map((plan, idx) => {
-            const isActive = plan.subscription_plan_is_active;
+      <PageContent>
+        {isLoading ? (
+          <SubscriptionPlansSkeleton />
+        ) : !plansData?.data?.length ? (
+          <PageLoader label="No subscription plans available" />
+        ) : (
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+            {plansData.data.map((plan) => {
+              const isActive = plan.subscription_plan_is_active;
 
-            return (
-              <motion.div
-                key={plan.subscription_plan_id}
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: 0.15 + idx * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-                className="relative"
-              >
-                {/* Glow behind active card */}
-                {isActive && (
-                  <div className="absolute -inset-px rounded-md bg-gradient-to-b from-primary/20 via-primary/5 to-transparent blur-sm" />
-                )}
-
+              return (
                 <div
-                  className={`relative h-full rounded-md border p-7 flex flex-col shadow-sm transition-all duration-300 ${
+                  key={plan.subscription_plan_id}
+                  className={cn(
+                    "flex h-full flex-col rounded-lg border bg-card p-6",
                     isActive
-                      ? "bg-white border-primary/30 ring-1 ring-primary/20"
-                      : "bg-white border-gray-200 hover:border-primary/25 hover:shadow-md"
-                  }`}
+                      ? "border-primary/25 bg-primary/[0.03]"
+                      : "border-border"
+                  )}
                 >
-                  {/* Active badge */}
                   {isActive && (
-                    <div className="absolute -top-3 left-6">
-                      <span className="inline-block px-3 py-[3px] bg-primary text-primary-foreground text-[10px] font-bold uppercase tracking-[0.12em] rounded-full shadow-sm">
-                        Active Plan
-                      </span>
-                    </div>
+                    <span className="mb-4 inline-flex w-fit rounded-sm bg-primary/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-primary">
+                      Active plan
+                    </span>
                   )}
 
-                  {/* Plan name & description */}
-                  <div className="mb-6">
-                    <h3 className="font-brfirma text-[17px] font-bold text-gray-950 mb-1.5 tracking-tight">
+                  <div className="mb-5">
+                    <h3 className="text-base font-semibold text-foreground">
                       {plan.subscription_plan_name}
                     </h3>
-                    <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
+                    <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                       {plan.subscription_plan_description}
                     </p>
                   </div>
 
-                  {/* Price */}
-                  <div className="mb-6 pb-6 border-b border-gray-200">
+                  <div className="mb-5 border-b border-border pb-5">
                     <div className="flex items-end gap-1.5">
-                      <span className="font-strawford text-[2.5rem] font-bold text-gray-950 leading-none tracking-tight">
+                      <span className="text-4xl font-semibold leading-none text-foreground">
                         $104
-                        {/* {plan.subscription_plan_monthly_price} */}
                       </span>
-                      <div className="flex flex-col mb-1">
-                        <span className="text-gray-600 text-xs font-medium">
-                          USD
-                          {/* {plan.subscription_plan_currency} */}
-                        </span>
-                        <span className="text-gray-500 text-[10px]">per month</span>
+                      <div className="mb-1 text-xs text-muted-foreground">
+                        <div>USD</div>
+                        <div>per month</div>
                       </div>
                     </div>
                   </div>
 
-                  {/* Features */}
                   {plan.subscription_plan_features && (
-                    <ul className="space-y-3 mb-8 flex-1">
-                      {Object.entries(plan.subscription_plan_features).map(([key, value]) => (
-                        <li key={key} className="flex items-start gap-2.5">
-                          <span
-                            className={`mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
-                              isActive
-                                ? "bg-primary/10 text-primary"
-                                : "bg-gray-100 text-gray-500"
-                            }`}
-                          >
-                            <Check className="w-2.5 h-2.5" strokeWidth={3} />
-                          </span>
-                          <span className="text-gray-700 text-[13px] leading-relaxed">{value}</span>
-                        </li>
-                      ))}
+                    <ul className="mb-6 flex-1 space-y-2.5">
+                      {Object.entries(plan.subscription_plan_features).map(
+                        ([key, value]) => (
+                          <li key={key} className="flex items-start gap-2.5">
+                            <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                              <Check className="size-2.5" strokeWidth={3} />
+                            </span>
+                            <span className="text-xs leading-relaxed text-foreground/80">
+                              {value}
+                            </span>
+                          </li>
+                        )
+                      )}
                     </ul>
                   )}
 
-                  {/* CTAs */}
-                  <div className="mt-auto flex flex-col gap-2.5">
+                  <div className="mt-auto flex flex-col gap-2">
                     {isActive ? (
                       <button
                         type="button"
                         disabled={isAccessLoading}
-                        onClick={() => handleAccessService(plan.subscription_plan_name)}
-                        className="group w-full py-2.5 px-4 bg-primary hover:bg-primary/90 active:bg-primary text-primary-foreground text-sm font-bold rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                        onClick={() =>
+                          handleAccessService(plan.subscription_plan_name)
+                        }
+                        className="flex w-full items-center justify-center gap-2 rounded-md bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-50"
                       >
                         {isAccessLoading ? (
                           <>
-                            <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                            <Loader2 className="size-3.5 animate-spin" />
                             Redirecting...
                           </>
                         ) : (
                           <>
                             Open {plan.subscription_plan_name}
-                            <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+                            <ArrowRight className="size-3.5" />
                           </>
                         )}
                       </button>
@@ -185,81 +200,79 @@ const SubscriptionCards = () => {
                         <button
                           type="button"
                           disabled={isStartingTrialLoading}
-                          onClick={() => handleStartTrial(plan.subscription_plan_id)}
-                          className="w-full py-2.5 px-4 border border-primary/25 hover:border-primary/40 hover:bg-primary/5 text-primary text-sm font-semibold rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                          onClick={() =>
+                            handleStartTrial(plan.subscription_plan_id)
+                          }
+                          className="w-full rounded-md border border-border bg-background px-4 py-2.5 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                          {isStartingTrialLoading ? "Starting..." : "Start Free Trial"}
+                          {isStartingTrialLoading
+                            ? "Starting..."
+                            : "Start free trial"}
                         </button>
                         <button
                           type="button"
                           disabled={isCreatePaidSubscriptionLoading}
-                          onClick={() => handleSubscribe(plan.subscription_plan_id)}
-                          className="w-full py-2.5 px-4 bg-gray-950 hover:bg-gray-800 text-white text-sm font-medium rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                          onClick={() =>
+                            handleSubscribe(plan.subscription_plan_id)
+                          }
+                          className="w-full rounded-md bg-foreground px-4 py-2.5 text-sm font-medium text-background transition-colors hover:bg-foreground/90 disabled:cursor-not-allowed disabled:opacity-50"
                         >
-                          {isCreatePaidSubscriptionLoading ? "Processing..." : "Subscribe Now"}
+                          {isCreatePaidSubscriptionLoading
+                            ? "Processing..."
+                            : "Subscribe now"}
                         </button>
                       </>
                     )}
                   </div>
                 </div>
-              </motion.div>
-            );
-          })}
+              );
+            })}
 
-          {upcomingPlans.map((plan, idx) => (
-            <motion.div
-              key={plan.name}
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, delay: 0.2 + (plansData?.data?.length || 0) * 0.1 + idx * 0.1, ease: [0.25, 0.46, 0.45, 0.94] }}
-              className="relative"
-            >
-              <div className="relative h-full rounded-md border border-gray-200 bg-gray-50 p-7 flex flex-col shadow-sm transition-all duration-300 hover:border-gray-300">
-                <div className="mb-6">
-                  <h3 className="font-brfirma text-[17px] font-bold text-gray-950 mb-1.5 tracking-tight">
+            {upcomingPlans.map((plan) => (
+              <div
+                key={plan.name}
+                className="flex h-full flex-col rounded-lg border border-border bg-muted/20 p-6"
+              >
+                <div className="mb-5">
+                  <h3 className="text-base font-semibold text-foreground">
                     {plan.name}
                   </h3>
-                  <p className="text-gray-600 text-xs leading-relaxed line-clamp-2">
+                  <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                     {plan.description}
                   </p>
                 </div>
 
-                <div className="mb-6 pb-6 border-b border-gray-200">
-                  <div className="flex items-end gap-1.5">
-                    <span className="font-strawford text-[2.5rem] font-bold text-gray-950 leading-none tracking-tight">
-                      --
-                    </span>
-                    <div className="flex flex-col mb-1">
-                      <span className="text-gray-500 text-xs font-medium">Coming Soon</span>
-                    </div>
-                  </div>
+                <div className="mb-5 border-b border-border pb-5">
+                  <span className="text-sm font-medium text-muted-foreground">
+                    Coming soon
+                  </span>
                 </div>
 
-                <ul className="space-y-3 mb-8 flex-1">
+                <ul className="mb-6 flex-1 space-y-2.5">
                   {plan.features.map((feature) => (
                     <li key={feature} className="flex items-start gap-2.5">
-                      <span className="mt-0.5 flex-shrink-0 w-4 h-4 rounded-full flex items-center justify-center bg-gray-100 text-gray-500">
-                        <Check className="w-2.5 h-2.5" strokeWidth={3} />
+                      <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground">
+                        <Check className="size-2.5" strokeWidth={3} />
                       </span>
-                      <span className="text-gray-700 text-[13px] leading-relaxed">{feature}</span>
+                      <span className="text-xs leading-relaxed text-foreground/80">
+                        {feature}
+                      </span>
                     </li>
                   ))}
                 </ul>
 
-                <div className="mt-auto">
-                  <button
-                    type="button"
-                    disabled
-                    className="w-full py-2.5 px-4 bg-gray-200 text-gray-500 text-sm font-medium rounded-md cursor-not-allowed"
-                  >
-                    Coming Soon
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  disabled
+                  className="mt-auto w-full cursor-not-allowed rounded-md border border-border bg-muted px-4 py-2.5 text-sm font-medium text-muted-foreground"
+                >
+                  Coming soon
+                </button>
               </div>
-            </motion.div>
-          ))}
-        </div>
-      </div>
+            ))}
+          </div>
+        )}
+      </PageContent>
     </div>
   );
 };

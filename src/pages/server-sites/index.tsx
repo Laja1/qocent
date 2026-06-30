@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Header } from "@/components/shared";
+import { Button, Header, PageContent } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
   import { Edit, Eye, Trash2, PlusIcon, Users, KeyRound } from "lucide-react";
 import { useState } from "react";
@@ -231,56 +231,46 @@ export const ServerSites = () => {
   );
 
   return (
-    <div className="h-full">
-      <Header title="Server Sites" description="Manage your server site">
-        <div className="gap-2 flex">
+    <div className="min-h-screen">
+      <Header title="Server Sites" description="Manage your server sites">
+        <div className="flex gap-2">
           <Button
-            intent="tertiary"
+            intent="secondary"
             label="Create New Site"
             prefixIcon={<PlusIcon className="size-4" />}
-            onClick={() => navigate("/create-new-site")}
+            onClick={() => navigate(RouteConstant.dashboard.createnewsite.path)}
             size="small"
           />
 
           <Button
-            intent="tertiary"
+            intent="secondary"
             label="Join Site"
             prefixIcon={<PlusIcon className="size-4" />}
             onClick={() => NiceModal.show(ModalConstant.InviteSiteModal)}
             size="small"
           />
-        </div>{" "}
+        </div>
       </Header>
 
-      <div className="flex gap-4 mb-10 lg:mb-20 flex-col overflow-y-hidden h-full px-5">
-          <DataTable
-            data={sitesToDisplay || []}
-            columns={serverSiteColumns}
-            title={"SERVER SITES"}
-            // description="Server Site"
-            filterableColumns={["siteStatus"]}
-            searchPlaceholder="Search server rooms by name, ID, or code..."
-            pageSize={5}
-            isLoading={isSiteLoading}
-            exportOptions={{
-              filename: "server_sites_export",
-              includeHeaders: true,
-            }}
-            actions={actions}
-            skeletonRows={sitesToDisplay?.length || 5}
-            onRowClick={handleRowClick}
-            getRowId={(row) => row.account_id.toString()}
-            highlightedRowId={selectedRowId}
-            initialSorting={{ id: "siteCreatedAt", desc: false }}
-          />
-
-        {/* {tabShow && (
-          <div className="mx-5 mt-5">
-            <Tabs tabs={tabData} />
-          </div>
-        )} */}
-      </div>
-
+      <PageContent>
+        <DataTable
+          data={sitesToDisplay || []}
+          columns={serverSiteColumns}
+          searchPlaceholder="Search sites by name, ID, or status..."
+          pageSize={10}
+          isLoading={isSiteLoading}
+          exportOptions={{
+            filename: "server_sites_export",
+            includeHeaders: true,
+          }}
+          actions={actions}
+          skeletonRows={sitesToDisplay?.length || 5}
+          onRowClick={handleRowClick}
+          getRowId={(row) => row.account_id.toString()}
+          highlightedRowId={selectedRowId}
+          initialSorting={{ id: "account_created_at", desc: true }}
+        />
+      </PageContent>
     </div>
   );
 };

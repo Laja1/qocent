@@ -67,7 +67,7 @@ const AuthLayout = ({
         <div
           className={`flex rounded-md justify-center items-center w-full ${cardbodyClass} lg:max-w-md`}
         >
-          <div className="bg-[#FFFFFF0D] border  mx-5 rounded-md py-5 px-8 w-full">
+          <div className="bg-[#FFFFFF0D]   mx-5 rounded-md py-5 px-8 w-full">
             <div className="justify-center flex text-gray-700 font-alumni">
               <img
                 src={svgLinks.logo}

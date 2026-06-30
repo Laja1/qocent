@@ -1,4 +1,4 @@
-import { Button, Header, Tabs } from "@/components/shared";
+import { Button, Header, Tabs, PageContent } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Edit, Eye, Trash2, PlusIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +11,6 @@ import type { RootState } from "@/store";
 import type { roomData } from "@/models/response/roomResponse";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
-import { Card } from "@/components/ui/card";
 import { serverRoomColumns } from "@/utilities/constants/colums";
 import { useState } from "react";
 import { ResourceTable } from "../server-sites/server-sites-table";
@@ -142,12 +141,11 @@ export const ServerRooms = () => {
         />
       </Header>
 
-      <Card className="mx-5 px-5 mt-5 rounded-md">
+      <PageContent>
         <DataTable
           data={data?.data || []}
           columns={serverRoomColumns}
           isLoading={isLoading}
-          title={"SERVER ROOMS"}
           searchPlaceholder="Search server rooms by name, ID, or region..."
           pageSize={5}
           actions={actions}
@@ -156,12 +154,8 @@ export const ServerRooms = () => {
           getRowId={(row) => row.roomId}
           initialSorting={{ id: "roomCreatedAt", desc: false }}
         />
-      </Card>
-      {tabShow && (
-        <div className="mx-5 mt-5">
-          <Tabs tabs={tabData} />
-        </div>
-      )}
+        {tabShow && <Tabs tabs={tabData} />}
+      </PageContent>
     </div>
   );
 };

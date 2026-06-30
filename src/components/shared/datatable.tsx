@@ -43,6 +43,10 @@ import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import { Textfield } from "./textfield";
+import { cn } from "@/lib/utils";
+
+export const DEFAULT_TABLE_HEADER_COLOR = "bg-[#f6f6f6]";
+export const DEFAULT_TABLE_PAGE_SIZE = 10;
 
 export type HeaderAction = {
   icon: React.ComponentType<{ className?: string }>;
@@ -113,13 +117,14 @@ export type DataTableProps<T> = {
   skeletonRows?: number;
   exportOptions?: ExportOptions;
   emptyComponent?: React.ReactNode;
-  enableRowSelection?: boolean; // NEW: Enable checkbox selection
+  enableRowSelection?: boolean;
   showPagination?: boolean;
+  /** Tailwind background class(es) for the header row. Defaults to light grey. */
+  headerColor?: string;
 };
 
-// Skeleton component
 const Skeleton = ({ className = "" }: { className?: string }) => (
-  <div className={`animate-pulse bg-gray-200 rounded ${className}`} />
+  <div className={`animate-pulse rounded-md bg-black/8 ${className}`} />
 );
 
 // Utility function to convert data to CSV
@@ -184,20 +189,22 @@ export function DataTable<T>({
   onFilterChange,
   initialSorting = null,
   filterableColumns = [],
-  pageSize = 100,
+  pageSize = DEFAULT_TABLE_PAGE_SIZE,
   actions = [],
   bulkActions = [],
   getRowId = (_, index) => index.toString(),
   showSearch = true,
   showDownload = true,
   isLoading = false,
-  skeletonRows = 10,
+  skeletonRows = DEFAULT_TABLE_PAGE_SIZE,
   buttonAction,
   buttonText,
   buttonShow,
   exportOptions = {},
   emptyComponent,
-  enableRowSelection = false, // NEW: Default to false for backwards compatibility
+  enableRowSelection = false,
+  showPagination = true,
+  headerColor,
 }: DataTableProps<T>) {
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState<Record<string, string>>({});
@@ -273,6 +280,10 @@ export function DataTable<T>({
       onFilterChange(filters);
     }
   }, [filters, onFilterChange]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, filters, sorting, data.length]);
 
   const getAccessor = (column: ColumnDef<T>) => {
     if (typeof column.accessorKey === "function") {
@@ -395,7 +406,7 @@ export function DataTable<T>({
 
   const exportToCSV = () => {
     const filename = baseFilename.endsWith(".csv") ? baseFilename : `${baseFilename}.csv`;
-    const csvContent = convertToCSV(data, columns, exportOptions);
+    const csvContent = convertToCSV(processedData, columns, exportOptions);
     downloadFile(csvContent, filename, "text/csv");
   };
 
@@ -409,7 +420,7 @@ export function DataTable<T>({
       exportOptions.includeHeaders !== false
         ? exportableColumns.map((col) => col.header)
         : [],
-      ...data.map((row) =>
+      ...processedData.map((row) =>
         exportableColumns.map((col) => {
           const accessor =
             typeof col.accessorKey === "function"
@@ -452,7 +463,7 @@ export function DataTable<T>({
     }
 
     const tableHeaders = exportableColumns.map((col) => col.header);
-    const tableData = data.map((row) =>
+    const tableData = processedData.map((row) =>
       exportableColumns.map((col) => {
         const accessor =
           typeof col.accessorKey === "function"
@@ -524,7 +535,7 @@ export function DataTable<T>({
                 checked={selectedRows.has(rowId)}
                 onChange={(e) => handleCheckboxChange(rowId, e as any)}
                 onClick={(e) => e.stopPropagation()}
-                className="w-4 h-4 rounded border-gray-300 cursor-pointer"
+                className="size-4 cursor-pointer rounded-md border border-black/15 bg-white accent-primary"
               />
             </div>
           );
@@ -609,46 +620,55 @@ export function DataTable<T>({
     );
   };
 
+  const showToolbar = Boolean(
+    title || description || showSearch || filterColumns.length > 0 || showDownload || buttonShow
+  );
+
   return (
-    <div className="border border-border rounded-md p-5 bg-card">
-      <div className="mb-2">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 ">
+    <section className="rounded-lg border border-border bg-card p-5 text-foreground">
+      {showToolbar && (
+      <div className={cn(title || description ? "mb-5" : "mb-4")}>
+        <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+          {(title || description) && (
           <div>
             {title && (
-              <CardTitle className="tracking-widest">
-                {isLoading ? <Skeleton className="h-6 w-48" /> : title}
+              <CardTitle className="text-sm font-semibold tracking-normal">
+                {isLoading ? <Skeleton className="h-5 w-40" /> : title}
               </CardTitle>
             )}
             {description && (
-              <CardDescription>
+              <CardDescription className="mt-1 text-xs text-muted-foreground">
                 {isLoading ? (
-                  <Skeleton className="h-4 w-64 mt-1" />
+                  <Skeleton className="mt-1 h-3 w-56" />
                 ) : (
                   description
                 )}
               </CardDescription>
             )}
           </div>
+          )}
 
-          <div className="flex-row items-center flex gap-2">
+          <div className="flex flex-row items-center gap-2 md:ml-auto">
             {(showSearch || filterColumns.length > 0 || showDownload) && (
-              <div className="flex flex-col md:flex-row gap-2">
+              <div className="flex flex-col gap-2 md:flex-row">
                 {showSearch && (
                   <div className="relative">
                     <Textfield
                       name="search"
                       placeholder={searchPlaceholder}
                       value={searchTerm}
-                      prefixIcon={<Search className="text-gray-400 size-4 " />}
+                      prefixIcon={
+                        <Search className="size-4 text-muted-foreground" />
+                      }
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="pl-10 rounded-md placeholder:text-xs w-full md:w-[350px]"
+                      className="h-9 w-full rounded-md border-border bg-muted/50 pl-10 text-xs placeholder:text-xs md:w-[18rem]"
                       disabled={isLoading}
                     />
                   </div>
                 )}
 
                 {(filterColumns.length > 0 || showDownload) && (
-                  <div className="flex gap-2 items-center justify-center">
+                  <div className="flex items-center justify-center gap-2">
                     {filterColumns.map((column) => (
                       <Select
                         key={column.id}
@@ -658,14 +678,14 @@ export function DataTable<T>({
                         }
                         disabled={isLoading}
                       >
-                        <SelectTrigger className="w-full rounded-md text-xs">
-                          <IconFilter2 className="h-4 w-4 mr-2" />
+                        <SelectTrigger className="h-9 w-full rounded-md border-border bg-muted/50 text-xs text-muted-foreground focus:ring-primary/15">
+                          <IconFilter2 className="mr-2 size-4" />
                           <SelectValue
                             className="text-xs"
                             placeholder={column.header}
                           />
                         </SelectTrigger>
-                        <SelectContent>
+                        <SelectContent className="rounded-lg border-border bg-card">
                           <SelectItem className="text-xs" value="all">
                             All {column.header}
                           </SelectItem>
@@ -681,21 +701,25 @@ export function DataTable<T>({
                         </SelectContent>
                       </Select>
                     ))}
-                    {/* Column visibility toggle */}
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button
                           variant="outline"
                           size="sm"
-                          className="border border-sm p-2"
+                          className="size-9 rounded-md border-border bg-muted/50 p-0 text-muted-foreground hover:bg-muted hover:text-foreground"
                           disabled={isLoading}
                           title="Toggle columns"
                         >
-                          <Columns3 className="h-4 w-4" />
+                          <Columns3 className="size-4" />
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end" className="rounded-md w-48 max-h-72 overflow-y-auto">
-                        <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">Toggle columns</div>
+                      <DropdownMenuContent
+                        align="end"
+                        className="max-h-72 w-48 overflow-y-auto rounded-lg border-border bg-card"
+                      >
+                        <div className="px-2 py-1.5 text-xs font-semibold text-muted-foreground">
+                          Toggle columns
+                        </div>
                         {toggleableColumns.map((col) => {
                           const isHidden = hiddenColumns.has(col.id);
                           return (
@@ -705,21 +729,33 @@ export function DataTable<T>({
                                 e.preventDefault();
                                 toggleColumnVisibility(col.id);
                               }}
-                              className="cursor-pointer text-xs flex items-center gap-2"
+                              className="flex cursor-pointer items-center gap-2 rounded-md text-xs"
                             >
                               {isHidden ? (
-                                <IconEyeOff className="h-3.5 w-3.5 text-muted-foreground" stroke={1.5} />
+                                <IconEyeOff
+                                  className="size-3.5 text-muted-foreground"
+                                  stroke={1.5}
+                                />
                               ) : (
-                                <IconEye className="h-3.5 w-3.5 text-primary" stroke={1.5} />
+                                <IconEye
+                                  className="size-3.5 text-foreground"
+                                  stroke={1.5}
+                                />
                               )}
-                              <span className={isHidden ? "text-muted-foreground" : ""}>{col.header}</span>
+                              <span
+                                className={
+                                  isHidden ? "text-muted-foreground" : ""
+                                }
+                              >
+                                {col.header}
+                              </span>
                             </DropdownMenuItem>
                           );
                         })}
                         {hiddenColumns.size > 0 && (
                           <DropdownMenuItem
                             onClick={() => setHiddenColumns(new Set())}
-                            className="cursor-pointer text-xs font-medium border-t mt-1 pt-1"
+                            className="mt-1 cursor-pointer border-t border-border pt-1 text-xs font-medium"
                           >
                             Show all columns
                           </DropdownMenuItem>
@@ -732,32 +768,35 @@ export function DataTable<T>({
                           <Button
                             variant="outline"
                             size="sm"
-                            className="border rounded-md border-sm p-2"
+                            className="size-9 rounded-md border-border bg-muted/50 p-0 text-muted-foreground hover:bg-muted hover:text-foreground"
                             disabled={isLoading}
                           >
-                            <Download className="h-4 w-4" />
+                            <Download className="size-4" />
                           </Button>
                         </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end" className="rounded-md">
+                        <DropdownMenuContent
+                          align="end"
+                          className="rounded-lg border-border bg-card"
+                        >
                           <DropdownMenuItem
                             onClick={exportToCSV}
                             className="cursor-pointer text-xs"
                           >
-                            <FileText className="h-2 w-2 mr-1" />
+                            <FileText className="mr-1 size-3.5" />
                             Export as CSV
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={exportToExcel}
                             className="cursor-pointer text-xs"
                           >
-                            <FileSpreadsheet className="h-2 w-2 mr-1" />
+                            <FileSpreadsheet className="mr-1 size-3.5" />
                             Export as Excel
                           </DropdownMenuItem>
                           <DropdownMenuItem
                             onClick={exportToPDF}
                             className="cursor-pointer text-xs"
                           >
-                            <FileImage className="h-2 w-2 mr-1" />
+                            <FileImage className="mr-1 size-3.5" />
                             Export as PDF
                           </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -769,7 +808,7 @@ export function DataTable<T>({
             )}
 
             {buttonShow && (
-              <Button className=" rounded-md" onClick={buttonAction}>
+              <Button className="h-9 rounded-md px-3 text-xs" onClick={buttonAction}>
                 {buttonText}
               </Button>
             )}
@@ -777,12 +816,12 @@ export function DataTable<T>({
         </div>
 
         {showBulkActions && !isLoading && (
-          <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-md mt-4">
-            <span className="text-sm font-medium text-red-900">
+          <div className="mt-4 flex items-center gap-2 rounded-lg border border-primary/15 bg-primary/8 p-3">
+            <span className="text-xs font-medium text-primary">
               {selectedRows.size} item
               {selectedRows.size !== 1 ? "s" : ""} selected
             </span>
-            <div className="flex gap-2 ml-auto">
+            <div className="ml-auto flex gap-2">
               {bulkActions.map((action, index) => (
                 <Button
                   key={index}
@@ -794,13 +833,14 @@ export function DataTable<T>({
                     action.onClick(selectedRowsData);
                   }}
                 >
-                  {action.icon && <action.icon className="h-4 w-4" />}
+                  {action.icon ? <action.icon className="size-4" /> : null}
                   {action.label}
                 </Button>
               ))}
               <Button
                 variant="ghost"
                 size="sm"
+                className="h-8 rounded-md text-xs text-muted-foreground"
                 onClick={() => setSelectedRows(new Set())}
               >
                 Clear selection
@@ -809,12 +849,21 @@ export function DataTable<T>({
           </div>
         )}
       </div>
+      )}
 
       <CardContent className="mx-0 p-0">
-        <div className="rounded-md border border-border overflow-x-auto" ref={tableRef}>
-          <Table className="w-full">
-            <TableHeader>
-              <TableRow className="bg-muted/50 hover:bg-muted/50">
+        <div
+          className="overflow-hidden rounded-lg border border-border"
+          ref={tableRef}
+        >
+          <Table className="w-full border-collapse text-left text-xs">
+            <TableHeader className="[&_tr]:border-border">
+              <TableRow
+                className={cn(
+                  "border-border",
+                  headerColor ?? cn(DEFAULT_TABLE_HEADER_COLOR, "hover:bg-[#f6f6f6]")
+                )}
+              >
                 {enhancedColumns.map((column) => {
                   const isUtilityCol = column.id === "select" || column.id === "actions";
                   const widthStyle = columnWidths[column.id]
@@ -827,11 +876,11 @@ export function DataTable<T>({
                     <TableHead
                       key={column.id}
                       style={widthStyle}
-                      className={`relative font-semibold text-xs h-10 border-b-2 border-border/60 ${
-                        column.sortable && !isLoading
-                          ? "cursor-pointer select-none"
-                          : ""
-                      } ${column.headerClassName || ""}`}
+                      className={cn(
+                        "relative h-11 border-b border-border px-3 text-xs font-semibold text-foreground",
+                        column.sortable && !isLoading && "cursor-pointer select-none",
+                        column.headerClassName
+                      )}
                       onClick={
                         column.sortable && !isLoading
                           ? () => handleSort(column.id)
@@ -857,7 +906,7 @@ export function DataTable<T>({
                               paginatedData.length > 0
                             }
                             onChange={handleSelectAll}
-                            className="w-4 h-4 rounded border-gray-300 cursor-pointer"
+                            className="size-4 cursor-pointer rounded-md border border-black/15 bg-white accent-primary"
                             disabled={isLoading}
                           />
                         ) : (
@@ -914,21 +963,18 @@ export function DataTable<T>({
                 : paginatedData.map((row, rowIndex) => {
                     const actualIndex = startIndex + rowIndex;
                     const rowId = getRowId(row, actualIndex);
-                    const isEven = rowIndex % 2 === 0;
                     return (
                       <tr
                         key={String(rowId)}
-                        className={`transition-colors ${
-                          onRowClick ? "cursor-pointer" : ""
-                        } ${
+                        className={cn(
+                          "border-b border-border text-foreground/80 transition-colors last:border-0",
+                          onRowClick && "cursor-pointer",
                           selectedRows.has(rowId)
-                            ? "bg-primary/5"
+                            ? "bg-primary/8"
                             : highlightedRowId === rowId
-                            ? "bg-primary/10 dark:text-black"
-                            : isEven
-                            ? ""
-                            : "bg-muted/30"
-                        } hover:bg-primary/5`}
+                              ? "bg-primary/10 text-primary"
+                              : "hover:bg-muted/40"
+                        )}
                         onClick={onRowClick ? () => onRowClick(row) : undefined}
                       >
                         {enhancedColumns.map((column) => {
@@ -939,7 +985,7 @@ export function DataTable<T>({
                             <td
                               key={column.id}
                               style={widthStyle}
-                              className="border-b border-border/40 px-2 py-1.5 text-xs overflow-hidden text-ellipsis whitespace-nowrap"
+                              className="overflow-hidden text-ellipsis whitespace-nowrap border-b border-border/40 px-3 py-2 text-xs"
                             >
                               <div className="truncate">
                                 {column.cell
@@ -956,9 +1002,9 @@ export function DataTable<T>({
           </Table>
         </div>
 
-        {!isLoading && totalPages > 1 && (
-          <div className="flex items-center justify-between mt-4">
-            <div className="text-xs text-gray-500">
+        {!isLoading && showPagination && totalPages > 1 && (
+          <div className="mt-4 flex items-center justify-between">
+            <div className="text-xs text-muted-foreground">
               Showing {startIndex + 1} to{" "}
               {Math.min(endIndex, processedData.length)} of{" "}
               {processedData.length} items
@@ -1002,7 +1048,7 @@ export function DataTable<T>({
                 })}
                 {totalPages > 5 && currentPage < totalPages - 2 && (
                   <>
-                    <span className="text-gray-500">...</span>
+                    <span className="text-muted-foreground">...</span>
                     <Button
                       variant="outline"
                       size="sm"
@@ -1041,6 +1087,6 @@ export function DataTable<T>({
           </div>
         )}
       </CardContent>
-    </div>
+    </section>
   );
 }

@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Info, User } from "lucide-react";
-import { Button, Header, Textfield2 } from "@/components/shared";
+import { Button, Header, Textfield2, FormPageCard, PageContent } from "@/components/shared";
 import { useModal } from "@/components/shared/modal";
 import { showCustomToast } from "@/components/shared/toast";
 import { SiteDeployModal } from "@/components/not-shared/site-modal";
@@ -96,24 +96,25 @@ export const CreateNewSite = () => {
         description="A server can have one or more server houses. A server house is provided by a provider."
       />
 
-      <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 rounded-t-md shadow-md">
-        {/* Header Section */}
-        <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 rounded-t-md px-3 sm:px-5 py-5">
-          <div>
-            <p className="text-lg text-white">Create Server Site</p>
-            <p className="text-xs text-gray-400">
-              Enter the server site details below.
-            </p>
-          </div>
-          <User color="white" size={40} />
-        </div>
-
-        {/* Form */}
-        <div className="flex flex-col gap-4 p-5">
-          <div className="flex items-center w-full md:w-1/2 lg:w-1/4 gap-2">
+      <PageContent>
+        <FormPageCard
+          className="max-w-2xl"
+          title="Create Server Site"
+          subtitle="Enter the server site details below."
+          icon={<User className="size-8" />}
+          footer={
+            <Button
+              label="Proceed"
+              disabled={!formik.isValid || isLoading}
+              onClick={() => setIsDeployModalOpen(true)}
+              surfixIcon={<ArrowRight className="size-3" />}
+            />
+          }
+        >
+          <div className="flex w-full max-w-md items-center gap-2">
             <Textfield2
               name="siteName"
-              labelClassName="text-black"
+              labelClassName="text-foreground"
               label="Server Site Name"
               placeholder="Enter your server site name"
               formik={formik}
@@ -121,25 +122,16 @@ export const CreateNewSite = () => {
             />
 
             <button
+              type="button"
               onClick={descriptionModal}
-              className="rounded-full p-2 text-gray-600 hover:bg-gray-200"
+              className="mt-6 rounded-full p-2 text-muted-foreground hover:bg-muted"
               title="View info"
             >
               <Info size={18} />
             </button>
           </div>
-        </div>
-
-        {/* Proceed Button */}
-        <div className="flex m-3 sm:m-5 justify-end">
-          <Button
-            label="Proceed"
-            disabled={!formik.isValid || isLoading}
-            onClick={() => setIsDeployModalOpen(true)}
-            surfixIcon={<ArrowRight className="size-3" />}
-          />
-        </div>
-      </div>
+        </FormPageCard>
+      </PageContent>
 
       {/* Deploy Modal */}
       <SiteDeployModal

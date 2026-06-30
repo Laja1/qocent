@@ -5,15 +5,11 @@ import { SidebarProvider } from "../ui/sidebar";
 export const DashboardLayoutWithSidebar = () => {
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-muted/40">
-        <div>
-          <SidebarLayout />
-        </div>
-        <div className="w-full h-full relative">
-          <div className="w-full flex flex-col z-10 min-h-screen">
-            <Outlet />
-          </div>
-        </div>
+      <div className="flex min-h-screen w-full bg-background">
+        <SidebarLayout />
+        <main className="relative flex min-h-screen min-w-0 flex-1 flex-col bg-[#fafafa]">
+          <Outlet />
+        </main>
       </div>
     </SidebarProvider>
   );

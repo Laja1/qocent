@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Header, RenderField } from "@/components/shared";
+import { Button, Header, RenderField, FormPageCard, PageContent } from "@/components/shared";
 import { useModal } from "@/components/shared/modal";
 import { ArrowRight, Info } from "lucide-react";
 import { useFormik } from "formik";
@@ -213,72 +213,68 @@ export const CreateNewResource = () => {
         description="A server can have one or more server houses. A server house is provided by a provider."
       />
 
-      <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100  shadow-t-md rounded-t-md">
-        <div className="bg-gradient-to-r flex justify-between from-black to-gray-800 rounded-t-md px-3 sm:px-5 py-5">
-          <div>
-            <p className="text-base sm:text-lg text-white">
-              {locationState.resourceType}
-            </p>
-            <p className="text-xs text-gray-400 leading-tight">
-              {locationState?.selectedField?.serviceDescription}
-            </p>
-          </div>
-          <div>
-            {typeof locationState.resourceType === "string" &&
-              RESOURCE_MAP?.[
-                locationState.resourceType as keyof typeof RESOURCE_MAP
-              ]?.icon}
-          </div>
-        </div>
-
-        <div className="flex mt-5 flex-col">
-          {resourceTemplate?.data
-            ?.slice()
-            .sort(
-              (a, b) => Number(a.parameterSerial) - Number(b.parameterSerial)
-            )
-            .map((item) => (
-              <div
-                className="flex lg:flex-row flex-col lg:items-center w-full py-[1px] border-b "
-                key={item.parameterId}
-              >
-                <p className="text-xs lg:w-1/6 w-1/2 pr-3 lg:text-right text-black">
-                  {item.parameterMandatory && (
-                    <span className="text-red-500 ml-1">*</span>
-                  )}
-                  {item.parameterLabel}
-                </p>
-                <div className="lg:w-2/5 w-full pr-3 flex gap-1">
-                  <RenderField
-                    name={item.parameterField}
-                    formik={formik}
-                    placeholder={`Enter your ${item.parameterLabel}`}
-                    parameterLookup={item.parameterLookup}
-                    options={item.parameterOptions}
-                    type={item.parameterInputType || "text"}
-                    autoComplete="off"
-                  />
-                  <button
-                    onClick={() => descriptionModal(item)}
-                    className="rounded-full flex items-center justify-center text-gray-600 hover:bg-gray-100 cursor-pointer"
-                    title="View more info"
-                  >
-                    <Info size={16} />
-                  </button>
+      <PageContent>
+        <FormPageCard
+          className="max-w-4xl"
+          title={locationState.resourceType}
+          subtitle={locationState?.selectedField?.serviceDescription}
+          icon={
+            typeof locationState.resourceType === "string"
+              ? RESOURCE_MAP?.[
+                  locationState.resourceType as keyof typeof RESOURCE_MAP
+                ]?.icon
+              : undefined
+          }
+          footer={
+            <Button
+              label="Proceed"
+              disabled={!formik.isValid || isLoading || isConfigLoading}
+              onClick={handleProceedClick}
+              surfixIcon={<ArrowRight className="size-3" />}
+            />
+          }
+        >
+          <div className="flex flex-col divide-y divide-border">
+            {resourceTemplate?.data
+              ?.slice()
+              .sort(
+                (a, b) => Number(a.parameterSerial) - Number(b.parameterSerial)
+              )
+              .map((item) => (
+                <div
+                  className="flex w-full flex-col gap-2 py-3 first:pt-0 last:pb-0 lg:flex-row lg:items-center lg:gap-3"
+                  key={item.parameterId}
+                >
+                  <p className="w-full shrink-0 text-xs text-muted-foreground lg:w-1/3 lg:text-right">
+                    {item.parameterMandatory && (
+                      <span className="mr-1 text-primary">*</span>
+                    )}
+                    {item.parameterLabel}
+                  </p>
+                  <div className="flex min-w-0 flex-1 items-center gap-1">
+                    <RenderField
+                      name={item.parameterField}
+                      formik={formik}
+                      placeholder={`Enter your ${item.parameterLabel}`}
+                      parameterLookup={item.parameterLookup}
+                      options={item.parameterOptions}
+                      type={item.parameterInputType || "text"}
+                      autoComplete="off"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => descriptionModal(item)}
+                      className="flex cursor-pointer items-center justify-center rounded-full p-1.5 text-muted-foreground hover:bg-muted"
+                      title="View more info"
+                    >
+                      <Info size={16} />
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-        </div>
-
-        <div className="flex m-3 sm:m-5 justify-end">
-          <Button
-            label="Proceed"
-            disabled={!formik.isValid || isLoading || isConfigLoading}
-            onClick={handleProceedClick}
-            surfixIcon={<ArrowRight className="size-3" />}
-          />
-        </div>
-      </div>
+              ))}
+          </div>
+        </FormPageCard>
+      </PageContent>
       <SiteDeployModal
         isOpen={isDeployModalOpen}
         onClose={() => !isLoading && setIsDeployModalOpen(false)}

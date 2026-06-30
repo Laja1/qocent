@@ -1,4 +1,4 @@
-import { Header, Tabs } from "@/components/shared";
+import { Header, PageContent, Tabs } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import type { FundWalletResponse } from "@/models/response/walletBillingResponse";
@@ -137,19 +137,13 @@ export const Billings = () => {
   ];
 
   return (
-    <div className="relative min-h-screen">
-      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute -top-40 -left-32 size-[28rem] rounded-full bg-primary/15 blur-[120px]" />
-        <div className="absolute top-1/3 -right-40 size-[32rem] rounded-full bg-blue-400/20 blur-[120px]" />
-        <div className="absolute bottom-0 left-1/3 size-[24rem] rounded-full bg-emerald-400/15 blur-[120px]" />
-      </div>
-
+    <div className="min-h-screen">
       <Header
         title="Wallet & Billing"
         description="Balance, funding, transactions, and invoices in one place"
       />
 
-      <div className="px-5 pb-10 space-y-5">
+      <PageContent className="w-full max-w-5xl">
         <WalletBalanceCard
           isLoading={isWalletBalanceLoading}
           balance={walletBalance?.balance}
@@ -157,7 +151,7 @@ export const Billings = () => {
         />
 
         <Tabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
-      </div>
+      </PageContent>
     </div>
   );
 };

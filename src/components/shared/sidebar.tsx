@@ -1,12 +1,11 @@
 import {
-  LogOut,
   Settings,
   Users,
   Wallet,
   Mail,
   UserPlus,
 } from "lucide-react";
-import { ContextSwitcher } from "./context-switcher";
+import { SidebarProfile } from "./sidebar-profile";
 import {
   Sidebar,
   SidebarContent,
@@ -18,18 +17,14 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { RouteConstant } from "@/router/routes";
-import {
-  // IconBrowser,
-  // IconCarouselVertical,
-  IconHome,
-} from "@tabler/icons-react";
-import { useDispatch, useSelector } from "react-redux";
-import { authStore } from "@/store/authSlice";
+import { IconHome } from "@tabler/icons-react";
+import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { imgLinks, svgLinks } from "@/assets/assetLink";
 import type { ReactElement } from "react";
+
 export interface SidebarItem {
   title: string;
   icon: ReactElement;
@@ -39,31 +34,23 @@ export interface SidebarItem {
 
 export const SidebarLayout = () => {
   const { pathname } = useLocation();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
   const account = useSelector((state: RootState) => state.account);
   const navItems: SidebarItem[] = [
     {
       title: "Server Sites",
-      icon: <IconHome className="size-4 text-white/70" />,
+      icon: <IconHome className="size-4" />,
       href: RouteConstant.dashboard.serverSite.path,
       isActive: false,
     },
-    // {
-    //   title: "Resources",
-    //   icon: <IconCloudComputing className="size-4 text-white/70" />,
-    //   href: RouteConstant.dashboard.resources.path,
-    //   isActive: false,
-    // },
     {
       title: "Subscriptions",
-      icon: <Users className="size-4 text-white/70" />,
+      icon: <Users className="size-4" />,
       href: RouteConstant.dashboard.subscription.path,
       isActive: false,
     },
     {
       title: "Billing & Statements",
-      icon: <Wallet className="size-4 text-white/70" />,
+      icon: <Wallet className="size-4" />,
       href: RouteConstant.dashboard.billings.path,
       isActive: false,
     },
@@ -71,7 +58,7 @@ export const SidebarLayout = () => {
       ? [
           {
             title: "Access",
-            icon: <Users className="size-4 text-white/70" />,
+            icon: <Users className="size-4" />,
             href: RouteConstant.dashboard.access.path,
             isActive: false,
           },
@@ -79,19 +66,19 @@ export const SidebarLayout = () => {
       : []),
     {
       title: "Invite Inbox",
-      icon: <Mail className="size-4 text-white/70" />,
+      icon: <Mail className="size-4" />,
       href: RouteConstant.dashboard.inviteInbox.path,
       isActive: false,
     },
     {
       title: "Invite Management",
-      icon: <UserPlus className="size-4 text-white/70" />,
+      icon: <UserPlus className="size-4" />,
       href: RouteConstant.dashboard.inviteManagement.path,
       isActive: false,
     },
     {
       title: "Settings",
-      icon: <Settings className="size-4 text-white/70" />,
+      icon: <Settings className="size-4" />,
       href: RouteConstant.dashboard.settings.path,
       isActive: false,
     },
@@ -102,9 +89,9 @@ export const SidebarLayout = () => {
   const Icon = () => {
     switch (dashboard.provider) {
       case "aws":
-        return <img src={imgLinks.awsLogo} className="size-8" />;
+        return <img src={imgLinks.awsLogo} className="size-8" alt="AWS" />;
       case "huawei":
-        return <img src={imgLinks.huaweiLight} className="size-6" />;
+        return <img src={imgLinks.huaweiLight} className="size-6" alt="Huawei" />;
       default:
         return null;
     }
@@ -113,35 +100,25 @@ export const SidebarLayout = () => {
   const isItemActive = (itemHref: string) =>
     pathname === itemHref || pathname.startsWith(`${itemHref}/`);
 
-  const handleLogout = () => {
-    dispatch(authStore.action.logout());
-    navigate(RouteConstant.auth.signin.path);
-  };
-
   return (
-    <Sidebar className="font-brfirma border-r border-white/10 bg-[#0c0d10]">
-      <SidebarHeader className="bg-[#0c0d10] text-white border-white/10 border-b p-3">
-        <div className="flex items-center space-x-2 justify-between">
-          <div className="flex space-x-2">
-            <img src={svgLinks.logoWhite} className="h-8" />
-          </div>
+    <Sidebar className="border-r border-sidebar-border bg-sidebar font-brfirma">
+      <SidebarHeader className="flex h-14 shrink-0 items-center border-b border-sidebar-border bg-sidebar px-4">
+        <div className="flex w-full items-center justify-between gap-2">
+          <img src={svgLinks.logo} className="h-7" alt="Qocent" />
           {Icon()}
-        </div>
-        <div className="mt-2">
-          <ContextSwitcher />
         </div>
       </SidebarHeader>
 
-      <SidebarContent className="bg-[#0c0d10]">
+      <SidebarContent className="bg-sidebar">
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-2">
+            <SidebarMenu className="gap-1">
               {navItems.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton isActive={isItemActive(item.href)} asChild>
                     <Link to={item.href}>
                       {item.icon}
-                      <span className="text-xs text-white/90">{item.title}</span>
+                      <span className="text-xs">{item.title}</span>
                     </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
@@ -151,15 +128,8 @@ export const SidebarLayout = () => {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t flex flex-row justify-between border-white/10 px-4 py-2 bg-[#0c0d10]">
-        <div
-          onClick={handleLogout}
-          className="text-xs flex py-2 items-center text-[#C12C27] gap-2 cursor-pointer hover:text-red-200 transition-colors"
-        >
-          <LogOut className="size-4" />
-          <p>Logout</p>
-        </div>
-        <button className="  rounded-full"></button>
+      <SidebarFooter className="bg-sidebar p-2">
+        <SidebarProfile />
       </SidebarFooter>
     </Sidebar>
   );

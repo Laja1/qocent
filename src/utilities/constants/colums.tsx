@@ -1,4 +1,5 @@
 import type { ColumnDef } from "@/components/shared/datatable";
+import { StatusBadge } from "@/components/shared/status-badge";
 import { Badge } from "@/components/ui/badge";
 import type { HouseItem } from "@/models/response/houseResponse";
 import {
@@ -50,14 +51,7 @@ export const serverHouseColumn: ColumnDef<HouseItem>[] = [
     header: "STATUS",
     accessorKey: "houseStatus",
     cell: (row) => (
-      <div className="">
-        <Badge
-          variant="outline"
-          className={getStatusClassName(row.houseStatus)}
-        >
-          {row.houseStatus}
-        </Badge>
-      </div>
+      <StatusBadge status={row.houseStatus ?? "closed"} />
     ),
     sortable: true,
     filterType: "select",
@@ -142,14 +136,7 @@ export const serverSiteColumns: ColumnDef<Account>[] = [
     header: "STATUS",
     accessorKey: "account_status",
     cell: (row) => (
-      <div className="">
-        <Badge
-          variant="outline"
-          className={getStatusClassName(row.account_status)}
-        >
-          {row.account_status}
-        </Badge>
-      </div>
+      <StatusBadge status={row.account_status ?? "closed"} />
     ),
     sortable: true,
     filterType: "select",

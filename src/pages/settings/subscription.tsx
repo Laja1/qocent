@@ -55,19 +55,19 @@ export const Subscription = () => {
 
   return (
     <div className="space-y-5">
-      <div className="rounded-md border border-gray-200 overflow-hidden">
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 px-5 py-4 flex items-center justify-between">
+      <div className="overflow-hidden rounded-lg border border-border">
+        <div className="flex items-center justify-between border-b border-border bg-muted/40 px-5 py-4">
           <div className="flex items-center gap-3">
-            <div className="size-10 rounded-md bg-white/10 flex items-center justify-center">
-              <Zap className="size-5 text-amber-400" />
+            <div className="flex size-10 items-center justify-center rounded-md bg-primary/10">
+              <Zap className="size-5 text-primary" />
             </div>
             <div>
-              <p className="text-white font-semibold text-sm">
+              <p className="text-sm font-semibold text-foreground">
                 {subscription.subscription_is_trial
                   ? "Trial Plan"
                   : "Paid Subscription"}
               </p>
-              <p className="text-gray-400 text-xs">
+              <p className="text-xs text-muted-foreground">
                 {subscription.subscription_billing_cycle} billing
               </p>
             </div>
@@ -77,7 +77,7 @@ export const Subscription = () => {
           </Badge>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-gray-100 bg-white">
+        <div className="grid grid-cols-1 divide-y bg-card sm:grid-cols-3 sm:divide-x sm:divide-y-0">
           <div className="px-5 py-4">
             <p className="text-[11px] uppercase tracking-wider text-gray-400 font-medium">
               Usage

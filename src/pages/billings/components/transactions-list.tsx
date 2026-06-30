@@ -1,6 +1,5 @@
-import { ArrowDownLeft, ArrowUpRight, History } from "lucide-react";
-import { GlassCard } from "./glass-card";
-import { InlineLoader } from "./inline-loader";
+import { useMemo } from "react";
+import { DataTable, type ColumnDef } from "@/components/shared/datatable";
 import { formatDate, formatMoney } from "../utils/format";
 import type { WalletTransactionResponse } from "@/models/response/walletBillingResponse";
 
@@ -18,72 +17,104 @@ export const TransactionsList = ({
   isLoading,
   transactions,
 }: TransactionsListProps) => {
+  const columns = useMemo<ColumnDef<WalletTransactionResponse>[]>(
+    () => [
+      {
+        id: "transaction_type",
+        header: "Type",
+        accessorKey: (row) => row.transaction_type,
+        sortable: true,
+        cell: (row) => (
+          <span className="capitalize">
+            {row.transaction_type.toLowerCase().replace(/_/g, " ")}
+          </span>
+        ),
+      },
+      {
+        id: "description",
+        header: "Description",
+        accessorKey: (row) => row.description ?? row.created_at,
+        sortable: true,
+        cell: (row) => row.description ?? formatDate(row.created_at),
+      },
+      {
+        id: "direction",
+        header: "Direction",
+        accessorKey: (row) => row.transaction_type,
+        cell: (row) => {
+          const credit = isCredit(row.transaction_type);
+          return (
+            <span
+              className={`inline-flex items-center rounded-sm px-2.5 py-0.5 text-xs font-medium ${
+                credit
+                  ? "bg-[#CAF8D2] text-[#1A6B47]"
+                  : "bg-muted text-muted-foreground"
+              }`}
+            >
+              {credit ? "Credit" : "Debit"}
+            </span>
+          );
+        },
+      },
+      {
+        id: "amount",
+        header: "Amount",
+        accessorKey: (row) => row.amount,
+        sortable: true,
+        headerClassName: "text-right",
+        cell: (row) => {
+          const credit = isCredit(row.transaction_type);
+          return (
+            <span
+              className={`font-medium ${credit ? "text-[#1A6B47]" : "text-foreground"}`}
+            >
+              {credit ? "+" : "-"}
+              {formatMoney(row.amount, row.currency ?? "NGN")}
+            </span>
+          );
+        },
+      },
+      {
+        id: "balance_after",
+        header: "Balance after",
+        accessorKey: (row) => row.balance_after,
+        sortable: true,
+        headerClassName: "text-right",
+        cell: (row) =>
+          formatMoney(row.balance_after, row.currency ?? "NGN"),
+      },
+      {
+        id: "created_at",
+        header: "Date",
+        accessorKey: (row) => row.created_at,
+        sortable: true,
+        cell: (row) => formatDate(row.created_at),
+      },
+    ],
+    []
+  );
+
   return (
-    <GlassCard
+    <DataTable
+      data={transactions}
+      columns={columns}
       title="Latest Transactions"
-      subtitle="Recent wallet activity"
-      action={
-        <span className="text-[11px] text-muted-foreground px-2.5 py-1 rounded-full border border-black/10 bg-white/60">
-          {transactions.length} entries
-        </span>
+      description="Recent wallet activity"
+      searchPlaceholder="Search transactions..."
+      isLoading={isLoading}
+      getRowId={(row) => row.entry_id}
+      showDownload
+      exportOptions={{ filename: "wallet-transactions" }}
+      emptyComponent={
+        <tr>
+          <td
+            colSpan={columns.length}
+            className="h-24 text-center text-xs text-muted-foreground"
+          >
+            No transactions yet
+          </td>
+        </tr>
       }
-    >
-      {isLoading ? (
-        <InlineLoader label="Loading transactions" />
-      ) : !transactions.length ? (
-        <div className="flex flex-col items-center justify-center py-8 text-center">
-          <div className="size-10 rounded-full bg-white/60 border border-black/10 flex items-center justify-center mb-2">
-            <History className="size-4 text-muted-foreground" />
-          </div>
-          <p className="text-xs text-muted-foreground">No transactions yet</p>
-        </div>
-      ) : (
-        <div className="divide-y divide-black/[0.06]">
-          {transactions.map((tx) => {
-            const credit = isCredit(tx.transaction_type);
-            const Icon = credit ? ArrowDownLeft : ArrowUpRight;
-            return (
-              <div
-                key={tx.entry_id}
-                className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0"
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div
-                    className={`size-9 rounded-md flex items-center justify-center border ${
-                      credit
-                        ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-700"
-                        : "bg-red-500/10 border-red-500/30 text-red-700"
-                    }`}
-                  >
-                    <Icon className="size-4" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-xs font-medium text-foreground truncate capitalize">
-                      {tx.transaction_type.toLowerCase().replace(/_/g, " ")}
-                    </p>
-                    <p className="text-[11px] text-muted-foreground truncate">
-                      {tx.description ?? formatDate(tx.created_at)}
-                    </p>
-                  </div>
-                </div>
-                <div className="text-right">
-                  <p
-                    className={`text-xs font-medium ${
-                      credit ? "text-emerald-700" : "text-foreground"
-                    }`}
-                  >
-                    {credit ? "+" : "-"}
-                    {formatMoney(tx.amount, tx.currency ?? "NGN")}
-                  </p>
-                  <p className="text-[10px] text-muted-foreground">
-                    Bal: {formatMoney(tx.balance_after, tx.currency ?? "NGN")}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </GlassCard>
+    />
   );
 };

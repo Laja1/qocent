@@ -1,4 +1,4 @@
-import { Button, Header } from "@/components/shared";
+import { Button, Header, FormPageCard, PageContent } from "@/components/shared";
 import { useUpdateProfessionalServiceMutation } from "@/service/authApi";
 import { useState } from "react";
 import { serviceTypes } from "../professional-services";
@@ -72,67 +72,61 @@ export const CreateProfessionalService = () => {
         description="Select services to add to your account"
       />
 
-      <div className="flex flex-col mt-5 mx-2 sm:mx-5 lg:mx-10 bg-gray-100 shadow-t-md rounded-t-md">
-        <div className="bg-gradient-to-r from-black to-gray-800 rounded-t-md px-3 sm:px-5 py-5">
-          <div className="text-base sm:text-lg text-white">Select Services</div>
-        </div>
-
-        <div className="p-6">
+      <PageContent>
+        <FormPageCard
+          className="max-w-4xl"
+          title="Select Services"
+          subtitle="Choose the professional services you want to add to your account."
+          footer={
+            availableServices.length > 0 ? (
+              <Button
+                label="Submit"
+                disabled={selectedServices.length === 0 || isLoading}
+                onClick={handleSubmit}
+                isLoading={isLoading}
+              />
+            ) : undefined
+          }
+        >
           {availableServices.length === 0 ? (
-            <p className="text-gray-600 mb-6">
+            <p className="text-sm text-muted-foreground">
               You have already enrolled in all available services.
             </p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
               {availableServices.map((s) => (
                 <button
                   key={s.value}
                   type="button"
                   onClick={() => toggleService(s.value)}
-                  className={`p-4 rounded-md border-2 transition-all text-left ${
+                  className={`rounded-lg border p-4 text-left transition-colors ${
                     selectedServices.includes(s.value)
-                      ? "border-red-400 bg-red-50"
-                      : "border-gray-200 hover:border-gray-300"
+                      ? "border-primary/30 bg-primary/5"
+                      : "border-border hover:border-border hover:bg-muted/40"
                   }`}
                 >
-                  <div className="flex items-start justify-between mb-2">
+                  <div className="mb-2 flex items-start justify-between">
                     <div
                       className={
                         selectedServices.includes(s.value)
-                          ? "text-red-600"
-                          : "text-gray-400"
+                          ? "text-primary"
+                          : "text-muted-foreground"
                       }
                     >
                       {s.triggerIcon}
                     </div>
                     {selectedServices.includes(s.value) && (
-                      <CheckCircle2 className="w-5 h-5 text-red-600" />
+                      <CheckCircle2 className="size-5 text-primary" />
                     )}
                   </div>
-                  <h4 className="font-semibold text-sm mb-1">{s.label}</h4>
-                  <p className="text-xs text-gray-600">{s.description}</p>
+                  <h4 className="mb-1 text-sm font-semibold">{s.label}</h4>
+                  <p className="text-xs text-muted-foreground">{s.description}</p>
                 </button>
               ))}
             </div>
           )}
-
-          <div className="flex justify-end gap-4">
-            <Button
-              label="Clear Selection"
-              intent="secondary"
-              onClick={() => setSelectedServices([])}
-              disabled={selectedServices.length === 0}
-            />
-            <Button
-              label="Submit Application"
-              intent="primary"
-              onClick={handleSubmit}
-              disabled={selectedServices.length === 0 || isLoading}
-              isLoading={isLoading}
-            />
-          </div>
-        </div>
-      </div>
+        </FormPageCard>
+      </PageContent>
     </div>
   );
 };

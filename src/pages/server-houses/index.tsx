@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Button, Header, Tabs } from "@/components/shared";
+import { Button, Header, Tabs, PageContent } from "@/components/shared";
 import { DataTable } from "@/components/shared/datatable";
 import { Eye, PlusIcon, Trash2 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
@@ -18,7 +18,6 @@ import {
 import type { HouseItem } from "@/models/response/houseResponse";
 import NiceModal from "@ebay/nice-modal-react";
 import { ModalConstant } from "@/components/shared/modal/register";
-import { Card } from "@/components/ui/card";
 import { ResourceTable } from "../server-sites/server-sites-table";
 import { serverHouseColumn } from "@/utilities/constants/colums";
 // Cute Data Flow Loader Component
@@ -182,13 +181,12 @@ export const ServerHouses = () => {
         />
       </Header>
 
-      <Card className="mx-5 px-5 mt-5 rounded-md">
+      <PageContent>
         <DataTable
           data={data?.data ?? []}
           columns={serverHouseColumn}
           isLoading={isLoading}
           filterableColumns={["houseStatus"]}
-          title="Server Houses"
           searchPlaceholder="Search server house by name, ID, or code..."
           pageSize={5}
           actions={actions}
@@ -197,13 +195,9 @@ export const ServerHouses = () => {
           getRowId={(row) => row.houseId}
           initialSorting={{ id: "houseCreatedAt", desc: false }}
         />
-      </Card>
 
-      {tabShow && (
-        <div className="mx-5 mt-5">
-          <Tabs tabs={tabData} />
-        </div>
-      )}
+        {tabShow && <Tabs tabs={tabData} />}
+      </PageContent>
     </div>
   );
 };
