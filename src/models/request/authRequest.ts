@@ -85,8 +85,8 @@ export function buildBusinessInitPayload(
 }
 
 export type signInRequest = {
-  user_email?: string;
-  user_password?: string;
+  user_email: string;
+  user_password: string;
 };
 
 export const signInInit = {

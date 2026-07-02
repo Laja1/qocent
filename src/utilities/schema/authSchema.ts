@@ -84,6 +84,7 @@ export const signupValidationSchema = object().shape({
 });
 
 export const businessCompleteValidationSchema = object().shape({
+  business_email: emailValidation(),
   business_display_name: defaultValidation('Business display name'),
 });
 

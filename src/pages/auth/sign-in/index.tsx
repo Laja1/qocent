@@ -1,8 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */ // Updated SignIn component using ID token flow
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import AuthLayout from "@/components/layouts/authLayout";
 import { Button, Textfield } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
 import { signInInit } from "@/models/request/authRequest";
+import {
+  businessNeedsCompletion,
+  type signInResponse,
+} from "@/models/response/authResponse";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useSignInMutation } from "@/service/authApi";
@@ -14,6 +18,37 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
+function mapSignInToCredentials(res: signInResponse) {
+  const { data } = res;
+
+  if (data.is_business && data.business) {
+    const { business } = data;
+    return {
+      token: data.access_token,
+      isBusiness: true,
+      userEmail: business.business_email,
+      userFirstName: business.business_display_name || business.business_name,
+      userLastName: null,
+      userId: business.business_id,
+      businessId: business.business_id,
+    };
+  }
+
+  if (data.user) {
+    return {
+      token: data.access_token,
+      isBusiness: false,
+      userEmail: data.user.user_email,
+      userFirstName: data.user.user_first_name,
+      userLastName: data.user.user_last_name,
+      userId: data.user.user_id,
+      businessId: null,
+    };
+  }
+
+  throw new Error("Invalid login response");
+}
+
 const SignIn = () => {
   const [seePassword, setSeePassword] = useState(false);
   const dispatch = useDispatch();
@@ -23,16 +58,19 @@ const SignIn = () => {
   const handleRegularSignIn = async (values: any) => {
     try {
       const res = await signIn(values).unwrap();
-      dispatch(
-        authStore.action.setCredentials({
-          token: res?.data?.access_token,
-          userEmail: res?.data?.user.user_email,
-          userFirstName: res?.data?.user?.user_first_name,
-          userLastName: res?.data?.user?.user_last_name,
-          userId: res?.data?.user?.user_id ?? null,
-        })
-      );
-      console.log(res);
+      dispatch(authStore.action.setCredentials(mapSignInToCredentials(res)));
+
+      showCustomToast(res.message, {
+        toastOptions: { type: "success", autoClose: 4000 },
+      });
+
+      if (res.data.is_business && businessNeedsCompletion(res.data.business)) {
+        navigate(RouteConstant.auth.completeBusiness.path, {
+          state: { business_email: res.data.business?.business_email },
+        });
+        return;
+      }
+
       navigate(RouteConstant.dashboard.console.path);
     } catch (error: any) {
       const message = ErrorHandler.extractMessage(error);
@@ -56,10 +94,13 @@ const SignIn = () => {
       title="Sign In"
       subtitle="Enter your credentials to access your cloud resources"
     >
-      <form onSubmit={(e) => {
-        e.preventDefault();
-        formik.handleSubmit();
-      }} className="flex flex-col gap-3">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          formik.handleSubmit();
+        }}
+        className="flex flex-col gap-3"
+      >
         <Textfield
           formik={formik}
           name="user_email"
@@ -110,7 +151,6 @@ const SignIn = () => {
           className="w-full mt-3"
           type="submit"
           disabled={!formik?.isValid || isLoading}
-          // disabled={true}
           isLoading={isLoading}
         />
       </form>
