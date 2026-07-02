@@ -202,6 +202,31 @@ const SignUp = () => {
               name="business_phone"
               formik={formik}
             />
+            <Textfield
+              name="business_password"
+              label="Password"
+              placeholder="Create a password"
+              type={seePassword ? "text" : "password"}
+              suffixIcon={
+                <button
+                  type="button"
+                  aria-label={seePassword ? "Hide password" : "Show password"}
+                  onClick={() => setSeePassword((prev) => !prev)}
+                >
+                  {seePassword ? (
+                    <EyeIcon size={16} className="text-black" />
+                  ) : (
+                    <EyeClosed size={16} className="text-black" />
+                  )}
+                </button>
+              }
+              formik={formik}
+              error={
+                formik.touched.business_password && formik.errors.business_password
+                  ? String(formik.errors.business_password)
+                  : ""
+              }
+            />
           </>
         ) : (
           <>

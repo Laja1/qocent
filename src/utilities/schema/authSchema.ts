@@ -76,6 +76,11 @@ export const signupValidationSchema = object().shape({
     then: () => defaultValidation('Business phone number'),
     otherwise: (schema) => schema.notRequired(),
   }),
+  business_password: string().when('accountType', {
+    is: 'BUSINESS',
+    then: () => passwordValidation(),
+    otherwise: (schema) => schema.notRequired(),
+  }),
 });
 
 export const businessCompleteValidationSchema = object().shape({

@@ -14,9 +14,11 @@ export type businessInitRequest = {
   business_email: string;
   business_phone: string;
   business_country: string;
+  business_password: string;
 };
 
 export type businessCompleteRequest = {
+  business_email: string;
   business_display_name: string;
 };
 
@@ -35,6 +37,7 @@ export type SignupFormValues = {
   business_phone: string;
   business_phone_full: string;
   business_country: string;
+  business_password: string;
 };
 
 export const signupFormInit: SignupFormValues = {
@@ -52,6 +55,7 @@ export const signupFormInit: SignupFormValues = {
   business_phone: "",
   business_phone_full: "",
   business_country: "",
+  business_password: "",
 };
 
 export function buildIndividualSignupPayload(
@@ -76,6 +80,7 @@ export function buildBusinessInitPayload(
     business_email: values.business_email,
     business_country: values.business_country,
     business_phone: values.business_phone_full || values.business_phone,
+    business_password: values.business_password,
   };
 }
 

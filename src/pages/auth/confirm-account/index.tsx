@@ -55,7 +55,9 @@ const ConfirmAccount = () => {
       });
 
       if (accountType === "BUSINESS") {
-        navigate(RouteConstant.auth.completeBusiness.path);
+        navigate(RouteConstant.auth.completeBusiness.path, {
+          state: { business_email: email },
+        });
       } else {
         navigate(RouteConstant.auth.signin.path);
       }

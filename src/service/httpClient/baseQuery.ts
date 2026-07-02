@@ -59,8 +59,8 @@ import { authStore } from "@/store/authSlice";
   
     // Skip logout for login/signup endpoints
     const isAuthEndpoint = typeof args === 'string' 
-      ? args.includes('/login') || args.includes('/signup') || args.includes('/business/init') || args.includes('/verify-otp') || args.includes('/send-verification')
-      : args.url?.includes('/login') || args.url?.includes('/signup') || args.url?.includes('/business/init') || args.url?.includes('/verify-otp') || args.url?.includes('/send-verification');
+      ? args.includes('/login') || args.includes('/signup') || args.includes('/business/init') || args.includes('/business/complete') || args.includes('/verify-otp') || args.includes('/send-verification')
+      : args.url?.includes('/login') || args.url?.includes('/signup') || args.url?.includes('/business/init') || args.url?.includes('/business/complete') || args.url?.includes('/verify-otp') || args.url?.includes('/send-verification');
   
     if (
       !isAuthEndpoint &&
