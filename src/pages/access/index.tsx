@@ -26,6 +26,7 @@ import type { Account } from "@/models/response/organizationResponse";
 import type { AccountMemberResponse } from "@/models/response/accountResponse";
 import type { RootState } from "@/store";
 import { SettingsSection } from "@/components/shared/settings-section";
+import { canInviteBusinessUsers } from "@/utilities/contextPermissions";
 
 const getInitials = (first?: string, last?: string, email?: string) => {
   const f = (first || "").trim();
@@ -36,6 +37,10 @@ const getInitials = (first?: string, last?: string, email?: string) => {
 
 export const Access = () => {
   const dashboard = useSelector((state: RootState) => state.dashboard);
+  const activeContext = useSelector(
+    (state: RootState) => state.context?.activeContext
+  );
+  const canInvite = canInviteBusinessUsers(activeContext);
 
   const { data: organizationAccount, isLoading: isSiteLoading } =
     useGetUserAccountsByProviderQuery({
@@ -182,9 +187,9 @@ export const Access = () => {
         title="Access"
         description="Manage team members, roles, and access across your sites"
       >
-        {isAdmin && selectedSite && (
+        {canInvite && selectedSite && (
           <Button
-            label="Invite member"
+            label="Invite user"
             prefixIcon={<UserPlus className="size-4" />}
             size="small"
             intent="secondary"

@@ -16,6 +16,7 @@ import { subscriptionApi } from "@/service/subscriptionApi";
 import { pythonBaseApi } from "@/service/pythonBaseApi";
 import { contextStore } from "./contextSlice";
 import { kotlinBaseApi } from "@/service/kotlinBaseApi";
+import { invitationApi } from "@/service/invitationApi";
 import "@/service/registerApis";
 
 // Combine all your reducers
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   [subscriptionApi.reducerPath]: subscriptionApi.reducer,
   [pythonBaseApi.reducerPath]: pythonBaseApi.reducer,
   [kotlinBaseApi.reducerPath]: kotlinBaseApi.reducer,
+  [invitationApi.reducerPath]: invitationApi.reducer,
  account:accountStore.reducer,
  [formApi.reducerPath]:formApi.reducer,
  [costApi.reducerPath]:costApi.reducer,
@@ -72,6 +74,7 @@ export const store = configureStore({
       subscriptionApi.middleware,
       pythonBaseApi.middleware,
       kotlinBaseApi.middleware,
+      invitationApi.middleware,
       formApi.middleware,
     ),
 });

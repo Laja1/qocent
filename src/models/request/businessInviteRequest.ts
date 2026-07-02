@@ -13,7 +13,6 @@ export interface UserRequestJoinRequest {
 
 export interface UserRespondToInvitePayload {
   action: 'ACCEPT' | 'REJECT';
-  csp?: Csp;
 }
 
 export interface BusinessRespondToRequestPayload {

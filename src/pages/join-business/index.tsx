@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { showCustomToast } from "@/components/shared/toast";
@@ -7,8 +8,14 @@ import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { Loader2, Building2, CheckCircle } from "lucide-react";
 import { useRequestJoinBusinessMutation } from "@/service/businessInviteApi";
 import type { BusinessInviteResponse } from "@/models/response/businessInviteResponse";
+import type { RootState } from "@/store";
+import { canRequestJoinBusiness } from "@/utilities/contextPermissions";
 
 export default function JoinBusiness() {
+  const activeContext = useSelector(
+    (state: RootState) => state.context?.activeContext
+  );
+  const canRequestJoin = canRequestJoinBusiness(activeContext);
   const [slug, setSlug] = useState("");
   const [message, setMessage] = useState("");
   const [result, setResult] = useState<BusinessInviteResponse | null>(null);
@@ -17,7 +24,7 @@ export default function JoinBusiness() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!slug.trim()) return;
+    if (!slug.trim() || !canRequestJoin) return;
     try {
       const res = await requestJoin({
         business_slug_or_name: slug.trim(),
@@ -44,12 +51,20 @@ export default function JoinBusiness() {
             <Building2 className="w-7 h-7 text-white" />
           </div>
           <h1 className="text-2xl font-bold text-gray-900">Join a Business</h1>
-          <p className="text-sm text-gray-500 mt-1">Request to join an existing business on the platform.</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Request to join an existing business from your personal account.
+          </p>
         </div>
 
         <Card className="border border-gray-200 shadow-sm">
           <CardContent className="p-6">
-            {result ? (
+            {!canRequestJoin ? (
+              <div className="rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+                Join requests can only be sent from a personal user account.
+                Business accounts invite users instead — switch to your personal
+                workspace or use Invite Management as a business owner.
+              </div>
+            ) : result ? (
               <div className="text-center space-y-4">
                 <CheckCircle className="w-12 h-12 text-green-500 mx-auto" />
                 <div>
@@ -113,7 +128,7 @@ export default function JoinBusiness() {
                 <Button
                   type="submit"
                   className="w-full bg-black hover:bg-gray-800 text-white h-9 text-sm font-medium"
-                  disabled={isLoading || !slug.trim()}
+                  disabled={isLoading || !slug.trim() || !canRequestJoin}
                 >
                   {isLoading ? (
                     <>

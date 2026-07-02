@@ -20,6 +20,7 @@ import type {
   ProposedRole,
 } from "@/models/response/businessInviteResponse";
 import type { RootState } from "@/store";
+import { canInviteBusinessUsers } from "@/utilities/contextPermissions";
 
 const formatDate = (dateStr: string) =>
   new Date(dateStr).toLocaleDateString("en-GB", {
@@ -121,8 +122,7 @@ export const InviteManagement = () => {
       (state as RootState & { context?: { activeContext?: { context_type?: string; entity_id?: string } } })
         .context?.activeContext
   );
-  const businessId: string =
-    activeContext?.context_type === "business" ? activeContext.entity_id ?? "" : "";
+  const canInvite = canInviteBusinessUsers(activeContext);
 
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
@@ -131,10 +131,10 @@ export const InviteManagement = () => {
   const [respondTarget, setRespondTarget] =
     useState<BusinessInviteResponse | null>(null);
 
-  const { data, isLoading } = useGetBusinessInvitesQuery({
-    business_id: businessId,
-    status: "PENDING",
-  });
+  const { data, isLoading } = useGetBusinessInvitesQuery(
+    { status: "PENDING" },
+    { skip: !canInvite }
+  );
 
   const [inviteUser, { isLoading: isInviting }] = useInviteUserMutation();
   const [cancelInvite, { isLoading: isCancelling }] = useCancelInviteMutation();
@@ -187,15 +187,12 @@ export const InviteManagement = () => {
   );
 
   const handleInviteSubmit = async () => {
-    if (!inviteEmail.trim()) return;
+    if (!inviteEmail.trim() || !canInvite) return;
     try {
       const res = await inviteUser({
-        business_id: businessId,
-        body: {
-          user_email: inviteEmail.trim(),
-          proposed_role: inviteRole,
-          ...(inviteMessage.trim() ? { message: inviteMessage.trim() } : {}),
-        },
+        user_email: inviteEmail.trim(),
+        proposed_role: inviteRole,
+        ...(inviteMessage.trim() ? { message: inviteMessage.trim() } : {}),
       }).unwrap();
       showCustomToast(`Invitation sent to ${res.user_id}`, {
         toastOptions: { type: "success" },
@@ -272,11 +269,18 @@ export const InviteManagement = () => {
           size="small"
           intent="secondary"
           onClick={() => setShowInviteForm((value) => !value)}
+          disabled={!canInvite}
         />
       </Header>
 
       <PageContent>
-        {showInviteForm && (
+        {!canInvite && (
+          <p className="mb-4 rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
+            Only business owners can invite users. Individual users should use
+            Request to Join from their personal workspace.
+          </p>
+        )}
+        {showInviteForm && canInvite && (
           <FormPageCard
             title="Invite a user"
             subtitle="Send an invitation to join your business workspace."
@@ -285,7 +289,7 @@ export const InviteManagement = () => {
                 <Button
                   label="Send invite"
                   onClick={handleInviteSubmit}
-                  disabled={isInviting || !inviteEmail.trim()}
+                  disabled={isInviting || !inviteEmail.trim() || !canInvite}
                   isLoading={isInviting}
                 />
                 <Button

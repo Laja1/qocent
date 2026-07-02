@@ -170,7 +170,7 @@ export const InviteInbox = () => {
     try {
       const res = await userRespond({
         invite_id: acceptingInvite.invite_id,
-        body: { action: "ACCEPT", ...(csp ? { csp } : {}) },
+        body: { action: "ACCEPT" },
         ...(csp ? { csp } : {}),
       }).unwrap();
       showCustomToast(res.message, { toastOptions: { type: "success" } });
@@ -226,7 +226,9 @@ export const InviteInbox = () => {
         account_id: respondedInviteResult.cloud_account_id,
         csp: respondedInviteResult.csp,
       }).unwrap();
-      showCustomToast(res.message, { toastOptions: { type: "success" } });
+      showCustomToast(res || "Login URL sent to your email", {
+        toastOptions: { type: "success" },
+      });
     } catch (error: unknown) {
       showCustomToast(ErrorHandler.extractMessage(error), {
         toastOptions: { type: "error" },

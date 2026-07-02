@@ -13,10 +13,15 @@ import { useSelector } from "react-redux";
 import { serverSiteColumns } from "@/utilities/constants/colums";
 import { useGetUserAccountsByProviderQuery } from "@/service/organizationApi";
 import type { Account } from "@/models/response/organizationResponse";
+import { canInviteBusinessUsers } from "@/utilities/contextPermissions";
 
 export const ServerSites = () => {
   const navigate = useNavigate();
   const dashboard = useSelector((state: RootState) => state.dashboard);
+  const activeContext = useSelector(
+    (state: RootState) => state.context?.activeContext
+  );
+  const canInvite = canInviteBusinessUsers(activeContext);
 
   const { data: organizationAccount, isLoading: isSiteLoading } =
     useGetUserAccountsByProviderQuery({
@@ -93,14 +98,10 @@ export const ServerSites = () => {
     },
   ];
 
-  // Only show "Invite to Site" for admin users
-  if (
-    organizationAccount?.data?.accounts?.some(
-      (item) => item.member_type === "Admin"
-    )
-  ) {
+  // Only business owners can invite users to the business
+  if (canInvite) {
     actions.splice(1, 0, {
-      label: "Invite to Site",
+      label: "Invite user",
       icon: Users,
       onClick: (row: Account) =>
         NiceModal.show(ModalConstant.InviteToWorkspace, row),

@@ -14,9 +14,8 @@ export interface BusinessInviteResponse {
   created_at: string;
   updated_at: string;
   expires_at?: string | null;
-  cloud_account_id?: string | null;
-  cloud_provider?: string | null;
-  login_url_available?: boolean;
+  cloud_account_provisioned?: boolean;
+  csp?: string | null;
 }
 
 export interface BusinessInviteListResponse {

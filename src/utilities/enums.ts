@@ -13,6 +13,7 @@ export enum ApiEnums {
     Wallet = "wallet",
     BillingSpend = "billingSpend",
     Context = "context",
-    BusinessInvite = "businessInvite"
+    BusinessInvite = "businessInvite",
+    Invitation = "invitation"
   }
   

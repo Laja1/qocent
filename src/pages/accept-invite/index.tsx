@@ -6,10 +6,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import {
-  useGetMyInvitesQuery,
-  useUserRespondToInviteMutation,
-} from "@/service/businessInviteApi";
-import type { Csp } from "@/models/response/businessInviteResponse";
+  useAcceptInvitationMutation,
+  useGetMyInvitationsQuery,
+  useRejectInvitationMutation,
+} from "@/service/invitationApi";
+import type { InvitationResponseData } from "@/models/response/invitationResponse";
 import {
   Check,
   X,
@@ -22,22 +23,32 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 
+const normalizeInvitations = (
+  data: InvitationResponseData | InvitationResponseData[] | null | undefined
+): InvitationResponseData[] => {
+  if (!data) return [];
+  return Array.isArray(data) ? data : [data];
+};
+
 export default function AcceptInvite() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const inviteId = searchParams.get("invite_id");
 
-  const { data, isLoading: isLoadingInvites } = useGetMyInvitesQuery();
-  const [userRespond, { isLoading: isResponding }] =
-    useUserRespondToInviteMutation();
+  const { data, isLoading: isLoadingInvites } = useGetMyInvitationsQuery();
+  const [acceptInvitation, { isLoading: isAccepting }] =
+    useAcceptInvitationMutation();
+  const [rejectInvitation, { isLoading: isRejecting }] =
+    useRejectInvitationMutation();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [showAnimation, setShowAnimation] = useState(false);
-  const [selectedCsp, setSelectedCsp] = useState<Csp>("aws");
-  const [showCspPicker, setShowCspPicker] = useState(false);
 
   const invite = useMemo(
-    () => data?.data?.find((item) => item.invite_id === inviteId),
+    () =>
+      normalizeInvitations(data?.data).find(
+        (item) => item.invite_id === inviteId
+      ),
     [data?.data, inviteId]
   );
 
@@ -46,19 +57,14 @@ export default function AcceptInvite() {
     return () => clearTimeout(timer);
   }, []);
 
-  const respond = async (
-    action: "ACCEPT" | "REJECT",
-    csp?: Csp
-  ) => {
-    if (!inviteId || isResponding || isProcessing) return;
+  const respond = async (action: "ACCEPT" | "REJECT") => {
+    if (!inviteId || isAccepting || isRejecting || isProcessing) return;
 
     setIsProcessing(true);
     try {
-      const res = await userRespond({
-        invite_id: inviteId,
-        body: { action, ...(csp ? { csp } : {}) },
-        ...(csp ? { csp } : {}),
-      }).unwrap();
+      const mutation =
+        action === "ACCEPT" ? acceptInvitation : rejectInvitation;
+      const res = await mutation({ invite_id: inviteId }).unwrap();
 
       showCustomToast(res.message, {
         toastOptions: {
@@ -79,15 +85,10 @@ export default function AcceptInvite() {
         toastOptions: { type: "error", autoClose: 5000 },
       });
       setIsProcessing(false);
-      setShowCspPicker(false);
     }
   };
 
   const handleAccept = () => {
-    if (invite?.proposed_role === "MEMBER") {
-      setShowCspPicker(true);
-      return;
-    }
     respond("ACCEPT");
   };
 
@@ -163,12 +164,12 @@ export default function AcceptInvite() {
                 <Users className="w-8 h-8 text-white" />
               </div>
               <h1 className="text-lg lg:text-2xl font-bold mb-2">
-                You're Invited!
+                You&apos;re Invited!
               </h1>
               <p className="text-blue-100 text-sm">
-                {invite?.proposed_role
-                  ? `Join as ${invite.proposed_role}`
-                  : "Join a business workspace"}
+                {invite?.invite_user_role
+                  ? `Join as ${invite.invite_user_role}`
+                  : "Join a cloud account"}
               </p>
             </div>
             <Star className="absolute top-4 right-4 w-4 h-4 text-white/30" />
@@ -179,21 +180,21 @@ export default function AcceptInvite() {
               <div className="flex items-center gap-2 mb-3">
                 <Shield className="w-5 h-5 text-green-600" />
                 <span className="font-medium text-green-800">
-                  What you'll get access to:
+                  What you&apos;ll get access to:
                 </span>
               </div>
               <ul className="space-y-2 text-sm text-green-700">
                 <li className="flex items-center gap-2 text-xs">
                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                  Team workspace and collaboration tools
+                  Cloud account workspace access
                 </li>
                 <li className="flex items-center gap-2 text-xs">
                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                  Cloud infrastructure management
+                  Infrastructure management for this site
                 </li>
                 <li className="flex items-center gap-2 text-xs">
                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                  Real-time monitoring and analytics
+                  Role-based permissions on the account
                 </li>
               </ul>
             </div>
@@ -202,9 +203,9 @@ export default function AcceptInvite() {
               <Button
                 className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white border-0 shadow-lg hover:shadow-xl transition-all duration-200 h-8 text-sm font-semibold"
                 onClick={handleAccept}
-                disabled={isResponding || isProcessing}
+                disabled={isAccepting || isRejecting || isProcessing}
               >
-                {isResponding || isProcessing ? (
+                {isAccepting || isProcessing ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                     Accepting...
@@ -221,7 +222,7 @@ export default function AcceptInvite() {
                 variant="outline"
                 className="flex-1 border-2 border-gray-300 hover:border-gray-400 hover:bg-gray-50 text-gray-700 h-8 text-sm font-semibold transition-all duration-200"
                 onClick={handleDecline}
-                disabled={isProcessing || isResponding}
+                disabled={isProcessing || isAccepting || isRejecting}
               >
                 <X className="w-5 h-5 mr-2" />
                 Decline
@@ -230,44 +231,6 @@ export default function AcceptInvite() {
           </div>
         </CardContent>
       </Card>
-
-      {showCspPicker && (
-        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-md shadow-2xl p-6 w-full max-w-sm">
-            <h3 className="text-base font-semibold text-gray-900 mb-2">
-              Select Cloud Provider
-            </h3>
-            <p className="text-sm text-gray-500 mb-4">
-              Member access requires a cloud provider.
-            </p>
-            <select
-              value={selectedCsp}
-              onChange={(e) => setSelectedCsp(e.target.value as Csp)}
-              className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm mb-4"
-            >
-              <option value="aws">AWS</option>
-              <option value="huawei">Huawei</option>
-            </select>
-            <div className="flex gap-3">
-              <Button
-                className="flex-1"
-                onClick={() => respond("ACCEPT", selectedCsp)}
-                disabled={isResponding || isProcessing}
-              >
-                Confirm
-              </Button>
-              <Button
-                variant="outline"
-                className="flex-1"
-                onClick={() => setShowCspPicker(false)}
-                disabled={isResponding || isProcessing}
-              >
-                Cancel
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

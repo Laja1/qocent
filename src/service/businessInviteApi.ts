@@ -15,12 +15,9 @@ import { pythonBaseApi } from "./pythonBaseApi";
 
 export const businessInviteApi = pythonBaseApi.injectEndpoints({
   endpoints: (build) => ({
-    inviteUser: build.mutation<
-      BusinessInviteResponse,
-      { business_id: string; body: BusinessInviteUserRequest }
-    >({
-      query: ({ business_id, body }) => ({
-        url: `/business-invites/business/${business_id}/invite-user`,
+    inviteUser: build.mutation<BusinessInviteResponse, BusinessInviteUserRequest>({
+      query: (body) => ({
+        url: "/business_invite/business/invite-user",
         method: "POST",
         body,
       }),
@@ -29,7 +26,7 @@ export const businessInviteApi = pythonBaseApi.injectEndpoints({
 
     cancelInvite: build.mutation<InviteActionResponse, { invite_id: string }>({
       query: ({ invite_id }) => ({
-        url: `/business-invites/${invite_id}/cancel-invite`,
+        url: `/business_invite/${invite_id}/cancel-invite`,
         method: "DELETE",
       }),
       invalidatesTags: [{ type: ApiEnums.BusinessInvite, id: "LIST" }],
@@ -37,11 +34,11 @@ export const businessInviteApi = pythonBaseApi.injectEndpoints({
 
     getBusinessInvites: build.query<
       BusinessInviteListResponse,
-      { business_id: string; status?: InviteStatus }
+      { status?: InviteStatus } | void
     >({
-      query: ({ business_id, status }) => ({
-        url: `/business-invites/business/${business_id}`,
-        params: status ? { status } : undefined,
+      query: (arg) => ({
+        url: "/business_invite/business",
+        params: arg?.status ? { status: arg.status } : undefined,
       }),
       providesTags: [{ type: ApiEnums.BusinessInvite, id: "LIST" }],
     }),
@@ -51,7 +48,7 @@ export const businessInviteApi = pythonBaseApi.injectEndpoints({
       UserRequestJoinRequest
     >({
       query: (body) => ({
-        url: "/business-invites/join-request",
+        url: "/business_invite/join-request",
         method: "POST",
         body,
       }),
@@ -63,7 +60,7 @@ export const businessInviteApi = pythonBaseApi.injectEndpoints({
       { invite_id: string }
     >({
       query: ({ invite_id }) => ({
-        url: `/business-invites/${invite_id}/cancel-request`,
+        url: `/business_invite/${invite_id}/cancel-request`,
         method: "DELETE",
       }),
       invalidatesTags: [{ type: ApiEnums.BusinessInvite, id: "LIST" }],
@@ -74,7 +71,7 @@ export const businessInviteApi = pythonBaseApi.injectEndpoints({
       { invite_id: string; body: UserRespondToInvitePayload; csp?: string }
     >({
       query: ({ invite_id, body, csp }) => ({
-        url: `/business-invites/${invite_id}/user-respond`,
+        url: `/business_invite/${invite_id}/user-respond`,
         method: "PATCH",
         params: csp ? { csp } : undefined,
         body,
@@ -87,7 +84,7 @@ export const businessInviteApi = pythonBaseApi.injectEndpoints({
       { invite_id: string; body: BusinessRespondToRequestPayload }
     >({
       query: ({ invite_id, body }) => ({
-        url: `/business-invites/${invite_id}/business-respond`,
+        url: `/business_invite/${invite_id}/business-respond`,
         method: "PATCH",
         body,
       }),
@@ -99,18 +96,18 @@ export const businessInviteApi = pythonBaseApi.injectEndpoints({
       { status?: InviteStatus } | void
     >({
       query: (arg) => ({
-        url: "/business-invites/me",
+        url: "/business_invite/me",
         params: arg?.status ? { status: arg.status } : undefined,
       }),
       providesTags: [{ type: ApiEnums.BusinessInvite, id: "LIST" }],
     }),
 
     generateCloudLoginUrl: build.mutation<
-      { message: string; account_id: string; csp: string },
+      string,
       { account_id: string; csp: string }
     >({
       query: ({ account_id, csp }) => ({
-        url: "/business-invites/cloud-login-url",
+        url: "/business_invite/cloud-login-url",
         method: "POST",
         params: { account_id, csp },
       }),
