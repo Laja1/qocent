@@ -80,11 +80,11 @@ export const deploymentPasswordValidation = (label = "Password") =>
         .min(8, `${label} must be at least 8 characters long`)
         .max(41, `${label} must be at most 41 characters long`);
     
-    export const codeValidatiion = (name: string) =>
+    export const codeValidatiion = (name: string, length = 6) =>
       string()
         .required(`${name} is required`)
-        .min(6, `Must be ${6} digits`)
-        .max(6, `Must be ${6} digits`);
+        .matches(/^\d+$/, `${name} must contain only digits`)
+        .length(length, `Must be ${length} digits`);
 
         export const libraryCidrValidation = (fieldName: string, options?: {
           requirePrivate?: boolean;

@@ -87,9 +87,16 @@ export const businessCompleteValidationSchema = object().shape({
   business_display_name: defaultValidation('Business display name'),
 });
 
-export const confirmAccountSchema = object().shape({
-  otp: codeValidatiion('OTP'),
-});
+export const USER_OTP_LENGTH = 6;
+export const BUSINESS_OTP_LENGTH = 5;
+
+export const getConfirmAccountSchema = (accountType: 'INDIVIDUAL' | 'BUSINESS') =>
+  object().shape({
+    otp: codeValidatiion(
+      'OTP',
+      accountType === 'BUSINESS' ? BUSINESS_OTP_LENGTH : USER_OTP_LENGTH
+    ),
+  });
 
 export const completePasswordSchema = object().shape({
   otp: codeValidatiion('OTP'),

@@ -13,9 +13,13 @@ import {
   useSendOtpMutation,
 } from "@/service/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import { confirmAccountSchema } from "@/utilities/schema/authSchema";
+import {
+  BUSINESS_OTP_LENGTH,
+  getConfirmAccountSchema,
+  USER_OTP_LENGTH,
+} from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const ConfirmAccount = () => {
@@ -27,6 +31,12 @@ const ConfirmAccount = () => {
     typeof flowState === "object" && flowState?.accountType
       ? flowState.accountType
       : "INDIVIDUAL";
+  const otpLength =
+    accountType === "BUSINESS" ? BUSINESS_OTP_LENGTH : USER_OTP_LENGTH;
+  const validationSchema = useMemo(
+    () => getConfirmAccountSchema(accountType),
+    [accountType]
+  );
 
   const [completeEnrollment, { isLoading }] = useCompleteEnrollmentMutation();
   const [resendOtp] = useSendOtpMutation();
@@ -102,7 +112,7 @@ const ConfirmAccount = () => {
   const formik = useFormik({
     initialValues: completeEnrollmentInit,
     onSubmit,
-    validationSchema: confirmAccountSchema,
+    validationSchema,
   });
 
   useEffect(() => {
@@ -112,7 +122,7 @@ const ConfirmAccount = () => {
   return (
     <AuthLayout
       title="Confirm Your OTP"
-      subtitle={`Enter the one-time password (OTP) sent to ${getMaskedEmail(
+      subtitle={`Enter the ${otpLength}-digit one-time password (OTP) sent to ${getMaskedEmail(
         email ?? ""
       )} to verify and activate your account.`}
     >
@@ -120,10 +130,10 @@ const ConfirmAccount = () => {
         <Textfield
           formik={formik}
           name="otp"
-          maxLength={6}
+          maxLength={otpLength}
           label="OTP"
           type="number"
-          placeholder="Enter your OTP"
+          placeholder={`Enter your ${otpLength}-digit OTP`}
           error={
             formik?.touched.otp && formik?.errors.otp ? formik?.errors.otp : ""
           }
