@@ -1,7 +1,7 @@
 // store.ts
-import { configureStore, combineReducers } from "@reduxjs/toolkit";
-import { persistStore, persistReducer } from "redux-persist";
-import storage from "redux-persist/lib/storage"; 
+import { configureStore, combineReducers, type Reducer } from "@reduxjs/toolkit";
+import { persistStore, persistReducer, PURGE } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import { authStore } from "./authSlice";
 import { dashboardStore } from "./dashboardSlice";
 import { authApi } from "@/service/authApi";
@@ -38,6 +38,16 @@ const rootReducer = combineReducers({
  context: contextStore.reducer,
 });
 
+type RootReducerState = ReturnType<typeof rootReducer>;
+
+// Reset ALL slices to initial state on logout, and handle redux-persist PURGE
+const rootReducerWithReset: Reducer<RootReducerState> = (state, action) => {
+  if (action.type === authStore.action.logout.type || action.type === PURGE) {
+    return rootReducer(undefined, action);
+  }
+  return rootReducer(state, action);
+};
+
 // Persist config for redux-persist
 const persistConfig = {
   key: "root",
@@ -48,7 +58,24 @@ const persistConfig = {
 };
 
 // Wrap root reducer with persistReducer
-const persistedReducer = persistReducer(persistConfig, rootReducer);
+const persistedReducer = persistReducer(persistConfig, rootReducerWithReset);
+
+// Purges persisted storage whenever logout is dispatched (covers all logout paths)
+const persistPurgeMiddleware =
+  (storeAPI: { dispatch: (action: unknown) => void }) =>
+  (next: (action: unknown) => unknown) =>
+  (action: unknown) => {
+    const result = next(action);
+    if (
+      typeof action === "object" &&
+      action !== null &&
+      "type" in action &&
+      (action as { type: string }).type === authStore.action.logout.type
+    ) {
+      persistor.purge();
+    }
+    return result;
+  };
 
 // Create store
 export const store = configureStore({
@@ -66,6 +93,7 @@ export const store = configureStore({
         ],
       },
     }).concat(
+      persistPurgeMiddleware,
       authApi.middleware,
       accountsApi.middleware,
       cloudServicesApi.middleware,

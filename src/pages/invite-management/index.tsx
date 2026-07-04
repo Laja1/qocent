@@ -97,11 +97,12 @@ function RespondModal({
 
 export const InviteManagement = () => {
   const activeContext = useSelector(
-    (state: RootState) =>
-      (state as RootState & { context?: { activeContext?: { context_type?: string; entity_id?: string } } })
-        .context?.activeContext
+    (state: RootState) => state.context?.activeContext
   );
-  const canInvite = canInviteBusinessUsers(activeContext);
+  const isBusiness = useSelector((state: RootState) => state.auth.isBusiness);
+
+  // Direct business login (isBusiness=true) OR a user in business-owner context
+  const canInvite = isBusiness || canInviteBusinessUsers(activeContext);
 
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [inviteEmail, setInviteEmail] = useState("");
@@ -235,14 +236,15 @@ export const InviteManagement = () => {
         title="Invite Management"
         description="Manage invitations for your business."
       >
-        <Button
-          label="Invite user"
-          prefixIcon={<UserPlus className="size-4" />}
-          size="small"
-          intent="secondary"
-          onClick={() => setShowInviteForm((value) => !value)}
-          disabled={!canInvite}
-        />
+        {canInvite && (
+          <Button
+            label="Invite user"
+            prefixIcon={<UserPlus className="size-4" />}
+            size="small"
+            intent="secondary"
+            onClick={() => setShowInviteForm((value) => !value)}
+          />
+        )}
       </Header>
 
       <PageContent>

@@ -24,6 +24,7 @@ import { useSelector } from "react-redux";
 import type { RootState } from "@/store";
 import { imgLinks, svgLinks } from "@/assets/assetLink";
 import type { ReactElement } from "react";
+import { canInviteBusinessUsers } from "@/utilities/contextPermissions";
 
 export interface SidebarItem {
   title: string;
@@ -35,6 +36,12 @@ export interface SidebarItem {
 export const SidebarLayout = () => {
   const { pathname } = useLocation();
   const account = useSelector((state: RootState) => state.account);
+  const activeContext = useSelector(
+    (state: RootState) => state.context?.activeContext
+  );
+  const isBusiness = useSelector((state: RootState) => state.auth.isBusiness);
+  const canManageInvites = isBusiness || canInviteBusinessUsers(activeContext);
+
   const navItems: SidebarItem[] = [
     {
       title: "Server Sites",
@@ -70,12 +77,16 @@ export const SidebarLayout = () => {
       href: RouteConstant.dashboard.inviteInbox.path,
       isActive: false,
     },
-    {
-      title: "Invite Management",
-      icon: <UserPlus className="size-4" />,
-      href: RouteConstant.dashboard.inviteManagement.path,
-      isActive: false,
-    },
+    ...(canManageInvites
+      ? [
+          {
+            title: "Invite Management",
+            icon: <UserPlus className="size-4" />,
+            href: RouteConstant.dashboard.inviteManagement.path,
+            isActive: false,
+          },
+        ]
+      : []),
     {
       title: "Settings",
       icon: <Settings className="size-4" />,
