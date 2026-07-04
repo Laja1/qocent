@@ -89,7 +89,7 @@ export const businessCompleteValidationSchema = object().shape({
 });
 
 export const USER_OTP_LENGTH = 6;
-export const BUSINESS_OTP_LENGTH = 5;
+export const BUSINESS_OTP_LENGTH = 6;
 
 export const getConfirmAccountSchema = (accountType: 'INDIVIDUAL' | 'BUSINESS') =>
   object().shape({
