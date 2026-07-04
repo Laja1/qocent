@@ -2,7 +2,7 @@
 import { TermsAndConditionsModal } from "@/components/auth/terms-and-conditions-modal";
 import { PasswordRequirements } from "@/components/auth/password-requirements";
 import AuthLayout from "@/components/layouts/authLayout";
-import { Button, SelectField } from "@/components/shared";
+import { Button, ComboBoxField } from "@/components/shared";
 import { PhoneField } from "@/components/shared/phonefield";
 import { Textfield } from "@/components/shared/textfield";
 import { showCustomToast } from "@/components/shared/toast";
@@ -191,9 +191,11 @@ const SignUp = () => {
                   : ""
               }
             />
-            <SelectField
+            <ComboBoxField
               name="business_country"
               placeholder="Select a country"
+              searchPlaceholder="Search countries..."
+              emptyMessage="No country found."
               label="Country"
               formik={formik}
               options={countryOptions}
@@ -267,9 +269,11 @@ const SignUp = () => {
                   : ""
               }
             />
-            <SelectField
+            <ComboBoxField
               name="user_country"
               placeholder="Select a country"
+              searchPlaceholder="Search countries..."
+              emptyMessage="No country found."
               label="Country"
               formik={formik}
               options={countryOptions}

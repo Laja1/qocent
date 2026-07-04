@@ -59,9 +59,9 @@ export const ComboBoxField = ({
 
   const selectedOption = options.find((option) => option.value === value);
 
-  const handleSelect = (currentValue: string) => {
+  const handleSelect = (optionValue: string) => {
     const newValue =
-      currentValue === value ? (allowClear ? "" : currentValue) : currentValue;
+      optionValue === value ? (allowClear ? "" : optionValue) : optionValue;
     formik.setFieldValue(name, newValue);
     setOpen(false);
   };
@@ -90,18 +90,24 @@ export const ComboBoxField = ({
           </Button>
         </PopoverTrigger>
 
-        <PopoverContent className="w-full p-0" align="start">
+        <PopoverContent
+          className="w-[var(--radix-popover-trigger-width)] p-0"
+          align="start"
+        >
           <Command>
-            <CommandInput className="text-xs" placeholder={searchPlaceholder} />
-            <CommandList >
+            <CommandInput
+              className="text-xs"
+              placeholder={searchPlaceholder}
+            />
+            <CommandList>
               <CommandEmpty>{emptyMessage}</CommandEmpty>
-              <CommandGroup >
+              <CommandGroup>
                 {options.map((option) => (
                   <CommandItem
                     key={option.value}
-                    value={option.value}
-                    className="text-xs overflow-y-hidden overflow-auto"
-                    onSelect={handleSelect}
+                    value={option.label}
+                    className="text-xs"
+                    onSelect={() => handleSelect(option.value)}
                   >
                     <CheckIcon
                       className={cn(
