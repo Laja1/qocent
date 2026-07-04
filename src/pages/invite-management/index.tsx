@@ -16,7 +16,6 @@ import {
 } from "@/service/businessInviteApi";
 import type {
   BusinessInviteResponse,
-  Csp,
   ProposedRole,
 } from "@/models/response/businessInviteResponse";
 import type { RootState } from "@/store";
@@ -31,7 +30,7 @@ const formatDate = (dateStr: string) =>
 
 interface RespondModalProps {
   invite: BusinessInviteResponse;
-  onConfirm: (proposedRole: ProposedRole, csp?: Csp) => void;
+  onConfirm: (proposedRole: ProposedRole) => void;
   onCancel: () => void;
   isLoading: boolean;
 }
@@ -43,7 +42,6 @@ function RespondModal({
   isLoading,
 }: RespondModalProps) {
   const [role, setRole] = useState<ProposedRole>("VIEWER");
-  const [csp, setCsp] = useState<Csp>("aws");
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4">
@@ -60,43 +58,24 @@ function RespondModal({
             &ldquo;{invite.message}&rdquo;
           </p>
         )}
-        <div className="mt-4 space-y-3">
-          <div>
-            <label className="mb-1 block text-xs font-medium text-foreground">
-              Role
-            </label>
-            <select
-              value={role}
-              onChange={(e) => setRole(e.target.value as ProposedRole)}
-              className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm"
-            >
-              <option value="VIEWER">VIEWER</option>
-              <option value="MEMBER">MEMBER</option>
-            </select>
-          </div>
-          {role === "MEMBER" && (
-            <div>
-              <label className="mb-1 block text-xs font-medium text-foreground">
-                Cloud provider
-              </label>
-              <select
-                value={csp}
-                onChange={(e) => setCsp(e.target.value as Csp)}
-                className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm"
-              >
-                <option value="aws">AWS</option>
-                <option value="huawei">Huawei</option>
-              </select>
-            </div>
-          )}
+        <div className="mt-4">
+          <label className="mb-1 block text-xs font-medium text-foreground">
+            Role
+          </label>
+          <select
+            value={role}
+            onChange={(e) => setRole(e.target.value as ProposedRole)}
+            className="h-9 w-full rounded-md border border-border bg-background px-3 text-sm"
+          >
+            <option value="VIEWER">VIEWER</option>
+            <option value="MEMBER">MEMBER</option>
+          </select>
         </div>
         <div className="mt-5 flex gap-2">
           <UiButton
             className="flex-1"
             size="sm"
-            onClick={() =>
-              onConfirm(role, role === "MEMBER" ? csp : undefined)
-            }
+            onClick={() => onConfirm(role)}
             disabled={isLoading}
           >
             Accept
@@ -233,19 +212,12 @@ export const InviteManagement = () => {
     }
   };
 
-  const handleRespondConfirm = async (
-    proposedRole: ProposedRole,
-    csp?: Csp
-  ) => {
+  const handleRespondConfirm = async (proposedRole: ProposedRole) => {
     if (!respondTarget) return;
     try {
       const res = await businessRespond({
         invite_id: respondTarget.invite_id,
-        body: {
-          action: "ACCEPT",
-          proposed_role: proposedRole,
-          ...(csp ? { csp } : {}),
-        },
+        body: { action: "ACCEPT", proposed_role: proposedRole },
       }).unwrap();
       showCustomToast(res.message, { toastOptions: { type: "success" } });
       setRespondTarget(null);

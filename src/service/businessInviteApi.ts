@@ -4,12 +4,15 @@ import type {
   UserRequestJoinRequest,
   UserRespondToInvitePayload,
   BusinessRespondToRequestPayload,
+  CreateCloudAccountRequest,
 } from "@/models/request/businessInviteRequest";
 import type {
   BusinessInviteResponse,
   BusinessInviteListResponse,
   InviteActionResponse,
   InviteStatus,
+  CloudAccountResponse,
+  CloudLoginUrlResponse,
 } from "@/models/response/businessInviteResponse";
 import { pythonBaseApi } from "./pythonBaseApi";
 
@@ -68,12 +71,11 @@ export const businessInviteApi = pythonBaseApi.injectEndpoints({
 
     userRespondToInvite: build.mutation<
       InviteActionResponse,
-      { invite_id: string; body: UserRespondToInvitePayload; csp?: string }
+      { invite_id: string; body: UserRespondToInvitePayload }
     >({
-      query: ({ invite_id, body, csp }) => ({
+      query: ({ invite_id, body }) => ({
         url: `/business_invite/${invite_id}/user-respond`,
         method: "PATCH",
-        params: csp ? { csp } : undefined,
         body,
       }),
       invalidatesTags: [{ type: ApiEnums.BusinessInvite, id: "LIST" }],
@@ -102,8 +104,19 @@ export const businessInviteApi = pythonBaseApi.injectEndpoints({
       providesTags: [{ type: ApiEnums.BusinessInvite, id: "LIST" }],
     }),
 
+    createCloudAccount: build.mutation<
+      CloudAccountResponse,
+      CreateCloudAccountRequest
+    >({
+      query: (body) => ({
+        url: "/business_invite/cloud-account",
+        method: "POST",
+        body,
+      }),
+    }),
+
     generateCloudLoginUrl: build.mutation<
-      string,
+      CloudLoginUrlResponse,
       { account_id: string; csp: string }
     >({
       query: ({ account_id, csp }) => ({
@@ -124,5 +137,6 @@ export const {
   useUserRespondToInviteMutation,
   useBusinessRespondToRequestMutation,
   useGetMyInvitesQuery,
+  useCreateCloudAccountMutation,
   useGenerateCloudLoginUrlMutation,
 } = businessInviteApi;

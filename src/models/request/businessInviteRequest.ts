@@ -18,6 +18,9 @@ export interface UserRespondToInvitePayload {
 export interface BusinessRespondToRequestPayload {
   action: 'ACCEPT' | 'REJECT';
   proposed_role?: ProposedRole;
-  csp?: Csp;
-  account_name_override?: string;
+}
+
+export interface CreateCloudAccountRequest {
+  csp: Csp;
+  account_name?: string;
 }

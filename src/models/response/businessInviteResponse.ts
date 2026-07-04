@@ -32,3 +32,20 @@ export interface InviteActionResponse {
   cloud_provider?: string | null;
   login_url_available?: boolean;
 }
+
+export interface CloudAccountResponse {
+  status: string;
+  message: string;
+  account_id: string;
+  org_id: string;
+  member_type: string;
+  login_url: string;
+  csp: Csp;
+}
+
+export interface CloudLoginUrlResponse {
+  status: string;
+  message: string;
+  account_id: string;
+  csp: Csp;
+}
