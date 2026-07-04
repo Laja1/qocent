@@ -13,6 +13,7 @@ import {
   useSendOtpMutation,
 } from "@/service/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
+import { useResendOtpCooldown } from "@/hooks/useResendOtpCooldown";
 import {
   BUSINESS_OTP_LENGTH,
   getConfirmAccountSchema,
@@ -39,7 +40,8 @@ const ConfirmAccount = () => {
   );
 
   const [completeEnrollment, { isLoading }] = useCompleteEnrollmentMutation();
-  const [resendOtp] = useSendOtpMutation();
+  const [resendOtp, { isLoading: isResending }] = useSendOtpMutation();
+  const { canResend, formattedCooldown, resetCooldown } = useResendOtpCooldown();
 
   const onSubmit = async (values: { otp: string }) => {
     if (!email) {
@@ -83,6 +85,8 @@ const ConfirmAccount = () => {
   };
 
   const handleResendOtp = async () => {
+    if (!canResend || isResending) return;
+
     if (!email) {
       showCustomToast("Missing email for verification. Please sign up again.", {
         toastOptions: { type: "error", autoClose: 5000 },
@@ -98,6 +102,7 @@ const ConfirmAccount = () => {
           autoClose: 5000,
         },
       });
+      resetCooldown();
     } catch (error) {
       const message = ErrorHandler.extractMessage(error);
       showCustomToast(message || "Failed to resend OTP", {
@@ -147,12 +152,20 @@ const ConfirmAccount = () => {
         />
         <p className="text-center mt-2 text-xs text-gray-700">
           Didn't get a code?{" "}
-          <span
-            onClick={handleResendOtp}
-            className="text-red-700 hover:cursor-pointer"
-          >
-            Resend OTP
-          </span>
+          {canResend ? (
+            <button
+              type="button"
+              onClick={handleResendOtp}
+              disabled={isResending}
+              className="text-red-700 hover:underline disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isResending ? "Sending..." : "Resend OTP"}
+            </button>
+          ) : (
+            <span className="text-gray-500">
+              Resend OTP in {formattedCooldown}
+            </span>
+          )}
         </p>
       </div>
     </AuthLayout>

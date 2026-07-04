@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { TermsAndConditionsModal } from "@/components/auth/terms-and-conditions-modal";
+import { PasswordRequirements } from "@/components/auth/password-requirements";
 import AuthLayout from "@/components/layouts/authLayout";
 import { Button, SelectField } from "@/components/shared";
 import { PhoneField } from "@/components/shared/phonefield";
@@ -227,6 +228,7 @@ const SignUp = () => {
                   : ""
               }
             />
+            <PasswordRequirements password={formik.values.business_password} />
           </>
         ) : (
           <>
@@ -302,6 +304,7 @@ const SignUp = () => {
                   : ""
               }
             />
+            <PasswordRequirements password={formik.values.user_password} />
           </>
         )}
 
