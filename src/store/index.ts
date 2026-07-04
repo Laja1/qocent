@@ -1,5 +1,5 @@
 // store.ts
-import { configureStore, combineReducers, type Reducer } from "@reduxjs/toolkit";
+import { configureStore, combineReducers, type Middleware, type Reducer } from "@reduxjs/toolkit";
 import { persistStore, persistReducer, PURGE } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { authStore } from "./authSlice";
@@ -60,22 +60,19 @@ const persistConfig = {
 // Wrap root reducer with persistReducer
 const persistedReducer = persistReducer(persistConfig, rootReducerWithReset);
 
-// Purges persisted storage whenever logout is dispatched (covers all logout paths)
-const persistPurgeMiddleware =
-  (storeAPI: { dispatch: (action: unknown) => void }) =>
-  (next: (action: unknown) => unknown) =>
-  (action: unknown) => {
-    const result = next(action);
-    if (
-      typeof action === "object" &&
-      action !== null &&
-      "type" in action &&
-      (action as { type: string }).type === authStore.action.logout.type
-    ) {
-      persistor.purge();
-    }
-    return result;
-  };
+// Persists persisted storage whenever logout is dispatched (covers all logout paths)
+const persistPurgeMiddleware: Middleware = () => (next) => (action) => {
+  const result = next(action);
+  if (
+    typeof action === "object" &&
+    action !== null &&
+    "type" in action &&
+    (action as { type: string }).type === authStore.action.logout.type
+  ) {
+    persistor.purge();
+  }
+  return result;
+};
 
 // Create store
 export const store = configureStore({
