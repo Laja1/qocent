@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 import { ClipLoader } from "react-spinners";
 import { GlassCard } from "./glass-card";
-import { formatMoney } from "../utils/format";
+import { formatAmountWithCommas, formatMoney, formatUsdAmount, sanitizeAmountInput } from "../utils/format";
 
 type FundWalletCardProps = {
   amount: string;
@@ -35,9 +35,9 @@ export const FundWalletCard = ({
           <input
             type="text"
             inputMode="decimal"
-            value={amount}
+            value={formatAmountWithCommas(amount)}
             onChange={(e) =>
-              onAmountChange(e.target.value.replace(/[^\d.]/g, ""))
+              onAmountChange(sanitizeAmountInput(e.target.value))
             }
             placeholder="0.00"
             className="w-full pl-12 pr-3 py-2.5 rounded-md bg-white/70 border border-black/10 text-sm text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/30"
@@ -68,7 +68,7 @@ export const FundWalletCard = ({
               </p>
             </div>
             <span className="rounded-full border border-black/10 bg-white/70 px-2.5 py-1 text-[11px] text-foreground/80">
-              ${amount || "0"} USD
+              ${formatUsdAmount(amount)} USD
             </span>
           </div>
 
