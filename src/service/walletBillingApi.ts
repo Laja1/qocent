@@ -1,24 +1,28 @@
 import { ApiEnums } from "@/utilities/enums";
+import type { FundWalletRequest } from "@/models/request/walletBillingRequest";
 import type {
-  FundWalletRequest,
-} from "@/models/request/walletBillingRequest";
-import type {
+  BalanceVsSpendResponse,
+  ExchangeRateResponse,
   FundWalletResponse,
   MyBillsResponse,
+  SpendOverTimeResponse,
   SpendReportResponse,
+  TotalSpendResponse,
   WalletBalanceResponse,
-  WalletFundingStatusResponse,
-  WalletTransactionResponse,
+  WalletMeResponse,
+  WalletTransactionListResponse,
 } from "@/models/response/walletBillingResponse";
-import type { CreatePaidSubscriptionRequest } from "@/models/request/subscriptionRequest";
-import type {
-  CreatePaidSubscriptionResponse,
-  SubscriptionPaymentStatusResponse,
-} from "@/models/response/subscriptionResponse";
 import { pythonBaseApi } from "./pythonBaseApi";
 
 export const walletBillingApi = pythonBaseApi.injectEndpoints({
   endpoints: (build) => ({
+    getWalletMe: build.query<WalletMeResponse, void>({
+      query: () => ({
+        url: "/wallet/me",
+      }),
+      providesTags: [{ type: ApiEnums.Wallet, id: "DETAILS" }],
+    }),
+
     getWalletBalance: build.query<
       WalletBalanceResponse,
       { force_recalculate?: boolean } | void
@@ -33,7 +37,7 @@ export const walletBillingApi = pythonBaseApi.injectEndpoints({
     }),
 
     getWalletTransactions: build.query<
-      WalletTransactionResponse[],
+      WalletTransactionListResponse,
       { limit?: number; offset?: number } | void
     >({
       query: (arg) => ({
@@ -46,6 +50,17 @@ export const walletBillingApi = pythonBaseApi.injectEndpoints({
       providesTags: [{ type: ApiEnums.Wallet, id: "TRANSACTIONS" }],
     }),
 
+    getBalanceVsSpend: build.query<
+      BalanceVsSpendResponse,
+      { period_days?: number } | void
+    >({
+      query: (arg) => ({
+        url: "/wallet/balance-vs-spend",
+        params: arg?.period_days ? { period_days: arg.period_days } : undefined,
+      }),
+      providesTags: [{ type: ApiEnums.Wallet, id: "BALANCE" }],
+    }),
+
     fundWallet: build.mutation<FundWalletResponse, FundWalletRequest>({
       query: (body) => ({
         url: "/wallet/fund",
@@ -54,162 +69,82 @@ export const walletBillingApi = pythonBaseApi.injectEndpoints({
       }),
     }),
 
-    checkWalletFundingStatus: build.query<WalletFundingStatusResponse, string>({
-      query: (payment_id) => ({
-        url: `/wallet/funding-status/${payment_id}`,
-      }),
-      providesTags: [{ type: ApiEnums.Wallet, id: "BALANCE" }],
-    }),
-
     getSpendReport: build.query<
       SpendReportResponse,
-      { start_date?: string | null; end_date?: string | null } | void
+      {
+        account_id: string;
+        start_date?: string | null;
+        end_date?: string | null;
+      }
     >({
-      query: (arg) => ({
+      query: ({ account_id, start_date, end_date }) => ({
         url: "/billing/spend-report",
-        params: {
-          start_date: arg?.start_date,
-          end_date: arg?.end_date,
-        },
+        params: { account_id, start_date, end_date },
       }),
       providesTags: [{ type: ApiEnums.BillingSpend, id: "REPORT" }],
     }),
 
-    getMyBills: build.query<MyBillsResponse, void>({
-      query: () => ({
+    getMyBills: build.query<
+      MyBillsResponse | TotalSpendResponse,
+      {
+        hyperscaler?: string | null;
+        start_date?: string | null;
+        end_date?: string | null;
+        status?: string | null;
+        detailed?: boolean;
+        limit?: number;
+        offset?: number;
+      } | void
+    >({
+      query: (arg) => ({
         url: "/billing/my-bills",
+        params: arg ?? undefined,
       }),
       providesTags: [{ type: ApiEnums.BillingSpend, id: "BILLS" }],
     }),
 
-    getWalletDetails: build.query<WalletBalanceResponse, void>({
-      query: () => ({
-        url: "/wallet/me",
+    getMySpend: build.query<
+      SpendOverTimeResponse,
+      {
+        hyperscaler?: string | null;
+        start_date?: string | null;
+        end_date?: string | null;
+        group_by?: "daily" | "monthly";
+      } | void
+    >({
+      query: (arg) => ({
+        url: "/billing/my-spend",
+        params: arg ?? undefined,
       }),
-      providesTags: [{ type: ApiEnums.Wallet, id: "DETAILS" }],
+      providesTags: [{ type: ApiEnums.BillingSpend, id: "SPEND" }],
     }),
 
-    startPersonalTrial: build.mutation<
-      void,
-      { plan_id: string; trial_duration_days?: number }
+    getCurrentExchangeRate: build.query<
+      ExchangeRateResponse,
+      { base?: string; quote?: string } | void
     >({
-      query: ({ plan_id, trial_duration_days = 30 }) => ({
-        url: "/wallet/subscribe/trial",
-        method: "POST",
-        params: { plan_id, trial_duration_days },
+      query: (arg) => ({
+        url: "/exchange-rates/current",
+        params: {
+          base: arg?.base ?? "USD",
+          quote: arg?.quote ?? "NGN",
+        },
       }),
-      invalidatesTags: [
-        { type: ApiEnums.Subscription, id: "LIST" },
-        { type: ApiEnums.Subscription, id: "PLANS" },
-      ],
-    }),
-
-    createPersonalPaidSubscription: build.mutation<
-      CreatePaidSubscriptionResponse,
-      CreatePaidSubscriptionRequest
-    >({
-      query: (body) => ({
-        url: "/wallet/subscribe/paid",
-        method: "POST",
-        body,
-      }),
-      invalidatesTags: [
-        { type: ApiEnums.Subscription, id: "LIST" },
-        { type: ApiEnums.Subscription, id: "PLANS" },
-      ],
-    }),
-
-    convertPersonalTrialToPaid: build.mutation<
-      CreatePaidSubscriptionResponse,
-      { subscription_id: string; payment_valid_minutes?: number }
-    >({
-      query: (body) => ({
-        url: "/wallet/subscribe/convert-trial",
-        method: "POST",
-        body,
-      }),
-      invalidatesTags: [{ type: ApiEnums.Subscription, id: "LIST" }],
-    }),
-
-    checkPersonalPaymentStatus: build.query<
-      SubscriptionPaymentStatusResponse,
-      string
-    >({
-      query: (payment_id) => ({
-        url: `/wallet/subscribe/payment-status/${payment_id}`,
-      }),
-      providesTags: [{ type: ApiEnums.Subscription, id: "PAYMENT" }],
-    }),
-
-    startBusinessTrial: build.mutation<
-      void,
-      { business_id: string; plan_id: string; trial_duration_days?: number }
-    >({
-      query: ({ business_id, plan_id, trial_duration_days }) => ({
-        url: `/wallet/business/${business_id}/subscribe/trial`,
-        method: "POST",
-        params: { plan_id, ...(trial_duration_days ? { trial_duration_days } : {}) },
-      }),
-      invalidatesTags: [
-        { type: ApiEnums.Subscription, id: "LIST" },
-        { type: ApiEnums.Subscription, id: "PLANS" },
-      ],
-    }),
-
-    createBusinessPaidSubscription: build.mutation<
-      CreatePaidSubscriptionResponse,
-      { business_id: string; body: CreatePaidSubscriptionRequest }
-    >({
-      query: ({ business_id, body }) => ({
-        url: `/wallet/business/${business_id}/subscribe/paid`,
-        method: "POST",
-        body,
-      }),
-      invalidatesTags: [
-        { type: ApiEnums.Subscription, id: "LIST" },
-        { type: ApiEnums.Subscription, id: "PLANS" },
-      ],
-    }),
-
-    convertBusinessTrialToPaid: build.mutation<
-      CreatePaidSubscriptionResponse,
-      { business_id: string; subscription_id: string; payment_valid_minutes?: number }
-    >({
-      query: ({ business_id, subscription_id, payment_valid_minutes }) => ({
-        url: `/wallet/business/${business_id}/subscribe/convert-trial`,
-        method: "POST",
-        body: { subscription_id, ...(payment_valid_minutes ? { payment_valid_minutes } : {}) },
-      }),
-      invalidatesTags: [{ type: ApiEnums.Subscription, id: "LIST" }],
-    }),
-
-    checkBusinessPaymentStatus: build.query<
-      SubscriptionPaymentStatusResponse,
-      { business_id: string; payment_id: string }
-    >({
-      query: ({ business_id, payment_id }) => ({
-        url: `/wallet/business/${business_id}/subscribe/payment-status/${payment_id}`,
-      }),
-      providesTags: [{ type: ApiEnums.Subscription, id: "PAYMENT" }],
     }),
   }),
 });
 
 export const {
+  useGetWalletMeQuery,
   useGetWalletBalanceQuery,
   useGetWalletTransactionsQuery,
+  useGetBalanceVsSpendQuery,
   useFundWalletMutation,
-  useCheckWalletFundingStatusQuery,
   useGetSpendReportQuery,
   useGetMyBillsQuery,
-  useGetWalletDetailsQuery,
-  useStartPersonalTrialMutation,
-  useCreatePersonalPaidSubscriptionMutation,
-  useConvertPersonalTrialToPaidMutation,
-  useCheckPersonalPaymentStatusQuery,
-  useLazyCheckPersonalPaymentStatusQuery,
-  useStartBusinessTrialMutation,
-  useCreateBusinessPaidSubscriptionMutation,
-  useConvertBusinessTrialToPaidMutation,
-  useCheckBusinessPaymentStatusQuery,
+  useGetMySpendQuery,
+  useGetCurrentExchangeRateQuery,
 } = walletBillingApi;
+
+/** @deprecated Use useGetWalletMeQuery */
+export const useGetWalletDetailsQuery = useGetWalletMeQuery;

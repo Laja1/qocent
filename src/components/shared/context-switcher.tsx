@@ -92,7 +92,7 @@ export function ContextSwitcher() {
       dispatch(
         contextStore.action.setActiveContext({
           context: res.active_context,
-          tokenContextClaim: res.token_context_claim,
+          tokenContextClaim: res.access_token,
         })
       );
 

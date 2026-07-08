@@ -8,19 +8,41 @@ export type InvitationStatus =
   | "EXPIRED"
   | string;
 
-export type InvitationResponseData = {
+export type InvitationData = {
   invite_id: string;
-  invite_sender_id: string;
-  invite_recipient_id: string;
-  invite_account_id: string;
-  invite_user_role: MemberType | string;
-  invite_status: InvitationStatus;
-  invite_created_at: string;
-  invite_expires_at: string;
+  business_id: string;
+  business_display_name?: string | null;
+  account_id?: string | null;
+  account_name?: string | null;
+  account_provider?: string | null;
+  user_id: string;
+  user_email?: string | null;
+  user_full_name?: string | null;
+  role: MemberType | string;
+  status: InvitationStatus;
+  message?: string | null;
+  created_at?: string | null;
+  expires_at?: string | null;
+  actioned_by_user_id?: string | null;
 };
 
+/** @deprecated Use InvitationData */
+export type InvitationResponseData = InvitationData;
+
 export type InvitationAPIResponse = {
-  status: string;
+  status?: string;
   message: string;
-  data?: InvitationResponseData | InvitationResponseData[] | null;
+  data: InvitationData;
+};
+
+export type InvitationListAPIResponse = {
+  status?: string;
+  message?: string;
+  total: number;
+  data: InvitationData[];
+};
+
+export type SendInvitationResponse = {
+  status?: string;
+  message: string;
 };

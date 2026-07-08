@@ -56,8 +56,8 @@ export const CreateNewSite = () => {
         setProgress(0);
         navigate(RouteConstant.dashboard.siteCredentials.path, {
           state: {
-            accountId: created.data.account_id,
-            accountName: created.data.account_name,
+            accountId: created.account_id,
+            accountName: values.siteName,
           },
         });
       } catch (error: any) {

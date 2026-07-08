@@ -18,22 +18,17 @@ import { showCustomToast } from "../toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import type { Account } from "@/models/response/organizationResponse";
-import type { ProposedRole } from "@/models/response/businessInviteResponse";
-import { useInviteUserMutation } from "@/service/businessInviteApi";
+import type { OrganizationAccount } from "@/models/response/organizationResponse";
+import type { MemberType } from "@/models/response/invitationResponse";
+import { useSendInvitationMutation } from "@/service/invitationApi";
 import type { RootState } from "@/store";
 import { canInviteBusinessUsers } from "@/utilities/contextPermissions";
 import { SelectField } from "../selectfield";
 import { ModalConstant } from "./register";
 
-const ROLE_MAP: Record<string, ProposedRole> = {
-  Member: "MEMBER",
-  Viewer: "VIEWER",
-};
-
-export const InviteToWorkspace = NiceModal.create<Account>(
-  ({ account_name }) => {
-  const [inviteUser, { isLoading }] = useInviteUserMutation();
+export const InviteToWorkspace = NiceModal.create<OrganizationAccount>(
+  ({ account_id, account_name }) => {
+  const [sendInvitation, { isLoading }] = useSendInvitationMutation();
   const modal = useModal(ModalConstant.InviteToWorkspace);
   const activeContext = useSelector(
     (state: RootState) => state.context?.activeContext
@@ -55,9 +50,10 @@ export const InviteToWorkspace = NiceModal.create<Account>(
     }
 
     try {
-      const res = await inviteUser({
+      const res = await sendInvitation({
+        account_id,
         user_email: formValues.recipient_identifier.trim(),
-        proposed_role: ROLE_MAP[formValues.role] ?? "VIEWER",
+        role: formValues.role as MemberType,
       }).unwrap();
 
       showCustomToast(
@@ -79,7 +75,7 @@ export const InviteToWorkspace = NiceModal.create<Account>(
   const formik = useFormik<{ recipient_identifier: string; role: string }>({
     initialValues: {
       recipient_identifier: "",
-      role: "",
+      role: "Member",
     },
     onSubmit: handleSubmit,
     enableReinitialize: true,
@@ -95,17 +91,16 @@ export const InviteToWorkspace = NiceModal.create<Account>(
     <Dialog open={modal.visible} onOpenChange={() => modal.hide()}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Invite User to Workspace</DialogTitle>
+          <DialogTitle>Invite User to Account</DialogTitle>
           <DialogDescription>
-            As a business owner, invite a registered user to join{" "}
-            {activeContext?.display_name ?? account_name}.
+            Invite a registered individual to access{" "}
+            {account_name ?? activeContext?.display_name}.
           </DialogDescription>
         </DialogHeader>
 
         {!canInvite && (
           <p className="rounded-md border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-800">
-            Only business owners can send invitations. Users who want to join a
-            business should use Request to Join instead.
+            Only business principals can send account invitations.
           </p>
         )}
 
@@ -132,6 +127,7 @@ export const InviteToWorkspace = NiceModal.create<Account>(
                 name="role"
                 formik={formik}
                 options={[
+                  { label: "Admin", value: "Admin" },
                   { label: "Member", value: "Member" },
                   { label: "Viewer", value: "Viewer" },
                 ]}

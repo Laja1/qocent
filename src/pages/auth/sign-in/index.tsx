@@ -3,10 +3,7 @@ import AuthLayout from "@/components/layouts/authLayout";
 import { Button, Textfield } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
 import { signInInit } from "@/models/request/authRequest";
-import {
-  businessNeedsCompletion,
-  type signInResponse,
-} from "@/models/response/authResponse";
+import type { signInResponse } from "@/models/response/authResponse";
 import { RouteConstant } from "@/router/routes";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { useSignInMutation } from "@/service/authApi";
@@ -64,13 +61,6 @@ const SignIn = () => {
         toastOptions: { type: "success", autoClose: 4000 },
       });
 
-      if (res.data.is_business && businessNeedsCompletion(res.data.business)) {
-        navigate(RouteConstant.auth.completeBusiness.path, {
-          state: { business_email: res.data.business?.business_email },
-        });
-        return;
-      }
-
       navigate(RouteConstant.dashboard.console.path);
     } catch (error: any) {
       const message = ErrorHandler.extractMessage(error);
@@ -103,19 +93,19 @@ const SignIn = () => {
       >
         <Textfield
           formik={formik}
-          name="user_email"
+          name="email"
           label="Email"
           prefixIcon={<Mail size={16} className="text-black" />}
           placeholder="Enter your email"
           error={
-            formik?.touched.user_email && formik?.errors.user_email
-              ? formik?.errors.user_email
+            formik?.touched.email && formik?.errors.email
+              ? formik?.errors.email
               : ""
           }
         />
         <Textfield
           label="Password"
-          name="user_password"
+          name="password"
           placeholder="Enter your password"
           prefixIcon={<Lock size={16} className="text-black" />}
           type={seePassword ? "text" : "password"}
@@ -134,8 +124,8 @@ const SignIn = () => {
           }
           formik={formik}
           error={
-            formik?.touched.user_password && formik?.errors.user_password
-              ? formik?.errors.user_password
+            formik?.touched.password && formik?.errors.password
+              ? formik?.errors.password
               : ""
           }
         />

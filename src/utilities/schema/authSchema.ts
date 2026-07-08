@@ -9,8 +9,8 @@ import {
 } from '.';
 
 export const loginFormValidationSchema = object().shape({
-  user_email: emailValidation(),
-  user_password: passwordValidation(),
+  email: emailValidation(),
+  password: passwordValidation(),
 });
 
 export const registerFormValidationSchema = object().shape({

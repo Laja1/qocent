@@ -11,63 +11,10 @@ import { Textfield } from "../textfield";
 import { DatePickerWithFormik } from "../date-picker";
 import NiceModal, { useModal } from "@ebay/nice-modal-react";
 import { X } from "lucide-react";
-import {
-  walletBillingApi,
-  useLazyCheckPersonalPaymentStatusQuery,
-} from "@/service/walletBillingApi";
-import { subscriptionApi } from "@/service/subscriptionApi";
-import { useDispatch } from "react-redux";
-import { ApiEnums } from "@/utilities/enums";
 import { showCustomToast } from "../toast";
 
 export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => {
   const modal = useModal();
-  const dispatch = useDispatch();
-  const [checkPaymentStatus, { isFetching }] =
-    useLazyCheckPersonalPaymentStatusQuery();
-
-  const invalidateSubscriptionState = () => {
-    dispatch(
-      subscriptionApi.util.invalidateTags([
-        { type: ApiEnums.Subscription, id: "PLANS" },
-        { type: ApiEnums.Subscription, id: "LIST" },
-        { type: ApiEnums.Subscription, id: "TRIAL" },
-        { type: ApiEnums.Subscription, id: "PAYMENT" },
-      ])
-    );
-    dispatch(
-      walletBillingApi.util.invalidateTags([
-        { type: ApiEnums.Subscription, id: "LIST" },
-        { type: ApiEnums.Subscription, id: "PAYMENT" },
-      ])
-    );
-  };
-
-  const handleConfirmPayment = async () => {
-    if (!paymentData?.payment_id) return;
-
-    try {
-      const result = await checkPaymentStatus(paymentData.payment_id).unwrap();
-
-      if (result.active) {
-        invalidateSubscriptionState();
-        showCustomToast(result.message || "Payment confirmed. Your subscription is now active.", {
-          toastOptions: { type: "success", autoClose: 5000 },
-        });
-        modal.hide();
-        return;
-      }
-
-      showCustomToast(
-        result.message || "Payment not confirmed yet. Please try again shortly.",
-        { toastOptions: { type: "warning", autoClose: 5000 } }
-      );
-    } catch {
-      showCustomToast("Unable to verify payment right now. Please try again.", {
-        toastOptions: { type: "error", autoClose: 5000 },
-      });
-    }
-  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -100,7 +47,8 @@ export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => 
           </button>
           <h2 className="text-2xl font-bold text-white mb-2">Payment Details</h2>
           <p className="text-slate-400 mb-8">
-            Complete your payment to activate subscription
+            Transfer the amount below to fund your wallet. Credits apply automatically
+            once the payment is confirmed.
           </p>
           <div className="space-y-6 text-sm">
             <div className="bg-slate-950/50 border border-slate-800 rounded-md p-6 space-y-4">
@@ -123,13 +71,13 @@ export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => 
               <div className="flex justify-between pt-4 border-t border-slate-800">
                 <span className="text-slate-400">Amount</span>
                 <span className="text-2xl font-bold text-cyan-400">
-                  {paymentData.currency} {paymentData.amount}
+                  {paymentData.currency ?? "NGN"} {paymentData.amount}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Reference</span>
                 <span className="text-white font-mono text-sm">
-                  {paymentData.payment_reference}
+                  {paymentData.payment_reference ?? paymentData.reference}
                 </span>
               </div>
               <div className="flex justify-between text-red-400">
@@ -140,14 +88,19 @@ export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => 
               </div>
             </div>
             <p className="text-slate-400 text-xs">
-              {paymentData.payment_instructions}
+              {paymentData.payment_instructions ?? paymentData.instructions}
             </p>
             <Button
-              onClick={handleConfirmPayment}
+              onClick={() => {
+                showCustomToast(
+                  "Wallet funding is confirmed automatically after your transfer is received.",
+                  { toastOptions: { type: "info", autoClose: 5000 } }
+                );
+                modal.hide();
+              }}
               intent={"secondary"}
-              disabled={isFetching}
               className="w-full text-white font-semibold py-3 rounded-md transition-colors"
-              label={isFetching ? "Verifying..." : "I've Made the Payment"}
+              label="Done"
             />
           </div>
         </div>
@@ -166,7 +119,7 @@ export const AddPaymentMethodSheet = NiceModal.create(({ paymentData }: any) => 
         <SheetHeader>
           <SheetTitle>Add Payment Method</SheetTitle>
           <SheetDescription>
-            Add a new credit or debit card to your account for billing purposes.
+            Wallet top-ups use bank transfer. Fund your wallet from the Billing page.
           </SheetDescription>
         </SheetHeader>
         <form onSubmit={handleSubmit} className="space-y-6 ">

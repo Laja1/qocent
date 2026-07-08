@@ -4,8 +4,12 @@ import type { RootState } from "@/store";
 import { authStore } from "@/store/authSlice";
   import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
+  const pythonBaseUrl =
+    import.meta.env.VITE_PYTHON_BASE_URL ??
+    "https://80de-14-137-174-138.ngrok-free.app/api/v1";
+
   export const rawBaseQuery = fetchBaseQuery({
-    baseUrl: "https://krl7jmmklv7mrb6hxdpkcoqhzq0rmpks.lambda-url.us-east-1.on.aws/api/v1",
+    baseUrl: pythonBaseUrl,
     prepareHeaders: (headers, { getState }) => {
       const state = getState() as RootState;
       // Use context token when active (post-context-switch), fall back to auth token
@@ -13,6 +17,10 @@ import { authStore } from "@/store/authSlice";
 
       if (token) {
         headers.set("Authorization", `Bearer ${token}`);
+      }
+
+      if (pythonBaseUrl.includes("ngrok")) {
+        headers.set("ngrok-skip-browser-warning", "true");
       }
 
       return headers;
@@ -57,10 +65,12 @@ import { authStore } from "@/store/authSlice";
      * }
      */
   
-    // Skip logout for login/signup endpoints
-    const isAuthEndpoint = typeof args === 'string' 
-      ? args.includes('/login') || args.includes('/signup') || args.includes('/business/init') || args.includes('/business/complete') || args.includes('/verify-otp') || args.includes('/send-verification')
-      : args.url?.includes('/login') || args.url?.includes('/signup') || args.url?.includes('/business/init') || args.url?.includes('/business/complete') || args.url?.includes('/verify-otp') || args.url?.includes('/send-verification');
+    const authPathPattern =
+      /\/auth\/(login|individual\/signup|business\/signup|verify-otp|resend-otp|forgot-password|reset-password)/;
+    const isAuthEndpoint =
+      typeof args === "string"
+        ? authPathPattern.test(args)
+        : authPathPattern.test(args.url ?? "");
   
     if (
       !isAuthEndpoint &&

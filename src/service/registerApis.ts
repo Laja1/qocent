@@ -2,7 +2,6 @@
  * Side-effect imports that register RTK Query endpoints via injectEndpoints.
  * Import this once from the store; add new API modules here.
  */
-import "./businessInviteApi";
 import "./contextApi";
 import "./siteApi";
 import "./resourceApi";

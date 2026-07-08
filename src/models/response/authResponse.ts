@@ -8,7 +8,7 @@ export interface SignInUser {
   user_email: string;
   user_first_name: string;
   user_last_name: string;
-  user_phone_number: string;
+  user_phone_number: string | null;
   user_country: string;
   user_is_email_verified: boolean;
   user_created_at: string;
@@ -18,46 +18,48 @@ export interface SignInBusiness {
   business_id: string;
   business_name: string;
   business_display_name: string;
-  business_slug: string;
   business_email: string;
   business_is_email_verified: boolean;
-  status: string;
+}
+
+export interface LoginToken {
+  token_type: string;
+  access_token_expires_in?: number | null;
+  is_business: boolean;
+  user: SignInUser | null;
+  business: SignInBusiness | null;
+  /** Populated client-side from X-Access-Token response header */
+  access_token?: string;
 }
 
 export interface signInResponse {
   status: string;
   message: string;
-  data: {
-    access_token: string;
-    token_type: string;
-    is_business: boolean;
-    user: SignInUser | null;
-    business: SignInBusiness | null;
-  };
-}
-
-export function businessNeedsCompletion(
-  business: SignInBusiness | null | undefined
-): boolean {
-  if (!business) return false;
-  return (
-    business.business_display_name === "Pending Completion" ||
-    business.business_slug.startsWith("pending-")
-  );
+  data: LoginToken;
 }
 
 export type signUpResponse = {
   message: string;
-  user: {
-    user_id: string;
-    user_email: string;
-    user_first_name: string;
-    user_last_name: string;
-    user_phone_number: string;
-    user_country: string;
-    user_is_email_verified: boolean;
-    user_created_at: string;
-  };
+  user: SignInUser;
+};
+
+export type BusinessSignupResponse = {
+  business_id: string;
+  business_name: string;
+  business_display_name: string;
+  business_email: string;
+  business_is_email_verified: boolean;
+};
+
+export type LogoutResponse = {
+  status: string;
+  message: string;
+};
+
+export type VerifyOTPResponse = {
+  status: string;
+  message: string;
+  entity_id?: string | null;
 };
 
 export type AccountMember = {

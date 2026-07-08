@@ -45,6 +45,12 @@ export const Profile = () => {
   const dashboard = useSelector((state: RootState) => state.dashboard);
 
   const { data: orgData, isLoading: isOrgLoading } = useGetMyOrganizationsQuery();
+  const organizations = Array.isArray(orgData?.data)
+    ? orgData.data
+    : orgData?.data
+      ? [orgData.data]
+      : [];
+  const primaryOrg = organizations[0];
 
   const fullName =
     `${auth.userFirstName ?? ""} ${auth.userLastName ?? ""}`.trim() || "—";
@@ -91,7 +97,7 @@ export const Profile = () => {
           <InfoRow
             icon={Building2}
             label="Organization"
-            value={isOrgLoading ? "Loading..." : orgData?.data?.org_name ?? "—"}
+            value={isOrgLoading ? "Loading..." : primaryOrg?.org_name ?? "—"}
           />
           <InfoRow
             icon={MapPin}

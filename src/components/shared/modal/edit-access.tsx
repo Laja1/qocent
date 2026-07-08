@@ -39,7 +39,7 @@ export const EditAccessModal = NiceModal.create<editAccessProps>(
             account_member_id: formValues.account_member_id,
             member_type: formValues.member_type,
           },
-          account_id: site?.account_id,
+          account_id: site.account_id,
         };
 
         const res = await updateMember(requestData).unwrap();
@@ -60,8 +60,8 @@ export const EditAccessModal = NiceModal.create<editAccessProps>(
 
     const formik = useFormik({
       initialValues: {
-        account_member_id: member.account_id,
-        member_type: site.member_type,
+        account_member_id: member.account_user_id,
+        member_type: member.account_member_type,
       },
       onSubmit: handleSubmit,
       enableReinitialize: true,

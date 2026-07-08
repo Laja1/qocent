@@ -9,18 +9,20 @@ import type {
 } from "@/models/response/contextResponse";
 import { pythonBaseApi } from "./pythonBaseApi";
 
+const CONTEXT_PREFIX = "/context/me/contexts";
+
 export const contextApi = pythonBaseApi.injectEndpoints({
   endpoints: (build) => ({
     getContexts: build.query<ContextListResponse, void>({
       query: () => ({
-        url: "/me/contexts",
+        url: CONTEXT_PREFIX,
       }),
       providesTags: [{ type: ApiEnums.Context, id: "LIST" }],
     }),
 
     selectContext: build.mutation<SelectContextResponse, SelectContextRequest>({
       query: (body) => ({
-        url: "/me/contexts/select",
+        url: `${CONTEXT_PREFIX}/select`,
         method: "POST",
         body,
       }),
@@ -29,7 +31,7 @@ export const contextApi = pythonBaseApi.injectEndpoints({
 
     getActiveContext: build.query<ActiveContextResponse, void>({
       query: () => ({
-        url: "/me/contexts/active",
+        url: `${CONTEXT_PREFIX}/active`,
       }),
       providesTags: [{ type: ApiEnums.Context, id: "ACTIVE" }],
     }),

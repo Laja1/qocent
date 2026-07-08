@@ -10,7 +10,7 @@ import {
   useGetMyInvitationsQuery,
   useRejectInvitationMutation,
 } from "@/service/invitationApi";
-import type { InvitationResponseData } from "@/models/response/invitationResponse";
+import type { InvitationData } from "@/models/response/invitationResponse";
 import {
   Check,
   X,
@@ -22,13 +22,6 @@ import {
 } from "lucide-react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
-
-const normalizeInvitations = (
-  data: InvitationResponseData | InvitationResponseData[] | null | undefined
-): InvitationResponseData[] => {
-  if (!data) return [];
-  return Array.isArray(data) ? data : [data];
-};
 
 export default function AcceptInvite() {
   const navigate = useNavigate();
@@ -45,10 +38,7 @@ export default function AcceptInvite() {
   const [showAnimation, setShowAnimation] = useState(false);
 
   const invite = useMemo(
-    () =>
-      normalizeInvitations(data?.data).find(
-        (item) => item.invite_id === inviteId
-      ),
+    () => data?.data?.find((item: InvitationData) => item.invite_id === inviteId),
     [data?.data, inviteId]
   );
 
@@ -64,7 +54,7 @@ export default function AcceptInvite() {
     try {
       const mutation =
         action === "ACCEPT" ? acceptInvitation : rejectInvitation;
-      const res = await mutation({ invite_id: inviteId }).unwrap();
+      const res = await mutation(inviteId).unwrap();
 
       showCustomToast(res.message, {
         toastOptions: {
@@ -167,9 +157,10 @@ export default function AcceptInvite() {
                 You&apos;re Invited!
               </h1>
               <p className="text-blue-100 text-sm">
-                {invite?.invite_user_role
-                  ? `Join as ${invite.invite_user_role}`
+                {invite?.business_display_name
+                  ? `${invite.business_display_name} invited you`
                   : "Join a cloud account"}
+                {invite?.role ? ` as ${invite.role}` : ""}
               </p>
             </div>
             <Star className="absolute top-4 right-4 w-4 h-4 text-white/30" />
@@ -186,7 +177,7 @@ export default function AcceptInvite() {
               <ul className="space-y-2 text-sm text-green-700">
                 <li className="flex items-center gap-2 text-xs">
                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>
-                  Cloud account workspace access
+                  {invite?.account_name ?? "Cloud account"} workspace access
                 </li>
                 <li className="flex items-center gap-2 text-xs">
                   <div className="w-1.5 h-1.5 bg-green-500 rounded-full"></div>

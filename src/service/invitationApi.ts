@@ -1,14 +1,12 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { ApiEnums } from "@/utilities/enums";
 import { baseQueryWithAuthGuard } from "./httpClient/baseQuery";
-import type {
-  AcceptInvitationRequest,
-  CreateInvitationRequest,
-  RejectInvitationRequest,
-} from "@/models/request/invitationRequest";
+import type { SendInvitationRequest } from "@/models/request/invitationRequest";
 import type {
   InvitationAPIResponse,
+  InvitationListAPIResponse,
   InvitationStatus,
+  SendInvitationResponse,
 } from "@/models/response/invitationResponse";
 
 export const invitationApi = createApi({
@@ -16,58 +14,98 @@ export const invitationApi = createApi({
   baseQuery: baseQueryWithAuthGuard,
   tagTypes: [ApiEnums.Invitation],
   endpoints: (build) => ({
-    createInvitation: build.mutation<
-      InvitationAPIResponse,
-      { account_id: string; body: CreateInvitationRequest }
-    >({
-      query: ({ account_id, body }) => ({
-        url: `/invitations/${account_id}/create`,
+    sendInvitation: build.mutation<SendInvitationResponse, SendInvitationRequest>({
+      query: (body) => ({
+        url: "/invitations",
         method: "POST",
         body,
       }),
-      invalidatesTags: [{ type: ApiEnums.Invitation, id: "LIST" }],
+      invalidatesTags: (_result, _error, { account_id }) => [
+        { type: ApiEnums.Invitation, id: "SENT" },
+        { type: ApiEnums.Invitation, id: "ACCOUNT" },
+        { type: ApiEnums.Invitation, id: `ACCOUNT_${account_id}` },
+      ],
     }),
 
-    getMyInvitations: build.query<
-      InvitationAPIResponse,
+    listSentInvitations: build.query<
+      InvitationListAPIResponse,
       { status?: InvitationStatus } | void
     >({
       query: (arg) => ({
-        url: "/invitations/my-invitations",
+        url: "/invitations",
         params: arg?.status ? { status: arg.status } : undefined,
       }),
-      providesTags: [{ type: ApiEnums.Invitation, id: "LIST" }],
+      providesTags: [{ type: ApiEnums.Invitation, id: "SENT" }],
     }),
 
-    acceptInvitation: build.mutation<
-      InvitationAPIResponse,
-      AcceptInvitationRequest
-    >({
-      query: (body) => ({
-        url: "/invitations/accept",
+    revokeInvitation: build.mutation<InvitationAPIResponse, string>({
+      query: (invite_id) => ({
+        url: `/invitations/${invite_id}/revoke`,
         method: "POST",
-        body,
       }),
-      invalidatesTags: [{ type: ApiEnums.Invitation, id: "LIST" }],
+      invalidatesTags: [
+        { type: ApiEnums.Invitation, id: "SENT" },
+        { type: ApiEnums.Invitation, id: "ACCOUNT" },
+      ],
     }),
 
-    rejectInvitation: build.mutation<
-      InvitationAPIResponse,
-      RejectInvitationRequest
+    getMyInvitations: build.query<
+      InvitationListAPIResponse,
+      { status?: InvitationStatus } | void
     >({
-      query: (body) => ({
-        url: "/invitations/reject",
-        method: "POST",
-        body,
+      query: (arg) => ({
+        url: "/invitations/me",
+        params: arg?.status ? { status: arg.status } : undefined,
       }),
-      invalidatesTags: [{ type: ApiEnums.Invitation, id: "LIST" }],
+      providesTags: [{ type: ApiEnums.Invitation, id: "INBOX" }],
+    }),
+
+    acceptInvitation: build.mutation<InvitationAPIResponse, string>({
+      query: (invite_id) => ({
+        url: `/invitations/${invite_id}/accept`,
+        method: "POST",
+      }),
+      invalidatesTags: [{ type: ApiEnums.Invitation, id: "INBOX" }],
+    }),
+
+    rejectInvitation: build.mutation<InvitationAPIResponse, string>({
+      query: (invite_id) => ({
+        url: `/invitations/${invite_id}/reject`,
+        method: "POST",
+      }),
+      invalidatesTags: [{ type: ApiEnums.Invitation, id: "INBOX" }],
+    }),
+
+    listAccountInvitations: build.query<
+      InvitationListAPIResponse,
+      { account_id: string; status?: InvitationStatus }
+    >({
+      query: ({ account_id, status }) => ({
+        url: `/invitations/account/${account_id}`,
+        params: status ? { status } : undefined,
+      }),
+      providesTags: (_result, _error, { account_id }) => [
+        { type: ApiEnums.Invitation, id: "ACCOUNT" },
+        { type: ApiEnums.Invitation, id: `ACCOUNT_${account_id}` },
+      ],
+    }),
+
+    getInvitation: build.query<InvitationAPIResponse, string>({
+      query: (invite_id) => `/invitations/${invite_id}`,
+      providesTags: (_result, _error, id) => [
+        { type: ApiEnums.Invitation, id },
+      ],
     }),
   }),
 });
 
 export const {
-  useCreateInvitationMutation,
+  useSendInvitationMutation,
+  useListSentInvitationsQuery,
+  useRevokeInvitationMutation,
   useGetMyInvitationsQuery,
   useAcceptInvitationMutation,
   useRejectInvitationMutation,
+  useListAccountInvitationsQuery,
+  useGetInvitationQuery,
 } = invitationApi;

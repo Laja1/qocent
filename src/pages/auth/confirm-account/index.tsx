@@ -66,13 +66,7 @@ const ConfirmAccount = () => {
         },
       });
 
-      if (accountType === "BUSINESS") {
-        navigate(RouteConstant.auth.completeBusiness.path, {
-          state: { business_email: email },
-        });
-      } else {
-        navigate(RouteConstant.auth.signin.path);
-      }
+      navigate(RouteConstant.auth.signin.path);
     } catch (error) {
       const message = ErrorHandler.extractMessage(error);
       showCustomToast(message, {
@@ -96,7 +90,7 @@ const ConfirmAccount = () => {
 
     try {
       const res = await resendOtp({ email }).unwrap();
-      showCustomToast(res?.responseMessage ?? "OTP sent successfully", {
+      showCustomToast(res?.message ?? res?.responseMessage ?? "OTP sent successfully", {
         toastOptions: {
           type: "success",
           autoClose: 5000,

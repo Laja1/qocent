@@ -7,6 +7,7 @@ export type SubscriptionPlanResponse = {
   subscription_plan_yearly_discount: string | null;
   subscription_plan_currency: string;
   subscription_plan_features: Record<string, string> | null;
+  subscription_plan_trial_duration_days?: number;
   subscription_plan_is_active: boolean;
   subscription_plan_created_at?: string;
   subscription_plan_updated_at?: string;
@@ -23,7 +24,10 @@ export type SubscriptionPlanListResponse = {
 
 export type SubscriptionResponse = {
   subscription_id: string;
-  subscription_user_id: string;
+  subscription_owner_type: string;
+  subscription_owner_id: string;
+  subscription_user_id?: string | null;
+  subscription_business_id?: string | null;
   subscription_plan_id: string;
   subscription_status: string;
   subscription_billing_cycle: string;
@@ -48,34 +52,32 @@ export type SubscriptionListResponse = {
   status: string;
 };
 
-export type CreatePaidSubscriptionResponse = {
-  payment_id: string;
-  payment_reference: string;
-  account_number: string;
-  bank_name: string;
-  account_name: string;
-  amount: number;
-  currency: string;
-  valid_until: string;
-  expires_in_minutes: number;
-  status: string;
-  payment_instructions: string;
-  message: string;
-};
-
-export type SubscriptionPaymentStatusResponse = {
-  payment_id: string;
-  active: boolean;
-  subscription_status: string;
-  payment_status: string | null;
-  message: string;
-  status: string;
-};
-
 export type SubscriptionActionResponse = {
   status: string;
   message: string;
   data?: SubscriptionResponse | null;
+};
+
+export type GenericResponse = {
+  status: string;
+  message: string;
+  data?: unknown;
+};
+
+export type TrialStatusData = {
+  has_subscription: boolean;
+  is_trial: boolean;
+  subscription_status?: string | null;
+  trial_ends_at?: string | null;
+  days_remaining?: number | null;
+  is_expired?: boolean | null;
+  message: string;
+};
+
+export type TrialStatusResponse = {
+  status: string;
+  message: string;
+  data: TrialStatusData;
 };
 
 export type ServiceAccessResponse = {

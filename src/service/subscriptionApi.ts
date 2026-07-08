@@ -1,17 +1,14 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithAuthGuard } from "./httpClient/baseQuery";
 import { ApiEnums } from "@/utilities/enums";
+import type { CreatePaidSubscriptionRequest } from "@/models/request/subscriptionRequest";
 import type {
-  CreatePaidSubscriptionRequest,
-  StartTrialRequest,
-} from "@/models/request/subscriptionRequest";
-import type {
+  GenericResponse,
   SubscriptionPlanListResponse,
   SubscriptionListResponse,
-  CreatePaidSubscriptionResponse,
-  SubscriptionPaymentStatusResponse,
-  SubscriptionActionResponse,
   SubscriptionDetailResponse,
+  SubscriptionActionResponse,
+  TrialStatusResponse,
 } from "@/models/response/subscriptionResponse";
 
 export const subscriptionApi = createApi({
@@ -19,6 +16,14 @@ export const subscriptionApi = createApi({
   baseQuery: baseQueryWithAuthGuard,
   tagTypes: [ApiEnums.Subscription],
   endpoints: (build) => ({
+    getAllPlans: build.query<SubscriptionPlanListResponse, { include_inactive?: boolean } | void>({
+      query: (arg) => ({
+        url: `/subscription_plans`,
+        params: arg?.include_inactive ? { include_inactive: arg.include_inactive } : undefined,
+      }),
+      providesTags: [{ type: ApiEnums.Subscription, id: "PLANS" }],
+    }),
+
     getAllWithMySubscriptions: build.query<SubscriptionPlanListResponse, void>({
       query: () => ({ url: `/subscription_plans/me` }),
       providesTags: [
@@ -27,21 +32,22 @@ export const subscriptionApi = createApi({
       ],
     }),
 
-    startTrial: build.mutation<SubscriptionDetailResponse, StartTrialRequest>({
-      query: ({ plan_id, trial_duration_days = 30 }) => ({
+    startTrial: build.mutation<SubscriptionDetailResponse, { plan_id: string }>({
+      query: ({ plan_id }) => ({
         url: `/subscriptions/trial/start`,
         method: "POST",
-        params: { plan_id, trial_duration_days },
+        params: { plan_id },
       }),
       invalidatesTags: [
         { type: ApiEnums.Subscription, id: "LIST" },
         { type: ApiEnums.Subscription, id: "PLANS" },
+        { type: ApiEnums.Subscription, id: "TRIAL" },
       ],
     }),
 
-    createPaidSubscription: build.mutation<CreatePaidSubscriptionResponse, CreatePaidSubscriptionRequest>({
+    subscribe: build.mutation<SubscriptionDetailResponse, CreatePaidSubscriptionRequest>({
       query: (body) => ({
-        url: `/subscriptions/create`,
+        url: `/subscriptions/subscribe`,
         method: "POST",
         body,
       }),
@@ -51,22 +57,17 @@ export const subscriptionApi = createApi({
       ],
     }),
 
-    checkPaymentStatus: build.query<SubscriptionPaymentStatusResponse, string>({
-      query: (payment_id) => `/subscriptions/payment-status/${payment_id}`,
-      providesTags: [{ type: ApiEnums.Subscription, id: "PAYMENT" }],
-    }),
-
     getMySubscription: build.query<SubscriptionListResponse, void>({
       query: () => `/subscriptions/me`,
       providesTags: [{ type: ApiEnums.Subscription, id: "LIST" }],
     }),
 
-    getTrialStatus: build.query<SubscriptionDetailResponse, void>({
+    getTrialStatus: build.query<TrialStatusResponse, void>({
       query: () => `/subscriptions/trial/status`,
       providesTags: [{ type: ApiEnums.Subscription, id: "TRIAL" }],
     }),
 
-    checkSubscriptionAccess: build.query<{ has_access: boolean; message?: string }, void>({
+    checkSubscriptionAccess: build.query<GenericResponse, void>({
       query: () => `/subscriptions/access/check`,
       providesTags: [{ type: ApiEnums.Subscription, id: "ACCESS" }],
     }),
@@ -98,7 +99,7 @@ export const subscriptionApi = createApi({
       ],
     }),
 
-    cancelSubscription: build.mutation<void, string>({
+    cancelSubscription: build.mutation<GenericResponse, string>({
       query: (subscription_id) => ({
         url: `/subscriptions/${subscription_id}/cancel`,
         method: "POST",
@@ -109,26 +110,25 @@ export const subscriptionApi = createApi({
       ],
     }),
 
-    convertTrialToPaid: build.mutation<CreatePaidSubscriptionResponse, { subscription_id: string; payment_valid_minutes?: number }>({
-      query: ({ subscription_id, payment_valid_minutes = 120 }) => ({
+    convertTrialToPaid: build.mutation<SubscriptionDetailResponse, string>({
+      query: (subscription_id) => ({
         url: `/subscriptions/trial/${subscription_id}/convert`,
         method: "POST",
-        params: { payment_valid_minutes },
       }),
       invalidatesTags: [
         { type: ApiEnums.Subscription },
         { type: ApiEnums.Subscription, id: "LIST" },
+        { type: ApiEnums.Subscription, id: "TRIAL" },
       ],
     }),
   }),
 });
 
 export const {
+  useGetAllPlansQuery,
   useGetAllWithMySubscriptionsQuery,
   useStartTrialMutation,
-  useCreatePaidSubscriptionMutation,
-  useCheckPaymentStatusQuery,
-  useLazyCheckPaymentStatusQuery,
+  useSubscribeMutation,
   useGetMySubscriptionQuery,
   useGetTrialStatusQuery,
   useCheckSubscriptionAccessQuery,
@@ -138,5 +138,8 @@ export const {
   useCancelSubscriptionMutation,
   useConvertTrialToPaidMutation,
 } = subscriptionApi;
+
+/** @deprecated Use useSubscribeMutation — subscriptions debit wallet directly */
+export const useCreatePaidSubscriptionMutation = useSubscribeMutation;
 
 export { useGetServiceAccessMutation } from "./contextApi";

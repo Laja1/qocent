@@ -25,7 +25,7 @@ import type { RootState } from "@/store";
 import { imgLinks, svgLinks } from "@/assets/assetLink";
 import type { ReactElement } from "react";
 import { canInviteBusinessUsers } from "@/utilities/contextPermissions";
-import { useGetMyInvitesQuery } from "@/service/businessInviteApi";
+import { useGetMyInvitationsQuery } from "@/service/invitationApi";
 
 export interface SidebarItem {
   title: string;
@@ -43,10 +43,8 @@ export const SidebarLayout = () => {
   const isBusiness = useSelector((state: RootState) => state.auth.isBusiness);
   const canManageInvites = isBusiness || canInviteBusinessUsers(activeContext);
 
-  const { data: myInvitesData } = useGetMyInvitesQuery();
-  const pendingInviteCount = (myInvitesData?.data ?? []).filter(
-    (i) => i.initiated_by === "BUSINESS" && i.status === "PENDING"
-  ).length;
+  const { data: myInvitesData } = useGetMyInvitationsQuery({ status: "PENDING" });
+  const pendingInviteCount = myInvitesData?.data?.length ?? 0;
 
   const navItems: SidebarItem[] = [
     {

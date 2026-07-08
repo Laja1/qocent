@@ -7,16 +7,23 @@ export type signupRequest = {
   user_phone_number: string;
   user_country: string;
   user_password: string;
+  agree_to_terms: boolean;
 };
 
-export type businessInitRequest = {
+export type businessSignupRequest = {
   business_name: string;
+  business_display_name?: string | null;
   business_email: string;
   business_phone: string;
   business_country: string;
   business_password: string;
+  agree_to_terms: boolean;
 };
 
+/** @deprecated Use businessSignupRequest — business registration is now one step */
+export type businessInitRequest = businessSignupRequest;
+
+/** @deprecated Business completion step removed from API */
 export type businessCompleteRequest = {
   business_email: string;
   business_display_name: string;
@@ -59,7 +66,8 @@ export const signupFormInit: SignupFormValues = {
 };
 
 export function buildIndividualSignupPayload(
-  values: SignupFormValues
+  values: SignupFormValues,
+  agreeToTerms: boolean
 ): signupRequest {
   return {
     user_first_name: values.user_first_name,
@@ -69,29 +77,39 @@ export function buildIndividualSignupPayload(
     user_password: values.user_password,
     user_phone_number:
       values.user_phone_number_full || values.user_phone_number,
+    agree_to_terms: agreeToTerms,
   };
 }
 
-export function buildBusinessInitPayload(
-  values: SignupFormValues
-): businessInitRequest {
+export function buildBusinessSignupPayload(
+  values: SignupFormValues,
+  agreeToTerms: boolean
+): businessSignupRequest {
   return {
     business_name: values.business_name,
     business_email: values.business_email,
     business_country: values.business_country,
     business_phone: values.business_phone_full || values.business_phone,
     business_password: values.business_password,
+    agree_to_terms: agreeToTerms,
   };
 }
 
+/** @deprecated Use buildBusinessSignupPayload */
+export function buildBusinessInitPayload(
+  values: SignupFormValues
+): businessSignupRequest {
+  return buildBusinessSignupPayload(values, true);
+}
+
 export type signInRequest = {
-  user_email: string;
-  user_password: string;
+  email: string;
+  password: string;
 };
 
 export const signInInit = {
-  user_email: "",
-  user_password: "",
+  email: "",
+  password: "",
 };
 
 export const forgotPasswordInit = {
@@ -124,7 +142,6 @@ export type completePasswordResetRequest = {
 };
 
 export type UpdatePasswordRequest = {
-  user_id: string;
   current_password: string;
   new_password: string;
   confirm_password: string;

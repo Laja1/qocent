@@ -1,12 +1,19 @@
 import { Plus } from "lucide-react";
 import { ClipLoader } from "react-spinners";
 import { GlassCard } from "./glass-card";
-import { formatAmountWithCommas, formatMoney, formatUsdAmount, sanitizeAmountInput } from "../utils/format";
+import { FundWalletSkeleton } from "./billing-skeletons";
+import {
+  formatAmountWithCommas,
+  formatMoney,
+  formatUsdAmount,
+  sanitizeAmountInput,
+} from "../utils/format";
 
 type FundWalletCardProps = {
   amount: string;
   equivalentAmount: number;
   exchangeRate: number;
+  isLoading?: boolean;
   isFunding: boolean;
   onAmountChange: (amount: string) => void;
   onFund: () => void;
@@ -18,10 +25,15 @@ export const FundWalletCard = ({
   amount,
   equivalentAmount,
   exchangeRate,
+  isLoading = false,
   isFunding,
   onAmountChange,
   onFund,
 }: FundWalletCardProps) => {
+  if (isLoading) {
+    return <FundWalletSkeleton />;
+  }
+
   return (
     <GlassCard
       title="Fund Wallet"

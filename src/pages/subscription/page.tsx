@@ -1,20 +1,11 @@
 import { Header, PageContent } from "@/components/shared";
-import {
-  PageLoader,
-  SubscriptionPlansSkeleton,
-} from "@/components/shared/page-loader";
+import { SubscriptionPlansSkeleton } from "@/components/shared/page-loader";
 import { ArrowRight, Check, Loader2 } from "lucide-react";
-import { useGetAllWithMySubscriptionsQuery } from "@/service/subscriptionApi";
-import {
-  useCreatePersonalPaidSubscriptionMutation,
-  useStartPersonalTrialMutation,
-} from "@/service/walletBillingApi";
+import { useGetAllWithMySubscriptionsQuery, useSubscribeMutation, useStartTrialMutation } from "@/service/subscriptionApi";
 import { useGetServiceAccessMutation } from "@/service/contextApi";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { buildServiceRedirectUrl } from "@/utilities/serviceAccess";
-import NiceModal from "@ebay/nice-modal-react";
-import { ModalConstant } from "@/components/shared/modal/register";
 import { cn } from "@/lib/utils";
 
 const upcomingPlans = [
@@ -53,9 +44,9 @@ const upcomingPlans = [
 const SubscriptionCards = () => {
   const { data: plansData, isLoading } = useGetAllWithMySubscriptionsQuery();
   const [startTrial, { isLoading: isStartingTrialLoading }] =
-    useStartPersonalTrialMutation();
-  const [createPaidSubscription, { isLoading: isCreatePaidSubscriptionLoading }] =
-    useCreatePersonalPaidSubscriptionMutation();
+    useStartTrialMutation();
+  const [subscribe, { isLoading: isCreatePaidSubscriptionLoading }] =
+    useSubscribeMutation();
   const [triggerServiceAccess, { isLoading: isAccessLoading }] =
     useGetServiceAccessMutation();
 
@@ -74,11 +65,13 @@ const SubscriptionCards = () => {
 
   const handleSubscribe = async (planId: string) => {
     try {
-      const result = await createPaidSubscription({
+      const result = await subscribe({
         plan_id: planId,
         billing_cycle: "MONTHLY",
       }).unwrap();
-      NiceModal.show(ModalConstant.PaymentSheet, { paymentData: result });
+      showCustomToast(result.message || "Subscription activated successfully", {
+        toastOptions: { type: "success", autoClose: 5000 },
+      });
     } catch (error: unknown) {
       showCustomToast(
         ErrorHandler.extractMessage(error) || "Failed to create subscription",
@@ -113,7 +106,11 @@ const SubscriptionCards = () => {
         {isLoading ? (
           <SubscriptionPlansSkeleton />
         ) : !plansData?.data?.length ? (
-          <PageLoader label="No subscription plans available" />
+          <div className="rounded-lg border border-border bg-card px-6 py-12 text-center">
+            <p className="text-sm text-muted-foreground">
+              No subscription plans available right now.
+            </p>
+          </div>
         ) : (
           <div className="grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
             {plansData.data.map((plan) => {

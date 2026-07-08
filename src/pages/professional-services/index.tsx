@@ -1,9 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Button, Header } from "@/components/shared";
 import { RouteConstant } from "@/router/routes";
-import { useGetUserAccountsQuery } from "@/service/authApi";
-import type { RootState } from "@/store";
-import { useBusinessStore } from "@/store/businessStore";
 import {
   Box,
   CheckCheck,
@@ -12,8 +9,6 @@ import {
   RefreshCcw,
   Settings,
 } from "lucide-react";
-import { useEffect, useMemo } from "react";
-import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export const serviceTypes = [
@@ -71,33 +66,8 @@ const statusConfig = {
 
 export const ProfessionalServices = () => {
   const navigate = useNavigate();
-  const { setBusiness } = useBusinessStore();
-  const user = useSelector((state: RootState) => state.auth);
-  const { data: workspaceData } = useGetUserAccountsQuery(
-    {
-      userCode: user.userEmail || "",
-    },
-    {
-      skip: !user.userEmail,
-    }
-  );
 
-  const enrolledServices = useMemo(
-    () =>
-      workspaceData?.business?.services?.map((s) => ({
-        type: s.serviceName,
-        status: (s.status as ServiceStatus) || "APPLIED",
-        appliedDate: s.bookingDate,
-      })) || [],
-    [workspaceData]
-  );
-
-  useEffect(() => {
-    if (workspaceData?.business) {
-      // ✅ Automatically persist to Zustand
-      setBusiness(workspaceData.business);
-    }
-  }, [workspaceData, setBusiness]);
+  const enrolledServices: EnrolledService[] = [];
 
   const hasEnrollments = enrolledServices.length > 0;
 

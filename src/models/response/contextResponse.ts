@@ -16,6 +16,7 @@ export interface ContextItem {
   can_fund: boolean;
   can_view_finops: boolean;
   has_active_subscription: boolean;
+  account_count?: number;
 }
 
 export interface ContextListResponse {
@@ -31,7 +32,9 @@ export interface SelectContextRequest {
 
 export interface SelectContextResponse {
   active_context: ContextItem;
-  token_context_claim: string;
+  access_token: string;
+  token_type?: string;
+  token_context_claim?: Record<string, unknown>;
   message: string;
 }
 
@@ -57,11 +60,17 @@ export interface ServiceRedirectResponse {
 }
 
 export interface ServiceInfo {
-  service_name: string;
-  display_name: string;
+  slug: string;
+  name: string;
+  /** @deprecated Use slug */
+  service_name?: string;
+  /** @deprecated Use name */
+  display_name?: string;
   description?: string;
 }
 
 export interface ServiceListResponse {
+  status?: string;
+  message?: string;
   data: ServiceInfo[];
 }

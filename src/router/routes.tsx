@@ -66,6 +66,14 @@ export const RouteConstant = {
       path: "/book-demo",
       name: "Book A Demo",
     },
+    terms: {
+      path: "/terms",
+      name: "Terms and Conditions",
+    },
+    termsAndConditions: {
+      path: "/terms-and-conditions",
+      name: "Terms and Conditions",
+    },
   },
   auth: {
     signin: {

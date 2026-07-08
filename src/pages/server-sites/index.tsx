@@ -11,8 +11,8 @@ import { ModalConstant } from "@/components/shared/modal/register";
 import type { RootState } from "@/store";
 import { useSelector } from "react-redux";
 import { serverSiteColumns } from "@/utilities/constants/colums";
-import { useGetUserAccountsByProviderQuery } from "@/service/organizationApi";
-import type { Account } from "@/models/response/organizationResponse";
+import { useGetMyAccountsQuery } from "@/service/accountsApi";
+import type { AccountResponse } from "@/models/response/accountResponse";
 import { canInviteBusinessUsers } from "@/utilities/contextPermissions";
 
 export const ServerSites = () => {
@@ -23,10 +23,12 @@ export const ServerSites = () => {
   );
   const canInvite = canInviteBusinessUsers(activeContext);
 
-  const { data: organizationAccount, isLoading: isSiteLoading } =
-    useGetUserAccountsByProviderQuery({
-      provider: String(dashboard?.provider) || "",
+  const { data: accountsResponse, isLoading: isSiteLoading } =
+    useGetMyAccountsQuery({
+      provider: String(dashboard?.provider) || undefined,
     });
+
+  const accounts = accountsResponse?.data ?? [];
 
   const [selectedRowId, setSelectedRowId] = useState("");
   // const [selectedSiteCode, setSelectedSiteCode] = useState("");
@@ -70,12 +72,12 @@ export const ServerSites = () => {
     {
       label: "View",
       icon: Eye,
-      onClick: (row: Account) => NiceModal.show(ModalConstant.DrawerModal, row),
+      onClick: (row: AccountResponse) => NiceModal.show(ModalConstant.DrawerModal, row),
     },
     {
       label: "Console Access",
       icon: KeyRound,
-      onClick: (row: Account) =>
+      onClick: (row: AccountResponse) =>
         navigate(RouteConstant.dashboard.siteCredentials.path, {
           state: {
             accountId: row.account_id,
@@ -86,13 +88,13 @@ export const ServerSites = () => {
     {
       label: "Edit",
       icon: Edit,
-      onClick: (row: Account) =>
+      onClick: (row: AccountResponse) =>
         console.log("Edit server room:", row.account_id),
     },
     {
-      label: "Close Account",
+      label: "Close AccountResponse",
       icon: Trash2,
-      onClick: (row: Account) =>
+      onClick: (row: AccountResponse) =>
         NiceModal.show(ModalConstant.CloseAccountModal, row),
       variant: "destructive" as const,
     },
@@ -103,12 +105,12 @@ export const ServerSites = () => {
     actions.splice(1, 0, {
       label: "Invite user",
       icon: Users,
-      onClick: (row: Account) =>
+      onClick: (row: AccountResponse) =>
         NiceModal.show(ModalConstant.InviteToWorkspace, row),
     });
   }
 
-  const handleRowClick = async (row: Account) => {
+  const handleRowClick = async (row: AccountResponse) => {
     // Clear existing timeout
 
     setSelectedRowId(row.account_id.toString());
@@ -225,8 +227,8 @@ export const ServerSites = () => {
   //   //   ),
   //   // },
   // ];
-  const sitesToDisplay = organizationAccount?.data?.accounts?.filter(
-    (item) =>
+  const sitesToDisplay = accounts.filter(
+    (item: AccountResponse) =>
       item.account_provider?.toLocaleLowerCase() ===
       dashboard.provider?.toLocaleLowerCase()
   );

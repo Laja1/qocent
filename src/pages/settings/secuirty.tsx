@@ -2,18 +2,15 @@ import { Button, Textfield } from "@/components/shared";
 import { showCustomToast } from "@/components/shared/toast";
 import { useUpdatePasswordMutation } from "@/service/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
-import type { RootState } from "@/store";
 import { changePasswordFormValidationSchema } from "@/utilities/schema/authSchema";
 import { useFormik } from "formik";
 import { EyeClosed, EyeIcon } from "lucide-react";
 import { useState } from "react";
-import { useSelector } from "react-redux";
 
 export const Security = () => {
   const [seeCurrentPassword, setSeeCurrentPassword] = useState(false);
   const [seeNewPassword, setSeeNewPassword] = useState(false);
   const [seeConfirmPassword, setSeeConfirmPassword] = useState(false);
-  const userId = useSelector((state: RootState) => state.auth.userId);
   const [updatePassword, { isLoading }] = useUpdatePasswordMutation();
 
   const formik = useFormik({
@@ -24,16 +21,8 @@ export const Security = () => {
     },
     validationSchema: changePasswordFormValidationSchema,
     onSubmit: async (values) => {
-      if (!userId) {
-        showCustomToast("Unable to update password. Please sign in again.", {
-          toastOptions: { type: "error", autoClose: 5000 },
-        });
-        return;
-      }
-
       try {
         const res = await updatePassword({
-          user_id: userId,
           current_password: values.currentPassword,
           new_password: values.password,
           confirm_password: values.confirmPassword,

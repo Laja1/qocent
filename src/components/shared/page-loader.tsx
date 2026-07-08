@@ -1,5 +1,6 @@
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { Skeleton } from "@/components/ui/skeleton";
 
 type PageLoaderProps = {
   label?: string;
@@ -26,17 +27,28 @@ export function SubscriptionPlansSkeleton() {
       {Array.from({ length: 3 }).map((_, index) => (
         <div
           key={index}
-          className="animate-pulse rounded-lg border border-border bg-card p-7"
+          className="flex h-full flex-col rounded-lg border border-border bg-card p-6"
         >
-          <div className="mb-3 h-5 w-32 rounded bg-muted" />
-          <div className="mb-6 h-3 w-full rounded bg-muted" />
-          <div className="mb-6 h-10 w-24 rounded bg-muted" />
-          <div className="mb-8 space-y-2">
+          <div className="mb-5 space-y-2">
+            <Skeleton className="h-5 w-32" />
+            <Skeleton className="h-3 w-full" />
+            <Skeleton className="h-3 w-4/5" />
+          </div>
+          <div className="mb-5 border-b border-border pb-5">
+            <Skeleton className="h-10 w-24" />
+          </div>
+          <div className="mb-6 flex-1 space-y-2.5">
             {Array.from({ length: 4 }).map((__, row) => (
-              <div key={row} className="h-3 rounded bg-muted" />
+              <div key={row} className="flex items-center gap-2.5">
+                <Skeleton className="size-4 rounded-full" />
+                <Skeleton className="h-3 flex-1" />
+              </div>
             ))}
           </div>
-          <div className="h-9 rounded bg-muted" />
+          <div className="mt-auto space-y-2">
+            <Skeleton className="h-10 w-full" />
+            <Skeleton className="h-10 w-full" />
+          </div>
         </div>
       ))}
     </div>

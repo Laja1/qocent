@@ -2,7 +2,10 @@ import { useMemo } from "react";
 import { DataTable, type ColumnDef } from "@/components/shared/datatable";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { formatDate, formatMoney } from "../utils/format";
-import type { Bill, MyBillsResponse } from "@/models/response/walletBillingResponse";
+import type {
+  BillResponse,
+  MyBillsResponse,
+} from "@/models/response/walletBillingResponse";
 
 type BillsListProps = {
   isLoading: boolean;
@@ -10,15 +13,14 @@ type BillsListProps = {
 };
 
 export const BillsList = ({ isLoading, data }: BillsListProps) => {
-  const bills: Bill[] = data?.bills ?? [];
+  const bills: BillResponse[] = Array.isArray(data) ? data : [];
 
-  const columns = useMemo<ColumnDef<Bill>[]>(
+  const columns = useMemo<ColumnDef<BillResponse>[]>(
     () => [
       {
-        id: "description",
-        header: "Description",
-        accessorKey: (row) =>
-          row.description ?? row.bill_id ?? "—",
+        id: "hyperscaler",
+        header: "Provider",
+        accessorKey: (row) => row.hyperscaler,
         sortable: true,
       },
       {
@@ -42,13 +44,13 @@ export const BillsList = ({ isLoading, data }: BillsListProps) => {
       {
         id: "amount",
         header: "Amount",
-        accessorKey: (row) => row.amount ?? "",
+        accessorKey: (row) => row.total_amount ?? "",
         sortable: true,
         headerClassName: "text-right",
         cell: (row) =>
-          row.amount !== undefined ? (
+          row.total_amount !== undefined ? (
             <span className="font-medium">
-              {formatMoney(row.amount, row.currency ?? "USD")}
+              {formatMoney(row.total_amount, row.currency ?? "USD")}
             </span>
           ) : (
             "—"

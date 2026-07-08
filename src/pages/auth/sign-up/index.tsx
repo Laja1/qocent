@@ -8,7 +8,7 @@ import { Textfield } from "@/components/shared/textfield";
 import { showCustomToast } from "@/components/shared/toast";
 import { Checkbox } from "@/components/ui/checkbox";
 import {
-  buildBusinessInitPayload,
+  buildBusinessSignupPayload,
   buildIndividualSignupPayload,
   signupFormInit,
   type OtpFlowState,
@@ -16,7 +16,7 @@ import {
   type SignupFormValues,
 } from "@/models/request/authRequest";
 import { RouteConstant } from "@/router/routes";
-import { useInitBusinessMutation, useSignUpMutation } from "@/service/authApi";
+import { useBusinessSignUpMutation, useSignUpMutation } from "@/service/authApi";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import { countryOptions } from "@/utilities/constants/config";
 import { signupValidationSchema } from "@/utilities/schema/authSchema";
@@ -54,8 +54,9 @@ const SignUp = () => {
   const [termsModalOpen, setTermsModalOpen] = useState(false);
   const navigate = useNavigate();
   const [signUp, { isLoading: isSigningUp }] = useSignUpMutation();
-  const [initBusiness, { isLoading: isInitBusiness }] = useInitBusinessMutation();
-  const isLoading = isSigningUp || isInitBusiness;
+  const [businessSignUp, { isLoading: isBusinessSigningUp }] =
+    useBusinessSignUpMutation();
+  const isLoading = isSigningUp || isBusinessSigningUp;
 
   const handleSubmit = async (values: SignupFormValues) => {
     const accountType = values.accountType as SignupAccountType;
@@ -67,13 +68,17 @@ const SignUp = () => {
 
     try {
       if (accountType === "INDIVIDUAL") {
-        const res = await signUp(buildIndividualSignupPayload(values)).unwrap();
+        const res = await signUp(
+          buildIndividualSignupPayload(values, agreedToTerms)
+        ).unwrap();
         showCustomToast(res?.message ?? "Sign up successful", {
           toastOptions: { type: "success", autoClose: 5000 },
         });
       } else {
-        const res = await initBusiness(buildBusinessInitPayload(values)).unwrap();
-        showCustomToast(res?.message ?? "Business registration started", {
+        const res = await businessSignUp(
+          buildBusinessSignupPayload(values, agreedToTerms)
+        ).unwrap();
+        showCustomToast(res?.business_email ? "Business account created" : "Business registration started", {
           toastOptions: { type: "success", autoClose: 5000 },
         });
       }

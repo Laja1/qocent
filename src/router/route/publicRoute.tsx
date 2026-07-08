@@ -3,6 +3,7 @@ import ContactUs from "@/pages/home/contact-us";
 import ExploreServices from "@/pages/home/explore-services";
 import Finops from "@/pages/home/finops";
 import Home from "@/pages/home/home";
+import TermsAndConditions from "@/pages/home/legal/terms-and-conditions";
 import Partners from "@/pages/home/our-partners";
 import { RouteConstant } from "../routes";
 import type { RouteType } from "./type";
@@ -42,6 +43,18 @@ export const publicRoute: RouteType[] = [
     path: RouteConstant.public.contactUs.path,
     name: RouteConstant.public.contactUs.name,
     component: <ContactUs />,
+    metadata: { isAuthenticated: false },
+  },
+  {
+    path: RouteConstant.public.terms.path,
+    name: RouteConstant.public.terms.name,
+    component: <TermsAndConditions />,
+    metadata: { isAuthenticated: false },
+  },
+  {
+    path: RouteConstant.public.termsAndConditions.path,
+    name: RouteConstant.public.termsAndConditions.name,
+    component: <TermsAndConditions />,
     metadata: { isAuthenticated: false },
   },
 ];

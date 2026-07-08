@@ -1,6 +1,6 @@
 import { TrendingUp, Users, PieChart } from "lucide-react";
 import { GlassCard } from "./glass-card";
-import { InlineLoader } from "./inline-loader";
+import { SpendReportSkeleton } from "./billing-skeletons";
 import { formatMoney } from "../utils/format";
 import type { SpendReportResponse } from "@/models/response/walletBillingResponse";
 
@@ -10,59 +10,59 @@ type SpendReportCardProps = {
 };
 
 export const SpendReportCard = ({ isLoading, data }: SpendReportCardProps) => {
+  if (isLoading) {
+    return <SpendReportSkeleton />;
+  }
+
   const spendEntries = Object.entries(data?.spend ?? {});
   const grandTotal = data?.grand_total ?? 0;
   const currency = data?.currency ?? "USD";
-  const totalUsers = data?.total_users_with_spend ?? 0;
+  const totalAccounts = data?.total_accounts_with_spend ?? 0;
 
   return (
     <GlassCard title="Spend Report" subtitle="Aggregated cloud spend">
-      {isLoading ? (
-        <InlineLoader label="Loading spend report" />
-      ) : (
-        <div className="space-y-4">
-          <div className="grid grid-cols-2 gap-3">
-            <Stat
-              icon={<TrendingUp className="size-3.5" />}
-              label="Grand Total"
-              value={formatMoney(grandTotal, currency)}
-            />
-            <Stat
-              icon={<Users className="size-3.5" />}
-              label="Active Users"
-              value={String(totalUsers)}
-            />
-          </div>
-
-          <div>
-            <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground uppercase tracking-wider mb-2">
-              <PieChart className="size-3" />
-              Breakdown
-            </div>
-            {spendEntries.length === 0 ? (
-              <p className="text-xs text-muted-foreground">
-                No spend recorded yet.
-              </p>
-            ) : (
-              <div className="space-y-1.5">
-                {spendEntries.map(([key, value]) => (
-                  <div
-                    key={key}
-                    className="flex items-center justify-between rounded-md border border-border bg-muted/30 px-3 py-2 text-xs"
-                  >
-                    <span className="text-foreground/80 capitalize">
-                      {key.replace(/_/g, " ")}
-                    </span>
-                    <span className="text-foreground font-medium">
-                      {formatMoney(value, currency)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+      <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-3">
+          <Stat
+            icon={<TrendingUp className="size-3.5" />}
+            label="Grand Total"
+            value={formatMoney(grandTotal, currency)}
+          />
+          <Stat
+            icon={<Users className="size-3.5" />}
+            label="Accounts with spend"
+            value={String(totalAccounts)}
+          />
         </div>
-      )}
+
+        <div>
+          <div className="flex items-center gap-1.5 text-[11px] text-muted-foreground uppercase tracking-wider mb-2">
+            <PieChart className="size-3" />
+            Breakdown
+          </div>
+          {spendEntries.length === 0 ? (
+            <p className="text-xs text-muted-foreground">
+              No spend recorded yet.
+            </p>
+          ) : (
+            <div className="space-y-1.5">
+              {spendEntries.map(([key, value]) => (
+                <div
+                  key={key}
+                  className="flex items-center justify-between rounded-md border border-border bg-muted/30 px-3 py-2 text-xs"
+                >
+                  <span className="text-foreground/80 capitalize">
+                    {key.replace(/_/g, " ")}
+                  </span>
+                  <span className="text-foreground font-medium">
+                    {formatMoney(value, currency)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </GlassCard>
   );
 };

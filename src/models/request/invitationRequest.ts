@@ -1,5 +1,13 @@
 import type { MemberType } from "../response/invitationResponse";
 
+export interface SendInvitationRequest {
+  account_id: string;
+  user_email: string;
+  role?: MemberType;
+  message?: string | null;
+}
+
+/** @deprecated Use SendInvitationRequest */
 export interface CreateInvitationRequest {
   recipient_identifier: string;
   role?: MemberType;

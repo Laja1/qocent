@@ -1,23 +1,18 @@
 import { useMemo, useState } from "react";
 import { Check, X } from "lucide-react";
 
-import { Header, PageContent, Tabs } from "@/components/shared";
+import { Header, PageContent } from "@/components/shared";
 import { DataTable, type ColumnDef } from "@/components/shared/datatable";
 import { StatusBadge } from "@/components/shared/status-badge";
 import { Button as UiButton } from "@/components/ui/button";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import {
-  useGetMyInvitesQuery,
-  useUserRespondToInviteMutation,
-  useCancelJoinRequestMutation,
-} from "@/service/businessInviteApi";
-import type { BusinessInviteResponse } from "@/models/response/businessInviteResponse";
-
-const TAB = {
-  received: 1,
-  sent: 2,
-} as const;
+  useGetMyInvitationsQuery,
+  useAcceptInvitationMutation,
+  useRejectInvitationMutation,
+} from "@/service/invitationApi";
+import type { InvitationData } from "@/models/response/invitationResponse";
 
 const formatDate = (dateStr: string) =>
   new Date(dateStr).toLocaleDateString("en-GB", {
@@ -27,7 +22,7 @@ const formatDate = (dateStr: string) =>
   });
 
 interface AcceptModalProps {
-  invite: BusinessInviteResponse;
+  invite: InvitationData;
   onConfirm: () => void;
   onCancel: () => void;
   isLoading: boolean;
@@ -40,13 +35,11 @@ function AcceptModal({ invite, onConfirm, onCancel, isLoading }: AcceptModalProp
         <h3 className="text-sm font-semibold text-foreground">Accept invitation</h3>
         <p className="mt-1 text-xs text-muted-foreground">
           You are accepting a{" "}
-          <span className="font-medium">{invite.proposed_role}</span> role.
+          <span className="font-medium">{invite.role}</span> role on{" "}
+          <span className="font-medium">{invite.account_name ?? "a cloud account"}</span>.
           {invite.message && (
             <span className="mt-2 block italic">&ldquo;{invite.message}&rdquo;</span>
           )}
-        </p>
-        <p className="mt-3 text-xs text-muted-foreground">
-          To set up a cloud account after joining, switch to the business context from your workspace switcher.
         </p>
         <div className="mt-5 flex gap-2">
           <UiButton
@@ -73,36 +66,37 @@ function AcceptModal({ invite, onConfirm, onCancel, isLoading }: AcceptModalProp
 }
 
 export const InviteInbox = () => {
-  const [activeTab, setActiveTab] = useState<number>(TAB.received);
-  const [acceptingInvite, setAcceptingInvite] =
-    useState<BusinessInviteResponse | null>(null);
+  const [acceptingInvite, setAcceptingInvite] = useState<InvitationData | null>(null);
 
-  const { data, isLoading } = useGetMyInvitesQuery();
-  const [userRespond, { isLoading: isResponding }] =
-    useUserRespondToInviteMutation();
-  const [cancelRequest, { isLoading: isCancelling }] =
-    useCancelJoinRequestMutation();
+  const { data, isLoading } = useGetMyInvitationsQuery();
+  const [acceptInvitation, { isLoading: isAccepting }] =
+    useAcceptInvitationMutation();
+  const [rejectInvitation, { isLoading: isRejecting }] =
+    useRejectInvitationMutation();
 
-  const allInvites = data?.data ?? [];
-  const received = allInvites.filter((i) => i.initiated_by === "BUSINESS");
-  const sent = allInvites.filter((i) => i.initiated_by === "USER");
-  const displayList = activeTab === TAB.received ? received : sent;
+  const invitations = data?.data ?? [];
 
-  const columns = useMemo<ColumnDef<BusinessInviteResponse>[]>(
+  const columns = useMemo<ColumnDef<InvitationData>[]>(
     () => [
       {
-        id: "business_id",
-        header: "Business",
-        accessorKey: (row) => row.business_id,
+        id: "business",
+        header: "Organization",
+        accessorKey: (row) => row.business_display_name ?? row.business_id,
+        sortable: true,
+      },
+      {
+        id: "account",
+        header: "Account",
+        accessorKey: (row) => row.account_name ?? row.account_id ?? "—",
         sortable: true,
       },
       {
         id: "role",
         header: "Role",
-        accessorKey: (row) => row.proposed_role,
+        accessorKey: (row) => row.role,
         cell: (row) => (
           <span className="rounded-sm bg-muted px-2 py-0.5 text-xs text-foreground">
-            {row.proposed_role}
+            {row.role}
           </span>
         ),
       },
@@ -116,9 +110,9 @@ export const InviteInbox = () => {
       {
         id: "created_at",
         header: "Created",
-        accessorKey: (row) => row.created_at,
+        accessorKey: (row) => row.created_at ?? "",
         sortable: true,
-        cell: (row) => formatDate(row.created_at),
+        cell: (row) => (row.created_at ? formatDate(row.created_at) : "—"),
       },
       {
         id: "expires_at",
@@ -139,10 +133,7 @@ export const InviteInbox = () => {
   const handleAcceptConfirm = async () => {
     if (!acceptingInvite) return;
     try {
-      const res = await userRespond({
-        invite_id: acceptingInvite.invite_id,
-        body: { action: "ACCEPT" },
-      }).unwrap();
+      const res = await acceptInvitation(acceptingInvite.invite_id).unwrap();
       showCustomToast(res.message, { toastOptions: { type: "success" } });
       setAcceptingInvite(null);
     } catch (error: unknown) {
@@ -153,12 +144,9 @@ export const InviteInbox = () => {
     }
   };
 
-  const handleDecline = async (invite: BusinessInviteResponse) => {
+  const handleDecline = async (invite: InvitationData) => {
     try {
-      const res = await userRespond({
-        invite_id: invite.invite_id,
-        body: { action: "REJECT" },
-      }).unwrap();
+      const res = await rejectInvitation(invite.invite_id).unwrap();
       showCustomToast(res.message, { toastOptions: { type: "info" } });
     } catch (error: unknown) {
       showCustomToast(ErrorHandler.extractMessage(error), {
@@ -167,56 +155,21 @@ export const InviteInbox = () => {
     }
   };
 
-  const handleCancelRequest = async (invite: BusinessInviteResponse) => {
-    try {
-      const res = await cancelRequest({ invite_id: invite.invite_id }).unwrap();
-      showCustomToast(res.message, { toastOptions: { type: "info" } });
-    } catch (error: unknown) {
-      showCustomToast(ErrorHandler.extractMessage(error), {
-        toastOptions: { type: "error" },
-      });
-    }
-  };
-
-  const actions =
-    activeTab === TAB.received
-      ? [
-          {
-            label: "Accept",
-            icon: Check,
-            onClick: (row: BusinessInviteResponse) => {
-              if (row.status === "PENDING") setAcceptingInvite(row);
-            },
-          },
-          {
-            label: "Decline",
-            icon: X,
-            variant: "destructive" as const,
-            onClick: (row: BusinessInviteResponse) => {
-              if (row.status === "PENDING") handleDecline(row);
-            },
-          },
-        ]
-      : [
-          {
-            label: "Cancel",
-            icon: X,
-            onClick: (row: BusinessInviteResponse) => {
-              if (row.status === "PENDING") handleCancelRequest(row);
-            },
-          },
-        ];
-
-  const tabs = [
+  const actions = [
     {
-      id: TAB.received,
-      text: `Received (${received.length})`,
-      component: <></>,
+      label: "Accept",
+      icon: Check,
+      onClick: (row: InvitationData) => {
+        if (row.status === "PENDING") setAcceptingInvite(row);
+      },
     },
     {
-      id: TAB.sent,
-      text: `Sent (${sent.length})`,
-      component: <></>,
+      label: "Decline",
+      icon: X,
+      variant: "destructive" as const,
+      onClick: (row: InvitationData) => {
+        if (row.status === "PENDING") handleDecline(row);
+      },
     },
   ];
 
@@ -224,27 +177,17 @@ export const InviteInbox = () => {
     <div className="min-h-screen">
       <Header
         title="Invite Inbox"
-        description="Manage your business invitations and join requests."
+        description="Cloud account invitations sent to you by organizations."
       />
 
       <PageContent>
-        <Tabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />
-
         <DataTable
-          data={displayList}
+          data={invitations}
           columns={columns}
-          title={
-            activeTab === TAB.received
-              ? "Received invitations"
-              : "Sent join requests"
-          }
-          description={
-            activeTab === TAB.received
-              ? "Invitations sent to you by businesses."
-              : "Requests you have sent to join businesses."
-          }
+          title="Received invitations"
+          description="Accept or decline invitations to join cloud accounts."
           searchPlaceholder="Search invitations..."
-          isLoading={isLoading || isResponding || isCancelling}
+          isLoading={isLoading || isAccepting || isRejecting}
           getRowId={(row) => row.invite_id}
           actions={actions}
           showDownload={false}
@@ -255,7 +198,7 @@ export const InviteInbox = () => {
                 colSpan={columns.length + 1}
                 className="h-24 text-center text-xs text-muted-foreground"
               >
-                No {activeTab === TAB.received ? "received invitations" : "sent requests"} yet.
+                No invitations yet.
               </td>
             </tr>
           }
@@ -267,10 +210,9 @@ export const InviteInbox = () => {
           invite={acceptingInvite}
           onConfirm={handleAcceptConfirm}
           onCancel={() => setAcceptingInvite(null)}
-          isLoading={isResponding}
+          isLoading={isAccepting}
         />
       )}
-
     </div>
   );
 };

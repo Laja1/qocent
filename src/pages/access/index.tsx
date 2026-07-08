@@ -17,12 +17,12 @@ import { ModalConstant } from "@/components/shared/modal/register";
 import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 
-import { useGetUserAccountsByProviderQuery } from "@/service/organizationApi";
+import { useGetMyAccountsQuery } from "@/service/accountsApi";
 import {
   useGetAccountMembersQuery,
   useRemoveAccountMemberMutation,
 } from "@/service/accountsApi";
-import type { Account } from "@/models/response/organizationResponse";
+import type { AccountResponse } from "@/models/response/accountResponse";
 import type { AccountMemberResponse } from "@/models/response/accountResponse";
 import type { RootState } from "@/store";
 import { SettingsSection } from "@/components/shared/settings-section";
@@ -42,14 +42,14 @@ export const Access = () => {
   );
   const canInvite = canInviteBusinessUsers(activeContext);
 
-  const { data: organizationAccount, isLoading: isSiteLoading } =
-    useGetUserAccountsByProviderQuery({
-      provider: String(dashboard?.provider) || "",
+  const { data: accountsResponse, isLoading: isSiteLoading } =
+    useGetMyAccountsQuery({
+      provider: String(dashboard?.provider) || undefined,
     });
 
   const accounts = useMemo(
-    () => organizationAccount?.data?.accounts ?? [],
-    [organizationAccount]
+    () => accountsResponse?.data ?? [],
+    [accountsResponse]
   );
 
   const [selectedAccountId, setSelectedAccountId] = useState<string>("");
@@ -60,7 +60,7 @@ export const Access = () => {
     }
   }, [accounts, selectedAccountId]);
 
-  const selectedSite: Account | undefined = accounts.find(
+  const selectedSite: AccountResponse | undefined = accounts.find(
     (a) => a.account_id === selectedAccountId
   );
 

@@ -3,21 +3,22 @@ import { showCustomToast } from "@/components/shared/toast";
 import { ErrorHandler } from "@/service/httpClient/errorHandler";
 import type { FundWalletResponse } from "@/models/response/walletBillingResponse";
 import {
-  useCheckWalletFundingStatusQuery,
   useFundWalletMutation,
   useGetMyBillsQuery,
-  useGetSpendReportQuery,
+  useGetMySpendQuery,
   useGetWalletBalanceQuery,
   useGetWalletTransactionsQuery,
+  useGetBalanceVsSpendQuery,
+  useGetCurrentExchangeRateQuery,
 } from "@/service/walletBillingApi";
 import { useCallback, useState } from "react";
 import { BillsList } from "./components/bills-list";
 import { FundWalletCard } from "./components/fund-wallet-card";
 import { FundingTransferDetailsCard } from "./components/funding-transfer-details-card";
-import { FundingStatusCard } from "./components/funding-status-card";
-import { SpendReportCard } from "./components/spend-report-card";
 import { TransactionsList } from "./components/transactions-list";
 import { WalletBalanceCard } from "./components/wallet-balance-card";
+import { SpendReportCard } from "./components/spend-report-card";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const TRANSACTION_LIMIT = 20;
 
@@ -29,39 +30,49 @@ const TAB = {
 } as const;
 
 const DEFAULT_USD_TO_NGN_RATE = 1600;
-const USD_TO_NGN_RATE =
-  Number(import.meta.env.VITE_USD_TO_NGN_RATE) || DEFAULT_USD_TO_NGN_RATE;
 
 export const Billings = () => {
   const [activeTab, setActiveTab] = useState<number>(TAB.overview);
-  const [amount, setAmount] = useState("350");
-  const [paymentId, setPaymentId] = useState("");
+  const [amount, setAmount] = useState("1");
   const [fundingDetails, setFundingDetails] = useState<FundWalletResponse | null>(
     null
   );
 
   const { data: walletBalance, isLoading: isWalletBalanceLoading } =
     useGetWalletBalanceQuery();
-  const { data: transactions, isLoading: isTransactionsLoading } =
+  const { data: transactionsResponse, isLoading: isTransactionsLoading } =
     useGetWalletTransactionsQuery({ limit: TRANSACTION_LIMIT });
-  const { data: spendReport, isLoading: isSpendReportLoading } =
-    useGetSpendReportQuery();
-  const { data: myBills, isLoading: isMyBillsLoading } = useGetMyBillsQuery();
-  const {
-    data: fundingStatus,
-    isFetching: isFundingStatusLoading,
-    isUninitialized: isFundingStatusUninitialized,
-    refetch: refetchFundingStatus,
-  } = useCheckWalletFundingStatusQuery(paymentId, { skip: !paymentId });
+  const { data: balanceVsSpend, isLoading: isBalanceVsSpendLoading } =
+    useGetBalanceVsSpendQuery();
+  const { data: mySpend, isLoading: isMySpendLoading } = useGetMySpendQuery();
+  const { data: exchangeRate, isLoading: isExchangeRateLoading } =
+    useGetCurrentExchangeRateQuery();
+  const { data: myBills, isLoading: isMyBillsLoading } = useGetMyBillsQuery({
+    detailed: true,
+    limit: 50,
+  });
 
   const [fundWallet, { isLoading: isFundingWallet }] = useFundWalletMutation();
 
-  const billCount = myBills?.bills?.length ?? 0;
+  const transactions = transactionsResponse?.data ?? [];
+  const billCount = Array.isArray(myBills) ? myBills.length : 0;
+  const usdToNgnRate = exchangeRate?.rate ?? DEFAULT_USD_TO_NGN_RATE;
   const dollarAmount = Number(amount);
   const nairaEquivalent =
     Number.isFinite(dollarAmount) && dollarAmount > 0
-      ? dollarAmount * USD_TO_NGN_RATE
+      ? dollarAmount * usdToNgnRate
       : 0;
+
+  const spendOverview = mySpend
+    ? {
+        spend: Object.fromEntries(
+          mySpend.spend.map((item) => [item.date, item.amount])
+        ),
+        grand_total: mySpend.total_spent,
+        currency: mySpend.currency ?? "USD",
+        total_accounts_with_spend: 0,
+      }
+    : undefined;
 
   const handleFundWallet = useCallback(async () => {
     if (!nairaEquivalent) {
@@ -74,7 +85,6 @@ export const Billings = () => {
     try {
       const response = await fundWallet({ amount: nairaEquivalent }).unwrap();
       setFundingDetails(response);
-      setPaymentId(response.payment_id);
       setActiveTab(TAB.fund);
       showCustomToast("Funding account generated successfully", {
         toastOptions: { type: "success", autoClose: 4000 },
@@ -93,7 +103,25 @@ export const Billings = () => {
       id: TAB.overview,
       text: "Overview",
       component: (
-        <SpendReportCard isLoading={isSpendReportLoading} data={spendReport} />
+        <div className="space-y-4">
+          <SpendReportCard
+            isLoading={isMySpendLoading || isBalanceVsSpendLoading}
+            data={spendOverview}
+          />
+          {balanceVsSpend ? (
+            <p className="text-xs text-muted-foreground">
+              Wallet balance: {balanceVsSpend.wallet_balance.toLocaleString()}{" "}
+              {balanceVsSpend.currency ?? "NGN"} · Cloud spend (last{" "}
+              {balanceVsSpend.period_days} days):{" "}
+              {balanceVsSpend.cloud_spend_in_period.toLocaleString()}{" "}
+              {balanceVsSpend.currency ?? "NGN"}
+            </p>
+          ) : isBalanceVsSpendLoading ? (
+            <div className="space-y-2">
+              <Skeleton className="h-3 w-full max-w-xl" />
+            </div>
+          ) : null}
+        </div>
       ),
     },
     {
@@ -104,18 +132,13 @@ export const Billings = () => {
           <FundWalletCard
             amount={amount}
             equivalentAmount={nairaEquivalent}
-            exchangeRate={USD_TO_NGN_RATE}
+            exchangeRate={usdToNgnRate}
+            isLoading={isExchangeRateLoading}
             isFunding={isFundingWallet}
             onAmountChange={setAmount}
             onFund={handleFundWallet}
           />
           <FundingTransferDetailsCard details={fundingDetails} />
-          <FundingStatusCard
-            isUninitialized={isFundingStatusUninitialized}
-            isLoading={isFundingStatusLoading}
-            data={fundingStatus}
-            onRefresh={refetchFundingStatus}
-          />
         </div>
       ),
     },
@@ -125,7 +148,7 @@ export const Billings = () => {
       component: (
         <TransactionsList
           isLoading={isTransactionsLoading}
-          transactions={transactions ?? []}
+          transactions={transactions}
         />
       ),
     },
