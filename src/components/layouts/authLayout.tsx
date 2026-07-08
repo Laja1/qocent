@@ -88,7 +88,16 @@ const AuthLayout = ({
           </div>
         </div>
       </main>
-      <footer className="flex justify-center text-gray-500 pb-4">
+      <footer className="flex flex-col items-center gap-1 text-gray-500 pb-4">
+        <p className="text-xs">
+          Need help?{" "}
+          <a
+            href="tel:+2349031701576"
+            className="text-red-700 hover:underline"
+          >
+            +234 903 170 1576
+          </a>
+        </p>
         <p className="text-xs">
           QOCENT. All rights reserved. © {new Date().getFullYear()}
         </p>

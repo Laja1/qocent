@@ -25,6 +25,7 @@ import type { RootState } from "@/store";
 import { imgLinks, svgLinks } from "@/assets/assetLink";
 import type { ReactElement } from "react";
 import { canInviteBusinessUsers } from "@/utilities/contextPermissions";
+import { useGetMyInvitesQuery } from "@/service/businessInviteApi";
 
 export interface SidebarItem {
   title: string;
@@ -41,6 +42,11 @@ export const SidebarLayout = () => {
   );
   const isBusiness = useSelector((state: RootState) => state.auth.isBusiness);
   const canManageInvites = isBusiness || canInviteBusinessUsers(activeContext);
+
+  const { data: myInvitesData } = useGetMyInvitesQuery();
+  const pendingInviteCount = (myInvitesData?.data ?? []).filter(
+    (i) => i.initiated_by === "BUSINESS" && i.status === "PENDING"
+  ).length;
 
   const navItems: SidebarItem[] = [
     {
@@ -124,16 +130,25 @@ export const SidebarLayout = () => {
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="gap-1">
-              {navItems.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton isActive={isItemActive(item.href)} asChild>
-                    <Link to={item.href}>
-                      {item.icon}
-                      <span className="text-xs">{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {navItems.map((item) => {
+                const isInviteInbox = item.href === RouteConstant.dashboard.inviteInbox.path;
+                const badgeCount = isInviteInbox ? pendingInviteCount : 0;
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton isActive={isItemActive(item.href)} asChild>
+                      <Link to={item.href}>
+                        {item.icon}
+                        <span className="text-xs">{item.title}</span>
+                        {badgeCount > 0 && (
+                          <span className="ml-auto flex h-4 min-w-4 items-center justify-center rounded-full bg-red-500 px-1 text-[10px] font-semibold text-white">
+                            {badgeCount}
+                          </span>
+                        )}
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

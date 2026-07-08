@@ -111,10 +111,9 @@ export const InviteManagement = () => {
   const [respondTarget, setRespondTarget] =
     useState<BusinessInviteResponse | null>(null);
 
-  const { data, isLoading } = useGetBusinessInvitesQuery(
-    { status: "PENDING" },
-    { skip: !canInvite }
-  );
+  const { data, isLoading } = useGetBusinessInvitesQuery(undefined, {
+    skip: !canInvite,
+  });
 
   const [inviteUser, { isLoading: isInviting }] = useInviteUserMutation();
   const [cancelInvite, { isLoading: isCancelling }] = useCancelInviteMutation();
